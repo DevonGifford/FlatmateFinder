@@ -1,24 +1,25 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "./components/ui/toaster";
+import { DataProvider } from "./components/contexts/data/DataProvider";
+import { ApplicantProvider } from "./components/contexts/applicant/ApplicantProvider";
+import { useAdminContext } from "./components/contexts/admin/useAdminContext";
 
 import Navbar from "./components/Navbar";
-import HomePage from "./pages/Home.page";
-import ApplicationPage from "./pages/Application.page";
+import NavbarAdmin from "./components/NavbarAdmin";
 
-import "./App.css";
-import { ApplicantProvider } from "./components/contexts/applicant/ApplicantProvider";
-import ThankyouPage from "./pages/Thankyou.page";
+import HomePage from "./pages/Home.page";
 import FaqPage from "./pages/Faq.page";
-import { useAdminContext } from "./components/contexts/admin/useAdminContext";
+import ApplicationPage from "./pages/Application.page";
+import ThankyouPage from "./pages/Thankyou.page";
 import TenantWelcomePage from "./pages/TenantWelcome.page";
 import TenantTinderPage from "./pages/TenantTinder.page";
 import TenantLeaderboardPage from "./pages/TenantLeaderboard.page";
-import NavbarAdmin from "./components/NavbarAdmin";
-import { DataProvider } from "./components/contexts/data/DataProvider";
+
+import "./App.css";
 
 function App() {
   const { adminProfile } = useAdminContext();
-  // console.log("adminProfile 🦺", adminProfile);
+
   return (
     <>
       <Router basename={import.meta.env.VITE_REACT_APP_BASENAME || "/"}>

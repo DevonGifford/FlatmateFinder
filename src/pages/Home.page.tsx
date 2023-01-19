@@ -2,14 +2,15 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAdminContext } from "@/components/contexts/admin/useAdminContext";
 import { useLanguageContext } from "@/components/contexts/language/useLanguageContext";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { HomePageData } from "@/lib/types/translation-types";
 import {
   toastCorrectPassword,
   toastIncorrectPassword,
 } from "@/lib/customToast";
-// import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -20,12 +21,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import Data_EN from "../lib/translations/home-page/home_en.json";
-import Data_ES from "../lib/translations/home-page/home_es.json";
-import { HomePageData } from "@/lib/types/translation-types";
-import { useAdminContext } from "@/components/contexts/admin/useAdminContext";
+import Data_EN from "@/lib/translations/home-page/home_en.json";
+import Data_ES from "@/lib/translations/home-page/home_es.json";
 
-// 👇 FORM SCHEMA : Home Page
 const FormSchema = z.object({
   password: z.string().min(5, {
     message: "Password must be at least 5 characters.",
@@ -37,10 +35,8 @@ export default function HomePage() {
   const { language } = useLanguageContext();
   const { setAdminProfile } = useAdminContext();
 
-  // ✅ SET CURRENT LANGUAGE:  access language from the context
   const setLanguage: HomePageData = language === "english" ? Data_EN : Data_ES;
 
-  // ✅ ZOD-FORM HOOK :  custom hook initializes a form instance
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -48,55 +44,36 @@ export default function HomePage() {
     },
   });
 
-  // ✅ SUBMIT PASSWORD - Handle start form or dashboard
   function onSubmit(data: z.infer<typeof FormSchema>) {
     const { password } = data;
-
-    //-check if form entry matches secret passwords
     switch (password) {
+      // ✔  Tennant Password Check
       case import.meta.env.VITE_PASSWORD_UNO:
-        setAdminProfile({
-          name: import.meta.env.VITE_PASSWORD_ONE,
-          isAdmin: true,
-        });
-        navigate("/admin-welcome");
-        break;
-
       case import.meta.env.VITE_PASSWORD_DOS:
-        setAdminProfile({
-          name: import.meta.env.VITE_PASSWORD_TWO,
-          isAdmin: true,
-        });
-        navigate("/admin-welcome");
-        break;
-
       case import.meta.env.VITE_PASSWORD_TRES:
         setAdminProfile({
-          name: import.meta.env.VITE_PASSWORD_THREE,
+          name: import.meta.env[`VITE_PASSWORD_${password}`],
           isAdmin: true,
         });
         navigate("/admin-welcome");
         break;
-
+      // ✔  Applicant Password Check
       case import.meta.env.VITE_PASSWORD_ALPHA:
       case import.meta.env.VITE_PASSWORD_BETA:
       case import.meta.env.VITE_PASSWORD_MANGO:
       case import.meta.env.VITE_PASSWORD_CHOCOLATE:
-        // ✔  Handle Success case
         toastCorrectPassword();
-        navigate("/form"); // Use navigate here directly
+        navigate("/form");
         break;
-
+      // ✖  Incorrect password case
       default:
-        // ✖  Handle incorrect password case
-        toastIncorrectPassword(); //-🍞custom toast
+        toastIncorrectPassword();
         break;
     }
   }
 
   return (
     <div className="flex flex-col justify-center items-center sm:mx-20 md:max-w-10/12 sm:max-w-4/6 gap-5 md:gap-8">
-      {/* //👇 HEADER SPLASH */}
       <header className="flex flex-col pt-3 items-center md:pt-10">
         <span className="text-2xl italic ">{setLanguage.subHeading}</span>
         <h1 className="text-3xl md:text-4xl lg:text-5xl tracking-wide font-extrabold pb-5 mx-10">
@@ -104,12 +81,8 @@ export default function HomePage() {
         </h1>
       </header>
 
-      {/*//👇  SPLASH IMAGE */}
-      {/* <AspectRatio ratio={16 / 9} className="flex items-center justify-center"> */}
       <img src="/Tetuan-Splash.jpg" className="rounded-full" width={"500px"} />
-      {/* </AspectRatio> */}
 
-      {/*//👇  PASSWORD FORM */}
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}

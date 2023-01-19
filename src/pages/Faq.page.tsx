@@ -1,3 +1,4 @@
+import { useLanguageContext } from "@/components/contexts/language/useLanguageContext";
 import {
   Accordion,
   AccordionContent,
@@ -5,13 +6,11 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-import faqData_EN from "../lib/translations/faq-page/faq_en.json";
-import faqData_ES from "../lib/translations/faq-page/faq_es.json";
-import { useLanguageContext } from "@/components/contexts/language/useLanguageContext";
+import faqData_EN from "@/lib/translations/faq-page/faq_en.json";
+import faqData_ES from "@/lib/translations/faq-page/faq_es.json";
 
 export default function FaqPage() {
-  const { language } = useLanguageContext(); // Access language from the context
-
+  const { language } = useLanguageContext();
   let questionData;
   if (language === "english") {
     questionData = faqData_EN;

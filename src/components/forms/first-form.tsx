@@ -2,15 +2,14 @@
 
 import * as z from "zod";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
 import { useLanguageContext } from "../contexts/language/useLanguageContext";
-import { toastError, toastFormComplete } from "@/lib/customToast";
 import { useApplicantContext } from "../contexts/applicant/useApplicantContext";
-
+import { toastError, toastFormComplete } from "@/lib/customToast";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { IoMale, IoFemale, IoMaleFemale } from "react-icons/io5";
 import {
   Form,
@@ -26,7 +25,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
+} from "@/components/ui/select";
 
 import { languages } from "@/lib/constants/constants";
 import { ApplicantProfile } from "@/lib/types/applicant-type";
@@ -35,7 +34,6 @@ import { FirstFormData } from "@/lib/types/translation-types";
 import Data_EN from "@/lib/translations/applicant-form/firstform_en.json";
 import Data_ES from "@/lib/translations/applicant-form/firstform_es.json";
 
-// 👇 FORM SCHEMA : Account Form
 const firstFormSchema = z.object({
   name: z
     .string({
@@ -72,32 +70,23 @@ type FirstFormValues = z.infer<typeof firstFormSchema>;
 export function FirstForm() {
   const navigate = useNavigate();
   const { updateApplicantContext, applicantProfile } = useApplicantContext();
-  const { language } = useLanguageContext();
 
-  // ✅ SET CURRENT LANGUAGE:  access language from the context
+  const { language } = useLanguageContext();
   const setLanguage: FirstFormData = language === "english" ? Data_EN : Data_ES;
 
-  // ✅ IF EXISTING USERDATA, UPDATE FORMS WITH DATAA
-  // Check if applicantProfile exists and has the necessary data
   const defaultValues: FirstFormValues = applicantProfile?.firstForm || {
     name: "",
     age: "",
     sex: "",
     phone: "",
-    languages: [], // Provide default values for arrays too, if needed
+    languages: [],
   };
-
-  // ✅ ZOD-FORM HOOK :  custom hook initializes a form instance,
   const form = useForm<FirstFormValues>({
     resolver: zodResolver(firstFormSchema),
     defaultValues,
   });
 
-  // ✅ SUBMIT FORM - submit account form
   function onSubmit(data: FirstFormValues) {
-    console.log("firstform/Submit:  💢 Triggered", data);
-
-    // 👇 Update the userContext with form data
     try {
       const formData: Partial<ApplicantProfile> = {
         firstForm: {
@@ -105,14 +94,10 @@ export function FirstForm() {
         },
       };
       updateApplicantContext(formData);
-
-      // ✔ Handle success
       toastFormComplete("1");
-      navigate(`/form?pageId=second-form`); //-chang route
+      navigate(`/form?pageId=second-form`); //-updating route
     } catch (error) {
-      // ✖ Handle errors
       toastError();
-      //📌 db update at end of form flow
     }
   }
 
@@ -160,7 +145,6 @@ export function FirstForm() {
             </FormItem>
           )}
         />
-
         <FormField
           name="languages"
           control={form.control}
@@ -190,10 +174,7 @@ export function FirstForm() {
             </FormItem>
           )}
         />
-
-        {/* GENDER + AGE */}
         <div className="flex flex-row justify justify-evenly">
-          {/* Gender Selection */}
           <FormField
             name="sex"
             control={form.control}
@@ -222,8 +203,6 @@ export function FirstForm() {
               </FormItem>
             )}
           />
-
-          {/* Age */}
           <FormField
             name="age"
             control={form.control}
@@ -259,7 +238,6 @@ export function FirstForm() {
           />
         </div>
 
-        {/* BUTTONS */}
         <Button
           type="submit"
           className="rounded-lg text-sm md:text-base lg:text-xl p-4 px-8 md:px-12 md:py-6"

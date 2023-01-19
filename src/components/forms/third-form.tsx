@@ -1,20 +1,17 @@
 "use client";
 
 import * as z from "zod";
-import { useForm } from "react-hook-form";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ApplicantProfile } from "@/lib/types/applicant-type";
-import { createApplicantDoc } from "@/lib/firebase/firestore";
-import { useApplicantContext } from "../contexts/applicant/useApplicantContext";
-import { toastError, toastFormComplete } from "@/lib/customToast";
-
-import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
-import { Textarea } from "../ui/textarea";
+import { useNavigate } from "react-router-dom";
+import { useApplicantContext } from "@/components/contexts/applicant/useApplicantContext";
+import { useLanguageContext } from "@/components/contexts/language/useLanguageContext";
 import { Button } from "@/components/ui/button";
-import { Input } from "../ui/input";
-// import { Label } from "../ui/label";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/Spinner";
 import {
   Form,
   FormControl,
@@ -23,16 +20,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-
-import { Building, Check, Home, Link, Video } from "lucide-react";
-import { Spinner } from "../Spinner";
+import { Building, Home, Link, Video } from "lucide-react";
+import { ApplicantProfile } from "@/lib/types/applicant-type";
+import { createApplicantDoc } from "@/lib/firebase/firestore";
+import { toastError, toastFormComplete } from "@/lib/customToast";
 import { ThirdFormData } from "@/lib/types/translation-types";
+
 import Data_EN from "@/lib/translations/applicant-form/thirdform_en.json";
 import Data_ES from "@/lib/translations/applicant-form/thirdform_es.json";
-import { useLanguageContext } from "../contexts/language/useLanguageContext";
-// import { createApplicantDoc } from "@/lib/firebase/firestore";
 
-// 👇 FORM SCHEMA : Account Form
 const thirdFormSchema = z.object({
   job_title: z.string({
     required_error: "⚠",
@@ -65,33 +61,24 @@ export function ThirdForm() {
   const navigate = useNavigate();
   const { updateApplicantContext, applicantProfile } = useApplicantContext();
   const { language } = useLanguageContext();
-  const [isLoading, setIsLoading] = useState(false); //- handle button loadingSpinner
-  const [submitted, setSubmitted] = useState(false); //- handle button-icon success
-
-  // ✅ SET CURRENT LANGUAGE:  access language from the context
+  const [isLoading, setIsLoading] = useState(false);
+  
   const setLanguage: ThirdFormData = language === "english" ? Data_EN : Data_ES;
 
-  // ✅ ZOD-FORM HOOK :  custom hook initializes a form instance,
   const form = useForm<ThirdFormValues>({
     resolver: zodResolver(thirdFormSchema),
   });
 
-  // ✅ SUBMIT FORM - submit account form
   async function onSubmit(data: ThirdFormValues) {
-    console.log("thirdForm/Submit:  💢 Triggered", data);
-
     setIsLoading(true);
-
     if (applicantProfile) {
-      // 👇 Create a uuid for the user
       //- Generate a unique ID for the user
       const secretVar = import.meta.env.VITE_SECRET_VARIABLE;
       const nameFirstFive = applicantProfile.firstForm.name
         .slice(0, 5)
         .replace(/\s/g, ""); // Extract first 5 letters and remove spaces
       const currentTimeStamp = Date.now().toString().slice(-5); // Extract last 5 digits of current timestamp
-
-      //-Construct a custom ID combining name, secret variable, and timestamp
+      //-Construct a custom ID
       const documentId = `${nameFirstFive}-${secretVar}-${currentTimeStamp}`;
 
       try {
@@ -101,50 +88,29 @@ export function ThirdForm() {
           ...data,
           social_media: data.social_media || "",
         };
-
         const updatedProfile: ApplicantProfile = {
           ...applicantProfile,
           thirdForm: updatedThirdForm,
           uuid: documentId,
           photo: "",
-        }; 
+        };
 
-        // 👇 Update the userContext with the merged data
+        // 👇 Update State & DB
         await updateApplicantContext(updatedProfile);
-        console.log("✔ updated user context");
-
-        // -👇 Create new Firestore db doc
-        console.log(
-          "updating the DB now - here is the data, newApplicantProfile",
-          updatedProfile
-        );
         await createApplicantDoc(documentId, updatedProfile);
-        console.log("✔ created firestore doc");
 
-        // ✔ Handle success
-        // 🎯💣 TRY BLOCK:  UPDATE FIRESTORE DOCUMENT HERE ....
-        setTimeout(() => {
-          setIsLoading(false); //- Reset loading state
-          setSubmitted(true); //- Set achieved state
-          setSubmitted(false); //- Reset achieved state after a while
-          toastFormComplete("3");
-          navigate("/thankyou"); //-change route
-        }, 1000);
+        setIsLoading(false);
+        toastFormComplete("3");
+        navigate("/thankyou"); //-updating route
       } catch (error) {
-        // ✖ Handle errors
-        setIsLoading(false); //- Reset loading state
-        setTimeout(() => {
-          setSubmitted(false); //- Reset achieved state after a while
-        }, 2000);
+        setIsLoading(false);
         toastError();
+        console.error("Error in submitting data", error);
       }
     } else {
-      console.log("Error:  cannot access applicant context");
-      setIsLoading(false); //- Reset loading state
-      setTimeout(() => {
-        setSubmitted(false); //- Reset achieved state after a while
-      }, 2000);
+      setIsLoading(false);
       toastError();
+      console.error("Error:  cannot access applicant context");
     }
   }
 
@@ -156,9 +122,7 @@ export function ThirdForm() {
         })}
         className="space-y-6 w-full "
       >
-        {/* JOB */}
         <div className="flex flex-col rounded-lg border">
-          {/* JOB TITLE */}
           <FormField
             name="job_title"
             control={form.control}
@@ -179,8 +143,6 @@ export function ThirdForm() {
               </FormItem>
             )}
           />
-
-          {/* TYPE OF VIEWING */}
           <FormField
             name="job_type"
             control={form.control}
@@ -223,7 +185,6 @@ export function ThirdForm() {
             )}
           />
         </div>
-
         {/* TELL US ABOUT YOURSELF */}
         <FormField
           name="describe"
@@ -262,7 +223,6 @@ export function ThirdForm() {
             </FormItem>
           )}
         />
-
         <FormField
           name="social_media"
           control={form.control}
@@ -284,21 +244,12 @@ export function ThirdForm() {
             </FormItem>
           )}
         />
-
-        {/* BUTTONS */}
         <Button
           type="submit"
           className="rounded-lg text-sm md:text-base lg:text-xl p-4 px-8 md:px-16 md:py-6"
           size={"lg"}
         >
-          {/* <Spinner/> */}
-          {isLoading ? (
-            <Spinner />
-          ) : submitted ? (
-            <Check />
-          ) : (
-            `${setLanguage.completeButton}`
-          )}
+          {isLoading ? <Spinner /> : `${setLanguage.completeButton}`}
         </Button>
       </form>
     </Form>
