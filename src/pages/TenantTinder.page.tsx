@@ -1,8 +1,14 @@
 import TinderCard from "react-tinder-card";
-import StarRating from "@/components/StarRating";
 import { useState } from "react";
+import { Rankings } from "@/lib/types/rawapplicant-type";
+import { Timestamp } from "firebase/firestore";
+import { updateRanking } from "@/lib/firebase/firestore";
 import { useRequireAdmin } from "@/lib/hooks/useRequireAdmin";
-import { IoFemale, IoMale, IoMaleFemale } from "react-icons/io5";
+import { ApplicantProfile } from "@/lib/types/applicant-type";
+import { useDataContext } from "@/components/contexts/data/useDataContext";
+import { useAdminContext } from "@/components/contexts/admin/useAdminContext";
+import { ProfilePic } from "@/components/ProfilePic";
+import { StarRating } from "@/components/StarRating";
 import {
   Card,
   CardContent,
@@ -12,6 +18,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
   Building,
   CalendarClockIcon,
   ExternalLinkIcon,
@@ -19,51 +31,31 @@ import {
   User,
   Video,
 } from "lucide-react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Timestamp } from "firebase/firestore";
-
-// import mockDB from "../assets/realmock-db.json";
-import { useAdminContext } from "@/components/contexts/admin/useAdminContext";
-import { useDataContext } from "@/components/contexts/data/useDataContext";
-import { updateRanking } from "@/lib/firebase/firestore";
-import { ApplicantProfile } from "@/lib/types/applicant-type";
-import ImageWithFallback from "@/components/ProfilePic";
-import { Rankings } from "@/lib/types/rawapplicant-type";
+import { IoFemale, IoMale, IoMaleFemale } from "react-icons/io5";
 
 export default function TenantTinderPage() {
   useRequireAdmin();
   const { adminProfile } = useAdminContext();
   const { data, updateDataContext } = useDataContext();
-  const [currentCardIndex, setCurrentCardIndex] = useState(0); //- State to keep track of the current card being shown
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [starRatings, setStarRatings] = useState<number[]>(
     Array(data?.length).fill(0)
   );
-  const whichAdmin = (adminProfile?.name || "").substring(0, 3);
+  const adminId = (adminProfile?.name || "").substring(0, 3).toLowerCase();
 
   // ✅ HANDLE STAR RATING - updates ranking field
   const handleStarClick = (starIndex: number, cardIndex: number) => {
-    console.log(
-      `🃏 Tinder handleStarClick:   Triggered 💢   - card ${cardIndex}`
-    );
     const newRatings = [...starRatings];
     newRatings[cardIndex] = starIndex + 1;
     setStarRatings(newRatings);
-
     // 👇 Ensure adminProfile and data are not null or undefined
     if (adminProfile && data) {
       const currentAdmin = adminProfile.name;
       const cardData = data[cardIndex];
-
-      // 👇 Identify admin and update data based on
+      // 👇 Identify current admin and update data
       if (cardData) {
         const updatedCard = { ...cardData };
         updatedCard.rankings = updatedCard.rankings || {}; //-Ensure 'rankings' property is defined before updating its fields
-
         switch (currentAdmin) {
           case "Devon":
             updatedCard.rankings.dev_star = starIndex + 1;
@@ -77,8 +69,7 @@ export default function TenantTinderPage() {
           default:
             break;
         }
-
-        // 👇 UPDATE THE STATE - update the context state with the modified user data
+        // 👇 Update state w/ modified data
         updateDataContext([updatedCard]);
       }
     }
@@ -86,18 +77,14 @@ export default function TenantTinderPage() {
 
   // ✅ HANDLE SWIPPING - updates boolean field
   const onSwipe = (direction: string, cardIndex: number) => {
-    console.log(`🃏 Tinder onSwipe:   Triggered 💢   - card ${cardIndex}`);
-
     // 👇 Ensure adminProfile and data are not null or undefined
     if (adminProfile && data) {
       const currentAdmin = adminProfile.name;
       const cardData = data[cardIndex];
-
-      // Ensure that rankings object exists before accessing its properties
+      // 👇 Ensure that rankings object exists before accessing its properties
       if (cardData) {
         const updatedCard = { ...cardData };
         updatedCard.rankings = updatedCard.rankings || {}; //-Ensure 'rankings' property is defined before updating its fields
-
         switch (currentAdmin) {
           case "Devon":
             updatedCard.rankings.dev_bool = direction === "right";
@@ -108,38 +95,25 @@ export default function TenantTinderPage() {
           case "Adrian":
             updatedCard.rankings.adr_bool = direction === "right";
             break;
-          // Add more cases if needed for other admins
           default:
             break;
         }
-
-        // 👇 UPDATE THE STATE - update the context state with the modified user data
+        // 👇 Update state w/ modified data
         updateDataContext([updatedCard]);
-
-        //👇  Update the card Index number here only once per swipe
+        //👇  Update card index number
         setCurrentCardIndex(currentCardIndex + 1);
       }
-
-      console.log("You swiped: " + direction);
     }
   };
 
   // ✅ HANADLE CARD LEAVING SCREEN - updates the applicantDoc
-  const onCardLeftScreen = (myIdentifier: string, cardIndex: number) => {
-    console.log(`🃏 Tinder onSwipe:   Triggered 💢   - card ${cardIndex}`);
-    console.log("ℹ  ", myIdentifier + " left the screen");
+  const onCardLeftScreen = (cardIndex: number) => {
     // 👇 Ensure data exists and the specific card's rankings are not undefined
     if (data && data[cardIndex]?.rankings) {
       const updatedRankings = data[cardIndex]
         .rankings as Partial<ApplicantProfile>;
-
       // 👇 Update the applicant document in Firestore with the updated rankings
-      // console.log(
-      //   "🃏🦺 Tinder onSwipe:  data being sent to the firebase function: ",
-      //   updatedRankings
-      // );
       updateRanking(data[cardIndex].uuid, updatedRankings);
-      console.log(`🃏 Tinder onSwipe:   ✔ Successs - ranking updated`);
     } else {
       console.error(
         "Error: Unable to retrieve rankings for the specified card index."
@@ -184,7 +158,7 @@ export default function TenantTinderPage() {
   };
   const convertTimestamp = (timeStamp: Timestamp) => {
     if (timeStamp?.seconds) {
-      // Firestore Timestamp-like object with seconds and nanoseconds
+      //-Firestore Timestamp-like object ~ seconds and nanoseconds
       const date = new Date(
         timeStamp.seconds * 1000 + timeStamp.nanoseconds / 1000000
       );
@@ -208,7 +182,7 @@ export default function TenantTinderPage() {
           <TinderCard
             key={index}
             onSwipe={(direction) => dataItem?.id && onSwipe(direction, index)}
-            onCardLeftScreen={() => onCardLeftScreen(`card${index}`, index)}
+            onCardLeftScreen={() => onCardLeftScreen(index)}
             preventSwipe={["up", "down"]}
             className="absolute w-[310px] md:w-[500px]"
           >
@@ -220,6 +194,7 @@ export default function TenantTinderPage() {
                   <span>{jobtypeIcon(dataItem.thirdForm.job_type)}</span>
                 </CardDescription>
               </CardHeader>
+
               <CardContent className="flex flex-col gap-1 sm:gap-3">
                 {/* //👇 ENTRY DATE  */}
                 <div className="flex flex-row items-center gap-1 text-sm">
@@ -277,7 +252,7 @@ export default function TenantTinderPage() {
                   </div>
                   {/* //👇 PROFILE PICTURE */}
 
-                  <ImageWithFallback
+                  <ProfilePic
                     src={dataItem.photo}
                     fallbackSrc="/profile-fallback.svg"
                     alt="profile-pic"
@@ -337,19 +312,20 @@ export default function TenantTinderPage() {
                   </AccordionItem>
                 </Accordion>
               </CardContent>
+              
               <CardFooter className="flex flex-col text-center pt-1 sm:pt-4 justify-center items-center border-t-2 mx-10">
                 {/* //👇 STAR RATING SYSTEM */}
                 <div className="flex flex-row gap-3 pt-1 ">
                   {[...Array(5)].map((_, starIndex) => (
                     <StarRating
                       key={starIndex}
+                      onClick={() => handleStarClick(starIndex, index)}
                       filled={
                         starIndex <
                         (dataItem.rankings?.[
-                          `${whichAdmin.toLowerCase()}_star` as keyof Rankings
+                          `${adminId}_star` as keyof Rankings
                         ] || 0)
                       }
-                      onClick={() => handleStarClick(starIndex, index)}
                     />
                   ))}
                 </div>

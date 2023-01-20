@@ -1,19 +1,19 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Toaster } from "./components/ui/toaster";
-import { DataProvider } from "./components/contexts/data/DataProvider";
-import { ApplicantProvider } from "./components/contexts/applicant/ApplicantProvider";
-import { useAdminContext } from "./components/contexts/admin/useAdminContext";
+import { Toaster } from "@/components/ui/toaster";
+import { DataProvider } from "@/components/contexts/data/DataProvider";
+import { ApplicantProvider } from "@/components/contexts/applicant/ApplicantProvider";
+import { useAdminContext } from "@/components/contexts/admin/useAdminContext";
 
-import Navbar from "./components/Navbar";
-import NavbarAdmin from "./components/NavbarAdmin";
+import Navbar from "@/components/Navbar";
+import NavbarAdmin from "@/components/NavbarAdmin";
 
-import HomePage from "./pages/Home.page";
-import FaqPage from "./pages/Faq.page";
-import ApplicationPage from "./pages/Application.page";
-import ThankyouPage from "./pages/Thankyou.page";
-import TenantWelcomePage from "./pages/TenantWelcome.page";
-import TenantTinderPage from "./pages/TenantTinder.page";
-import TenantLeaderboardPage from "./pages/TenantLeaderboard.page";
+import HomePage from "@/pages/Home.page";
+import FaqPage from "@/pages/Faq.page";
+import ApplicationPage from "@/pages/Application.page";
+import ThankyouPage from "@/pages/Thankyou.page";
+import TenantWelcomePage from "@/pages/TenantWelcome.page";
+import TenantTinderPage from "@/pages/TenantTinder.page";
+import TenantLeaderboardPage from "@/pages/TenantLeaderboard.page";
 
 import "./App.css";
 

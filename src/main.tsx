@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
-import { LanguageProvider } from "./components/contexts/language/LanguageProvider.tsx";
-import { AdminProvider } from "./components/contexts/admin/AdminProvider.tsx";
+import App from "@/App.tsx";
+import { LanguageProvider } from "@/components/contexts/language/LanguageProvider.tsx";
+import { AdminProvider } from "@/components/contexts/admin/AdminProvider.tsx";
 
 import "./index.css";
 

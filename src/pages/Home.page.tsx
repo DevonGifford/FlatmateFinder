@@ -49,10 +49,22 @@ export default function HomePage() {
     switch (password) {
       // ✔  Tennant Password Check
       case import.meta.env.VITE_PASSWORD_UNO:
+        setAdminProfile({
+          name: import.meta.env.VITE_PASSWORD_ONE,
+          isAdmin: true,
+        });
+        navigate("/admin-welcome");
+        break;
       case import.meta.env.VITE_PASSWORD_DOS:
+        setAdminProfile({
+          name: import.meta.env.VITE_PASSWORD_TWO,
+          isAdmin: true,
+        });
+        navigate("/admin-welcome");
+        break;
       case import.meta.env.VITE_PASSWORD_TRES:
         setAdminProfile({
-          name: import.meta.env[`VITE_PASSWORD_${password}`],
+          name: import.meta.env.VITE_PASSWORD_THREE,
           isAdmin: true,
         });
         navigate("/admin-welcome");

@@ -1,7 +1,7 @@
-import { useAdminContext } from "@/components/contexts/admin/useAdminContext";
-import { Button } from "@/components/ui/button";
-import { useRequireAdmin } from "@/lib/hooks/useRequireAdmin";
 import { Link } from "react-router-dom";
+import { useAdminContext } from "@/components/contexts/admin/useAdminContext";
+import { useRequireAdmin } from "@/lib/hooks/useRequireAdmin";
+import { Button } from "@/components/ui/button";
 
 export default function TenantWelcomePage() {
   useRequireAdmin();
@@ -15,10 +15,8 @@ export default function TenantWelcomePage() {
           Welcome to your profile {adminProfile?.name}
         </p>
       </div>
-
       <div className="text-lg">
         <p className="mb-4 text-3xl">Steps to use the app:</p>
-
         <div className="flex flex-col md:flex-row justify-center items-center gap-8">
           <div className="flex flex-col w-full md:w-1/2 border-2 p-10 h-[250px]">
             <Link to={"/admin-tinder"}>
@@ -42,7 +40,6 @@ export default function TenantWelcomePage() {
                 <p className="font-semibold">The Leaderboard.</p>
               </Button>
             </Link>
-
             <p className="italic text-sm py-2">Based on the received stars.</p>
             <ol className="list-disc text-start mb-4">
               <li>Discover top-rated candidates</li>
@@ -52,7 +49,6 @@ export default function TenantWelcomePage() {
           </div>
         </div>
       </div>
-
       <div className="mx-6">
         <p className="mb-4 text-lg font-semibold">Known issues:</p>
         <p className="mb-4 text-base italic">
@@ -78,7 +74,6 @@ export default function TenantWelcomePage() {
           </span>
         </ul>
       </div>
-
       <div>
         <p>
           If you notice any other issues or have feature requests, please let me
