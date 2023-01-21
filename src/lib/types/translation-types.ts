@@ -52,7 +52,6 @@ export interface ThirdFormData {
   optional: string;
 }
 
-
 export interface ThankyouPageData {
   checkoutHeading: string;
   faqheading: string;
