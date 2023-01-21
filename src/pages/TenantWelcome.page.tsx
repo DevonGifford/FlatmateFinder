@@ -9,79 +9,71 @@ export default function TenantWelcomePage() {
 
   return (
     <div className="flex flex-col justify-center items-center mx-auto max-w-screen-md gap-8 py-8">
-      <div className="flex flex-col text-lg font-bold">
-        <div className="text-2xl italic pb-2 border-b-2">TENANT PAGE</div>
-        <p className="font-thin pt-4">
+      <header className="flex flex-col text-lg font-bold">
+        <h1 className="text-2xl italic pb-2 border-b-2">TENANT PAGE</h1>
+        <h2 className="font-thin pt-4">
           Welcome to your profile {adminProfile?.name}
-        </p>
-      </div>
-      <div className="text-lg">
-        <p className="mb-4 text-3xl">Steps to use the app:</p>
+        </h2>
+      </header>
+      <article className="text-lg">
+        <h2 className="mb-4 text-3xl">Steps to use the app:</h2>
         <div className="flex flex-col md:flex-row justify-center items-center gap-8">
-          <div className="flex flex-col w-full md:w-1/2 border-2 p-10 h-[250px]">
+          <section className="flex flex-col w-full md:w-1/2 border-2 p-10 h-[250px]">
             <Link to={"/admin-tinder"}>
               <Button>
                 <p className="font-semibold">The Tinderpage.</p>
               </Button>
             </Link>
-            <p className="italic text-sm py-2">Rate and review applicants.</p>
+            <p className="italic text-sm py-2 whitespace-nowrap pb-6">
+              Rate and review applicants.
+            </p>
             <ol className=" list-disc text-start mb-4">
-              <li>Give each card a star rating.</li>
+              <li>Rate each candidate</li>
               <li>Swipe the card</li>
-              <span className="text-sm italic">
-                Left for no - Right for yes.
-              </span>
             </ol>
-          </div>
+            <span className="text-sm italic">Left for no - Right for yes.</span>
+          </section>
 
-          <div className="flex flex-col w-full md:w-1/2 border-2 p-10 h-[250px]">
+          <section className="flex flex-col w-full md:w-1/2 border-2 p-10 h-[250px]">
             <Link to={"/admin-leaderboard"}>
               <Button>
                 <p className="font-semibold">The Leaderboard.</p>
               </Button>
             </Link>
-            <p className="italic text-sm py-2">Based on the received stars.</p>
+            <p className="italic text-sm py-2 whitespace-nowrap pb-6">
+              Overview of applicants
+            </p>
             <ol className="list-disc text-start mb-4">
-              <li>Discover top-rated candidates</li>
-              <li>Shows individual rankings</li>
-              <span className="text-sm italic">Still very rudimentary</span>
+              <li>Candidates ranked</li>
+              <li>Ranked by star value</li>
             </ol>
-          </div>
+            <span className="text-sm italic">Still very rudimentary.</span>
+          </section>
         </div>
-      </div>
-      <div className="mx-6">
-        <p className="mb-4 text-lg font-semibold">Known issues:</p>
+      </article>
+      <aside className="mx-6 border-2 p-10">
+        <h3 className="mb-4 text-lg font-semibold">Known issues:</h3>
         <p className="mb-4 text-base italic">
           You may encounter some bugs, potentially particullary on mobile
           devices.
         </p>
         <ul className="list-disc text-start mb-4">
           <li>
-            <span className="flex flex-row items-center">
-              Tinder card dropdown buttons may be difficult to click on mobile.
-            </span>
+            Tinder card dropdown buttons may be difficult to click on mobile.
           </li>
-          <li>
-            Reloading page resets tinder cards, note your ratings are still
-            saved.
-          </li>
-
-          <li>
-            Need to create a sorting algorithm to hide unreviewed applications.
-          </li>
-          <span className=" font-light">
-            - Feature to separate reviewed and unreviewed applications required.
-          </span>
+          <li>Currently reloading or refreshing the page will sign you out.</li>
         </ul>
-      </div>
-      <div>
-        <p>
-          If you notice any other issues or have feature requests, please let me
-          know.
+        <p className="flex flex-col font-thin italic">
+          <span>If you notice any other issues or have feature requests,</span>
+          <span>just let me know.</span>
         </p>
-        <p>Lets find our next flatmate</p>
-        <p>😅</p>
-      </div>
+      </aside>
+      <footer>
+        <p className="font-semibold tracking-wider">
+          Lets find our next flatmate
+        </p>
+        <p>😁</p>
+      </footer>
     </div>
   );
 }
