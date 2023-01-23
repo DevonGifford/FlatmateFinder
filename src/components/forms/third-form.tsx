@@ -5,8 +5,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
-import { useApplicantContext } from "@/components/contexts/applicant/useApplicantContext";
-import { useLanguageContext } from "@/components/contexts/language/useLanguageContext";
+import { useApplicantContext } from "@/contexts/applicant/useApplicantContext";
+import { useLanguageContext } from "@/contexts/language/useLanguageContext";
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Textarea } from "@/components/ui/textarea";
@@ -78,11 +78,9 @@ export function ThirdForm() {
         .slice(0, 5)
         .replace(/\s/g, ""); // Extract first 5 letters and remove spaces
       const currentTimeStamp = Date.now().toString().slice(-5); // Extract last 5 digits of current timestamp
-      //-Construct a custom ID
-      const documentId = `${nameFirstFive}-${secretVar}-${currentTimeStamp}`;
+      const documentId = `${nameFirstFive}-${secretVar}-${currentTimeStamp}`;  //-custom ID
 
       try {
-        // 👇 Merge form data with context data
         const updatedThirdForm = {
           ...applicantProfile.thirdForm,
           ...data,
@@ -95,8 +93,7 @@ export function ThirdForm() {
           photo: "",
         };
 
-        // 👇 Update State & DB
-        await updateApplicantContext(updatedProfile);
+        updateApplicantContext(updatedProfile);
         await createApplicantDoc(documentId, updatedProfile);
 
         setIsLoading(false);

@@ -1,12 +1,14 @@
+import { useDatabase } from "@/contexts/database/useDatabaseContext";
+import { useRequireAdmin } from "@/lib/hooks/useRequireAdmin";
+import { ErrorMessage } from "@/components/ErrorMessage";
 import { ProfilePic } from "@/components/ProfilePic";
 import { RatingBadge } from "@/components/RatingBadge";
-import { useDataContext } from "@/components/contexts/data/useDataContext";
-import { useRequireAdmin } from "@/lib/hooks/useRequireAdmin";
+import { Spinner } from "@/components/Spinner";
 import { Rankings, RawApplicantProfile } from "@/lib/types/rawapplicant-type";
 
 export default function TenantLeaderboardPage() {
   useRequireAdmin();
-  const { data } = useDataContext();
+  const { applicantPool, isLoading, error } = useDatabase();
 
   const computeTotalRating = (applicant: RawApplicantProfile): number => {
     const {
@@ -17,8 +19,8 @@ export default function TenantLeaderboardPage() {
     return dev_star + adr_star + osc_star;
   };
 
-  const sortedApplicants = data
-    ? data.slice().sort((a, b) => {
+  const sortedApplicants = applicantPool
+    ? applicantPool.slice().sort((a, b) => {
         const totalRatingA = computeTotalRating(a);
         const totalRatingB = computeTotalRating(b);
         return totalRatingB - totalRatingA;
@@ -30,6 +32,8 @@ export default function TenantLeaderboardPage() {
       <h1 className="text-2xl italic py-4 pb-6 border-b-2">
         Current Leaderboard
       </h1>
+      {isLoading && <Spinner />}
+      {error && <ErrorMessage />}
       {sortedApplicants.length > 0 ? (
         sortedApplicants.map(
           (applicant: RawApplicantProfile, index: number) => (

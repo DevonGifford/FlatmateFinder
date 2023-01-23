@@ -1,8 +1,6 @@
-import { Menu, RefreshCwIcon, SaveAllIcon } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAdminContext } from "@/contexts/admin/useAdminContext";
 import { Button } from "@/components/ui/button";
-import { useAdminContext } from "@/components/contexts/admin/useAdminContext";
-import { useDataContext } from "@/components/contexts/data/useDataContext";
 import {
   Sheet,
   SheetContent,
@@ -11,11 +9,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { Menu } from "lucide-react";
 
-export default function NavbarAdmin() {
+export default function Sidebar() {
   const navigate = useNavigate();
   const { signOut } = useAdminContext();
-  const { handleRefresh } = useDataContext();
 
   return (
     <>
@@ -29,7 +27,7 @@ export default function NavbarAdmin() {
             <SheetHeader className=" items-center justify-center py-16">
               <SheetTitle>Quick Links</SheetTitle>
               <SheetDescription>
-                Remember to save your changes before leaving.
+                Calle de Muller
               </SheetDescription>
               <div className="flex flex-col w-full gap-8 py-4">
                 <Link
@@ -54,7 +52,7 @@ export default function NavbarAdmin() {
                   onClick={() => {
                     signOut();
                     navigate("/");
-                    window.location.reload();
+                    window.location.reload();  //🎯 to-do-list remove
                   }}
                   className="flex text-xl font-semibold w-full h-14 rounded-xl justify-center items-center hover:bg-slate-300"
                 >
@@ -64,27 +62,6 @@ export default function NavbarAdmin() {
             </SheetHeader>
           </SheetContent>
         </Sheet>
-        {/* //👇 Buttons */}
-        <div className="hidden flex-row">
-          <Button
-            className="transition ease-in-out duration-150 hover:scale-125"
-            size={"icon"}
-            variant={"ghost"}
-            onClick={() => {
-              handleRefresh();
-              //🎯 to-do-list: toast notification?
-            }}
-          >
-            <RefreshCwIcon />
-          </Button>
-          <Button
-            className="flex flex-row gap-1 transition ease-in-out duration-150 hover:scale-125"
-            size={"icon"}
-            variant={"ghost"}
-          >
-            <SaveAllIcon />
-          </Button>
-        </div>
       </nav>
     </>
   );

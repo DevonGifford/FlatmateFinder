@@ -5,8 +5,8 @@ import { Timestamp } from "firebase/firestore";
 import { updateRanking } from "@/lib/firebase/firestore";
 import { useRequireAdmin } from "@/lib/hooks/useRequireAdmin";
 import { ApplicantProfile } from "@/lib/types/applicant-type";
-import { useDataContext } from "@/components/contexts/data/useDataContext";
-import { useAdminContext } from "@/components/contexts/admin/useAdminContext";
+import { useDatabase } from "@/contexts/database/useDatabaseContext";
+import { useAdminContext } from "@/contexts/admin/useAdminContext";
 import { ProfilePic } from "@/components/ProfilePic";
 import { StarRating } from "@/components/StarRating";
 import {
@@ -36,10 +36,10 @@ import { IoFemale, IoMale, IoMaleFemale } from "react-icons/io5";
 export default function TenantTinderPage() {
   useRequireAdmin();
   const { adminProfile } = useAdminContext();
-  const { data, updateDataContext } = useDataContext();
+  const { applicantPool, updateDatabase } = useDatabase();
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [starRatings, setStarRatings] = useState<number[]>(
-    Array(data?.length).fill(0)
+    Array(applicantPool?.length).fill(0)
   );
   const adminId = (adminProfile?.name || "").substring(0, 3).toLowerCase();
 
@@ -49,9 +49,9 @@ export default function TenantTinderPage() {
     newRatings[cardIndex] = starIndex + 1;
     setStarRatings(newRatings);
     // 👇 Ensure adminProfile and data are not null or undefined
-    if (adminProfile && data) {
+    if (adminProfile && applicantPool) {
       const currentAdmin = adminProfile.name;
-      const cardData = data[cardIndex];
+      const cardData = applicantPool[cardIndex];
       // 👇 Identify current admin and update data
       if (cardData) {
         const updatedCard = { ...cardData };
@@ -70,7 +70,7 @@ export default function TenantTinderPage() {
             break;
         }
         // 👇 Update state w/ modified data
-        updateDataContext([updatedCard]);
+        updateDatabase([updatedCard]);
       }
     }
   };
@@ -78,9 +78,9 @@ export default function TenantTinderPage() {
   // ✅ HANDLE SWIPPING - updates boolean field
   const onSwipe = (direction: string, cardIndex: number) => {
     // 👇 Ensure adminProfile and data are not null or undefined
-    if (adminProfile && data) {
+    if (adminProfile && applicantPool) {
       const currentAdmin = adminProfile.name;
-      const cardData = data[cardIndex];
+      const cardData = applicantPool[cardIndex];
       // 👇 Ensure that rankings object exists before accessing its properties
       if (cardData) {
         const updatedCard = { ...cardData };
@@ -99,7 +99,7 @@ export default function TenantTinderPage() {
             break;
         }
         // 👇 Update state w/ modified data
-        updateDataContext([updatedCard]);
+        updateDatabase([updatedCard]);
         //👇  Update card index number
         setCurrentCardIndex(currentCardIndex + 1);
       }
@@ -109,11 +109,11 @@ export default function TenantTinderPage() {
   // ✅ HANADLE CARD LEAVING SCREEN - updates the applicantDoc
   const onCardLeftScreen = (cardIndex: number) => {
     // 👇 Ensure data exists and the specific card's rankings are not undefined
-    if (data && data[cardIndex]?.rankings) {
-      const updatedRankings = data[cardIndex]
+    if (applicantPool && applicantPool[cardIndex]?.rankings) {
+      const updatedRankings = applicantPool[cardIndex]
         .rankings as Partial<ApplicantProfile>;
       // 👇 Update the applicant document in Firestore with the updated rankings
-      updateRanking(data[cardIndex].uuid, updatedRankings);
+      updateRanking(applicantPool[cardIndex].uuid, updatedRankings);
     } else {
       console.error(
         "Error: Unable to retrieve rankings for the specified card index."
@@ -178,7 +178,7 @@ export default function TenantTinderPage() {
   return (
     <>
       <div className="flex h-[calc(100vh-10vh)] flex-col justify-center items-center sm:mx-20 md:max-w-10/12 sm:max-w-4/6 gap-2 md:gap-8 overscroll-none">
-        {data?.map((dataItem, index) => (
+        {applicantPool?.map((dataItem, index) => (
           <TinderCard
             key={index}
             onSwipe={(direction) => dataItem?.id && onSwipe(direction, index)}
@@ -212,13 +212,11 @@ export default function TenantTinderPage() {
                         <h3 className="font-semibold">Age:</h3>
                         <span>{dataItem.firstForm.age}</span>
                       </div>
-
                       <div className="flex flex-row gap-2 items-center p-1">
                         <h3 className="font-semibold">Sex:</h3>
                         <span>{genderIcon(dataItem.firstForm.sex)}</span>
                       </div>
                     </div>
-
                     {/* //👇 LANGUAGES  */}
                     <div>
                       {dataItem.firstForm.languages &&
@@ -238,9 +236,7 @@ export default function TenantTinderPage() {
                             </div>
                           </div>
                         )}
-                      {/* Additional content or logic if languages are empty or don't exist */}
                     </div>
-
                     {/* //👇 SOCIAL MEDIA */}
                     <a
                       className="flex flex-row items-center gap-1 hover:text-blue-500 pt-1"
@@ -251,7 +247,6 @@ export default function TenantTinderPage() {
                     </a>
                   </div>
                   {/* //👇 PROFILE PICTURE */}
-
                   <ProfilePic
                     src={dataItem.photo}
                     fallbackSrc="/profile-fallback.svg"
@@ -261,7 +256,6 @@ export default function TenantTinderPage() {
                     className="flex justify-center items-center rounded-full"
                   />
                 </div>
-
                 {/* //👇 Viewing & Length of Stay */}
                 <div className="flex flex-row w-full justify-evenly items-center text-sm font-semibold">
                   <div className="flex flex-col justify-center items-center p-2 rounded-lg border">
@@ -278,7 +272,6 @@ export default function TenantTinderPage() {
                     </span>
                   </div>
                 </div>
-
                 {/* //👇 ABOUT SECTION & HOBBIES/INTEREST & SPECIAL REQUEST */}
                 <Accordion
                   type="single"
@@ -312,7 +305,7 @@ export default function TenantTinderPage() {
                   </AccordionItem>
                 </Accordion>
               </CardContent>
-              
+
               <CardFooter className="flex flex-col text-center pt-1 sm:pt-4 justify-center items-center border-t-2 mx-10">
                 {/* //👇 STAR RATING SYSTEM */}
                 <div className="flex flex-row gap-3 pt-1 ">

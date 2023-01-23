@@ -1,11 +1,11 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
-import { DataProvider } from "@/components/contexts/data/DataProvider";
-import { ApplicantProvider } from "@/components/contexts/applicant/ApplicantProvider";
-import { useAdminContext } from "@/components/contexts/admin/useAdminContext";
+import { useAdminContext } from "@/contexts/admin/useAdminContext";
+import { ApplicantProvider } from "@/contexts/applicant/ApplicantProvider";
+import { DatabaseProvider } from "@/contexts/database/DatabaseProvider";
 
 import Navbar from "@/components/Navbar";
-import NavbarAdmin from "@/components/NavbarAdmin";
+import Sidebar from "@/components/Sidebar";
 
 import HomePage from "@/pages/Home.page";
 import FaqPage from "@/pages/Faq.page";
@@ -35,8 +35,8 @@ function App() {
               <Route path="/thankyou" element={<ThankyouPage />} />
             </Routes>
           </ApplicantProvider>
-          <DataProvider>
-            {adminProfile && <NavbarAdmin />}
+          <DatabaseProvider>
+            {adminProfile && <Sidebar />}
             <Routes>
               <Route path="/admin-welcome" element={<TenantWelcomePage />} />
               <Route path="/admin-tinder" element={<TenantTinderPage />} />
@@ -45,7 +45,7 @@ function App() {
                 element={<TenantLeaderboardPage />}
               />
             </Routes>
-          </DataProvider>
+          </DatabaseProvider>
         </main>
         <Toaster />
       </Router>

@@ -1,4 +1,4 @@
-import { useLanguageContext } from "@/components/contexts/language/useLanguageContext";
+import { useLanguageContext } from "@/contexts/language/useLanguageContext";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ThankyouPageData } from "@/lib/types/translation-types";

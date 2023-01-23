@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useAdminContext } from "@/components/contexts/admin/useAdminContext";
+import { useAdminContext } from "@/contexts/admin/useAdminContext";
 import { useRequireAdmin } from "@/lib/hooks/useRequireAdmin";
 import { Button } from "@/components/ui/button";
 

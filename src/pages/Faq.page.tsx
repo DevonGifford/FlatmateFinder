@@ -1,4 +1,4 @@
-import { useLanguageContext } from "@/components/contexts/language/useLanguageContext";
+import { useLanguageContext } from "@/contexts/language/useLanguageContext";
 import {
   Accordion,
   AccordionContent,

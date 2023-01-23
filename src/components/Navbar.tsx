@@ -3,7 +3,7 @@ import { useMatch, useNavigate } from "react-router-dom";
 import {
   Language,
   LanguageContext,
-} from "@/components/contexts/language/LanguageProvider";
+} from "@/contexts/language/LanguageProvider";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
