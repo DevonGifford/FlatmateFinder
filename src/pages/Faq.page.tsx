@@ -11,12 +11,7 @@ import faqData_ES from "@/lib/translations/faq-page/faq_es.json";
 
 export default function FaqPage() {
   const { language } = useLanguageContext();
-  let questionData;
-  if (language === "english") {
-    questionData = faqData_EN;
-  } else {
-    questionData = faqData_ES;
-  }
+  const localeData = language === "english" ? faqData_EN : faqData_ES;
 
   return (
     <>
@@ -25,7 +20,7 @@ export default function FaqPage() {
           Frequently Asked Questions
         </div>
         <Accordion type="single" collapsible className="w-full text-center">
-          {questionData.faq_questions.map((faq, index) => (
+          {localeData.faq_questions.map((faq, index) => (
             <AccordionItem
               key={`faq-${index}`}
               className="border-none py-2"

@@ -8,7 +8,7 @@ import Data_ES from "@/lib/translations/thankyou-page/thankyou_es.json";
 
 export default function ThankyouPage() {
   const { language } = useLanguageContext();
-  const setLanguage: ThankyouPageData =
+  const localeData: ThankyouPageData =
     language === "english" ? Data_EN : Data_ES;
 
   return (
@@ -20,8 +20,8 @@ export default function ThankyouPage() {
           width={"500px"}
         />
         <Link to="/FAQ">
-          <h2 className="text-3xl font-bold">{setLanguage.checkoutHeading}</h2>
-          <Button>{setLanguage.faqheading}</Button>
+          <h2 className="text-3xl font-bold">{localeData.checkoutHeading}</h2>
+          <Button>{localeData.faqheading}</Button>
         </Link>
       </div>
     </>

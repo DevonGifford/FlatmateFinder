@@ -32,6 +32,7 @@ import {
   Video,
 } from "lucide-react";
 import { IoFemale, IoMale, IoMaleFemale } from "react-icons/io5";
+import { toastError } from "@/lib/customToast";
 
 export default function TenantTinderPage() {
   useRequireAdmin();
@@ -43,19 +44,19 @@ export default function TenantTinderPage() {
   );
   const adminId = (adminProfile?.name || "").substring(0, 3).toLowerCase();
 
-  // ✅ HANDLE STAR RATING - updates ranking field
+  //🚀 HANDLE STAR RATING - updates ranking field
   const handleStarClick = (starIndex: number, cardIndex: number) => {
     const newRatings = [...starRatings];
     newRatings[cardIndex] = starIndex + 1;
     setStarRatings(newRatings);
-    // 👇 Ensure adminProfile and data are not null or undefined
+
     if (adminProfile && applicantPool) {
       const currentAdmin = adminProfile.name;
       const cardData = applicantPool[cardIndex];
-      // 👇 Identify current admin and update data
+
       if (cardData) {
         const updatedCard = { ...cardData };
-        updatedCard.rankings = updatedCard.rankings || {}; //-Ensure 'rankings' property is defined before updating its fields
+        updatedCard.rankings = updatedCard.rankings || {};
         switch (currentAdmin) {
           case "Devon":
             updatedCard.rankings.dev_star = starIndex + 1;
@@ -69,22 +70,21 @@ export default function TenantTinderPage() {
           default:
             break;
         }
-        // 👇 Update state w/ modified data
+
         updateDatabase([updatedCard]);
       }
     }
   };
 
-  // ✅ HANDLE SWIPPING - updates boolean field
+  //🚀 HANDLE SWIPPING - updates boolean field
   const onSwipe = (direction: string, cardIndex: number) => {
-    // 👇 Ensure adminProfile and data are not null or undefined
     if (adminProfile && applicantPool) {
       const currentAdmin = adminProfile.name;
       const cardData = applicantPool[cardIndex];
-      // 👇 Ensure that rankings object exists before accessing its properties
+
       if (cardData) {
         const updatedCard = { ...cardData };
-        updatedCard.rankings = updatedCard.rankings || {}; //-Ensure 'rankings' property is defined before updating its fields
+        updatedCard.rankings = updatedCard.rankings || {};
         switch (currentAdmin) {
           case "Devon":
             updatedCard.rankings.dev_bool = direction === "right";
@@ -98,30 +98,26 @@ export default function TenantTinderPage() {
           default:
             break;
         }
-        // 👇 Update state w/ modified data
+
         updateDatabase([updatedCard]);
-        //👇  Update card index number
         setCurrentCardIndex(currentCardIndex + 1);
       }
     }
   };
 
-  // ✅ HANADLE CARD LEAVING SCREEN - updates the applicantDoc
+  //🚀 HANADLE CARD LEAVING SCREEN - updates the applicantDoc
   const onCardLeftScreen = (cardIndex: number) => {
-    // 👇 Ensure data exists and the specific card's rankings are not undefined
     if (applicantPool && applicantPool[cardIndex]?.rankings) {
       const updatedRankings = applicantPool[cardIndex]
         .rankings as Partial<ApplicantProfile>;
-      // 👇 Update the applicant document in Firestore with the updated rankings
+
       updateRanking(applicantPool[cardIndex].uuid, updatedRankings);
     } else {
-      console.error(
-        "Error: Unable to retrieve rankings for the specified card index."
-      );
+      toastError("Something went wrong");
     }
   };
 
-  // ✅ HANDLE ICONS & CONVERSIONS
+  //🚀 HANDLE ICONS & CONVERSIONS
   const genderIcon = (gender: string) => {
     if (gender === "male") {
       return <IoMale />;

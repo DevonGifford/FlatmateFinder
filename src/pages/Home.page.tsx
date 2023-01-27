@@ -35,7 +35,7 @@ export default function HomePage() {
   const { language } = useLanguageContext();
   const { setAdminProfile } = useAdminContext();
 
-  const setLanguage: HomePageData = language === "english" ? Data_EN : Data_ES;
+  const localeData: HomePageData = language === "english" ? Data_EN : Data_ES;
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -87,9 +87,9 @@ export default function HomePage() {
   return (
     <div className="flex flex-col justify-center items-center sm:mx-20 md:max-w-10/12 sm:max-w-4/6 gap-5 md:gap-8">
       <header className="flex flex-col pt-3 items-center md:pt-10">
-        <span className="text-2xl italic ">{setLanguage.subHeading}</span>
+        <span className="text-2xl italic ">{localeData.subHeading}</span>
         <h1 className="text-3xl md:text-4xl lg:text-5xl tracking-wide font-extrabold pb-5 mx-10">
-          {setLanguage.mainHeading}
+          {localeData.mainHeading}
         </h1>
       </header>
 
@@ -106,7 +106,7 @@ export default function HomePage() {
             render={({ field }) => (
               <FormItem className="px-8">
                 <FormLabel className="text-xl sm:text-3xl font-bold">
-                  {setLanguage.passwordLabel}
+                  {localeData.passwordLabel}
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -117,13 +117,13 @@ export default function HomePage() {
                   />
                 </FormControl>
                 <FormDescription>
-                  {setLanguage.passwordDescription}
+                  {localeData.passwordDescription}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button type="submit">{setLanguage.startButton}</Button>
+          <Button type="submit">{localeData.startButton}</Button>
         </form>
       </Form>
     </div>
