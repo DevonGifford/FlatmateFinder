@@ -1,15 +1,14 @@
-<!-- Introduction Text -->
 <div align="center">
-    <h1>Flatmate Finder</h1>
-    <h3> 
-      <a href='https://flatmate-finder-devongifford.vercel.app/', target='_blank'>
-        <h5>live demo</h5>
-      <a/>
-    </h3>
-        <h6>
-            built with <a href="https://vitejs.dev/" >Vite</a> &
-            hosted by <a href="https://vercel.com/">Vercel</a> 
-        </h6>
+    <h1>
+        Flatmate Finder 
+    </h1>
+    <a href='https://flatmate-finder-devongifford.vercel.app/', target='_blank'>
+        live demo ↗
+    <a/>
+    <h6>
+        built with <a href="https://vitejs.dev/" >Vite</a> &
+        hosted by <a href="https://vercel.com/">Vercel</a> 
+    </h6>
 </div>
 
 ---
@@ -26,18 +25,7 @@ Tech Used in this Project
 
 ---
 
-<!-- Logo -->
-<div align=center>
-    <img src="/src/assets/github/FlatmateFinder_demo.png" alt="Demo" title="DemoImage" width="800" height="500">     
-</div>
-
-<div align=center>
-    <img src="/src/assets/github/FlatmateFinder_demo2.png" alt="Demo-tinder" title="DemoImageTinder" width="400" height="600">     
-    <img src="/src/assets/github/FlatmateFinder_demo3.png" alt="Demo-form" title="DemoImageForm" width="400" height="600">     
-</div>
-
 <br>
-
 
 
 ## Brief Introduction:
@@ -48,10 +36,28 @@ Flatmate Finder streamlines the flatmate search process with its user-friendly f
 
 Built with Vite, TypeScript, Firebase, and Tailwind CSS, Flatmate Finder delivers a seamless user experience for both potential flatmates and current tenants.
 
+<!-- SCREENSHOTS -->
+<details>
+<summary> Click here for screenshots: </summary>
+
+<div align=center>
+    <img src="/src/assets/github/FlatmateFinder_demo.png" alt="Demo" title="DemoImage" width="650" height="300">     
+</div>
+
+<div align=center>
+    <img src="/src/assets/github/FlatmateFinder_demo2.png" alt="Demo-tinder" title="DemoImageTinder" width="280" height="450">     
+    <img src="/src/assets/github/FlatmateFinder_demo3.png" alt="Demo-form" title="DemoImageForm" width="280" height="450">     
+</div>
+
+<!-- CLOSING DIV -->
+</details>
+<br/>
+
 <br/>
 
 
 ## How It Works
+<!-- -------------------------------------------------------------------------- -->
 
 ### For Potential Flatmates
 
@@ -103,10 +109,6 @@ Your contribution helps us maintain a stable and reliable application. Thank you
 </details>
 <br/>
 
-
-
-
-<br/>
 
 ## Running Locally
 <!-- -------------------------------------------------------------------------- -->
