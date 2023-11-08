@@ -26,6 +26,10 @@ import {
 
 import { Building, Check, Home, Video } from "lucide-react";
 import { Spinner } from "../Spinner";
+import { ThirdFormData } from "@/lib/types/translation-types";
+import Data_EN from "@/lib/translations/thirdform_en.json";
+import Data_ES from "@/lib/translations/thirdform_es.json";
+import { useLanguageContext } from "../contexts/language/useLanguageContext";
 // import { createApplicantDoc } from "@/lib/firebase/firestore";
 
 // 👇 FORM SCHEMA : Account Form
@@ -57,6 +61,10 @@ export function ThirdForm() {
   const { updateApplicantContext, applicantProfile } = useApplicantContext();
   const [isLoading, setIsLoading] = useState(false); //-button-loadingSpinner
   const [submitted, setSubmitted] = useState(false); //-button-icon success state
+  const { language } = useLanguageContext();
+
+  // ✅ SET CURRENT LANGUAGE:  access language from the context
+  const setLanguage: ThirdFormData = language === "english" ? Data_EN : Data_ES;
 
   // ✅ ZOD-FORM HOOK :  custom hook initializes a form instance,
   const form = useForm<ThirdFormValues>({
@@ -137,8 +145,6 @@ export function ThirdForm() {
           toastFormComplete("3");
           navigate("/thankyou"); //-change route
         }, 1000);
-
-
       } catch (error) {
         // ✖ Handle errors
         setIsLoading(false); //- Reset loading state
@@ -174,7 +180,7 @@ export function ThirdForm() {
             render={({ field }) => (
               <FormItem className="border-none pb-0">
                 <FormLabel className="flex text-center justify-center">
-                  Career Title
+                  {setLanguage.careerTitle}
                 </FormLabel>
 
                 <FormControl>
@@ -208,21 +214,21 @@ export function ThirdForm() {
                       className="flex flex-col items-center justify-center text-center gap-1"
                     >
                       <Home />
-                      <span className="text-xs">WFH</span>
+                      <span className="text-xs">{setLanguage.wfh}</span>
                     </ToggleGroupItem>
                     <ToggleGroupItem
                       value="hybrid"
                       className="flex flex-col items-center justify-center text-center gap-1"
                     >
                       <Video />
-                      <span className="text-xs">Hybrid</span>
+                      <span className="text-xs">{setLanguage.hybrid}</span>
                     </ToggleGroupItem>
                     <ToggleGroupItem
                       value="office"
                       className="flex flex-col items-center justify-center text-center gap-1"
                     >
                       <Building />
-                      <span className="text-xs">Office</span>
+                      <span className="text-xs">{setLanguage.office}</span>
                     </ToggleGroupItem>
                   </ToggleGroup>
                 </FormControl>
@@ -239,7 +245,7 @@ export function ThirdForm() {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Tell us more about you</FormLabel>
+              <FormLabel>{setLanguage.tellMoreTitle}</FormLabel>
               <FormControl>
                 <Textarea placeholder="" {...field} />
               </FormControl>
@@ -253,7 +259,7 @@ export function ThirdForm() {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>What do you do for fun</FormLabel>
+              <FormLabel>{setLanguage.hobbiesTitle}</FormLabel>
               <FormControl>
                 <Textarea placeholder="" {...field} />
               </FormControl>
@@ -265,9 +271,13 @@ export function ThirdForm() {
         {/* 💣 upload image */}
         <div className="grid w-full items-center gap-2 rounded-lg border p-4">
           <Label htmlFor="picture" className="py-2">
-            Picture
+            {setLanguage.picTitle}
           </Label>
-          <Input id="picture" type="file" />
+          <Input
+            id="picture"
+            type="file"
+            placeholder={`${setLanguage.picPlaceHolder}`}
+          />
         </div>
 
         {/* BUTTONS */}
@@ -277,7 +287,13 @@ export function ThirdForm() {
           size={"lg"}
         >
           {/* <Spinner/> */}
-          {isLoading ? <Spinner /> : submitted ? <Check /> : "Complete Application"}
+          {isLoading ? (
+            <Spinner />
+          ) : submitted ? (
+            <Check />
+          ) : (
+            `${setLanguage.completeButton}`
+          )}
         </Button>
       </form>
     </Form>

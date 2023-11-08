@@ -34,3 +34,16 @@ export interface SecondFormData {
   specialRequestQuestion: string;
   nextbutton: string;
 }
+
+export interface ThirdFormData {
+  careerTitle: string;
+  wfh: string;
+  hybrid: string;
+  office: string;
+  tellMoreTitle: string;
+  hobbiesTitle: string;
+  picTitle: string;
+  picButton: string;
+  picPlaceHolder: string;
+  completeButton: string;
+}

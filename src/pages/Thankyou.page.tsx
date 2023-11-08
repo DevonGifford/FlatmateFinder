@@ -5,10 +5,7 @@ export default function ThankyouPage() {
   return (
     <>
       <div className="flex flex-col items-center justify-center h-screen">
-        <div className="text-4xl font-semibold italic mt-8">Thank you</div>
-        <div className="text-2xl italic mt-4 mb-8">
-          Look forward to living with you soon
-        </div>
+        <img src="/ThankYouPage.png" className="rounded-full -translate-y-10" width={"500px"} />
       </div>
       <div className="flex flex-col gap-3">
         <div className="flex flex-row gap-3">
