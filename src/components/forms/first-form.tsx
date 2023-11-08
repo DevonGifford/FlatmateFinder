@@ -274,7 +274,7 @@ export function FirstForm() {
           className="rounded-lg text-sm md:text-base lg:text-xl p-4 px-8 md:px-12 md:py-6"
           size={"lg"}
         >
-          Next
+          {setLanguage.nextbutton}
         </Button>
       </form>
     </Form>

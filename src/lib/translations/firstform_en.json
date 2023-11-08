@@ -5,8 +5,9 @@
     "age": "Age",
     "social": "Social Media",
     "spoken": "I speak",
-    "english": "English",
-    "Spanish": "Spanish",
-    "French": "French",
-    "Other": "Other"
+    "en": "English",
+    "es": "Spanish",
+    "fr": "French",
+    "other": "Other",
+    "nextbutton": "Next"
   }

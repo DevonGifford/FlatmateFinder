@@ -13,8 +13,24 @@ export interface FirstFormData {
   age: string;
   social: string;
   spoken: string;
-  english: string;
-  Spanish: string;
-  French: string;
-  Other: string;
+  en: string;
+  es: string;
+  fr: string;
+  other: string;
+  nextbutton: string;
+}
+
+export interface SecondFormData {
+  headingMoveDate: string;
+  pickDate: string;
+  headingETAStay: string;
+  months: string;
+  year: string;
+  headingTypeViewing: string;
+  inPerson: string;
+  videoCall: string;
+  schedule: string;
+  headingMoreInfo: string;
+  specialRequestQuestion: string;
+  nextbutton: string;
 }
