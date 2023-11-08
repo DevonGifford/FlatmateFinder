@@ -24,8 +24,8 @@ export const locations = [
 
 export const languages = [
   { label: "English", value: "en" },
-  { label: "Spanish", value: "es" },
-  { label: "French", value: "fr" },
+  { label: "Español", value: "es" },
+  { label: "Français", value: "fr" },
   { label: "Other", value: "more" },
 ] as const;
 
