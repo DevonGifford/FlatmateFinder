@@ -68,13 +68,15 @@ export default function Navbar() {
           </Button>
         )}
 
-        {/* LANGUAGE SETTINGS */}
+        {/* //👇 LANGUAGE SETTINGS */}
         <ToggleGroup type="single">
           <ToggleGroupItem
             variant={"outline"}
             value="EN"
             onClick={() => changeLanguage("english")}
-            className=" hover:bg-cyan-600/20"
+            className={`${
+              language === "english" ? "bg-cyan-600/20" : "hover:bg-cyan-600/20"
+            }`}
           >
             <Avatar className="h-6 w-6">
               <AvatarImage src="/en-flag.png" />
@@ -84,7 +86,9 @@ export default function Navbar() {
             variant={"outline"}
             value="ES"
             onClick={() => changeLanguage("spanish")}
-            className=" hover:bg-cyan-600/20"
+            className={`${
+              language === "spanish" ? "bg-cyan-600/20" : "hover:bg-cyan-600/20"
+            }`}
           >
             <Avatar className="h-6 w-6">
               <AvatarImage src="/es-flag.png" />
