@@ -33,8 +33,8 @@ import { languages } from "@/lib/constants/constants";
 import { ApplicantProfile } from "@/lib/types/applicant-type";
 import { FirstFormData } from "@/lib/types/translation-types";
 
-import Data_EN from "@/lib/translations/firstform_en.json";
-import Data_ES from "@/lib/translations/firstform_es.json";
+import Data_EN from "@/lib/translations/applicant-form/firstform_en.json";
+import Data_ES from "@/lib/translations/applicant-form/firstform_es.json";
 
 // 👇 FORM SCHEMA : Account Form
 const firstFormSchema = z.object({

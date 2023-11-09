@@ -27,8 +27,8 @@ import {
 
 import { SecondFormData } from "@/lib/types/translation-types";
 import { ApplicantProfile } from "@/lib/types/applicant-type";
-import Data_EN from "@/lib/translations/secondform_en.json";
-import Data_ES from "@/lib/translations/secondform_es.json";
+import Data_EN from "@/lib/translations/applicant-form/secondform_en.json";
+import Data_ES from "@/lib/translations/applicant-form/secondform_es.json";
 
 // 👇 FORM SCHEMA : Account Form
 const secondFormSchema = z.object({

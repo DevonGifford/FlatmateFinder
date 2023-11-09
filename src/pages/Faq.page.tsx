@@ -5,8 +5,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-import faqData_EN from "../lib/translations/faq_en.json";
-import faqData_ES from "../lib/translations/faq_es.json";
+import faqData_EN from "../lib/translations/faq-page/faq_en.json";
+import faqData_ES from "../lib/translations/faq-page/faq_es.json";
 import { useLanguageContext } from "@/components/contexts/language/useLanguageContext";
 
 export default function FaqPage() {

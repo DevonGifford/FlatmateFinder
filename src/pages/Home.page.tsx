@@ -20,8 +20,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import Data_EN from "../lib/translations/home_en.json";
-import Data_ES from "../lib/translations/home_es.json";
+import Data_EN from "../lib/translations/home-page/home_en.json";
+import Data_ES from "../lib/translations/home-page/home_es.json";
 import { HomePageData } from "@/lib/types/translation-types";
 
 // 👇 FORM SCHEMA : Home Page

@@ -15,15 +15,10 @@ export default function Navbar() {
   const navigate = useNavigate();
   const match = useMatch("*"); //- match any route
 
-  // 🎯🔮 Need to use this language state - current issue #12
-  // 🔗🔮 https://github.com/DevonGifford/FlatmateFinder/issues/12
+  // ✅ Handles changing website language
   const changeLanguage = (newLanguage: Language) => {
     setLanguage(newLanguage);
   };
-
-  // 🔧🚧 Development logs
-  console.log("🦺📌 Navbar - current Lang =", language);
-  console.log("🦺📌 Navbar - current URL =", match?.pathname);
 
   return (
     <>

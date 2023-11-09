@@ -27,8 +27,8 @@ import {
 import { Building, Check, Home, Video } from "lucide-react";
 import { Spinner } from "../Spinner";
 import { ThirdFormData } from "@/lib/types/translation-types";
-import Data_EN from "@/lib/translations/thirdform_en.json";
-import Data_ES from "@/lib/translations/thirdform_es.json";
+import Data_EN from "@/lib/translations/applicant-form/thirdform_en.json";
+import Data_ES from "@/lib/translations/applicant-form/thirdform_es.json";
 import { useLanguageContext } from "../contexts/language/useLanguageContext";
 // import { createApplicantDoc } from "@/lib/firebase/firestore";
 
@@ -59,9 +59,9 @@ type ThirdFormValues = z.infer<typeof thirdFormSchema>;
 export function ThirdForm() {
   const navigate = useNavigate();
   const { updateApplicantContext, applicantProfile } = useApplicantContext();
-  const [isLoading, setIsLoading] = useState(false); //-button-loadingSpinner
-  const [submitted, setSubmitted] = useState(false); //-button-icon success state
   const { language } = useLanguageContext();
+  const [isLoading, setIsLoading] = useState(false); //- handle button loadingSpinner
+  const [submitted, setSubmitted] = useState(false); //- handle button-icon success
 
   // ✅ SET CURRENT LANGUAGE:  access language from the context
   const setLanguage: ThirdFormData = language === "english" ? Data_EN : Data_ES;
@@ -71,22 +71,12 @@ export function ThirdForm() {
     resolver: zodResolver(thirdFormSchema),
   });
 
-  //   💣 COMPLETE THIS
+  //   🎯 Handle Image Storage Upload 💣 COMPLETE THIS OR REMOVE THIS
   // - Upload to storage
   // - Create local state to hold url
   // - submit form with state.
-  //   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-  //     const file = e.target.files?.[0]; // Accessing the first file from the selected files
-
-  //     // -uploade to firestore
-
-  //     // -return the url string
-  //     const storageLink = "";
-
-  //     if (file) {
-  //       form.setValue("photo", storageLink);
-  //     }
-  //   }
+  // - uploade to firestore
+  // - return the url string
 
   // ✅ SUBMIT FORM - submit account form
   async function onSubmit(data: ThirdFormValues) {
@@ -95,8 +85,6 @@ export function ThirdForm() {
     setIsLoading(true);
 
     if (applicantProfile) {
-      console.log("🦺 Applicant context exist's proceeding with submission");
-
       // 👇 Create a uuid for the user
       //- Generate a unique ID for the user
       const secretVar = import.meta.env.VITE_SECRET_VARIABLE;
@@ -104,9 +92,9 @@ export function ThirdForm() {
         .slice(0, 5)
         .replace(/\s/g, ""); // Extract first 5 letters and remove spaces
       const currentTimeStamp = Date.now().toString().slice(-5); // Extract last 5 digits of current timestamp
+
       //-Construct a custom ID combining name, secret variable, and timestamp
       const documentId = `${nameFirstFive}-${secretVar}-${currentTimeStamp}`;
-      console.log("🦺 documentId", documentId);
 
       try {
         // 👇 Merge form data with context data
@@ -115,14 +103,12 @@ export function ThirdForm() {
           ...data,
           photo: "", //🎯💣 Temporary solution for if photo
         };
-        console.log("🦺 updatedThirdForm", updatedThirdForm);
 
         const updatedProfile: ApplicantProfile = {
           ...applicantProfile,
           thirdForm: updatedThirdForm,
           uuid: documentId,
         };
-        console.log("🦺 updatedProfile", updatedProfile);
 
         // 👇 Update the userContext with the merged data
         await updateApplicantContext(updatedProfile);
