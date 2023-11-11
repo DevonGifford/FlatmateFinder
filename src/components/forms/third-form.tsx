@@ -24,7 +24,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import { Building, Check, Home, Video } from "lucide-react";
+import { Building, Check, Home, Link, Video } from "lucide-react";
 import { Spinner } from "../Spinner";
 import { ThirdFormData } from "@/lib/types/translation-types";
 import Data_EN from "@/lib/translations/applicant-form/thirdform_en.json";
@@ -52,7 +52,13 @@ const thirdFormSchema = z.object({
     .max(500, {
       message: "⚠ too long",
     }),
-  photo: z.string().optional(),
+  social_media: z
+    .string()
+    .url()
+    .max(50, {
+      message: "⚠ too long",
+    })
+    .optional(),
 });
 type ThirdFormValues = z.infer<typeof thirdFormSchema>;
 
@@ -94,7 +100,7 @@ export function ThirdForm() {
         const updatedThirdForm = {
           ...applicantProfile.thirdForm,
           ...data,
-          photo: "", //🎯💣 Temporary solution for if photo
+          social_media: data.social_media || "",
         };
 
         const updatedProfile: ApplicantProfile = {
@@ -252,6 +258,28 @@ export function ThirdForm() {
               <FormControl>
                 <Textarea placeholder="" {...field} />
               </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          name="social_media"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem className="rounded-lg border p-4">
+              <FormLabel className="flex flex-col gap-1 text-center justify-center">
+                <p>{setLanguage.social}</p>
+                <p className="text-xs font-thin italic">
+                  {setLanguage.optional}
+                </p>
+              </FormLabel>
+              <div className="flex flex-row justify-between items-center gap-3">
+                <Link className="text-devready-green" size={20} />
+                <FormControl>
+                  <Input placeholder="Instagram, LinkedIn etc." {...field} />
+                </FormControl>
+              </div>
               <FormMessage />
             </FormItem>
           )}

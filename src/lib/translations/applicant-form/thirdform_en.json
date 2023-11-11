@@ -8,9 +8,7 @@
   "tellMorePlacholder": "How would you describe yourself...",
   "hobbiesTitle": "What do you do for fun",
   "hobbiesPlacholder": "hobbies or interests",
-  "picTitle": "Picture",
-  "picButton": "Choose File",
-  "picPlaceHolder": "No file chosen",
+  "social": "Social Media",
   "completeButton": "Complete Application",
   "optional": "optional"
 }

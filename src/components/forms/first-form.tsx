@@ -10,7 +10,6 @@ import { useApplicantContext } from "../contexts/applicant/useApplicantContext";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Link } from "lucide-react";
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 import { IoMale, IoFemale, IoMaleFemale } from "react-icons/io5";
 import {
@@ -66,13 +65,6 @@ const firstFormSchema = z.object({
     .max(16, {
       message: "⚠ too long",
     }),
-  social_media: z
-    .string()
-    .url()
-    .max(50, {
-      message: "⚠ too long",
-    })
-    .optional(),
   languages: z.array(z.string()).optional(),
 });
 type FirstFormValues = z.infer<typeof firstFormSchema>;
@@ -158,6 +150,36 @@ export function FirstForm() {
           )}
         />
 
+        <FormField
+          name="languages"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem className="rounded-lg border p-4">
+              <FormLabel className="flex flex-col gap-1 text-center justify-center">
+                {setLanguage.spoken}
+                <p className="text-xs font-thin italic">
+                  {setLanguage.optional}
+                </p>
+              </FormLabel>
+              <FormControl>
+                <ToggleGroup
+                  size="sm"
+                  type="multiple"
+                  value={field.value}
+                  onValueChange={(value) => field.onChange(value)}
+                >
+                  {languages.map((lang) => (
+                    <ToggleGroupItem key={lang.label} value={lang.label}>
+                      {lang.label}
+                    </ToggleGroupItem>
+                  ))}
+                </ToggleGroup>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         {/* GENDER + AGE */}
         <div className="flex flex-row justify justify-evenly">
           {/* Gender Selection */}
@@ -225,58 +247,6 @@ export function FirstForm() {
             )}
           />
         </div>
-
-        <FormField
-          name="social_media"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem className="rounded-lg border p-4">
-              <FormLabel className="flex flex-col gap-1 text-center justify-center">
-                <p>{setLanguage.social}</p>
-                <p className="text-xs font-thin italic">
-                  {setLanguage.optional}
-                </p>
-              </FormLabel>
-              <div className="flex flex-row justify-between items-center gap-3">
-                <Link className="text-devready-green" size={20} />
-                <FormControl>
-                  <Input placeholder="Instagram, LinkedIn etc." {...field} />
-                </FormControl>
-              </div>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          name="languages"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem className="rounded-lg border p-4">
-              <FormLabel className="flex flex-col gap-1 text-center justify-center">
-                {setLanguage.spoken}
-                <p className="text-xs font-thin italic">
-                  {setLanguage.optional}
-                </p>
-              </FormLabel>
-              <FormControl>
-                <ToggleGroup
-                  size="sm"
-                  type="multiple"
-                  value={field.value}
-                  onValueChange={(value) => field.onChange(value)}
-                >
-                  {languages.map((lang) => (
-                    <ToggleGroupItem key={lang.label} value={lang.label}>
-                      {lang.label}
-                    </ToggleGroupItem>
-                  ))}
-                </ToggleGroup>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
 
         {/* BUTTONS */}
         <Button

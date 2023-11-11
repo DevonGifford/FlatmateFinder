@@ -11,7 +11,6 @@ export interface FirstFormData {
   whatsapp: string;
   gender: string;
   age: string;
-  social: string;
   spoken: string;
   en: string;
   es: string;
@@ -36,7 +35,6 @@ export interface SecondFormData {
   specialRequestQuestion: string;
   nextbutton: string;
   optional: string;
-
 }
 
 export interface ThirdFormData {
@@ -49,10 +47,13 @@ export interface ThirdFormData {
   tellMorePlacholder: string;
   hobbiesTitle: string;
   hobbiesPlacholder: string;
-  picTitle: string;
-  picButton: string;
-  picPlaceHolder: string;
+  social: string;
   completeButton: string;
   optional: string;
+}
 
+
+export interface ThankyouPageData {
+  checkoutHeading: string;
+  faqheading: string;
 }

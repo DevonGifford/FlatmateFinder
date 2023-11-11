@@ -74,6 +74,7 @@ export function SecondForm() {
       const formData: Partial<ApplicantProfile> = {
         secondForm: {
           ...data,
+          more_info: data.more_info || "",
         },
       };
       updateApplicantContext(formData);
