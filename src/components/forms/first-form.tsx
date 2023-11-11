@@ -77,8 +77,7 @@ export function FirstForm() {
   // ✅ SET CURRENT LANGUAGE:  access language from the context
   const setLanguage: FirstFormData = language === "english" ? Data_EN : Data_ES;
 
-  // ⏳ IF EXISTING USERDATA, UPDATE FORMS WITH DATAA
-  console.log(" 🦺 applicantProfile", applicantProfile);
+  // ✅ IF EXISTING USERDATA, UPDATE FORMS WITH DATAA
   // Check if applicantProfile exists and has the necessary data
   const defaultValues: FirstFormValues = applicantProfile?.firstForm || {
     name: "",
