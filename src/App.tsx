@@ -9,12 +9,19 @@ import "./App.css";
 import { ApplicantProvider } from "./components/contexts/applicant/ApplicantProvider";
 import ThankyouPage from "./pages/Thankyou.page";
 import FaqPage from "./pages/Faq.page";
+import { useAdminContext } from "./components/contexts/admin/useAdminContext";
+import TenantWelcomePage from "./pages/TenantWelcome.page";
+import TenantTinderPage from "./pages/TenantTinder.page";
+import TenantLeaderboardPage from "./pages/TenantLeaderboard.page";
+import NavbarAdmin from "./components/NavbarAdmin";
 
 function App() {
+  const { adminProfile } = useAdminContext();
+  console.log("adminProfile 🦺", adminProfile);
   return (
     <>
       <Router basename={import.meta.env.VITE_REACT_APP_BASENAME || "/"}>
-        <Navbar />
+        {adminProfile ? <NavbarAdmin /> : <Navbar />}
         <main className="flex flex-col h-auto gap-3 lg:gap-5">
           <Routes>
             <Route path="/" element={<HomePage />} />
@@ -26,6 +33,14 @@ function App() {
               <Route path="/thankyou" element={<ThankyouPage />} />
             </Routes>
           </ApplicantProvider>
+          <Routes>
+            <Route path="/welcome-tenant" element={<TenantWelcomePage />} />
+            <Route path="/applicant-tinder" element={<TenantTinderPage />} />
+            <Route
+              path="/applicant-leaderboard"
+              element={<TenantLeaderboardPage />}
+            />
+          </Routes>
         </main>
         <Toaster />
       </Router>

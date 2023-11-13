@@ -23,6 +23,7 @@ import {
 import Data_EN from "../lib/translations/home-page/home_en.json";
 import Data_ES from "../lib/translations/home-page/home_es.json";
 import { HomePageData } from "@/lib/types/translation-types";
+import { useAdminContext } from "@/components/contexts/admin/useAdminContext";
 
 // 👇 FORM SCHEMA : Home Page
 const FormSchema = z.object({
@@ -34,6 +35,7 @@ const FormSchema = z.object({
 export default function HomePage() {
   const navigate = useNavigate();
   const { language } = useLanguageContext();
+  const { validateAdmin } = useAdminContext();
 
   // ✅ SET CURRENT LANGUAGE:  access language from the context
   const setLanguage: HomePageData = language === "english" ? Data_EN : Data_ES;
@@ -54,7 +56,8 @@ export default function HomePage() {
     switch (password) {
       case import.meta.env.VITE_PASSWORD_DASHBOARD:
         console.log("👀 Existing tenant login");
-        navigate("/dashboard");
+        validateAdmin();
+        navigate("/welcome-tenant");
         break;
 
       case import.meta.env.VITE_PASSWORD_ALPHA:
