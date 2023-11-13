@@ -25,16 +25,23 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-
-import mockDB from "../assets/realmock-db.json";
 import { Timestamp } from "firebase/firestore";
+
+// import mockDB from "../assets/realmock-db.json";
+import { useAdminContext } from "@/components/contexts/admin/useAdminContext";
+import { useDataContext } from "@/components/contexts/data/useDataContext";
 
 export default function TenantTinderPage() {
   useRequireAdmin();
+  const { data } = useDataContext();
+  const { adminProfile } = useAdminContext();
   const [currentCardIndex, setCurrentCardIndex] = useState(0); //- State to keep track of the current card being shown
   const [starRatings, setStarRatings] = useState<number[]>(
-    Array(mockDB.length).fill(0)
+    Array(data?.length).fill(0)
   );
+
+  console.log("adminProfile", adminProfile);
+  console.log("data", data);
 
   // 🎯⏳ HANDLE STAR RATING
   const handleStarClick = (starIndex: number, cardIndex: number) => {
@@ -42,20 +49,22 @@ export default function TenantTinderPage() {
     newRatings[cardIndex] = starIndex + 1;
     setStarRatings(newRatings);
 
-    // 🎯💣  UPDATE THE DB - with this new rating for the card at cardIndex
+    // 🎯💣 UPDATE THE State - with this new rating for the card at cardIndex
     //- implement the database update logic here
     //- Resetting the state for a specific card when needed (for example, when new cards arrive)
     //- setStarRatings(newRatings.map((rating, index) => (index === cardIndex ? 0 : rating)));
   };
 
   // 🎯⏳ HANDLE SWIPPING
-  const onSwipe = (direction: string) => {
-    console.log("🃏 a card has been swiped 🃏");
+  const onSwipe = (direction: string, cardIndex: string) => {
+    console.log(`🃏 ${cardIndex} a card has been swiped 🃏`);
     // Update current card index on swipe
-    if (direction === "right" && currentCardIndex < mockDB.length - 1) {
+    if (direction === "right" && currentCardIndex < data!.length - 1) {
       console.log("You swiped: " + direction);
       setCurrentCardIndex(currentCardIndex + 1);
-      // 🎯💣  UPDATE THE TEMP-LOCAL DB
+      // 🎯💣  UPDATE THE STATE
+      // . depending on the current admin profile and the current
+      //  . update the state with the boolean - if swiped right update with true if swiped left update with false
     }
     // Handle other swipe directions as needed
     console.log("You swiped: " + direction);
@@ -70,7 +79,7 @@ export default function TenantTinderPage() {
     //
   };
 
-  // ✅ Handle Icons
+  // ✅ HANDLE ICONS & CONVERSIONS
   const genderIcon = (gender: string) => {
     if (gender === "male") {
       return <IoMale />;
@@ -106,7 +115,7 @@ export default function TenantTinderPage() {
     }
   };
   const convertTimestamp = (timeStamp: Timestamp) => {
-    if (timeStamp?.seconds && timeStamp?.nanoseconds) {
+    if (timeStamp?.seconds) {
       // Firestore Timestamp-like object with seconds and nanoseconds
       const date = new Date(
         timeStamp.seconds * 1000 + timeStamp.nanoseconds / 1000000
@@ -127,10 +136,12 @@ export default function TenantTinderPage() {
   return (
     <>
       <div className="flex h-[calc(100vh-10vh)] flex-col justify-center items-center sm:mx-20 md:max-w-10/12 sm:max-w-4/6 gap-5 md:gap-8 overscroll-none">
-        {mockDB.map((dataItem, index) => (
+        {data?.map((dataItem, index) => (
           <TinderCard
             key={index}
-            onSwipe={onSwipe}
+            onSwipe={(direction) =>
+              dataItem?.id && onSwipe(direction, dataItem.id)
+            }
             onCardLeftScreen={() => onCardLeftScreen(`card${index}`)}
             preventSwipe={["up", "down"]}
             className="absolute w-[310px] md:w-[500px]"
@@ -151,16 +162,7 @@ export default function TenantTinderPage() {
                       <CalendarClockIcon size={16} />
                       <p>Desired Entry:</p>
                       <span className="font-normal">
-                        {convertTimestamp(
-                          dataItem.secondForm.move_date as Timestamp
-                        )}
-                        {/* {new Date(
-                          dataItem.secondForm.move_date
-                        ).toLocaleDateString("en-US", {
-                          day: "numeric",
-                          month: "short",
-                          year: "2-digit",
-                        })} */}
+                        {convertTimestamp(dataItem.secondForm.move_date)}
                       </span>
                     </div>
                     {/* //👇 AGE & GENDER */}

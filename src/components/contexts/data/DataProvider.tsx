@@ -1,17 +1,18 @@
 import React, { createContext, useEffect, useState } from "react";
-import { ApplicantProfile } from "@/lib/types/applicant-type";
+// import { ApplicantProfile } from "@/lib/types/applicant-type";
+import { RawApplicantProfile } from "@/lib/types/rawapplicant-type";
 import { collection, getDocs } from "firebase/firestore";
 
 import db from "@/lib/firebase/config";
 // import mockDB from "../../../assets/realmock-db.json"; //👈 For development
 
 // Define the data type
-export type DatabaseDataType = ApplicantProfile[] | null;
+export type DatabaseDataType = RawApplicantProfile[] | null;
 // Create the context
 export type DataContextProps = {
   data: DatabaseDataType;
   setData: React.Dispatch<React.SetStateAction<DatabaseDataType>>;
-  updateDataContext: (newData: Partial<ApplicantProfile[]>) => Promise<void>;
+  updateDataContext: (newData: Partial<RawApplicantProfile[]>) => Promise<void>;
   fetchDataProcess: () => Promise<void>;
   handleRefresh: () => void;
 };
@@ -28,7 +29,7 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
   const [data, setData] = useState<DatabaseDataType>(null); // Set a default empty o ruse mockDB for development...
   const [refresh, setRefresh] = useState<boolean>(false); // State to trigger refresh
 
-  // const mockData = mockDB as ApplicantProfile[]; //👈 For development
+  // const mockData = mockDB as RawApplicantProfile[]; //👈 For development
 
   // ⏳ FETCHING DATA ON LOAD & CUSTOM-REFRESH
   useEffect(() => {
@@ -66,7 +67,7 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
     const querySnapshot = await getDocs(collection(db, "applicants"));
 
     //- Extract data from querySnapshot
-    const data: ApplicantProfile[] = [];
+    const data: RawApplicantProfile[] = [];
     querySnapshot.forEach((doc) => {
       const applicantData = doc.data(); // Extract data from Firestore document
 
@@ -78,7 +79,7 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
         applicantData.thirdForm &&
         applicantData.applicationDate
       ) {
-        const profile: ApplicantProfile = {
+        const profile: RawApplicantProfile = {
           id: doc.id, // Assuming id refers to uuid
           uuid: applicantData.uuid,
           firstForm: applicantData.firstForm,
@@ -103,11 +104,11 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
   /**
    * 🔮 HANDLES UPDATING CONTEXT:
    * Updates the user profile in the context with new data.
-   * @param {Partial<ApplicantProfile>} newData - The new data to update in the user profile.
+   * @param {Partial<RawApplicantProfile>} newData - The new data to update in the user profile.
    * @returns {Promise<void>} A Promise that resolves once the update process completes.
    */
-  const updateDataContext = async (newData: Partial<ApplicantProfile[]>) => {
-    console.log("🎭DataContext/updateApplicantProfile: 💢 Triggered", newData);
+  const updateDataContext = async (newData: Partial<RawApplicantProfile[]>) => {
+    console.log("🎭DataContext/updateRawApplicantProfile: 💢 Triggered", newData);
   };
 
   const userContextValue: DataContextProps = {

@@ -20,6 +20,14 @@ export type ApplicantProfile = {
     hobbies: string;
     social_media?: string;
   };
+  rankings?: {
+    dev_star?: number;
+    dev_bool?: boolean;
+    adr_star?: number;
+    adr_bool?: boolean;
+    osc_star?: number;
+    osc_bool?: boolean;
+  };
   applicationDate: Date;
   id?: string;
   photo?: string;
