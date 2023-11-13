@@ -1,7 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 
 import { ApplicantProfile } from "@/lib/types/applicant-type";
-import { Timestamp } from "firebase/firestore";
 
 // Create the context
 export type ApplicantContextType = {
@@ -35,9 +34,9 @@ export const ApplicantProvider = ({
       setApplicantProfile({
         uuid: "", // Set initial properties as needed
         firstForm: { name: "", age: "", sex: "", phone: "" },
-        secondForm: { move_date: Timestamp.now(), length_stay: 0, meet_type: "" },
+        secondForm: { move_date: new Date(), length_stay: 0, meet_type: "" },
         thirdForm: { job_title: "", job_type:"" ,describe: "", hobbies: "", },
-        applicationDate: Timestamp.now(),
+        applicationDate: new Date(),
       });
     }
   }, [applicantProfile]);
