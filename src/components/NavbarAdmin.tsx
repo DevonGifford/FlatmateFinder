@@ -16,7 +16,7 @@ export default function NavbarAdmin() {
   const navigate = useNavigate();
   return (
     <>
-      <nav className="flex flex-row justify-between">
+      <nav className="flex flex-row justify-between ">
         {/* //👇 Hamburger Menu */}
         <Sheet>
           <SheetTrigger>
@@ -63,15 +63,15 @@ export default function NavbarAdmin() {
         </Sheet>
         <div className="flex flex-row">
           <Button
-            className="flex flex-row gap-1 transition ease-in-out duration-150 hover:scale-110"
-            size={"sm"}
+            className="transition ease-in-out duration-150 hover:scale-110"
+            size={"icon"}
             variant={"ghost"}
           >
             <RefreshCwIcon />
           </Button>
           <Button
             className="flex flex-row gap-1 transition ease-in-out duration-150 hover:scale-110"
-            size={"sm"}
+            size={"icon"}
             variant={"ghost"}
           >
             <SaveAllIcon />
