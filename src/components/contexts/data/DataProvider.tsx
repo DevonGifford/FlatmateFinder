@@ -3,7 +3,7 @@ import { ApplicantProfile } from "@/lib/types/applicant-type";
 import { collection, getDocs } from "firebase/firestore";
 
 import db from "@/lib/firebase/config";
-import mockDB from "../../../assets/realmock-db.json"; //👈 For development
+// import mockDB from "../../../assets/realmock-db.json"; //👈 For development
 
 // Define the data type
 export type DatabaseDataType = ApplicantProfile[] | null;
@@ -12,7 +12,7 @@ export type DataContextProps = {
   data: DatabaseDataType;
   setData: React.Dispatch<React.SetStateAction<DatabaseDataType>>;
   updateDataContext: (newData: Partial<ApplicantProfile[]>) => Promise<void>;
-  fetchDataProcess: (userId: string) => Promise<void>;
+  fetchDataProcess: () => Promise<void>;
   handleRefresh: () => void;
 };
 export const DataContext = createContext<DataContextProps>({
@@ -28,15 +28,15 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
   const [data, setData] = useState<DatabaseDataType>(null); // Set a default empty o ruse mockDB for development...
   const [refresh, setRefresh] = useState<boolean>(false); // State to trigger refresh
 
-  const mockData = mockDB as ApplicantProfile[]; //👈 For development
+  // const mockData = mockDB as ApplicantProfile[]; //👈 For development
 
   // ⏳ FETCHING DATA ON LOAD & CUSTOM-REFRESH
   useEffect(() => {
     console.log("🎭DataContext/useEffect :  💢 Triggered");
     const fetchData = async () => {
       try {
-        // fetchDataProcess("Devon");  //👈 For production
-        setData(mockData); //👈 For development
+        fetchDataProcess(); //👈 For production
+        // setData(mockData); //👈 For development
         console.log("new data set");
         console.log("refresh state:", refresh);
       } catch (error) {
@@ -44,10 +44,10 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
       }
     };
     fetchData(); // Call the fetching function
-  }, [refresh, mockData]); // Add 'refresh' state as a dependency
+  }, [refresh]); // Add 'refresh' state as a dependency
 
   /**
-   * 🧱 TRIGGER FOR RE-FETCHING DATA
+   * ✅ TRIGGER FOR RE-FETCHING DATA
    * Handles fetching user firestore document by checking if the document exists and sets it to state.
    */
   const handleRefresh = () => {
@@ -61,8 +61,8 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
    * @param {string} userId - The ID of the user whose data is being fetched.
    * @returns {Promise<void>} A Promise that resolves once the fetch process completes.
    */
-  const fetchDataProcess = async (userId: string) => {
-    console.log("🎭DataContext/fetchUserDataProcess :  💢 Triggered", userId);
+  const fetchDataProcess = async () => {
+    console.log("🎭DataContext/fetchUserDataProcess :  💢 Triggered");
     const querySnapshot = await getDocs(collection(db, "applicants"));
 
     //- Extract data from querySnapshot
@@ -94,7 +94,7 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
 
     //- Set the data to state
     console.log(
-      "🎭DataContext/fetchUserDataProcess :   ✔ Success - fetched data:",
+      "🎭DataContext/fetchUserDataProcess :   ✔ Success - fetched and set data:",
       data
     );
     setData(data);
