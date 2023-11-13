@@ -7,14 +7,14 @@ export type AdminContextType = {
   adminProfile: AdminProfile | null;
   setAdminProfile: React.Dispatch<React.SetStateAction<AdminProfile | null>>;
   isAdmin: () => Promise<boolean>;
-  validateAdmin: () => Promise<void>;
+  signOut: () => Promise<void>;
 };
 
 export const AdminContext = createContext<AdminContextType>({
   adminProfile: null,
   setAdminProfile: () => {},
   isAdmin: async () => false,
-  validateAdmin: async () => {},
+  signOut: async () => {},
 });
 
 // Create the context provider
@@ -29,13 +29,13 @@ export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const validateAdmin = async () => {
-    setAdminProfile({ isAdmin: true, uuid: "", name: "" });
+  const signOut = async () => {
+    setAdminProfile({ isAdmin: false, name: "" });
   };
 
   return (
     <AdminContext.Provider
-      value={{ adminProfile, isAdmin, setAdminProfile, validateAdmin }}
+      value={{ adminProfile, isAdmin, signOut, setAdminProfile }}
     >
       {children}
     </AdminContext.Provider>

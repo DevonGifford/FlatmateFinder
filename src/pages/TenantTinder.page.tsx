@@ -10,7 +10,6 @@ export default function TenantTinderPage() {
         <div className="text-4xl italic py-4 pb-6 border-b-2">TINDER PAGE</div>
         <p>admin profile:</p>
         <p>name: {adminProfile?.name}</p>
-        <p>uuid: {adminProfile?.uuid}</p>
       </div>
     </>
   );

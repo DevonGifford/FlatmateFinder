@@ -8,9 +8,12 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "./ui/sheet";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAdminContext } from "./contexts/admin/useAdminContext";
 
 export default function NavbarAdmin() {
+  const { signOut } = useAdminContext();
+  const navigate = useNavigate();
   return (
     <>
       <nav className="flex flex-row justify-between">
@@ -20,23 +23,41 @@ export default function NavbarAdmin() {
             <Menu />
           </SheetTrigger>
           <SheetContent side={"left"}>
-            <SheetHeader>
+            <SheetHeader className=" items-center justify-center py-16">
               <SheetTitle>Quick Links</SheetTitle>
               <SheetDescription>
                 Remember to save your changes before leaving.
               </SheetDescription>
-              <Link
-                to="/applicant-leaderboard"
-                className="flex text-xl font-semibold w-full h-20 rounded-xl justify-center items-center hover:bg-slate-300"
-              >
-                Leaderboard
-              </Link>
-              <Link
-                to="/applicant-tinder"
-                className="flex text-xl font-semibold w-full h-20 rounded-xl justify-center items-center hover:bg-slate-300"
-              >
-                Tinder
-              </Link>
+              <div className="flex flex-col w-full gap-8 py-4">
+                <Link
+                  to="/admin-welcome"
+                  className="flex text-xl font-semibold w-full h-20 rounded-xl justify-center items-center hover:bg-slate-300"
+                >
+                  Instructions
+                </Link>
+                <Link
+                  to="/admin-leaderboard"
+                  className="flex text-xl font-semibold w-full h-20 rounded-xl justify-center items-center hover:bg-slate-300"
+                >
+                  Leaderboard
+                </Link>
+                <Link
+                  to="/admin-tinder"
+                  className="flex text-xl font-semibold w-full h-20 rounded-xl justify-center items-center hover:bg-slate-300"
+                >
+                  Tinder
+                </Link>
+                <Button
+                  onClick={() => {
+                    signOut();
+                    navigate("/");
+                    window.location.reload();
+                  }}
+                  className="flex text-xl font-semibold w-full h-14 rounded-xl justify-center items-center hover:bg-slate-300"
+                >
+                  Logout
+                </Button>
+              </div>
             </SheetHeader>
           </SheetContent>
         </Sheet>

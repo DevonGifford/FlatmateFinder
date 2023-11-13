@@ -35,7 +35,7 @@ const FormSchema = z.object({
 export default function HomePage() {
   const navigate = useNavigate();
   const { language } = useLanguageContext();
-  const { validateAdmin } = useAdminContext();
+  const { setAdminProfile } = useAdminContext();
 
   // ✅ SET CURRENT LANGUAGE:  access language from the context
   const setLanguage: HomePageData = language === "english" ? Data_EN : Data_ES;
@@ -54,10 +54,28 @@ export default function HomePage() {
 
     //-check if form entry matches secret passwords
     switch (password) {
-      case import.meta.env.VITE_PASSWORD_DASHBOARD:
-        console.log("👀 Existing tenant login");
-        validateAdmin();
-        navigate("/welcome-tenant");
+      case import.meta.env.VITE_PASSWORD_ONE:
+        setAdminProfile({
+          name: import.meta.env.VITE_PASSWORD_ONE,
+          isAdmin: true,
+        });
+        navigate("/admin-welcome");
+        break;
+
+      case import.meta.env.VITE_PASSWORD_TWO:
+        setAdminProfile({
+          name: import.meta.env.VITE_PASSWORD_TWO,
+          isAdmin: true,
+        });
+        navigate("/admin-welcome");
+        break;
+
+      case import.meta.env.VITE_PASSWORD_THREE:
+        setAdminProfile({
+          name: import.meta.env.VITE_PASSWORD_THREE,
+          isAdmin: true,
+        });
+        navigate("/admin-welcome");
         break;
 
       case import.meta.env.VITE_PASSWORD_ALPHA:

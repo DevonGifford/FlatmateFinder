@@ -34,10 +34,10 @@ function App() {
             </Routes>
           </ApplicantProvider>
           <Routes>
-            <Route path="/welcome-tenant" element={<TenantWelcomePage />} />
-            <Route path="/applicant-tinder" element={<TenantTinderPage />} />
+            <Route path="/admin-welcome" element={<TenantWelcomePage />} />
+            <Route path="/admin-tinder" element={<TenantTinderPage />} />
             <Route
-              path="/applicant-leaderboard"
+              path="/admin-leaderboard"
               element={<TenantLeaderboardPage />}
             />
           </Routes>
