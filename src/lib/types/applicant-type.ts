@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export type ApplicantProfile = {
   uuid: string;
   firstForm: {
@@ -8,7 +10,7 @@ export type ApplicantProfile = {
     languages?: string[];
   };
   secondForm: {
-    move_date: Date;
+    move_date: Timestamp;
     length_stay: number;
     meet_type: string;
     more_info?: string;
@@ -20,7 +22,9 @@ export type ApplicantProfile = {
     hobbies: string;
     social_media?: string;
   };
-  applicationDate: Date;
+  applicationDate: Timestamp;
+  id?: string;
+  photo?: string;
 };
 
 export const defaultApplicant: ApplicantProfile = {
@@ -33,7 +37,7 @@ export const defaultApplicant: ApplicantProfile = {
     languages: ["English", "Spanish"],
   },
   secondForm: {
-    move_date: new Date(),
+    move_date: Timestamp.now(),
     length_stay: 6,
     meet_type: "In person",
     more_info: "Additional information about the move",
@@ -46,5 +50,5 @@ export const defaultApplicant: ApplicantProfile = {
     hobbies: "Reading, hiking, coding",
     social_media: "john.doe",
   },
-  applicationDate: new Date(),
+  applicationDate: Timestamp.now(),
 };

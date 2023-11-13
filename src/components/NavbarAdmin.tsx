@@ -10,17 +10,20 @@ import {
 } from "./ui/sheet";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminContext } from "./contexts/admin/useAdminContext";
+import { useDataContext } from "./contexts/data/useDataContext";
 
 export default function NavbarAdmin() {
   const { signOut } = useAdminContext();
+  const { handleRefresh } = useDataContext();
   const navigate = useNavigate();
+
   return (
     <>
       <nav className="flex flex-row justify-between ">
         {/* //👇 Hamburger Menu */}
         <Sheet>
           <SheetTrigger>
-            <Menu />
+            <Menu className="transition ease-in-out duration-150 hover:scale-125" />
           </SheetTrigger>
           <SheetContent side={"left"}>
             <SheetHeader className=" items-center justify-center py-16">
@@ -30,10 +33,10 @@ export default function NavbarAdmin() {
               </SheetDescription>
               <div className="flex flex-col w-full gap-8 py-4">
                 <Link
-                  to="/admin-welcome"
+                  to="/admin-tinder"
                   className="flex text-xl font-semibold w-full h-20 rounded-xl justify-center items-center hover:bg-slate-300"
                 >
-                  Instructions
+                  Tinder
                 </Link>
                 <Link
                   to="/admin-leaderboard"
@@ -41,11 +44,12 @@ export default function NavbarAdmin() {
                 >
                   Leaderboard
                 </Link>
+
                 <Link
-                  to="/admin-tinder"
+                  to="/admin-welcome"
                   className="flex text-xl font-semibold w-full h-20 rounded-xl justify-center items-center hover:bg-slate-300"
                 >
-                  Tinder
+                  Instructions
                 </Link>
                 <Button
                   onClick={() => {
@@ -63,14 +67,19 @@ export default function NavbarAdmin() {
         </Sheet>
         <div className="flex flex-row">
           <Button
-            className="transition ease-in-out duration-150 hover:scale-110"
+            className="transition ease-in-out duration-150 hover:scale-125"
             size={"icon"}
             variant={"ghost"}
+            onClick={() => {
+              console.log("Navbar refresh button triggered 💢 ");
+              handleRefresh();
+              //🔮 toast notifications
+            }}
           >
             <RefreshCwIcon />
           </Button>
           <Button
-            className="flex flex-row gap-1 transition ease-in-out duration-150 hover:scale-110"
+            className="flex flex-row gap-1 transition ease-in-out duration-150 hover:scale-125"
             size={"icon"}
             variant={"ghost"}
           >

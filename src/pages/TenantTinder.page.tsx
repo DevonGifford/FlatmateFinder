@@ -26,7 +26,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-import mockDB from "../assets/mock-db.json";
+import mockDB from "../assets/realmock-db.json";
+import { Timestamp } from "firebase/firestore";
 
 export default function TenantTinderPage() {
   useRequireAdmin();
@@ -104,6 +105,24 @@ export default function TenantTinderPage() {
       return "Short";
     }
   };
+  const convertTimestamp = (timeStamp: Timestamp) => {
+    if (timeStamp?.seconds && timeStamp?.nanoseconds) {
+      // Firestore Timestamp-like object with seconds and nanoseconds
+      const date = new Date(
+        timeStamp.seconds * 1000 + timeStamp.nanoseconds / 1000000
+      );
+
+      const formattedDate = date.toLocaleDateString("en-US", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      });
+
+      return formattedDate;
+    } else {
+      return "Invalid Date";
+    }
+  };
 
   return (
     <>
@@ -132,13 +151,16 @@ export default function TenantTinderPage() {
                       <CalendarClockIcon size={16} />
                       <p>Desired Entry:</p>
                       <span className="font-normal">
-                        {new Date(
+                        {convertTimestamp(
+                          dataItem.secondForm.move_date as Timestamp
+                        )}
+                        {/* {new Date(
                           dataItem.secondForm.move_date
                         ).toLocaleDateString("en-US", {
                           day: "numeric",
                           month: "short",
                           year: "2-digit",
-                        })}
+                        })} */}
                       </span>
                     </div>
                     {/* //👇 AGE & GENDER */}

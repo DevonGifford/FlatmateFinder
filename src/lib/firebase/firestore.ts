@@ -8,6 +8,7 @@ import {
   DocumentReference,
   DocumentSnapshot,
   DocumentData,
+  updateDoc,
 } from "firebase/firestore";
 import db from "./config";
 import { ApplicantProfile } from "../types/applicant-type";
@@ -60,6 +61,50 @@ export const createApplicantDoc = async (
       `✖ Error creating the document ${documentId} in given collection `,
       error
     );
+  }
+};
+
+/**
+ * ✅ HELPER FUNCTION:
+ * Updates a specified document in a specified collection or creates a new document if not found.
+ * @param {string} collectionName - The name of the collection.
+ * @param {string} documentId - The ID of the document to be updated.
+ * @param {object} data - The data to be updated or created.
+ */
+export const updateDocument = async (
+  collectionName: CollectionName,
+  documentId: DocumentId,
+  data: Data
+) => {
+  console.log("🎯event_log:  🔥utils/firestore/updateDocument:  💢 Triggered");
+  const collectionRef = collection(firestore, collectionName);
+  const docRef: DocumentReference<Data> = doc(collectionRef, documentId);
+
+  try {
+    const docSnapshot: DocumentSnapshot<Data> = await getDoc(docRef);
+
+    // - check if user doc exists and update or else return false
+    if (docSnapshot.exists()) {
+      await updateDoc(docRef, data);
+    } else {
+      // -notfound case
+      console.error(
+        `🎯event_log:  🔥utils/firestore/updateDocument:  ❌ Error:  Document ${documentId} not found in collection ${collectionName}!`
+      );
+      return false;
+    }
+    // -success case
+    console.log(
+      `🎯event_log:  🔥utils/firestore/updateDocument:  ✔ Success:  Document ${documentId} updated successfully in collection ${collectionName}!`
+    );
+    return true;
+  } catch (error) {
+    // -error case
+    console.error(
+      `🎯event_log:  🔥utils/firestore/updateDocument:  ❌ Error:  Error updating/creating document ${documentId} in collection ${collectionName}: `,
+      error
+    );
+    return false;
   }
 };
 
