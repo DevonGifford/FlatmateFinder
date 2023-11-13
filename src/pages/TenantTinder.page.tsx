@@ -1,4 +1,8 @@
-// import { useAdminContext } from "@/components/contexts/admin/useAdminContext";
+import TinderCard from "react-tinder-card";
+import StarRating from "@/components/StarRating";
+import { useState } from "react";
+import { useRequireAdmin } from "@/lib/hooks/useRequireAdmin";
+import { IoFemale, IoMale, IoMaleFemale } from "react-icons/io5";
 import {
   Card,
   CardContent,
@@ -7,21 +11,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useRequireAdmin } from "@/lib/hooks/useRequireAdmin";
 import {
   Building,
   CalendarClockIcon,
   ExternalLinkIcon,
   Home,
-  StarIcon,
   User,
   Video,
 } from "lucide-react";
-import { useState } from "react";
-import { IoFemale, IoMale, IoMaleFemale } from "react-icons/io5";
-import TinderCard from "react-tinder-card";
-
-import mockDB from "../assets/mock-db.json";
 import {
   Accordion,
   AccordionContent,
@@ -29,11 +26,50 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
+import mockDB from "../assets/mock-db.json";
+
 export default function TenantTinderPage() {
   useRequireAdmin();
-  // const { adminProfile } = useAdminContext();
-  // const [starRating, setStarRating] = useState<number | null>(null);
+  const [currentCardIndex, setCurrentCardIndex] = useState(0); //- State to keep track of the current card being shown
+  const [starRatings, setStarRatings] = useState<number[]>(
+    Array(mockDB.length).fill(0)
+  );
 
+  // 🎯⏳ HANDLE STAR RATING
+  const handleStarClick = (starIndex: number, cardIndex: number) => {
+    const newRatings = [...starRatings];
+    newRatings[cardIndex] = starIndex + 1;
+    setStarRatings(newRatings);
+
+    // 🎯💣  UPDATE THE DB - with this new rating for the card at cardIndex
+    //- implement the database update logic here
+    //- Resetting the state for a specific card when needed (for example, when new cards arrive)
+    //- setStarRatings(newRatings.map((rating, index) => (index === cardIndex ? 0 : rating)));
+  };
+
+  // 🎯⏳ HANDLE SWIPPING
+  const onSwipe = (direction: string) => {
+    console.log("🃏 a card has been swiped 🃏");
+    // Update current card index on swipe
+    if (direction === "right" && currentCardIndex < mockDB.length - 1) {
+      console.log("You swiped: " + direction);
+      setCurrentCardIndex(currentCardIndex + 1);
+      // 🎯💣  UPDATE THE TEMP-LOCAL DB
+    }
+    // Handle other swipe directions as needed
+    console.log("You swiped: " + direction);
+    // 🎯💣  UPDATE THE TEMP-LOCAL DB
+  };
+
+  // 🎯⏳ HNADLE CARD LEAVING SCREEN
+  const onCardLeftScreen = (myIdentifier: string) => {
+    console.log(myIdentifier + " left the screen");
+    // Perform actions if needed when a card leaves the screen
+    // 🎯🔮  UPDATE THE REAL DB
+    //
+  };
+
+  // ✅ Handle Icons
   const genderIcon = (gender: string) => {
     if (gender === "male") {
       return <IoMale />;
@@ -43,7 +79,6 @@ export default function TenantTinderPage() {
       return <IoMaleFemale />;
     }
   };
-
   const jobtypeIcon = (jobType: string) => {
     if (jobType === "wfh") {
       return <Home size={16} />;
@@ -53,7 +88,6 @@ export default function TenantTinderPage() {
       return <Video size={16} />;
     }
   };
-
   const viewingtypeIcon = (viewType: string) => {
     if (viewType === "meet_type") {
       return <User className="font-bold" size={18} />;
@@ -61,7 +95,6 @@ export default function TenantTinderPage() {
       return <Video size={18} />;
     }
   };
-
   const lengthStayIcon = (lengthStay: number) => {
     if (lengthStay < 80) {
       return "Long";
@@ -72,31 +105,9 @@ export default function TenantTinderPage() {
     }
   };
 
-  // State to keep track of the current card being shown
-  const [currentCardIndex, setCurrentCardIndex] = useState(0);
-
-  // Handle swipe
-  const onSwipe = (direction: string) => {
-    console.log("You swiped: " + direction);
-    // Update current card index on swipe
-    if (direction === "right" && currentCardIndex < mockDB.length - 1) {
-      setCurrentCardIndex(currentCardIndex + 1);
-    }
-    // Handle other swipe directions as needed
-  };
-
-  // Handle when a card leaves the screen
-  const onCardLeftScreen = (myIdentifier: string) => {
-    console.log(myIdentifier + " left the screen");
-    // Perform actions if needed when a card leaves the screen
-  };
-
   return (
     <>
       <div className="flex h-[calc(100vh-10vh)] flex-col justify-center items-center sm:mx-20 md:max-w-10/12 sm:max-w-4/6 gap-5 md:gap-8 overscroll-none">
-        {/* <div className="text-4xl italic py-4 pb-6 border-b-2 fixed top-10">
-          <span>TINDER PAGE</span>
-        </div> */}
         {mockDB.map((dataItem, index) => (
           <TinderCard
             key={index}
@@ -209,7 +220,7 @@ export default function TenantTinderPage() {
                 >
                   <AccordionItem className="border-none py-1" value={"about"}>
                     <AccordionTrigger className="flex-col justify-center gap-1 py-1 text-lg hover:no-underline">
-                      About me
+                      Appllicant Introduction
                     </AccordionTrigger>
                     <AccordionContent className="mx-8 text-sm italic font-normal">
                       {dataItem.thirdForm.describe}
@@ -217,7 +228,7 @@ export default function TenantTinderPage() {
                   </AccordionItem>
 
                   <AccordionItem className="border-none py-1" value={"hobbies"}>
-                    <AccordionTrigger className="flex-col justify-center gap-1 py-1 text-lg hover:no-underline">
+                    <AccordionTrigger className="flex-col justify-center gap-1 py-1 text-base hover:no-underline">
                       Hobbies & Interests
                     </AccordionTrigger>
                     <AccordionContent className="mx-8 text-sm italic font-normal">
@@ -234,12 +245,16 @@ export default function TenantTinderPage() {
                   </AccordionItem>
                 </Accordion>
               </CardContent>
-              <CardFooter className="flex flex-col text-center justify-center items-center border-t-2 mx-10">
-                <p className="text-xs italic font-thin pt-2">{dataItem.uuid}</p>
-
-                <div>
-                  <StarIcon />
-                  <StarIcon className=" fill-yellow-500" />
+              <CardFooter className="flex flex-col text-center pt-4 justify-center items-center border-t-2 mx-10">
+                {/* //👇 STAR RATING SYSTEM */}
+                <div className="flex flex-row gap-3 ">
+                  {[...Array(5)].map((_, starIndex) => (
+                    <StarRating
+                      key={starIndex}
+                      filled={starIndex < starRatings[index]}
+                      onClick={() => handleStarClick(starIndex, index)}
+                    />
+                  ))}
                 </div>
               </CardFooter>
             </Card>
