@@ -75,8 +75,7 @@ export default function TenantTinderPage() {
   const onCardLeftScreen = (myIdentifier: string) => {
     console.log(myIdentifier + " left the screen");
     // Perform actions if needed when a card leaves the screen
-    // 🎯🔮  UPDATE THE REAL DB
-    //
+    // 🎯🔮  UPDATE THE REAL DB? OR LOCAL DB?
   };
 
   // ✅ HANDLE ICONS & CONVERSIONS
