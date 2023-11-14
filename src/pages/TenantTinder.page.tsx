@@ -30,6 +30,8 @@ import { Timestamp } from "firebase/firestore";
 // import mockDB from "../assets/realmock-db.json";
 import { useAdminContext } from "@/components/contexts/admin/useAdminContext";
 import { useDataContext } from "@/components/contexts/data/useDataContext";
+import { updateRanking } from "@/lib/firebase/firestore";
+import { ApplicantProfile } from "@/lib/types/applicant-type";
 
 export default function TenantTinderPage() {
   useRequireAdmin();
@@ -40,8 +42,11 @@ export default function TenantTinderPage() {
     Array(data?.length).fill(0)
   );
 
-  // ✅ HANDLE STAR RATING
+  // ✅ HANDLE STAR RATING - updates ranking field
   const handleStarClick = (starIndex: number, cardIndex: number) => {
+    console.log(
+      `🃏 Tinder handleStarClick:   Triggered 💢   - card ${cardIndex}`
+    );
     const newRatings = [...starRatings];
     newRatings[cardIndex] = starIndex + 1;
     setStarRatings(newRatings);
@@ -71,15 +76,14 @@ export default function TenantTinderPage() {
         }
 
         // 👇 UPDATE THE STATE - update the context state with the modified user data
-        // console.log("updatedCard", updatedCard);
-        updateDataContext([updatedCard]); //-🎯🔮 need to define this function
+        updateDataContext([updatedCard]);
       }
     }
   };
 
-  // ✅ HANDLE SWIPPING
+  // ✅ HANDLE SWIPPING - updates boolean field
   const onSwipe = (direction: string, cardIndex: number) => {
-    console.log(`🃏 Tinder card ${cardIndex} has been swiped 🃏`);
+    console.log(`🃏 Tinder onSwipe:   Triggered 💢   - card ${cardIndex}`);
 
     // 👇 Ensure adminProfile and data are not null or undefined
     if (adminProfile && data) {
@@ -107,8 +111,7 @@ export default function TenantTinderPage() {
         }
 
         // 👇 UPDATE THE STATE - update the context state with the modified user data
-        // console.log("updatedUserData", updatedCard);
-        updateDataContext([updatedCard]); //-🎯🔮 need to define this function
+        updateDataContext([updatedCard]);
 
         //👇  Update the card Index number here only once per swipe
         setCurrentCardIndex(currentCardIndex + 1);
@@ -118,13 +121,26 @@ export default function TenantTinderPage() {
     }
   };
 
-  // ⏳ HNADLE CARD LEAVING SCREEN
-  const onCardLeftScreen = (myIdentifier: string) => {
-    console.log(myIdentifier + " left the screen");
-    // Perform actions if needed when a card leaves the screen
-    // 🎯🔮  UPDATE THE REAL DB? OR LOCAL DB?
-    // 🤔 Potentially implement database update logic?
-    //updateUserDataInFirestore(updatedUserData); //-🎯🔮 need to define this function
+  // ✅ HANADLE CARD LEAVING SCREEN - updates the applicantDoc
+  const onCardLeftScreen = (myIdentifier: string, cardIndex: number) => {
+    console.log(`🃏 Tinder onSwipe:   Triggered 💢   - card ${cardIndex}`);
+    console.log("ℹ  ", myIdentifier + " left the screen");
+    // 👇 Ensure data exists and the specific card's rankings are not undefined
+    if (data && data[cardIndex]?.rankings) {
+      const updatedRankings = data[cardIndex]
+        .rankings as Partial<ApplicantProfile>;
+
+      // Update the applicant document in Firestore with the updated rankings
+      console.log(
+        "🃏🦺 Tinder onSwipe:  data being sent to the firebase function: ",
+        updatedRankings
+      );
+      updateRanking(data[cardIndex].uuid, updatedRankings);
+    } else {
+      console.error(
+        "Error: Unable to retrieve rankings for the specified card index."
+      );
+    }
   };
 
   // ✅ HANDLE ICONS & CONVERSIONS
@@ -188,7 +204,7 @@ export default function TenantTinderPage() {
           <TinderCard
             key={index}
             onSwipe={(direction) => dataItem?.id && onSwipe(direction, index)}
-            onCardLeftScreen={() => onCardLeftScreen(`card${index}`)}
+            onCardLeftScreen={() => onCardLeftScreen(`card${index}`, index)}
             preventSwipe={["up", "down"]}
             className="absolute w-[310px] md:w-[500px]"
           >

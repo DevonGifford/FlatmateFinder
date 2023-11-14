@@ -30,7 +30,7 @@ const firestore: Firestore = db;
  */
 export const createApplicantDoc = async (
   documentId: DocumentId,
-  userData: ApplicantProfile,
+  userData: ApplicantProfile
 ) => {
   console.log("createApplicantDoc:  💢 Triggered");
 
@@ -76,7 +76,7 @@ export const updateDocument = async (
   documentId: DocumentId,
   data: Data
 ) => {
-  console.log("🎯event_log:  🔥utils/firestore/updateDocument:  💢 Triggered");
+  console.log("🔥utils/firestore/updateDocument:  💢 Triggered");
   const collectionRef = collection(firestore, collectionName);
   const docRef: DocumentReference<Data> = doc(collectionRef, documentId);
 
@@ -89,22 +89,40 @@ export const updateDocument = async (
     } else {
       // -notfound case
       console.error(
-        `🎯event_log:  🔥utils/firestore/updateDocument:  ❌ Error:  Document ${documentId} not found in collection ${collectionName}!`
+        `🔥utils/firestore/updateDocument:  ❌ Error:  Document ${documentId} not found in collection ${collectionName}!`
       );
       return false;
     }
     // -success case
     console.log(
-      `🎯event_log:  🔥utils/firestore/updateDocument:  ✔ Success:  Document ${documentId} updated successfully in collection ${collectionName}!`
+      `🔥utils/firestore/updateDocument:  ✔ Success:  Document ${documentId} updated successfully in collection ${collectionName}!`
     );
     return true;
   } catch (error) {
     // -error case
     console.error(
-      `🎯event_log:  🔥utils/firestore/updateDocument:  ❌ Error:  Error updating/creating document ${documentId} in collection ${collectionName}: `,
+      `🔥utils/firestore/updateDocument:  ❌ Error:  Error updating/creating document ${documentId} in collection ${collectionName}: `,
       error
     );
     return false;
+  }
+};
+
+export const updateRanking = async (
+  userId: string,
+  updatedRankings: Partial<ApplicantProfile>
+) => {
+  console.log("🔥utils/firestore/updateRanking:  💢 Triggered");
+  const applicantDocRef = doc(db, "applicants", userId); // Replace "applicants" with your collection name
+
+  try {
+    await updateDoc(applicantDocRef, {
+      rankings: updatedRankings,
+    });
+    console.log(`🔥utils/firestore/updateRanking:  ✔ Success:  Applicant document with ID ${userId} updated successfully.`);
+  } catch (error) {
+    console.error("🔥utils/firestore/updateRanking:  ✖ Error:  Error updating document: ", error);
+    // Handle the error as needed
   }
 };
 

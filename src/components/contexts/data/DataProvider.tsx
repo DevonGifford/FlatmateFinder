@@ -31,7 +31,7 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
 
   // const mockData = mockDB as RawApplicantProfile[]; //👈 For development
 
-  // ⏳ FETCHING DATA ON LOAD & CUSTOM-REFRESH
+  // ✅ FETCHING DATA ON LOAD & CUSTOM-REFRESH
   useEffect(() => {
     console.log("🎭DataContext/useEffect :  💢 Triggered");
     const fetchData = async () => {
@@ -102,7 +102,7 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   /**
-   * 🔮 HANDLES UPDATING CONTEXT:
+   * ✅ HANDLES UPDATING CONTEXT:
    * Updates the user profile in the context with new data.
    * @param {Partial<RawApplicantProfile>} newData - The new data to update in the user profile.
    * @returns {Promise<void>} A Promise that resolves once the update process completes.
@@ -112,8 +112,6 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
       "🎭DataContext/updateRawApplicantProfile: 💢 Triggered",
       newData
     );
-    // Assuming you receive an updated profile with an ID
-
     if (data && newData && newData.length > 0 && newData[0]?.id) {
       const indexToUpdate = data.findIndex(
         (profile) => profile.id === newData[0]!.id
@@ -126,12 +124,12 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
           ...newData[0],
         };
         setData(updatedData);
-        console.log("Updated data:", updatedData);
+        console.log("🎭DataContext/updateRawApplicantProfile:  ✔ Successfully updated dataContext:", updatedData);
       } else {
-        console.error("Profile not found for update");
+        console.error("🎭DataContext/updateRawApplicantProfile:  ✖ Error:  Profile not found for update");
       }
     } else {
-      console.error("No data available or no updated data received");
+      console.error("🎭DataContext/updateRawApplicantProfile:  ✖ Error:  No data available or no updated data received");
     }
   };
 
