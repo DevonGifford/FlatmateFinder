@@ -40,9 +40,6 @@ export default function TenantTinderPage() {
     Array(data?.length).fill(0)
   );
 
-  console.log("adminProfile", adminProfile);
-  console.log("data", data);
-
   // ✅ HANDLE STAR RATING
   const handleStarClick = (starIndex: number, cardIndex: number) => {
     const newRatings = [...starRatings];
