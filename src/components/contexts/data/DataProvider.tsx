@@ -108,7 +108,31 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
    * @returns {Promise<void>} A Promise that resolves once the update process completes.
    */
   const updateDataContext = async (newData: Partial<RawApplicantProfile[]>) => {
-    console.log("🎭DataContext/updateRawApplicantProfile: 💢 Triggered", newData);
+    console.log(
+      "🎭DataContext/updateRawApplicantProfile: 💢 Triggered",
+      newData
+    );
+    // Assuming you receive an updated profile with an ID
+
+    if (data && newData && newData.length > 0 && newData[0]?.id) {
+      const indexToUpdate = data.findIndex(
+        (profile) => profile.id === newData[0]!.id
+      );
+
+      if (indexToUpdate !== -1) {
+        const updatedData = [...data];
+        updatedData[indexToUpdate] = {
+          ...updatedData[indexToUpdate],
+          ...newData[0],
+        };
+        setData(updatedData);
+        console.log("Updated data:", updatedData);
+      } else {
+        console.error("Profile not found for update");
+      }
+    } else {
+      console.error("No data available or no updated data received");
+    }
   };
 
   const userContextValue: DataContextProps = {

@@ -33,7 +33,7 @@ import { useDataContext } from "@/components/contexts/data/useDataContext";
 
 export default function TenantTinderPage() {
   useRequireAdmin();
-  const { data } = useDataContext();
+  const { data, updateDataContext } = useDataContext();
   const { adminProfile } = useAdminContext();
   const [currentCardIndex, setCurrentCardIndex] = useState(0); //- State to keep track of the current card being shown
   const [starRatings, setStarRatings] = useState<number[]>(
@@ -43,39 +43,91 @@ export default function TenantTinderPage() {
   console.log("adminProfile", adminProfile);
   console.log("data", data);
 
-  // 🎯⏳ HANDLE STAR RATING
+  // ✅ HANDLE STAR RATING
   const handleStarClick = (starIndex: number, cardIndex: number) => {
     const newRatings = [...starRatings];
     newRatings[cardIndex] = starIndex + 1;
     setStarRatings(newRatings);
 
-    // 🎯💣 UPDATE THE State - with this new rating for the card at cardIndex
-    //- implement the database update logic here
-    //- Resetting the state for a specific card when needed (for example, when new cards arrive)
-    //- setStarRatings(newRatings.map((rating, index) => (index === cardIndex ? 0 : rating)));
-  };
+    // 👇 Ensure adminProfile and data are not null or undefined
+    if (adminProfile && data) {
+      const currentAdmin = adminProfile.name;
+      const cardData = data[cardIndex];
 
-  // 🎯⏳ HANDLE SWIPPING
-  const onSwipe = (direction: string, cardIndex: string) => {
-    console.log(`🃏 ${cardIndex} a card has been swiped 🃏`);
-    // Update current card index on swipe
-    if (direction === "right" && currentCardIndex < data!.length - 1) {
-      console.log("You swiped: " + direction);
-      setCurrentCardIndex(currentCardIndex + 1);
-      // 🎯💣  UPDATE THE STATE
-      // . depending on the current admin profile and the current
-      //  . update the state with the boolean - if swiped right update with true if swiped left update with false
+      // 👇 Identify admin and update data based on
+      if (cardData) {
+        const updatedCard = { ...cardData };
+        updatedCard.rankings = updatedCard.rankings || {}; //-Ensure 'rankings' property is defined before updating its fields
+
+        switch (currentAdmin) {
+          case "Devon":
+            updatedCard.rankings.dev_star = starIndex + 1;
+            break;
+          case "Oscar":
+            updatedCard.rankings.osc_star = starIndex + 1;
+            break;
+          case "Adrian":
+            updatedCard.rankings.adr_star = starIndex + 1;
+            break;
+          default:
+            break;
+        }
+
+        // 👇 UPDATE THE STATE - update the context state with the modified user data
+        // console.log("updatedCard", updatedCard);
+        updateDataContext([updatedCard]); //-🎯🔮 need to define this function
+      }
     }
-    // Handle other swipe directions as needed
-    console.log("You swiped: " + direction);
-    // 🎯💣  UPDATE THE TEMP-LOCAL DB
   };
 
-  // 🎯⏳ HNADLE CARD LEAVING SCREEN
+  // ✅ HANDLE SWIPPING
+  const onSwipe = (direction: string, cardIndex: number) => {
+    console.log(`🃏 Tinder card ${cardIndex} has been swiped 🃏`);
+
+    // 👇 Ensure adminProfile and data are not null or undefined
+    if (adminProfile && data) {
+      const currentAdmin = adminProfile.name;
+      const cardData = data[cardIndex];
+
+      // Ensure that rankings object exists before accessing its properties
+      if (cardData) {
+        const updatedCard = { ...cardData };
+        updatedCard.rankings = updatedCard.rankings || {}; //-Ensure 'rankings' property is defined before updating its fields
+
+        switch (currentAdmin) {
+          case "Devon":
+            updatedCard.rankings.dev_bool = direction === "right";
+            break;
+          case "Oscar":
+            updatedCard.rankings.osc_bool = direction === "right";
+            break;
+          case "Adrian":
+            updatedCard.rankings.adr_bool = direction === "right";
+            break;
+          // Add more cases if needed for other admins
+          default:
+            break;
+        }
+
+        // 👇 UPDATE THE STATE - update the context state with the modified user data
+        // console.log("updatedUserData", updatedCard);
+        updateDataContext([updatedCard]); //-🎯🔮 need to define this function
+
+        //👇  Update the card Index number here only once per swipe
+        setCurrentCardIndex(currentCardIndex + 1);
+      }
+
+      console.log("You swiped: " + direction);
+    }
+  };
+
+  // ⏳ HNADLE CARD LEAVING SCREEN
   const onCardLeftScreen = (myIdentifier: string) => {
     console.log(myIdentifier + " left the screen");
     // Perform actions if needed when a card leaves the screen
     // 🎯🔮  UPDATE THE REAL DB? OR LOCAL DB?
+    // 🤔 Potentially implement database update logic?
+    //updateUserDataInFirestore(updatedUserData); //-🎯🔮 need to define this function
   };
 
   // ✅ HANDLE ICONS & CONVERSIONS
@@ -138,9 +190,7 @@ export default function TenantTinderPage() {
         {data?.map((dataItem, index) => (
           <TinderCard
             key={index}
-            onSwipe={(direction) =>
-              dataItem?.id && onSwipe(direction, dataItem.id)
-            }
+            onSwipe={(direction) => dataItem?.id && onSwipe(direction, index)}
             onCardLeftScreen={() => onCardLeftScreen(`card${index}`)}
             preventSwipe={["up", "down"]}
             className="absolute w-[310px] md:w-[500px]"
