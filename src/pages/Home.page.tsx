@@ -88,13 +88,13 @@ export default function HomePage() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="md:w-6/12 space-y-6 py-5"
+          className="md:w-5/12 space-y-6 py-5"
         >
           <FormField
             control={form.control}
             name="password"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="px-8">
                 <FormLabel className="text-xl sm:text-3xl font-bold">
                   Enter password
                 </FormLabel>

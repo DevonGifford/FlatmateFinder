@@ -118,7 +118,7 @@ export function ThirdForm() {
             name="job_title"
             control={form.control}
             render={({ field }) => (
-              <FormItem className="border-none">
+              <FormItem className="border-none pb-0">
                 <FormLabel className="flex text-center justify-center">
                   Career Title
                 </FormLabel>

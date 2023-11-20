@@ -193,7 +193,6 @@ export function SecondForm() {
               <FormLabel>Type of viewing</FormLabel>
               <FormControl>
                 <ToggleGroup
-                  size="sm"
                   type="single"
                   value={field.value}
                   onValueChange={(value) => field.onChange(value)}
@@ -203,14 +202,14 @@ export function SecondForm() {
                     value="inperson"
                     className="flex flex-col items-center justify-center text-center gap-1"
                   >
-                    <User className="font-bold" />{" "}
+                    <User className="font-bold" size={18} />
                     <span className="text-xs">In Person</span>
                   </ToggleGroupItem>
                   <ToggleGroupItem
                     value="videocall"
                     className="flex flex-col items-center justify-center text-center gap-1"
                   >
-                    <Video />
+                    <Video size={18} />
                     <span className="text-xs">Videocall</span>
                   </ToggleGroupItem>
                 </ToggleGroup>
