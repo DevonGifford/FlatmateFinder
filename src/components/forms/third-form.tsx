@@ -109,7 +109,7 @@ export function ThirdForm() {
           );
           onSubmit(data);
         })}
-        className="space-y-6 w-full -translate-y-5 "
+        className="space-y-6 w-full "
       >
         {/* JOB */}
         <div className="flex flex-col rounded-lg border">
