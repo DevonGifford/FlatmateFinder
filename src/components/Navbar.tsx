@@ -15,7 +15,9 @@ export default function Navbar() {
     setLanguage(newLanguage);
   };
 
-  console.log("language - 🎈🎈", language);
+  // 🎯🔮 Need to use this language state - current issue #12
+  // 🔗🔮 https://github.com/DevonGifford/FlatmateFinder/issues/12
+  console.log("⏳ current language ", language);
 
   return (
     <>

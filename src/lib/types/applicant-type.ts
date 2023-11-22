@@ -16,10 +16,10 @@ export type ApplicantProfile = {
   };
   thirdForm: {
     job_title: string;
-    job_type?: string;
+    job_type: string;
     describe: string;
     hobbies: string;
-    photo: string | undefined;
+    photo: string;
   };
   applicationDate: Date;
 };

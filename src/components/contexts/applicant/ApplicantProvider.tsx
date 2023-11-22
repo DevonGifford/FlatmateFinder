@@ -44,41 +44,40 @@ export const ApplicantProvider = ({
   // ✅ HANDLES UPDATING CONTEXT:
   const updateApplicantContext = async (newData: Partial<ApplicantProfile>) => {
     console.log(
-      "🎯event_log:  🎭ApplicantContext/updateapplicantProfile: 💢 Triggered"
+      "🎭 updateapplicantProfile: 💢 Triggered"
     );
     try {
       if (!applicantProfile) {
         console.error(
-          `🎯event_log:  🎭ApplicantContext/updateapplicantProfile:  ❌ Error:  cannot access user context.`
+          `🎭 updateapplicantProfile:  ❌ Error:  cannot access user context.`
         );
         return;
       }
 
       console.log(
-        "🦺event_log:  🎭ApplicantContext/updateapplicantProfile:  Current applicantProfile",
-        applicantProfile
-      );
-      console.log(
-        "🦺event_log:  🎭ApplicantContext/updateapplicantProfile:  New data to be updated",
+        "🦺🎭 updateapplicantProfile: ",  
+        "Pre-existing context data - applicantProfile: ",
+        applicantProfile,
+        "Newdata to updated context - newData: ",
         newData
       );
 
       //👇 Merge the existing profile with the new data
       const updatedProfile = { ...applicantProfile, ...newData };
       console.log(
-        "🦺event_log:  🎭ApplicantContext/updateapplicantProfile:  Updated profile after merge",
+        "🦺🎭 updateapplicantProfile:  Updated profile after merge",
         updatedProfile
       );
 
       //👇 Update the applicantProfile state with the merged profile
       setApplicantProfile(updatedProfile);
       console.log(
-        "🎯event_log:  🎭ApplicantContext/updateapplicantProfile:  ✔  Success:  Successfully updated applicantProfile - new data:",
+        "🎭 updateapplicantProfile:  ✔  Success:  Successfully updated applicantProfile - new data:",
         updatedProfile
       );
     } catch (error) {
       console.error(
-        "🎯event_log:  🎭ApplicantContext/updateapplicantProfile:  ❌ Error:  Error updating applicantProfile",
+        "🎭 updateapplicantProfile:  ❌ Error:  Error updating applicantProfile",
         error
       );
     }

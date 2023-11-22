@@ -22,6 +22,8 @@ import { ApplicantProfile } from "@/lib/types/applicant-type";
 import { useNavigate } from "react-router-dom";
 import { useApplicantContext } from "../contexts/applicant/useApplicantContext";
 import { toastError, toastFormComplete } from "@/lib/customToast";
+import { createApplicantDoc } from "@/lib/firebase/firestore";
+// import { createApplicantDoc } from "@/lib/firebase/firestore";
 
 // 👇 FORM SCHEMA : Account Form
 const thirdFormSchema = z.object({
@@ -50,7 +52,6 @@ type ThirdFormValues = z.infer<typeof thirdFormSchema>;
 export function ThirdForm() {
   const navigate = useNavigate();
   const { updateApplicantContext, applicantProfile } = useApplicantContext();
-  console.log("🦺applicantProfile", applicantProfile);
 
   // ✅ ZOD-FORM HOOK :  custom hook initializes a form instance,
   const form = useForm<ThirdFormValues>({
@@ -75,27 +76,64 @@ export function ThirdForm() {
   //   }
 
   // ✅ SUBMIT FORM - submit account form
-  function onSubmit(data: ThirdFormValues) {
+  async function onSubmit(data: ThirdFormValues) {
     console.log("thirdForm/Submit:  💢 Triggered", data);
 
-    // 👇 Update the userContext with form data
-    try {
-      const formData: Partial<ApplicantProfile> = {
-        thirdForm: {
-          ...data,
-          photo: "", //🎯🐞temporary solution
-        },
-      };
-      updateApplicantContext(formData);
+    if (applicantProfile) {
+      console.log("🦺 Applicant context exist's proceeding with submission");
 
-      // ✔ Handle success
-      // 🎯💣 TRY BLOCK:  UPDATE FIRESTORE DOCUMENT HERE ....
-      toastFormComplete("3");
-      navigate("/thankyou"); //-chang route
-    } catch (error) {
-      // ✖ Handle errors
+      // 👇 Create a uuid for the user
+      //- Generate a unique ID for the user
+      const secretVar = import.meta.env.VITE_SECRET_VARIABLE;
+      const nameFirstFive = applicantProfile.firstForm.name
+        .slice(0, 5)
+        .replace(/\s/g, ""); // Extract first 5 letters and remove spaces
+      const currentTimeStamp = Date.now().toString().slice(-5); // Extract last 5 digits of current timestamp
+      //-Construct a custom ID combining name, secret variable, and timestamp
+      const documentId = `${nameFirstFive}-${secretVar}-${currentTimeStamp}`;
+      console.log("🦺 documentId", documentId);
+
+
+      try {
+        // 👇 Merge form data with context data
+        const updatedThirdForm = {
+          ...applicantProfile.thirdForm,
+          ...data,
+          photo: "", //🎯💣 Temporary solution for if photo
+        };
+        console.log("🦺 updatedThirdForm", updatedThirdForm);
+
+        const updatedProfile: ApplicantProfile = {
+          ...applicantProfile,
+          thirdForm: updatedThirdForm,
+          uuid: documentId
+        };
+        console.log("🦺 updatedProfile", updatedProfile);
+
+        // 👇 Update the userContext with the merged data
+        await updateApplicantContext(updatedProfile);
+        console.log("✔ updated user context");
+
+        // -👇 Create new Firestore db doc
+        console.log(
+          "updating the DB now - here is the data, newApplicantProfile",
+          updatedProfile
+        );
+        await createApplicantDoc(documentId, updatedProfile);
+        console.log("✔ created firestore doc");
+
+        // ✔ Handle success
+        // 🎯💣 TRY BLOCK:  UPDATE FIRESTORE DOCUMENT HERE ....
+        toastFormComplete("3");
+        navigate("/thankyou"); //-change route
+      } catch (error) {
+        // ✖ Handle errors
+        toastError();
+        //📌 db update at end of form flow
+      }
+    } else {
+      console.log("Error:  cannot access applicant context");
       toastError();
-      //📌 db update at end of form flow
     }
   }
 
@@ -103,10 +141,6 @@ export function ThirdForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit((data) => {
-          console.log(
-            "🎯event_log:  📝-form submitted with following form-data: ",
-            data
-          );
           onSubmit(data);
         })}
         className="space-y-6 w-full "

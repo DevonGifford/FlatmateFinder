@@ -24,17 +24,14 @@ const firestore: Firestore = db;
  * ✅ SUBMIT APPLICATION HELPER:
  * Creates a uuid and new user document in the submission process.
  * @param {ApplicantProfile} userData - Partial user data for document creation.
+ * @param {DocumentId} userUUID - This will be the doc name
+ *
  */
-export const createApplicantDoc = async (userData: ApplicantProfile) => {
+export const createApplicantDoc = async (
+  documentId: DocumentId,
+  userData: ApplicantProfile,
+) => {
   console.log("createApplicantDoc:  💢 Triggered");
-
-  // 👇 Create a uuid for the user
-  //- Generate a unique ID for the user
-  const secretVar = import.meta.env.VITE_SECRET_VARIABLE;
-  const nameFirstFive = userData.firstForm.name.slice(0, 5).replace(/\s/g, ""); // Extract first 5 letters and remove spaces
-  const currentTimeStamp = Date.now().toString().slice(-5); // Extract last 5 digits of current timestamp
-  //-Construct a custom ID combining name, secret variable, and timestamp
-  const documentId: DocumentId = `${nameFirstFive}-${secretVar}-${currentTimeStamp}`;
 
   // 👇 Check no document already exists for this user
   try {
@@ -43,7 +40,7 @@ export const createApplicantDoc = async (userData: ApplicantProfile) => {
     const docSnapshot: DocumentSnapshot<Data> = await getDoc(docRef);
     if (docSnapshot.exists()) {
       console.log(
-        `⚠ Warning -  Document ${documentId} already exists in collection "users"`
+        `⚠ Warning -  Document ${documentId} already exists in collection db`
       );
     } else {
       // 👇 Create a new document with provided user data
@@ -54,7 +51,7 @@ export const createApplicantDoc = async (userData: ApplicantProfile) => {
 
       // ✔ Handle Success Case
       console.log(
-        `✔ Success - Document ${documentId} created successfully in collection "users"!`
+        `✔ Success - Document ${documentId} created successfully in collection db!`
       );
     }
     // ✖ Handle error case

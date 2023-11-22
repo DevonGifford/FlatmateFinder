@@ -63,7 +63,7 @@ export function FirstForm() {
   function onSubmit(data: FirstFormValues) {
     console.log("firstform/Submit:  💢 Triggered", data);
 
-    // 👇 Update the userContext with form data  
+    // 👇 Update the userContext with form data
     try {
       const formData: Partial<ApplicantProfile> = {
         firstForm: {
@@ -86,10 +86,6 @@ export function FirstForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit((data) => {
-          console.log(
-            "🎯event_log:  📝-form submitted with following form-data: ",
-            data
-          );
           onSubmit(data);
         })}
         className="space-y-4 w-full  "

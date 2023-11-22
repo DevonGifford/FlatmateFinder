@@ -19,10 +19,6 @@ import {
   toastCorrectPassword,
   toastIncorrectPassword,
 } from "@/lib/customToast";
-import {
-  createApplicantDoc,
-} from "@/lib/firebase/firestore";
-import { defaultApplicant } from "@/lib/types/applicant-type";
 
 const FormSchema = z.object({
   password: z.string().min(5, {
@@ -47,7 +43,7 @@ export default function HomePage() {
     //-check if form entry matches secret passwords
     switch (password) {
       case import.meta.env.VITE_PASSWORD_DASHBOARD:
-        console.log("Existing tenant login");
+        console.log("👀 Existing tenant login");
         navigate("/dashboard");
         break;
 
@@ -55,19 +51,13 @@ export default function HomePage() {
       case import.meta.env.VITE_PASSWORD_BETA:
       case import.meta.env.VITE_PASSWORD_MANGO:
       case import.meta.env.VITE_PASSWORD_CHOCOLATE:
-        //-💣 Handle user creation and Firestore document creation
-        //-   implement the logic to create users and Firestore documents here
-        // const uniqueId = `${Date.now()}`;
-
-        //-💣 Instantiate a new context version with this new user uuid
-
-        // - Handle Success case
+        // ✔  Handle Success case
         toastCorrectPassword();
         navigate("/form"); // Use navigate here directly
         break;
 
       default:
-        // -  Handle incorrect password case
+        // ✖  Handle incorrect password case
         toastIncorrectPassword(); //-🍞custom toast
         break;
     }
@@ -120,18 +110,6 @@ export default function HomePage() {
           <Button type="submit">Start</Button>
         </form>
       </Form>
-
-      <Button
-        size={"default"}
-        variant={"destructive"}
-        className="p-4 px-8"
-        onClick={() => {
-          createApplicantDoc(defaultApplicant);
-          console.log("it has been done...");
-        }}
-      >
-        Add new Doc Button
-      </Button>
     </div>
   );
 }
