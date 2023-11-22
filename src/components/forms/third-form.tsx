@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ApplicantProfile } from "@/lib/types/applicant-type";
-// import { createApplicantDoc } from "@/lib/firebase/firestore";
+import { createApplicantDoc } from "@/lib/firebase/firestore";
 import { useApplicantContext } from "../contexts/applicant/useApplicantContext";
 import { toastError, toastFormComplete } from "@/lib/customToast";
 
@@ -125,7 +125,7 @@ export function ThirdForm() {
           "updating the DB now - here is the data, newApplicantProfile",
           updatedProfile
         );
-        // await createApplicantDoc(documentId, updatedProfile);
+        await createApplicantDoc(documentId, updatedProfile);
         console.log("✔ created firestore doc");
 
         // ✔ Handle success
