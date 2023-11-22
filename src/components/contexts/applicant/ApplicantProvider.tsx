@@ -35,7 +35,7 @@ export const ApplicantProvider = ({
         uuid: "", // Set initial properties as needed
         firstForm: { name: "", age: "", sex: "", phone: "" },
         secondForm: { move_date: new Date(), length_stay: 0, meet_type: "" },
-        thirdForm: { job_title: "", describe: "", hobbies: "", photo: "" },
+        thirdForm: { job_title: "", job_type:"" ,describe: "", hobbies: "", photo: "" },
         applicationDate: new Date(),
       });
     }
