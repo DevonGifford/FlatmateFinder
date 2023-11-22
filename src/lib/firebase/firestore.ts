@@ -22,16 +22,19 @@ const firestore: Firestore = db;
 
 /**
  * ✅ SUBMIT APPLICATION HELPER:
- * Creates a uuid and new user document in the registration process.
+ * Creates a uuid and new user document in the submission process.
  * @param {ApplicantProfile} userData - Partial user data for document creation.
  */
 export const createApplicantDoc = async (userData: ApplicantProfile) => {
   console.log("createApplicantDoc:  💢 Triggered");
 
   // 👇 Create a uuid for the user
-  // 🎯🧱 to do list - blocking issue
-  // 🎯🧱 this uuid will be the documentID
-  const documentId: DocumentId = "🎯insert custom name from above logic";
+  //- Generate a unique ID for the user
+  const secretVar = import.meta.env.VITE_SECRET_VARIABLE;
+  const nameFirstFive = userData.firstForm.name.slice(0, 5).replace(/\s/g, ""); // Extract first 5 letters and remove spaces
+  const currentTimeStamp = Date.now().toString().slice(-5); // Extract last 5 digits of current timestamp
+  //-Construct a custom ID combining name, secret variable, and timestamp
+  const documentId: DocumentId = `${nameFirstFive}-${secretVar}-${currentTimeStamp}`;
 
   // 👇 Check no document already exists for this user
   try {

@@ -19,6 +19,10 @@ import {
   toastCorrectPassword,
   toastIncorrectPassword,
 } from "@/lib/customToast";
+import {
+  createApplicantDoc,
+} from "@/lib/firebase/firestore";
+import { defaultApplicant } from "@/lib/types/applicant-type";
 
 const FormSchema = z.object({
   password: z.string().min(5, {
@@ -116,6 +120,18 @@ export default function HomePage() {
           <Button type="submit">Start</Button>
         </form>
       </Form>
+
+      <Button
+        size={"default"}
+        variant={"destructive"}
+        className="p-4 px-8"
+        onClick={() => {
+          createApplicantDoc(defaultApplicant);
+          console.log("it has been done...");
+        }}
+      >
+        Add new Doc Button
+      </Button>
     </div>
   );
 }

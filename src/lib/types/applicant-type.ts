@@ -25,7 +25,7 @@ export type ApplicantProfile = {
 };
 
 export const defaultApplicant: ApplicantProfile = {
-  uuid: "123456", // Replace with a unique identifier generation logic
+  uuid: "devtesting0000", // Replace with a unique identifier generation logic
   firstForm: {
     name: "John Doe",
     age: "25",
