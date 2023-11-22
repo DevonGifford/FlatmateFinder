@@ -33,19 +33,41 @@ import { ApplicantProfile } from "@/lib/types/applicant-type";
 
 // 👇 FORM SCHEMA : Account Form
 const firstFormSchema = z.object({
-  name: z.string({
-    required_error: "⚠",
-  }),
-  age: z.string({
-    required_error: "⚠",
-  }),
-  sex: z.string({
-    required_error: "⚠",
-  }),
-  phone: z.string({
-    required_error: "⚠",
-  }),
-  social_media: z.string().url().optional(),
+  name: z
+    .string({
+      required_error: "⚠",
+    })
+    .max(50, {
+      message: "⚠ too long",
+    }),
+  age: z
+    .string({
+      required_error: "⚠",
+    })
+    .max(10, {
+      message: "⚠ too long",
+    }),
+  sex: z
+    .string({
+      required_error: "⚠",
+    })
+    .max(10, {
+      message: "⚠ too long",
+    }),
+  phone: z
+    .string({
+      required_error: "⚠",
+    })
+    .max(50, {
+      message: "⚠ too long",
+    }),
+  social_media: z
+    .string()
+    .url()
+    .max(50, {
+      message: "⚠ too long",
+    })
+    .optional(),
   languages: z.array(z.string()).optional(),
 });
 type FirstFormValues = z.infer<typeof firstFormSchema>;

@@ -39,8 +39,8 @@ const secondFormSchema = z.object({
   }),
   more_info: z
     .string()
-    .max(240, {
-      message: "⚠",
+    .max(500, {
+      message: "⚠ too long",
     })
     .optional(),
 });

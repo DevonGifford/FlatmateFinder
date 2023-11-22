@@ -2,11 +2,19 @@
 
 import * as z from "zod";
 import { useForm } from "react-hook-form";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/components/ui/button";
+import { ApplicantProfile } from "@/lib/types/applicant-type";
+// import { createApplicantDoc } from "@/lib/firebase/firestore";
+import { useApplicantContext } from "../contexts/applicant/useApplicantContext";
+import { toastError, toastFormComplete } from "@/lib/customToast";
+
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 import { Textarea } from "../ui/textarea";
+import { Button } from "@/components/ui/button";
 import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 import {
   Form,
   FormControl,
@@ -16,13 +24,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import { Building, Home, Video } from "lucide-react";
-import { Label } from "../ui/label";
-import { ApplicantProfile } from "@/lib/types/applicant-type";
-import { useNavigate } from "react-router-dom";
-import { useApplicantContext } from "../contexts/applicant/useApplicantContext";
-import { toastError, toastFormComplete } from "@/lib/customToast";
-import { createApplicantDoc } from "@/lib/firebase/firestore";
+import { Building, Check, Home, Video } from "lucide-react";
+import { Spinner } from "../Spinner";
 // import { createApplicantDoc } from "@/lib/firebase/firestore";
 
 // 👇 FORM SCHEMA : Account Form
@@ -35,14 +38,14 @@ const thirdFormSchema = z.object({
     .string({
       required_error: "⚠",
     })
-    .max(240, {
+    .max(500, {
       message: "⚠ too long",
     }),
   hobbies: z
     .string({
       required_error: "⚠",
     })
-    .max(240, {
+    .max(500, {
       message: "⚠ too long",
     }),
   photo: z.string().optional(),
@@ -52,6 +55,8 @@ type ThirdFormValues = z.infer<typeof thirdFormSchema>;
 export function ThirdForm() {
   const navigate = useNavigate();
   const { updateApplicantContext, applicantProfile } = useApplicantContext();
+  const [isLoading, setIsLoading] = useState(false); //-button-loadingSpinner
+  const [submitted, setSubmitted] = useState(false); //-button-icon success state
 
   // ✅ ZOD-FORM HOOK :  custom hook initializes a form instance,
   const form = useForm<ThirdFormValues>({
@@ -79,6 +84,8 @@ export function ThirdForm() {
   async function onSubmit(data: ThirdFormValues) {
     console.log("thirdForm/Submit:  💢 Triggered", data);
 
+    setIsLoading(true);
+
     if (applicantProfile) {
       console.log("🦺 Applicant context exist's proceeding with submission");
 
@@ -93,7 +100,6 @@ export function ThirdForm() {
       const documentId = `${nameFirstFive}-${secretVar}-${currentTimeStamp}`;
       console.log("🦺 documentId", documentId);
 
-
       try {
         // 👇 Merge form data with context data
         const updatedThirdForm = {
@@ -106,7 +112,7 @@ export function ThirdForm() {
         const updatedProfile: ApplicantProfile = {
           ...applicantProfile,
           thirdForm: updatedThirdForm,
-          uuid: documentId
+          uuid: documentId,
         };
         console.log("🦺 updatedProfile", updatedProfile);
 
@@ -119,20 +125,34 @@ export function ThirdForm() {
           "updating the DB now - here is the data, newApplicantProfile",
           updatedProfile
         );
-        await createApplicantDoc(documentId, updatedProfile);
+        // await createApplicantDoc(documentId, updatedProfile);
         console.log("✔ created firestore doc");
 
         // ✔ Handle success
         // 🎯💣 TRY BLOCK:  UPDATE FIRESTORE DOCUMENT HERE ....
-        toastFormComplete("3");
-        navigate("/thankyou"); //-change route
+        setTimeout(() => {
+          setIsLoading(false); //- Reset loading state
+          setSubmitted(true); //- Set achieved state
+          setSubmitted(false); //- Reset achieved state after a while
+          toastFormComplete("3");
+          navigate("/thankyou"); //-change route
+        }, 1000);
+
+
       } catch (error) {
         // ✖ Handle errors
+        setIsLoading(false); //- Reset loading state
+        setTimeout(() => {
+          setSubmitted(false); //- Reset achieved state after a while
+        }, 2000);
         toastError();
-        //📌 db update at end of form flow
       }
     } else {
       console.log("Error:  cannot access applicant context");
+      setIsLoading(false); //- Reset loading state
+      setTimeout(() => {
+        setSubmitted(false); //- Reset achieved state after a while
+      }, 2000);
       toastError();
     }
   }
@@ -253,10 +273,11 @@ export function ThirdForm() {
         {/* BUTTONS */}
         <Button
           type="submit"
-          className="rounded-lg text-sm md:text-base lg:text-xl p-4 px-8 md:px-12 md:py-6"
+          className="rounded-lg text-sm md:text-base lg:text-xl p-4 px-8 md:px-16 md:py-6"
           size={"lg"}
         >
-          Next
+          {/* <Spinner/> */}
+          {isLoading ? <Spinner /> : submitted ? <Check /> : "Complete Application"}
         </Button>
       </form>
     </Form>
