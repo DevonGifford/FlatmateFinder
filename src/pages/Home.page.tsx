@@ -1,11 +1,11 @@
+import * as z from "zod";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-
 import {
   Form,
   FormControl,
@@ -15,6 +15,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { toastCorrectPassword, toastIncorrectPassword } from "@/lib/customToast";
 
 const FormSchema = z.object({
   password: z.string().min(5, {
@@ -23,6 +24,8 @@ const FormSchema = z.object({
 });
 
 export default function HomePage() {
+  const navigate = useNavigate();
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -32,7 +35,35 @@ export default function HomePage() {
 
   // 🎯 Handle start form
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data);
+    const { password } = data;
+
+    //-check if form entry matches secret passwords
+    switch (password) {
+      case import.meta.env.VITE_PASSWORD_DASHBOARD:
+        console.log("Existing tenant login");
+        navigate("/dashboard");
+        break;
+
+      case import.meta.env.VITE_PASSWORD_ALPHA:
+      case import.meta.env.VITE_PASSWORD_BETA:
+      case import.meta.env.VITE_PASSWORD_MANGO:
+      case import.meta.env.VITE_PASSWORD_CHOCOLATE:
+        //-💣 Handle user creation and Firestore document creation
+        //-   implement the logic to create users and Firestore documents here
+        // const uniqueId = `${Date.now()}`;
+
+        //-💣 Instantiate a new context version with this new user uuid
+
+        // - Handle Success case
+        toastCorrectPassword();
+        navigate("/form"); // Use navigate here directly
+        break;
+
+      default:
+        // -  Handle incorrect password case
+        toastIncorrectPassword();  //-🍞custom toast
+        break;
+    }
   }
 
   return (
@@ -44,7 +75,7 @@ export default function HomePage() {
       <h1 className=" text-flipdish-blue text-2xl md:text-3xl lg:text-4xl tracking-wide font-extrabold py-5 mx-10">
         Calle de Muller, 1
       </h1>
-      
+
       {/* SPLASH IMAGE */}
       <AspectRatio ratio={16 / 9} className="flex flex-row">
         <img src="/src/assets/Tetuan-Splash.jpg" className="rounded-3xl" />

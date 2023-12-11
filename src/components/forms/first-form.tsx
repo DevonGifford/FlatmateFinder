@@ -2,10 +2,14 @@
 
 import * as z from "zod";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
+
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Link } from "lucide-react";
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
+import { IoMale, IoFemale, IoMaleFemale } from "react-icons/io5";
 import {
   Form,
   FormControl,
@@ -22,13 +26,8 @@ import {
   SelectValue,
 } from "../ui/select";
 
-import { Link } from "lucide-react";
-import { IoMale } from "react-icons/io5";
-import { IoFemale } from "react-icons/io5";
-import { IoMaleFemale } from "react-icons/io5";
-
 import { languages } from "@/lib/constants";
-import { useNavigate } from "react-router-dom";
+import { toastFormComplete } from "@/lib/customToast";
 
 // 👇 FORM SCHEMA : Account Form
 const firstFormSchema = z.object({
@@ -50,14 +49,15 @@ const firstFormSchema = z.object({
 type FirstFormValues = z.infer<typeof firstFormSchema>;
 
 export function FirstForm() {
-  const navigate = useNavigate()
-  
+  const navigate = useNavigate();  
+
   // ✅ ZOD-FORM HOOK :  custom hook initializes a form instance,
   const form = useForm<FirstFormValues>({
     resolver: zodResolver(firstFormSchema),
   });
-
+  
   // ✅ SUBMIT FORM - submit account form
+  // 💣 COMPLETE
   function onSubmit(data: FirstFormValues) {
     console.log(
       "🎯event-log:  📝UserForm/firstform/onSubmit:  💢 Triggered",
@@ -66,7 +66,7 @@ export function FirstForm() {
 
     navigate(`/form?pageId=second-form`);
 
-    // 💣 COMPLETE
+    toastFormComplete("1");
   }
 
   return (

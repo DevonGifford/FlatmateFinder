@@ -213,7 +213,7 @@ export function SecondForm() {
               <FormLabel>More information</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="I will achieve this by doing this and that..."
+                  placeholder="I have a special request or question ..." 
                   {...field}
                 />
               </FormControl>
