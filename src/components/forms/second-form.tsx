@@ -128,7 +128,7 @@ export function SecondForm() {
                 <FormLabel>Estimated length of stay</FormLabel>
               </div>
 
-              <FormControl className="mx-4 w-10/12">
+              <FormControl className="mx-4 w-11/12">
                 <Slider
                   min={0}
                   max={100}
@@ -140,7 +140,7 @@ export function SecondForm() {
                 />
               </FormControl>
 
-              <div className="flex justify-between text-xs text-muted-foreground ">
+              <div className="flex justify-between text-xs text-muted-foreground sm:w-11/12">
                 <div className="flex flex-col text-center">
                   <p>3</p>
                   <p className="w-full">Months</p>

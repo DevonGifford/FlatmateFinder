@@ -1,10 +1,10 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
-import Homepage from "./pages/Homepage";
+import HomePage from "./pages/Home.page";
+import ApplicationPage from "./pages/Application.page";
 
 import "./App.css";
-import Formpage from "./pages/Formpage";
 
 function App() {
   return (
@@ -13,8 +13,8 @@ function App() {
         <Navbar />
         <main className="flex flex-col gap-3 lg:gap-5">
           <Routes>
-            <Route path="/" element={<Homepage />} />
-            <Route path="/form" element={<Formpage />} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/form" element={<ApplicationPage />} />
           </Routes>
         </main>
       </Router>

@@ -28,6 +28,7 @@ import { IoFemale } from "react-icons/io5";
 import { IoMaleFemale } from "react-icons/io5";
 
 import { languages } from "@/lib/constants";
+import { useNavigate } from "react-router-dom";
 
 // 👇 FORM SCHEMA : Account Form
 const firstFormSchema = z.object({
@@ -49,42 +50,12 @@ const firstFormSchema = z.object({
 type FirstFormValues = z.infer<typeof firstFormSchema>;
 
 export function FirstForm() {
+  const navigate = useNavigate()
+  
   // ✅ ZOD-FORM HOOK :  custom hook initializes a form instance,
   const form = useForm<FirstFormValues>({
     resolver: zodResolver(firstFormSchema),
   });
-
-  // ✅ SET FORM VALUES - based on existing user profile context data
-  // useEffect(() => {
-  //   if (userProfile) {
-  //     form.setValue("username", userProfile.account.username || "");
-  //     form.setValue("career_title", userProfile.account.career_title || "");
-  //     form.setValue(
-  //       "programming_lang",
-  //       userProfile.account.programming_lang || ""
-  //     );
-  //     form.setValue("career_level", userProfile.account.career_level || 1);
-  //     form.setValue(
-  //       "experience_level",
-  //       userProfile.account.experience_level || 1
-  //     );
-  //     // - handle skills_lists + local state
-  //     if (userProfile && userProfile.account.skills_list) {
-  //       setSelectedSkills(userProfile.account.skills_list || []);
-  //       form.setValue("skills_list", userProfile.account.skills_list || []);
-  //     }
-  //   }
-  // }, [form, userProfile]);
-
-  // // ✅ HANDLE SKILL SELECTION - checks if skill exists in state, and handles click accordingly
-  // const handleSkillList = (selectedSkill: string) => {
-  //   const updatedSkills = selectedSkills.includes(selectedSkill)
-  //     ? selectedSkills.filter((skill) => skill !== selectedSkill)
-  //     : [...selectedSkills, selectedSkill];
-  //   //- update local skills state + skills form field
-  //   setSelectedSkills(updatedSkills);
-  //   form.setValue("languages", updatedSkills);
-  // };
 
   // ✅ SUBMIT FORM - submit account form
   function onSubmit(data: FirstFormValues) {
@@ -92,6 +63,8 @@ export function FirstForm() {
       "🎯event-log:  📝UserForm/firstform/onSubmit:  💢 Triggered",
       data
     );
+
+    navigate(`/form?pageId=second-form`);
 
     // 💣 COMPLETE
   }
