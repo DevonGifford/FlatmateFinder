@@ -12,7 +12,7 @@ function App() {
     <>
       <Router basename={import.meta.env.VITE_REACT_APP_BASENAME || "/"}>
         <Navbar />
-        <main className="flex flex-col gap-3 lg:gap-5">
+        <main className="flex flex-col h-auto gap-3 lg:gap-5">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/form" element={<ApplicationPage />} />
