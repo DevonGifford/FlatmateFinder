@@ -5,7 +5,6 @@ import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 import { HelpCircle } from "lucide-react";
 import { Language, LanguageContext } from "./contexts/language/LanguageProvider";
 
-
 export default function Navbar() {
   const { language, setLanguage } = useContext(LanguageContext);
 
