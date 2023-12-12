@@ -78,7 +78,7 @@ export default function HomePage() {
 
       {/* SPLASH IMAGE */}
       <AspectRatio ratio={16 / 9} className="flex flex-row">
-        <img src="/src/assets/Tetuan-Splash.jpg" className="rounded-3xl" />
+        <img src="/Tetuan-Splash.jpg" className="rounded-3xl" />
       </AspectRatio>
 
       {/* PASSWORD FORM */}

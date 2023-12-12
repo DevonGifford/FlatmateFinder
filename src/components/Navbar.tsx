@@ -39,12 +39,12 @@ export default function Navbar() {
         <ToggleGroup type="single">
         <ToggleGroupItem value="EN" onClick={() => changeLanguage('english')}>
           <Avatar className="h-6 w-6">
-            <AvatarImage src="/src/assets/en-flag.png" />
+            <AvatarImage src="/en-flag.png" />
           </Avatar>
         </ToggleGroupItem>
         <ToggleGroupItem value="ES" onClick={() => changeLanguage('spanish')}>
           <Avatar className="h-6 w-6">
-            <AvatarImage src="/src/assets/es-flag.png" />
+            <AvatarImage src="/es-flag.png" />
           </Avatar>
         </ToggleGroupItem>
       </ToggleGroup>
