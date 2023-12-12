@@ -1,9 +1,20 @@
+import { useContext } from "react";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 import { HelpCircle } from "lucide-react";
+import { Language, LanguageContext } from "./contexts/language/LanguageProvider";
+
 
 export default function Navbar() {
+  const { language, setLanguage } = useContext(LanguageContext);
+
+  const changeLanguage = (newLanguage: Language) => {
+    setLanguage(newLanguage);
+  };
+
+  console.log('language - 🎈🎈', language)
+
   return (
     <>
       <nav className="flex flex-row justify-between">
@@ -26,17 +37,17 @@ export default function Navbar() {
         </div>
         {/* LANGUAGE SETTINGS */}
         <ToggleGroup type="single">
-          <ToggleGroupItem value="EN">
-            <Avatar className="h-6 w-6">
-              <AvatarImage src="/src/assets/en-flag.png" />
-            </Avatar>
-          </ToggleGroupItem>
-          <ToggleGroupItem value="ES">
-            <Avatar className="h-6 w-6">
-              <AvatarImage src="/src/assets/es-flag.png" />
-            </Avatar>
-          </ToggleGroupItem>
-        </ToggleGroup>
+        <ToggleGroupItem value="EN" onClick={() => changeLanguage('english')}>
+          <Avatar className="h-6 w-6">
+            <AvatarImage src="/src/assets/en-flag.png" />
+          </Avatar>
+        </ToggleGroupItem>
+        <ToggleGroupItem value="ES" onClick={() => changeLanguage('spanish')}>
+          <Avatar className="h-6 w-6">
+            <AvatarImage src="/src/assets/es-flag.png" />
+          </Avatar>
+        </ToggleGroupItem>
+      </ToggleGroup>
       </nav>
     </>
   );

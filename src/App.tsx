@@ -6,6 +6,7 @@ import HomePage from "./pages/Home.page";
 import ApplicationPage from "./pages/Application.page";
 
 import "./App.css";
+import { ApplicantProvider } from "./components/contexts/applicant/ApplicantProvider";
 
 function App() {
   return (
@@ -13,8 +14,12 @@ function App() {
       <Router basename={import.meta.env.VITE_REACT_APP_BASENAME || "/"}>
         <Navbar />
         <main className="flex flex-col h-auto gap-3 lg:gap-5">
+          <ApplicantProvider>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+            </Routes>
+          </ApplicantProvider>
           <Routes>
-            <Route path="/" element={<HomePage />} />
             <Route path="/form" element={<ApplicationPage />} />
           </Routes>
         </main>
