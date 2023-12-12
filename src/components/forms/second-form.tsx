@@ -39,8 +39,8 @@ const secondFormSchema = z.object({
   }),
   more_info: z
     .string()
-    .max(240, {
-      message: "⚠",
+    .max(500, {
+      message: "⚠ too long",
     })
     .optional(),
 });
@@ -48,8 +48,7 @@ type SecondFormValues = z.infer<typeof secondFormSchema>;
 
 export function SecondForm() {
   const navigate = useNavigate();
-  const { applicantProfile, updateApplicantContext } = useApplicantContext();
-  console.log("🦺applicantProfile", applicantProfile);
+  const { updateApplicantContext } = useApplicantContext();
 
   // ✅ ZOD-FORM HOOK :  custom hook initializes a form instance,
   const form = useForm<SecondFormValues>({
@@ -83,10 +82,6 @@ export function SecondForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit((data) => {
-          console.log(
-            "🎯event_log:  📝-form submitted with following form-data: ",
-            data
-          );
           onSubmit(data);
         })}
         className="space-y-6 w-full "

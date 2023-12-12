@@ -43,7 +43,7 @@ export default function HomePage() {
     //-check if form entry matches secret passwords
     switch (password) {
       case import.meta.env.VITE_PASSWORD_DASHBOARD:
-        console.log("Existing tenant login");
+        console.log("👀 Existing tenant login");
         navigate("/dashboard");
         break;
 
@@ -51,19 +51,13 @@ export default function HomePage() {
       case import.meta.env.VITE_PASSWORD_BETA:
       case import.meta.env.VITE_PASSWORD_MANGO:
       case import.meta.env.VITE_PASSWORD_CHOCOLATE:
-        //-💣 Handle user creation and Firestore document creation
-        //-   implement the logic to create users and Firestore documents here
-        // const uniqueId = `${Date.now()}`;
-
-        //-💣 Instantiate a new context version with this new user uuid
-
-        // - Handle Success case
+        // ✔  Handle Success case
         toastCorrectPassword();
         navigate("/form"); // Use navigate here directly
         break;
 
       default:
-        // -  Handle incorrect password case
+        // ✖  Handle incorrect password case
         toastIncorrectPassword(); //-🍞custom toast
         break;
     }

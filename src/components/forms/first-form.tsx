@@ -33,19 +33,41 @@ import { ApplicantProfile } from "@/lib/types/applicant-type";
 
 // 👇 FORM SCHEMA : Account Form
 const firstFormSchema = z.object({
-  name: z.string({
-    required_error: "⚠",
-  }),
-  age: z.string({
-    required_error: "⚠",
-  }),
-  sex: z.string({
-    required_error: "⚠",
-  }),
-  phone: z.string({
-    required_error: "⚠",
-  }),
-  social_media: z.string().url().optional(),
+  name: z
+    .string({
+      required_error: "⚠",
+    })
+    .max(50, {
+      message: "⚠ too long",
+    }),
+  age: z
+    .string({
+      required_error: "⚠",
+    })
+    .max(10, {
+      message: "⚠ too long",
+    }),
+  sex: z
+    .string({
+      required_error: "⚠",
+    })
+    .max(10, {
+      message: "⚠ too long",
+    }),
+  phone: z
+    .string({
+      required_error: "⚠",
+    })
+    .max(50, {
+      message: "⚠ too long",
+    }),
+  social_media: z
+    .string()
+    .url()
+    .max(50, {
+      message: "⚠ too long",
+    })
+    .optional(),
   languages: z.array(z.string()).optional(),
 });
 type FirstFormValues = z.infer<typeof firstFormSchema>;
@@ -63,7 +85,7 @@ export function FirstForm() {
   function onSubmit(data: FirstFormValues) {
     console.log("firstform/Submit:  💢 Triggered", data);
 
-    // 👇 Update the userContext with form data  
+    // 👇 Update the userContext with form data
     try {
       const formData: Partial<ApplicantProfile> = {
         firstForm: {
@@ -86,10 +108,6 @@ export function FirstForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit((data) => {
-          console.log(
-            "🎯event_log:  📝-form submitted with following form-data: ",
-            data
-          );
           onSubmit(data);
         })}
         className="space-y-4 w-full  "

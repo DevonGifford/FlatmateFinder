@@ -1,22 +1,20 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
-import { FirstForm } from "@/components/forms/first-form";
-import { SecondForm } from "@/components/forms/second-form";
-import { ThirdForm } from "@/components/forms/third-form";
-// import { useParams, useSearchParams } from "react-router-dom";
-import { ArrowLeftIcon } from "lucide-react";
 import { useURLState } from "@/lib/hooks/useUrlState";
 import { useNavigate } from "react-router-dom";
+
+import { Button } from "@/components/ui/button";
+import { FirstForm } from "@/components/forms/first-form";
+import { ThirdForm } from "@/components/forms/third-form";
+import { SecondForm } from "@/components/forms/second-form";
+import { ArrowLeftIcon } from "lucide-react";
 
 const ApplicationPage: React.FC = () => {
   const { pageId } = useURLState();
   const navigate = useNavigate();
+  console.log("🦺 Application page - page ID params: ", pageId);
 
-  console.log("🎈🎈PAGEIDE", pageId);
-
+  // 👇 Logic to determine background color based on pageId and circleId
   const getCircleColor = (circleId: number) => {
-    // Logic to determine background color based on pageId and circleId
-    // Example logic: Change background color for the completed circle
     if (pageId === "second-form" && circleId === 1) {
       return "bg-cyan-600/40";
     } else if (pageId === "third-form" && circleId <= 2) {
