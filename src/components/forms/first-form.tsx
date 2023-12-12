@@ -27,7 +27,9 @@ import {
 } from "../ui/select";
 
 import { languages } from "@/lib/constants";
-import { toastFormComplete } from "@/lib/customToast";
+import { toastError, toastFormComplete } from "@/lib/customToast";
+import { useApplicantContext } from "../contexts/applicant/useApplicantContext";
+import { ApplicantProfile } from "@/lib/types/applicant-type";
 
 // 👇 FORM SCHEMA : Account Form
 const firstFormSchema = z.object({
@@ -49,24 +51,35 @@ const firstFormSchema = z.object({
 type FirstFormValues = z.infer<typeof firstFormSchema>;
 
 export function FirstForm() {
-  const navigate = useNavigate();  
+  const navigate = useNavigate();
+  const { updateApplicantContext } = useApplicantContext();
 
   // ✅ ZOD-FORM HOOK :  custom hook initializes a form instance,
   const form = useForm<FirstFormValues>({
     resolver: zodResolver(firstFormSchema),
   });
-  
+
   // ✅ SUBMIT FORM - submit account form
-  // 💣 COMPLETE
   function onSubmit(data: FirstFormValues) {
-    console.log(
-      "🎯event-log:  📝UserForm/firstform/onSubmit:  💢 Triggered",
-      data
-    );
+    console.log("firstform/Submit:  💢 Triggered", data);
 
-    navigate(`/form?pageId=second-form`);
+    // 👇 Update the userContext with form data  
+    try {
+      const formData: Partial<ApplicantProfile> = {
+        firstForm: {
+          ...data,
+        },
+      };
+      updateApplicantContext(formData);
 
-    toastFormComplete("1");
+      // ✔ Handle success
+      toastFormComplete("1");
+      navigate(`/form?pageId=second-form`); //-chang route
+    } catch (error) {
+      // ✖ Handle errors
+      toastError();
+      //📌 db update at end of form flow
+    }
   }
 
   return (

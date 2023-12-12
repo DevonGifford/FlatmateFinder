@@ -19,7 +19,7 @@ export type ApplicantProfile = {
       job_type?: string;
       describe: string;
       hobbies: string;
-      photo: string;
+      photo: string | undefined;
     };
     applicationDate: Date;
   };

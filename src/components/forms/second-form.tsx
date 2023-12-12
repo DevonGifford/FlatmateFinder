@@ -1,10 +1,21 @@
 "use client";
 
 import * as z from "zod";
+import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { ApplicantProfile } from "@/lib/types/applicant-type";
+import { toastError, toastFormComplete } from "@/lib/customToast";
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
+
+import { Button } from "@/components/ui/button";
+import { Slider } from "../ui/slider";
+import { Calendar } from "../ui/calendar";
+import { Textarea } from "../ui/textarea";
+import { useApplicantContext } from "../contexts/applicant/useApplicantContext";
+import { CalendarIcon, User, Video } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import {
   Form,
   FormControl,
@@ -13,14 +24,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-
-import { CalendarIcon, User, Video } from "lucide-react";
-
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { cn } from "@/lib/utils";
-import { Calendar } from "../ui/calendar";
-import { Textarea } from "../ui/textarea";
-import { Slider } from "../ui/slider";
 
 // 👇 FORM SCHEMA : Account Form
 const secondFormSchema = z.object({
@@ -44,6 +47,10 @@ const secondFormSchema = z.object({
 type SecondFormValues = z.infer<typeof secondFormSchema>;
 
 export function SecondForm() {
+  const navigate = useNavigate();
+  const { applicantProfile, updateApplicantContext } = useApplicantContext();
+  console.log("🦺applicantProfile", applicantProfile);
+
   // ✅ ZOD-FORM HOOK :  custom hook initializes a form instance,
   const form = useForm<SecondFormValues>({
     resolver: zodResolver(secondFormSchema),
@@ -51,12 +58,25 @@ export function SecondForm() {
 
   // ✅ SUBMIT FORM - submit account form
   function onSubmit(data: SecondFormValues) {
-    console.log(
-      "🎯event-log:  📝UserForm/SecondForm/onSubmit:  💢 Triggered",
-      data
-    );
+    console.log("secondForm/Submit:  💢 Triggered", data);
 
-    // 💣 COMPLETE
+    // 👇 Update the userContext with form data
+    try {
+      const formData: Partial<ApplicantProfile> = {
+        secondForm: {
+          ...data,
+        },
+      };
+      updateApplicantContext(formData);
+
+      // ✔ Handle success
+      toastFormComplete("2");
+      navigate(`/form?pageId=third-form`); //-chang route
+    } catch (error) {
+      // ✖ Handle errors
+      toastError();
+      //📌 db update at end of form flow
+    }
   }
 
   return (
@@ -213,7 +233,7 @@ export function SecondForm() {
               <FormLabel>More information</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="I have a special request or question ..." 
+                  placeholder="I have a special request or question ..."
                   {...field}
                 />
               </FormControl>
@@ -229,7 +249,6 @@ export function SecondForm() {
         >
           Next
         </Button>
-        {/* </div> */}
       </form>
     </Form>
   );

@@ -16,6 +16,14 @@ export function toastIncorrectPassword() {
   });
 }
 
+export function toastError() {
+  toast({
+    variant: "destructive",
+    title: "Uh oh! Something went wrong",
+    description: "Somethings not right - Please try again later.",
+  });
+}
+
 export function toastFormComplete(formNumber: string) {
   toast({
     variant: "default",

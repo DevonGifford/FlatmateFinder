@@ -18,6 +18,10 @@ import {
 
 import { Building, Home, Video } from "lucide-react";
 import { Label } from "../ui/label";
+import { ApplicantProfile } from "@/lib/types/applicant-type";
+import { useNavigate } from "react-router-dom";
+import { useApplicantContext } from "../contexts/applicant/useApplicantContext";
+import { toastError, toastFormComplete } from "@/lib/customToast";
 
 // 👇 FORM SCHEMA : Account Form
 const thirdFormSchema = z.object({
@@ -39,11 +43,15 @@ const thirdFormSchema = z.object({
     .max(240, {
       message: "⚠ too long",
     }),
-  photo: z.string(),
+  photo: z.string().optional(),
 });
 type ThirdFormValues = z.infer<typeof thirdFormSchema>;
 
 export function ThirdForm() {
+  const navigate = useNavigate();
+  const { updateApplicantContext, applicantProfile } = useApplicantContext();
+  console.log("🦺applicantProfile", applicantProfile);
+
   // ✅ ZOD-FORM HOOK :  custom hook initializes a form instance,
   const form = useForm<ThirdFormValues>({
     resolver: zodResolver(thirdFormSchema),
@@ -68,12 +76,27 @@ export function ThirdForm() {
 
   // ✅ SUBMIT FORM - submit account form
   function onSubmit(data: ThirdFormValues) {
-    console.log(
-      "🎯event-log:  📝UserForm/ThirdForm/onSubmit:  💢 Triggered",
-      data
-    );
+    console.log("thirdForm/Submit:  💢 Triggered", data);
 
-    // 💣 COMPLETE
+    // 👇 Update the userContext with form data
+    try {
+      const formData: Partial<ApplicantProfile> = {
+        thirdForm: {
+          ...data,
+          photo: "", //🎯🐞temporary solution
+        },
+      };
+      updateApplicantContext(formData);
+
+      // ✔ Handle success
+      // 🎯💣 TRY BLOCK:  UPDATE FIRESTORE DOCUMENT HERE ....
+      toastFormComplete("3");
+      navigate("/thankyou"); //-chang route
+    } catch (error) {
+      // ✖ Handle errors
+      toastError();
+      //📌 db update at end of form flow
+    }
   }
 
   return (
@@ -187,7 +210,9 @@ export function ThirdForm() {
 
         {/* 💣 upload image */}
         <div className="grid w-full max-w-sm items-center gap-1.5 rounded-lg border p-4">
-          <Label htmlFor="picture" className="py-2">Picture</Label>
+          <Label htmlFor="picture" className="py-2">
+            Picture
+          </Label>
           <Input id="picture" type="file" />
         </div>
 
