@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { AspectRatio } from "@/components/ui/aspect-ratio";
+// import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -15,7 +15,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { toastCorrectPassword, toastIncorrectPassword } from "@/lib/customToast";
+import {
+  toastCorrectPassword,
+  toastIncorrectPassword,
+} from "@/lib/customToast";
 
 const FormSchema = z.object({
   password: z.string().min(5, {
@@ -61,49 +64,50 @@ export default function HomePage() {
 
       default:
         // -  Handle incorrect password case
-        toastIncorrectPassword();  //-🍞custom toast
+        toastIncorrectPassword(); //-🍞custom toast
         break;
     }
   }
 
   return (
-    <div className="flex flex-col justify-center items-center">
+    <div className="flex flex-col justify-center items-center sm:mx-20 md:max-w-10/12 sm:max-w-4/6 gap-5 md:gap-8">
       {/* HEADER SPLASH */}
-      <header className="flex flex-col pt-3 items-center">
-        <span className="font-semibold">Welcome to</span>
+      <header className="flex flex-col pt-3 items-center md:pt-10">
+        <span className="text-2xl italic ">Welcome to</span>
+        <h1 className="text-3xl md:text-4xl lg:text-5xl tracking-wide font-extrabold pb-5 mx-10">
+          Calle de Muller
+        </h1>
       </header>
-      <h1 className=" text-flipdish-blue text-2xl md:text-3xl lg:text-4xl tracking-wide font-extrabold py-5 mx-10">
-        Calle de Muller, 1
-      </h1>
 
       {/* SPLASH IMAGE */}
-      <AspectRatio ratio={16 / 9} className="flex flex-row">
-        <img src="/Tetuan-Splash.jpg" className="rounded-3xl" />
-      </AspectRatio>
+      {/* <AspectRatio ratio={16 / 9} className="flex items-center justify-center"> */}
+      <img src="/Tetuan-Splash.jpg" className="rounded-full" width={"500px"} />
+      {/* </AspectRatio> */}
 
       {/* PASSWORD FORM */}
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="w-2/3 space-y-6 py-10"
+          className="md:w-5/12 space-y-6 py-5"
         >
           <FormField
             control={form.control}
             name="password"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-3xl font-bold">
+              <FormItem className="px-8">
+                <FormLabel className="text-xl sm:text-3xl font-bold">
                   Enter password
                 </FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="password"
+                    placeholder=""
                     className="text-center"
+                    autoFocus
                     {...field}
                   />
                 </FormControl>
                 <FormDescription>
-                  Please enter the password shared with you.
+                  A secret password shared with you.
                 </FormDescription>
                 <FormMessage />
               </FormItem>

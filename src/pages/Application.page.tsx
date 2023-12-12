@@ -14,37 +14,57 @@ const ApplicationPage: React.FC = () => {
 
   console.log("🎈🎈PAGEIDE", pageId);
 
+  const getCircleColor = (circleId: number) => {
+    // Logic to determine background color based on pageId and circleId
+    // Example logic: Change background color for the completed circle
+    if (pageId === "second-form" && circleId === 1) {
+      return "bg-cyan-600/40";
+    } else if (pageId === "third-form" && circleId <= 2) {
+      return "bg-cyan-600/40";
+    }
+    return "bg-cyan-600/10"; // Default color for incomplete circles
+  };
+
   return (
     <>
       <div className="flex flex-col items-center h-[calc(100vh-10vh)] overflow-auto hide-scrollbar">
-        {/* Handle Viewing Form  */}
-        <div className="flex flex-row justify-center items-center text-center gap-3 text-xl font-bold py-10">
-          <p>Form one</p>
-          <p>Form two</p>
-          <p>Form three</p>
-        </div>
-        {/* Conditional rendering based on router query */}
-        {pageId === "second-form" && <SecondForm key="second-form" />}
-        {pageId === "third-form" && <ThirdForm key="third-form" />}
-        {/* 🎯{pageId === "complete-form" && INSERT THANK YOU PAGE} */}
-
-        {/* Render 'go back to previous form' button or render first form */}
-        {pageId ? (
-          <div>
-            <Button
-              className="text-xs font-bold translate-y-1/2"
-              variant={"outline"}
-              size={"sm"}
-              onClick={() => {
-                navigate(-1);
-              }}
+        {/* Handle Eaasy Viewing Forms to complete  */}
+        <div className="flex flex-row justify-center items-center text-center gap-6 text-xl font-bold py-6">
+          {[1, 2, 3].map((circleId) => (
+            <div
+              key={circleId}
+              className={`h-4 w-4 text-xs flex justify-center items-center rounded-full ${getCircleColor(
+                circleId
+              )}`}
             >
-              <ArrowLeftIcon size={16} /> Go Back
-            </Button>
-          </div>
-        ) : (
-          <FirstForm key="first-form" /> //👉 change to whatever form for development use
-        )}
+            </div>
+          ))}
+        </div>
+
+        <div className="flex flex-col sm:w-3/5 max-w-xl">
+          {/* Conditional rendering based on router query */}
+          {pageId === "second-form" && <SecondForm key="second-form" />}
+          {pageId === "third-form" && <ThirdForm key="third-form" />}
+          {/* 🎯{pageId === "complete-form" && INSERT THANK YOU PAGE} */}
+
+          {/* Render 'go back to previous form' button or render first form */}
+          {pageId ? (
+            <div>
+              <Button
+                className="text-xs font-bold mt-5"
+                variant={"secondary"}
+                size={"sm"}
+                onClick={() => {
+                  navigate(-1);
+                }}
+              >
+                <ArrowLeftIcon size={16} /> Go Back
+              </Button>
+            </div>
+          ) : (
+            <FirstForm key="first-form" /> //👉 change to whatever form for development use
+          )}
+        </div>
       </div>
     </>
   );

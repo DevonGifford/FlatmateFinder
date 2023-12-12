@@ -3,7 +3,10 @@ import { Avatar, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 import { HelpCircle } from "lucide-react";
-import { Language, LanguageContext } from "./contexts/language/LanguageProvider";
+import {
+  Language,
+  LanguageContext,
+} from "./contexts/language/LanguageProvider";
 
 export default function Navbar() {
   const { language, setLanguage } = useContext(LanguageContext);
@@ -12,7 +15,7 @@ export default function Navbar() {
     setLanguage(newLanguage);
   };
 
-  console.log('language - 🎈🎈', language)
+  console.log("language - 🎈🎈", language);
 
   return (
     <>
@@ -36,17 +39,27 @@ export default function Navbar() {
         </div>
         {/* LANGUAGE SETTINGS */}
         <ToggleGroup type="single">
-        <ToggleGroupItem value="EN" onClick={() => changeLanguage('english')}>
-          <Avatar className="h-6 w-6">
-            <AvatarImage src="/en-flag.png" />
-          </Avatar>
-        </ToggleGroupItem>
-        <ToggleGroupItem value="ES" onClick={() => changeLanguage('spanish')}>
-          <Avatar className="h-6 w-6">
-            <AvatarImage src="/es-flag.png" />
-          </Avatar>
-        </ToggleGroupItem>
-      </ToggleGroup>
+          <ToggleGroupItem
+            variant={"outline"}
+            value="EN"
+            onClick={() => changeLanguage("english")}
+            className=" hover:bg-cyan-600/20"
+          >
+            <Avatar className="h-6 w-6">
+              <AvatarImage src="/en-flag.png" />
+            </Avatar>
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            variant={"outline"}
+            value="ES"
+            onClick={() => changeLanguage("spanish")}
+            className=" hover:bg-cyan-600/20"
+          >
+            <Avatar className="h-6 w-6">
+              <AvatarImage src="/es-flag.png" />
+            </Avatar>
+          </ToggleGroupItem>
+        </ToggleGroup>
       </nav>
     </>
   );
