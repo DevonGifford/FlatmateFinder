@@ -109,16 +109,16 @@ export function ThirdForm() {
           );
           onSubmit(data);
         })}
-        className="space-y-6 w-full -translate-y-5 "
+        className="space-y-6 w-full "
       >
         {/* JOB */}
-        <div className="flex flex-col rounded-lg border w-[300px]">
+        <div className="flex flex-col rounded-lg border">
           {/* JOB TITLE */}
           <FormField
             name="job_title"
             control={form.control}
             render={({ field }) => (
-              <FormItem className="border-none">
+              <FormItem className="border-none pb-0">
                 <FormLabel className="flex text-center justify-center">
                   Career Title
                 </FormLabel>
@@ -209,7 +209,7 @@ export function ThirdForm() {
         />
 
         {/* 💣 upload image */}
-        <div className="grid w-full max-w-sm items-center gap-1.5 rounded-lg border p-4">
+        <div className="grid w-full items-center gap-2 rounded-lg border p-4">
           <Label htmlFor="picture" className="py-2">
             Picture
           </Label>
@@ -219,7 +219,8 @@ export function ThirdForm() {
         {/* BUTTONS */}
         <Button
           type="submit"
-          className="rounded-lg text-sm md:text-base p-2 px-4"
+          className="rounded-lg text-sm md:text-base lg:text-xl p-4 px-8 md:px-12 md:py-6"
+          size={"lg"}
         >
           Next
         </Button>
