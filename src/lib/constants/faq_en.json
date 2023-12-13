@@ -1,0 +1,65 @@
+{
+  "faq_questions": [
+    {
+      "question": "What type of individuals are you looking for as potential flatmates?",
+      "answer": "We prefer tidy, respectful working professionals or master's students.",
+      "emoji": "👔"
+    },
+    {
+      "question": "What amenities are included in the apartment?",
+      "answer": "You'll find 4 bedrooms, 3 bathrooms, laundry facilities, a spacious living room with a Smart TV, and a well-equipped kitchen.",
+      "emoji": "🏠"
+    },
+    {
+      "question": "Could you describe the available room?",
+      "answer": "Fully furnished, including a double bed, blackout blinds, a desk, and ample storage.  The room shares a large bathroom with one other person.",
+      "emoji": "🛏️"
+    },
+    {
+      "question": "What's the neighborhood like?",
+      "answer": "Valdeacederas offers a safe, quiet environment with nearby essentials like eateries, supermarkets, and easy access to public transport.",
+      "emoji": "🏙️"
+    },
+    {
+      "question": "How much is the monthly rent and what additional costs should I expect?",
+      "answer": "Rent is €500/month. Utilities are split among tenants, averaging €40 to €60/month.  We use splitwise app to track any shared small costs - couple euros a month",
+      "emoji": "💸"
+    },
+
+    {
+      "question": "How is household maintenance and cleaning managed among the flatmates?",
+      "answer": "A cleaner handles communal areas weekly. Personal cleaning/ironing can be arranged.",
+      "emoji": "🧹"
+    },
+    {
+      "question": "Is parking available?",
+      "answer": "Yes, parking is available, arranged separately through the building manager.  Parking spots range between 60 - 80€",
+      "emoji": "🚗"
+    },
+    {
+      "question": "How is the payment for rent and utilities typically handled among the tenants?",
+      "answer": "Monthly bank transfers on the first.",
+      "emoji": "💳"
+    },
+    {
+        "question": "Is there a contract that needs to be signed?",
+        "answer": "No, there's no formal contract or agency fees involved. Upon payment of the deposit, the room will be reserved, and the ads will be removed.",
+        "emoji": "📜"
+      },
+    {
+      "question": "Are guests allowed, and if so, are there any restrictions?",
+      "answer": "Guests are welcome, respecting shared spaces and house guidelines.",
+      "emoji": "🤝"
+    },
+    {
+      "question": "Is the apartment pet-friendly?",
+      "answer": "Apologies, no pets due to potential allergies and resident comfort.",
+      "emoji": "🐾"
+    },
+    {
+      "question": "How is the deposit handled & will it be used for final month's rent?",
+      "answer": "The deposit equals one month's rent and is refundable upon departure. It cannot cover the final month's rent, held separately as security until the lease ends.",
+      "emoji": "💰"
+    }
+  ]
+}

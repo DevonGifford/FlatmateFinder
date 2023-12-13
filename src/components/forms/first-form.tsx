@@ -26,7 +26,7 @@ import {
   SelectValue,
 } from "../ui/select";
 
-import { languages } from "@/lib/constants";
+import { languages } from "@/lib/constants/constants";
 import { toastError, toastFormComplete } from "@/lib/customToast";
 import { useApplicantContext } from "../contexts/applicant/useApplicantContext";
 import { ApplicantProfile } from "@/lib/types/applicant-type";

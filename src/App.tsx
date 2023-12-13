@@ -8,6 +8,7 @@ import ApplicationPage from "./pages/Application.page";
 import "./App.css";
 import { ApplicantProvider } from "./components/contexts/applicant/ApplicantProvider";
 import ThankyouPage from "./pages/Thankyou.page";
+import FaqPage from "./pages/Faq.page";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <main className="flex flex-col h-auto gap-3 lg:gap-5">
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/FAQ" element={<FaqPage />} />
           </Routes>
           <ApplicantProvider>
             <Routes>
