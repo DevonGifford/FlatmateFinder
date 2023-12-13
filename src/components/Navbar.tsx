@@ -1,8 +1,10 @@
+import { useMatch, useNavigate } from "react-router-dom";
 import { useContext } from "react";
-import { Avatar, AvatarImage } from "./ui/avatar";
+
 import { Button } from "./ui/button";
+import { Avatar, AvatarImage } from "./ui/avatar";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
-import { HelpCircle } from "lucide-react";
+import { HelpCircle, HomeIcon, XSquare } from "lucide-react";
 import {
   Language,
   LanguageContext,
@@ -10,35 +12,62 @@ import {
 
 export default function Navbar() {
   const { language, setLanguage } = useContext(LanguageContext);
+  const navigate = useNavigate();
+  const match = useMatch("*"); //- match any route
 
+  // 🎯🔮 Need to use this language state - current issue #12
+  // 🔗🔮 https://github.com/DevonGifford/FlatmateFinder/issues/12
   const changeLanguage = (newLanguage: Language) => {
     setLanguage(newLanguage);
   };
 
-  // 🎯🔮 Need to use this language state - current issue #12
-  // 🔗🔮 https://github.com/DevonGifford/FlatmateFinder/issues/12
-  console.log("⏳ current language ", language);
+  // 🔧🚧 Development logs
+  console.log("🦺📌 Navbar - current Lang =", language);
+  console.log("🦺📌 Navbar - current URL =", match?.pathname);
 
   return (
     <>
       <nav className="flex flex-row justify-between">
-        {/* FAQ BUTTON */}
-        <div>
-          <a
-            href="/"
-            // 🎯🔮 FAQ update this link once page is created
-            // 🎯🔮 FAQ should be hidden while on form page...(not the whole nav - just this ...)
+        {/* // 👇 FAQ/HOME/QUIT BUTTON */}
+        {match && match.pathname === "/form" ? (
+          //👀 Quit Button if URL is "/form"
+          <Button
+            className="flex flex-row gap-1 transition ease-in-out duration-150 hover:scale-110"
+            size={"sm"}
+            variant={"ghost"}
+            onClick={() => {
+              navigate("/");
+            }}
           >
-            <Button
-              className="flex flex-row gap-1 transition ease-in-out duration-150 hover:scale-110"
-              size={"sm"}
-              variant={"ghost"}
-            >
-              <HelpCircle size={16} />
-              <span className="block">FAQ</span>
-            </Button>
-          </a>
-        </div>
+            <XSquare size={25} />
+          </Button>
+        ) : match && match.pathname === "/FAQ" ? (
+          //👀 HOME button if URL is "/FAQ"
+          <Button
+            className="flex flex-row gap-1 transition ease-in-out duration-150 hover:scale-110"
+            size={"sm"}
+            variant={"ghost"}
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            <HomeIcon size={22} />
+          </Button>
+        ) : (
+          //👀 Default FAQ Button
+          <Button
+            className="flex flex-row gap-1 transition ease-in-out duration-150 hover:scale-110"
+            size={"sm"}
+            variant={"ghost"}
+            onClick={() => {
+              navigate("/FAQ");
+            }}
+          >
+            <HelpCircle size={16} />
+            <span className="block">FAQ</span>
+          </Button>
+        )}
+
         {/* LANGUAGE SETTINGS */}
         <ToggleGroup type="single">
           <ToggleGroupItem
