@@ -5,17 +5,17 @@ import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
-import { ApplicantProfile } from "@/lib/types/applicant-type";
-import { toastError, toastFormComplete } from "@/lib/customToast";
+import { useLanguageContext } from "../contexts/language/useLanguageContext";
+import { useApplicantContext } from "../contexts/applicant/useApplicantContext";
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
+import { toastError, toastFormComplete } from "@/lib/customToast";
 
-import { Button } from "@/components/ui/button";
-import { Slider } from "../ui/slider";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Calendar } from "../ui/calendar";
 import { Textarea } from "../ui/textarea";
-import { useApplicantContext } from "../contexts/applicant/useApplicantContext";
+import { Slider } from "../ui/slider";
+import { Button } from "@/components/ui/button";
 import { CalendarIcon, User, Video } from "lucide-react";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import {
   Form,
   FormControl,
@@ -24,6 +24,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+
+import { SecondFormData } from "@/lib/types/translation-types";
+import { ApplicantProfile } from "@/lib/types/applicant-type";
+import Data_EN from "@/lib/translations/applicant-form/secondform_en.json";
+import Data_ES from "@/lib/translations/applicant-form/secondform_es.json";
 
 // 👇 FORM SCHEMA : Account Form
 const secondFormSchema = z.object({
@@ -49,6 +54,11 @@ type SecondFormValues = z.infer<typeof secondFormSchema>;
 export function SecondForm() {
   const navigate = useNavigate();
   const { updateApplicantContext } = useApplicantContext();
+  const { language } = useLanguageContext();
+
+  // ✅ SET CURRENT LANGUAGE:  access language from the context
+  const setLanguage: SecondFormData =
+    language === "english" ? Data_EN : Data_ES;
 
   // ✅ ZOD-FORM HOOK :  custom hook initializes a form instance,
   const form = useForm<SecondFormValues>({
@@ -92,7 +102,7 @@ export function SecondForm() {
           control={form.control}
           render={({ field }) => (
             <FormItem className="flex flex-col min-w-[300px]">
-              <FormLabel>Move in date</FormLabel>
+              <FormLabel>{setLanguage.headingMoveDate}</FormLabel>
 
               <Popover>
                 <PopoverTrigger asChild>
@@ -108,7 +118,7 @@ export function SecondForm() {
                         {field.value instanceof Date ? (
                           <span>{field.value.toDateString()}</span>
                         ) : (
-                          <span>Pick a date</span>
+                          <span>{setLanguage.pickDate}</span>
                         )}
                       </span>
                       <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
@@ -121,7 +131,8 @@ export function SecondForm() {
                     selected={field.value}
                     onSelect={field.onChange}
                     disabled={(date) =>
-                      date < new Date() || date < new Date("1900-01-01")
+                      date < new Date("2024-01-20") ||
+                      date < new Date("1900-01-01")
                     }
                     initialFocus
                   />
@@ -140,7 +151,7 @@ export function SecondForm() {
           render={({ field: { onChange } }) => (
             <FormItem className="space-y-5">
               <div className="flex flex-col items-center pb-2">
-                <FormLabel>Estimated length of stay</FormLabel>
+                <FormLabel>{setLanguage.headingETAStay}</FormLabel>
               </div>
 
               <FormControl className="mx-4 w-11/12">
@@ -158,19 +169,19 @@ export function SecondForm() {
               <div className="flex justify-between text-xs text-muted-foreground sm:w-11/12">
                 <div className="flex flex-col text-center">
                   <p>3</p>
-                  <p className="w-full">Months</p>
+                  <p className="w-full">{setLanguage.months}</p>
                 </div>
                 <div className="flex flex-col text-center">
                   <p>6</p>
-                  <p className="w-full">Months</p>
+                  <p className="w-full">{setLanguage.months}</p>
                 </div>
                 <div className="flex flex-col items-center text-center">
                   <p>1</p>
-                  <p>Year</p>
+                  <p>{setLanguage.year}</p>
                 </div>
                 <div className="flex flex-col items-center text-center">
-                  <p>++</p>
-                  <p>Years</p>
+                  <p>+?</p>
+                  <p>{setLanguage.year}s</p>
                 </div>
               </div>
 
@@ -185,7 +196,7 @@ export function SecondForm() {
           control={form.control}
           render={({ field }) => (
             <FormItem className="rounded-lg border p-4">
-              <FormLabel>Type of viewing</FormLabel>
+              <FormLabel>{setLanguage.headingTypeViewing}</FormLabel>
               <FormControl>
                 <ToggleGroup
                   type="single"
@@ -198,20 +209,20 @@ export function SecondForm() {
                     className="flex flex-col items-center justify-center text-center gap-1"
                   >
                     <User className="font-bold" size={18} />
-                    <span className="text-xs">In Person</span>
+                    <span className="text-xs">{setLanguage.inPerson}</span>
                   </ToggleGroupItem>
                   <ToggleGroupItem
                     value="videocall"
                     className="flex flex-col items-center justify-center text-center gap-1"
                   >
                     <Video size={18} />
-                    <span className="text-xs">Videocall</span>
+                    <span className="text-xs">{setLanguage.videoCall}</span>
                   </ToggleGroupItem>
                 </ToggleGroup>
               </FormControl>
               <span className="text-xs text-slate-500">
                 {" "}
-                *scheduled via whatsapp
+                *{setLanguage.schedule}
               </span>
               <FormMessage />
             </FormItem>
@@ -224,10 +235,10 @@ export function SecondForm() {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>More information</FormLabel>
+              <FormLabel>{setLanguage.headingMoreInfo}</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="I have a special request or question ..."
+                  placeholder={`${setLanguage.specialRequestQuestion}`}
                   {...field}
                 />
               </FormControl>
@@ -242,7 +253,7 @@ export function SecondForm() {
           className="rounded-lg text-sm md:text-base lg:text-xl p-4 px-8 md:px-12 md:py-6"
           size={"lg"}
         >
-          Next
+          {setLanguage.nextbutton}
         </Button>
       </form>
     </Form>

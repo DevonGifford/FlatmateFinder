@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { FirstForm } from "@/components/forms/first-form";
 import { ThirdForm } from "@/components/forms/third-form";
 import { SecondForm } from "@/components/forms/second-form";
-import { ArrowLeftIcon } from "lucide-react";
+import { ArrowLeftToLine } from "lucide-react";
 
 const ApplicationPage: React.FC = () => {
   const { pageId } = useURLState();
@@ -56,7 +56,7 @@ const ApplicationPage: React.FC = () => {
                   navigate(-1);
                 }}
               >
-                <ArrowLeftIcon size={16} /> Go Back
+                <ArrowLeftToLine />
               </Button>
             </div>
           ) : (

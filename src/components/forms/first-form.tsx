@@ -4,6 +4,9 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useLanguageContext } from "../contexts/language/useLanguageContext";
+import { toastError, toastFormComplete } from "@/lib/customToast";
+import { useApplicantContext } from "../contexts/applicant/useApplicantContext";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -27,9 +30,11 @@ import {
 } from "../ui/select";
 
 import { languages } from "@/lib/constants/constants";
-import { toastError, toastFormComplete } from "@/lib/customToast";
-import { useApplicantContext } from "../contexts/applicant/useApplicantContext";
 import { ApplicantProfile } from "@/lib/types/applicant-type";
+import { FirstFormData } from "@/lib/types/translation-types";
+
+import Data_EN from "@/lib/translations/applicant-form/firstform_en.json";
+import Data_ES from "@/lib/translations/applicant-form/firstform_es.json";
 
 // 👇 FORM SCHEMA : Account Form
 const firstFormSchema = z.object({
@@ -75,6 +80,10 @@ type FirstFormValues = z.infer<typeof firstFormSchema>;
 export function FirstForm() {
   const navigate = useNavigate();
   const { updateApplicantContext } = useApplicantContext();
+  const { language } = useLanguageContext();
+
+  // ✅ SET CURRENT LANGUAGE:  access language from the context
+  const setLanguage: FirstFormData = language === "english" ? Data_EN : Data_ES;
 
   // ✅ ZOD-FORM HOOK :  custom hook initializes a form instance,
   const form = useForm<FirstFormValues>({
@@ -118,7 +127,7 @@ export function FirstForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="flex text-center justify-center sm:justify-start">
-                Name
+                {setLanguage.name}
               </FormLabel>
 
               <FormControl>
@@ -157,7 +166,7 @@ export function FirstForm() {
             control={form.control}
             render={({ field }) => (
               <FormItem className="rounded-lg border p-4">
-                <FormLabel>Gender</FormLabel>
+                <FormLabel>{setLanguage.gender}</FormLabel>
                 <FormControl>
                   <ToggleGroup
                     size="sm"
@@ -187,14 +196,14 @@ export function FirstForm() {
             control={form.control}
             render={({ field }) => (
               <FormItem className="flex flex-col rounded-lg border p-4 px-8">
-                <FormLabel>Age</FormLabel>
+                <FormLabel>{setLanguage.age}</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="age" />
+                      <SelectValue placeholder={`${setLanguage.age}`} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -222,11 +231,11 @@ export function FirstForm() {
           control={form.control}
           render={({ field }) => (
             <FormItem className="rounded-lg border p-4">
-              <FormLabel>Social media</FormLabel>
+              <FormLabel>{setLanguage.social}</FormLabel>
               <div className="flex flex-row justify-between items-center gap-3">
                 <Link className="text-devready-green" size={20} />
                 <FormControl>
-                  <Input placeholder="Instagram or LinkedIn etc." {...field} />
+                  <Input placeholder="Instagram, LinkedIn etc." {...field} />
                 </FormControl>
               </div>
               <FormMessage />
@@ -239,7 +248,7 @@ export function FirstForm() {
           control={form.control}
           render={({ field }) => (
             <FormItem className="rounded-lg border p-4">
-              <FormLabel>I speak</FormLabel>
+              <FormLabel>{setLanguage.spoken}</FormLabel>
               <FormControl>
                 <ToggleGroup
                   size="sm"
@@ -265,7 +274,7 @@ export function FirstForm() {
           className="rounded-lg text-sm md:text-base lg:text-xl p-4 px-8 md:px-12 md:py-6"
           size={"lg"}
         >
-          Next
+          {setLanguage.nextbutton}
         </Button>
       </form>
     </Form>

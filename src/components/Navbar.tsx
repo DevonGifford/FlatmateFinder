@@ -15,15 +15,10 @@ export default function Navbar() {
   const navigate = useNavigate();
   const match = useMatch("*"); //- match any route
 
-  // 🎯🔮 Need to use this language state - current issue #12
-  // 🔗🔮 https://github.com/DevonGifford/FlatmateFinder/issues/12
+  // ✅ Handles changing website language
   const changeLanguage = (newLanguage: Language) => {
     setLanguage(newLanguage);
   };
-
-  // 🔧🚧 Development logs
-  console.log("🦺📌 Navbar - current Lang =", language);
-  console.log("🦺📌 Navbar - current URL =", match?.pathname);
 
   return (
     <>
@@ -68,13 +63,15 @@ export default function Navbar() {
           </Button>
         )}
 
-        {/* LANGUAGE SETTINGS */}
+        {/* //👇 LANGUAGE SETTINGS */}
         <ToggleGroup type="single">
           <ToggleGroupItem
             variant={"outline"}
             value="EN"
             onClick={() => changeLanguage("english")}
-            className=" hover:bg-cyan-600/20"
+            className={`${
+              language === "english" ? "bg-cyan-600/20" : "hover:bg-cyan-600/20"
+            }`}
           >
             <Avatar className="h-6 w-6">
               <AvatarImage src="/en-flag.png" />
@@ -84,7 +81,9 @@ export default function Navbar() {
             variant={"outline"}
             value="ES"
             onClick={() => changeLanguage("spanish")}
-            className=" hover:bg-cyan-600/20"
+            className={`${
+              language === "spanish" ? "bg-cyan-600/20" : "hover:bg-cyan-600/20"
+            }`}
           >
             <Avatar className="h-6 w-6">
               <AvatarImage src="/es-flag.png" />

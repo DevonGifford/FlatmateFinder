@@ -2,7 +2,11 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import { useLanguageContext } from "@/components/contexts/language/useLanguageContext";
+import {
+  toastCorrectPassword,
+  toastIncorrectPassword,
+} from "@/lib/customToast";
 // import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,11 +19,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  toastCorrectPassword,
-  toastIncorrectPassword,
-} from "@/lib/customToast";
 
+import Data_EN from "../lib/translations/home-page/home_en.json";
+import Data_ES from "../lib/translations/home-page/home_es.json";
+import { HomePageData } from "@/lib/types/translation-types";
+
+// 👇 FORM SCHEMA : Home Page
 const FormSchema = z.object({
   password: z.string().min(5, {
     message: "Password must be at least 5 characters.",
@@ -28,7 +33,12 @@ const FormSchema = z.object({
 
 export default function HomePage() {
   const navigate = useNavigate();
+  const { language } = useLanguageContext();
 
+  // ✅ SET CURRENT LANGUAGE:  access language from the context
+  const setLanguage: HomePageData = language === "english" ? Data_EN : Data_ES;
+
+  // ✅ ZOD-FORM HOOK :  custom hook initializes a form instance
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -36,7 +46,7 @@ export default function HomePage() {
     },
   });
 
-  // 🎯 Handle start form
+  // ✅ SUBMIT PASSWORD - Handle start form or dashboard
   function onSubmit(data: z.infer<typeof FormSchema>) {
     const { password } = data;
 
@@ -65,32 +75,32 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col justify-center items-center sm:mx-20 md:max-w-10/12 sm:max-w-4/6 gap-5 md:gap-8">
-      {/* HEADER SPLASH */}
+      {/* //👇 HEADER SPLASH */}
       <header className="flex flex-col pt-3 items-center md:pt-10">
-        <span className="text-2xl italic ">Welcome to</span>
+        <span className="text-2xl italic ">{setLanguage.subHeading}</span>
         <h1 className="text-3xl md:text-4xl lg:text-5xl tracking-wide font-extrabold pb-5 mx-10">
-          Calle de Muller
+          {setLanguage.mainHeading}
         </h1>
       </header>
 
-      {/* SPLASH IMAGE */}
+      {/*//👇  SPLASH IMAGE */}
       {/* <AspectRatio ratio={16 / 9} className="flex items-center justify-center"> */}
       <img src="/Tetuan-Splash.jpg" className="rounded-full" width={"500px"} />
       {/* </AspectRatio> */}
 
-      {/* PASSWORD FORM */}
+      {/*//👇  PASSWORD FORM */}
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="md:w-5/12 space-y-6 py-5"
         >
           <FormField
-            control={form.control}
             name="password"
+            control={form.control}
             render={({ field }) => (
               <FormItem className="px-8">
                 <FormLabel className="text-xl sm:text-3xl font-bold">
-                  Enter password
+                  {setLanguage.passwordLabel}
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -101,13 +111,13 @@ export default function HomePage() {
                   />
                 </FormControl>
                 <FormDescription>
-                  A secret password shared with you.
+                  {setLanguage.passwordDescription}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button type="submit">Start</Button>
+          <Button type="submit">{setLanguage.startButton}</Button>
         </form>
       </Form>
     </div>
