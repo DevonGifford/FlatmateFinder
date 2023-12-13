@@ -1,62 +1,62 @@
 {
   "faq_questions": [
     {
-      "question": "¿Qué tipo de personas buscan como compañeros de piso?",
+      "question": "Qué tipo de personas buscan como compañeros de piso?",
       "answer": "Preferimos profesionales trabajadores y respetuosos o estudiantes de máster.",
       "emoji": "👔"
     },
     {
-      "question": "¿Qué comodidades incluye el apartamento?",
+      "question": "Qué comodidades incluye el apartamento?",
       "answer": "Encontrarás 4 habitaciones, 3 baños, lavandería, una sala amplia con Smart TV y una cocina bien equipada.",
       "emoji": "🏠"
     },
     {
-      "question": "¿Puede describir la habitación disponible?",
+      "question": "Puede describir la habitación disponible?",
       "answer": "Completamente amueblada, con cama doble, persianas opacas, escritorio y mucho espacio de almacenamiento. La habitación comparte un baño grande con otra persona.",
       "emoji": "🛏️"
     },
     {
-      "question": "¿Cómo es el vecindario?",
+      "question": "Cómo es el vecindario?",
       "answer": "Valdeacederas ofrece un ambiente seguro y tranquilo con servicios cercanos como restaurantes, supermercados y fácil acceso al transporte público.",
       "emoji": "🏙️"
     },
     {
-      "question": "¿Cuánto es el alquiler mensual y qué costos adicionales debo esperar?",
+      "question": "Cuánto es el alquiler mensual y qué costos adicionales debo esperar?",
       "answer": "El alquiler es de €500 al mes. Los servicios se dividen entre los inquilinos, con un promedio de €40 a €60 al mes. Utilizamos la aplicación Splitwise para rastrear cualquier gasto compartido, algunos euros al mes.",
       "emoji": "💸"
     },
     {
-      "question": "¿Cómo se gestiona el mantenimiento y la limpieza del hogar entre los compañeros de piso?",
+      "question": "Cómo se gestiona el mantenimiento y la limpieza del hogar entre los compañeros de piso?",
       "answer": "Un limpiador se encarga de las áreas comunes semanalmente. Se puede coordinar limpieza y planchado personal.",
       "emoji": "🧹"
     },
     {
-      "question": "¿Hay estacionamiento disponible?",
+      "question": "Hay estacionamiento disponible?",
       "answer": "Sí, hay estacionamiento disponible, organizado por separado a través del administrador del edificio. Los espacios de estacionamiento oscilan entre 60 y 80€.",
       "emoji": "🚗"
     },
     {
-      "question": "¿Cómo se maneja el pago del alquiler y los servicios públicos entre los inquilinos?",
+      "question": "Cómo se maneja el pago del alquiler y los servicios públicos entre los inquilinos?",
       "answer": "Transferencias bancarias mensuales el primer día.",
       "emoji": "💳"
     },
     {
-      "question": "¿Hay algún contrato que necesite ser firmado?",
+      "question": "Hay algún contrato que necesite ser firmado?",
       "answer": "No, no hay un contrato formal ni tarifas de agencia involucradas. Al pagar el depósito, la habitación se reservará y los anuncios se eliminarán.",
       "emoji": "📜"
     },
     {
-      "question": "¿Se permiten invitados y, de ser así, hay restricciones?",
+      "question": "Se permiten invitados y, de ser así, hay restricciones?",
       "answer": "Los invitados son bienvenidos, respetando los espacios compartidos y las reglas de la casa.",
       "emoji": "🤝"
     },
     {
-      "question": "¿Es el apartamento apto para mascotas?",
+      "question": "Es el apartamento apto para mascotas?",
       "answer": "Lo siento, no se permiten mascotas debido a posibles alergias y comodidad de los residentes.",
       "emoji": "🐾"
     },
     {
-      "question": "¿Cómo se maneja el depósito y se usará para el último mes de alquiler?",
+      "question": "Cómo se maneja el depósito y se usará para el último mes de alquiler?",
       "answer": "El depósito equivale a un mes de alquiler y se devuelve al partir. No se puede utilizar para el último mes, se mantiene como seguridad hasta que termine el contrato de arrendamiento.",
       "emoji": "💰"
     }
