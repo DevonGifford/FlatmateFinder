@@ -1,5 +1,6 @@
 {
-  "headingMoveDate": "Move in date",
+  "headingMoveDate": "Estimated move in date",
+  "descriptionMoveDate": "available from the 1st of February 2024",
   "pickDate": "Pick a date",
   "headingETAStay": "Estimated length of stay",
   "months": "Months",
@@ -10,5 +11,6 @@
   "schedule": "Scheduled via WhatsApp",
   "headingMoreInfo": "More information",
   "specialRequestQuestion": "I have a special request or question...",
-  "nextbutton": "Next"
+  "nextbutton": "Next",
+  "optional": "optional"
 }

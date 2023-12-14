@@ -18,10 +18,12 @@ export interface FirstFormData {
   fr: string;
   other: string;
   nextbutton: string;
+  optional: string;
 }
 
 export interface SecondFormData {
   headingMoveDate: string;
+  descriptionMoveDate: string;
   pickDate: string;
   headingETAStay: string;
   months: string;
@@ -33,6 +35,8 @@ export interface SecondFormData {
   headingMoreInfo: string;
   specialRequestQuestion: string;
   nextbutton: string;
+  optional: string;
+
 }
 
 export interface ThirdFormData {
@@ -41,9 +45,14 @@ export interface ThirdFormData {
   hybrid: string;
   office: string;
   tellMoreTitle: string;
+  tellMoreDescription: string;
+  tellMorePlacholder: string;
   hobbiesTitle: string;
+  hobbiesPlacholder: string;
   picTitle: string;
   picButton: string;
   picPlaceHolder: string;
   completeButton: string;
+  optional: string;
+
 }

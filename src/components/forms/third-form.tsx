@@ -14,7 +14,7 @@ import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 import { Textarea } from "../ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Input } from "../ui/input";
-import { Label } from "../ui/label";
+// import { Label } from "../ui/label";
 import {
   Form,
   FormControl,
@@ -70,13 +70,6 @@ export function ThirdForm() {
   const form = useForm<ThirdFormValues>({
     resolver: zodResolver(thirdFormSchema),
   });
-
-  //   🎯 Handle Image Storage Upload 💣 COMPLETE THIS OR REMOVE THIS
-  // - Upload to storage
-  // - Create local state to hold url
-  // - submit form with state.
-  // - uploade to firestore
-  // - return the url string
 
   // ✅ SUBMIT FORM - submit account form
   async function onSubmit(data: ThirdFormValues) {
@@ -164,7 +157,7 @@ export function ThirdForm() {
             name="job_title"
             control={form.control}
             render={({ field }) => (
-              <FormItem className="border-none pb-0">
+              <FormItem className="border-none pb-0 min-w-[300px]">
                 <FormLabel className="flex text-center justify-center">
                   {setLanguage.careerTitle}
                 </FormLabel>
@@ -231,7 +224,12 @@ export function ThirdForm() {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{setLanguage.tellMoreTitle}</FormLabel>
+              <FormLabel className="flex flex-col gap-1 text-center justify-center">
+                {setLanguage.tellMoreTitle}
+                <p className="text-xs font-thin italic">
+                  {setLanguage.tellMoreDescription}
+                </p>
+              </FormLabel>
               <FormControl>
                 <Textarea placeholder="" {...field} />
               </FormControl>
@@ -245,7 +243,12 @@ export function ThirdForm() {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{setLanguage.hobbiesTitle}</FormLabel>
+              <FormLabel className="flex flex-col gap-1 text-center justify-center">
+                {setLanguage.hobbiesTitle}
+                <p className="text-xs font-thin italic">
+                  {setLanguage.hobbiesPlacholder}
+                </p>
+              </FormLabel>
               <FormControl>
                 <Textarea placeholder="" {...field} />
               </FormControl>
@@ -253,18 +256,6 @@ export function ThirdForm() {
             </FormItem>
           )}
         />
-
-        {/* 💣 upload image */}
-        <div className="grid w-full items-center gap-2 rounded-lg border p-4">
-          <Label htmlFor="picture" className="py-2">
-            {setLanguage.picTitle}
-          </Label>
-          <Input
-            id="picture"
-            type="file"
-            placeholder={`${setLanguage.picPlaceHolder}`}
-          />
-        </div>
 
         {/* BUTTONS */}
         <Button

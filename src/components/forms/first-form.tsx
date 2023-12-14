@@ -63,7 +63,7 @@ const firstFormSchema = z.object({
     .string({
       required_error: "⚠",
     })
-    .max(50, {
+    .max(16, {
       message: "⚠ too long",
     }),
   social_media: z
@@ -126,7 +126,7 @@ export function FirstForm() {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="flex text-center justify-center sm:justify-start">
+              <FormLabel className="flex text-center justify-center">
                 {setLanguage.name}
               </FormLabel>
 
@@ -148,7 +148,7 @@ export function FirstForm() {
 
               <FormControl>
                 <Input
-                  placeholder="(+34)"
+                  placeholder=""
                   className="text-center sm:text-left"
                   {...field}
                 />
@@ -231,7 +231,12 @@ export function FirstForm() {
           control={form.control}
           render={({ field }) => (
             <FormItem className="rounded-lg border p-4">
-              <FormLabel>{setLanguage.social}</FormLabel>
+              <FormLabel className="flex flex-col gap-1 text-center justify-center">
+                <p>{setLanguage.social}</p>
+                <p className="text-xs font-thin italic">
+                  {setLanguage.optional}
+                </p>
+              </FormLabel>
               <div className="flex flex-row justify-between items-center gap-3">
                 <Link className="text-devready-green" size={20} />
                 <FormControl>
@@ -248,7 +253,12 @@ export function FirstForm() {
           control={form.control}
           render={({ field }) => (
             <FormItem className="rounded-lg border p-4">
-              <FormLabel>{setLanguage.spoken}</FormLabel>
+              <FormLabel className="flex flex-col gap-1 text-center justify-center">
+                {setLanguage.spoken}
+                <p className="text-xs font-thin italic">
+                  {setLanguage.optional}
+                </p>
+              </FormLabel>
               <FormControl>
                 <ToggleGroup
                   size="sm"

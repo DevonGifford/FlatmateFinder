@@ -102,7 +102,12 @@ export function SecondForm() {
           control={form.control}
           render={({ field }) => (
             <FormItem className="flex flex-col min-w-[300px]">
-              <FormLabel>{setLanguage.headingMoveDate}</FormLabel>
+              <FormLabel className="flex flex-col gap-1 text-center justify-center">
+                {setLanguage.headingMoveDate}
+                <p className="text-xs font-thin italic">
+                  {setLanguage.descriptionMoveDate}
+                </p>
+              </FormLabel>
 
               <Popover>
                 <PopoverTrigger asChild>
@@ -235,7 +240,12 @@ export function SecondForm() {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{setLanguage.headingMoreInfo}</FormLabel>
+              <FormLabel className="flex flex-col gap-1 text-center justify-center">
+                <p>{setLanguage.headingMoreInfo}</p>
+                <p className="text-xs font-thin italic">
+                  {setLanguage.optional}
+                </p>
+              </FormLabel>
               <FormControl>
                 <Textarea
                   placeholder={`${setLanguage.specialRequestQuestion}`}
