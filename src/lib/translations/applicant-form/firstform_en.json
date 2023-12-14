@@ -1,13 +1,13 @@
 {
-    "name": "Name",
+    "name": "Name & Surname",
     "whatsapp": "Whatsapp",
     "gender": "Gender",
     "age": "Age",
-    "social": "Social Media",
     "spoken": "I speak",
     "en": "English",
     "es": "Spanish",
     "fr": "French",
     "other": "Other",
-    "nextbutton": "Next"
+    "nextbutton": "Next",
+    "optional": "optional"
   }

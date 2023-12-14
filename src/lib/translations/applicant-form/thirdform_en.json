@@ -1,12 +1,14 @@
 {
-  "careerTitle": "Career Title",
+  "careerTitle": "Work",
   "wfh": "WFH",
   "hybrid": "Hybrid",
   "office": "Office",
   "tellMoreTitle": "Tell us more about you",
+  "tellMoreDescription": "Introduce yourself in a couple sentences",
+  "tellMorePlacholder": "How would you describe yourself...",
   "hobbiesTitle": "What do you do for fun",
-  "picTitle": "Picture",
-  "picButton": "Choose File",
-  "picPlaceHolder": "No file chosen",
-  "completeButton": "Complete Application"
+  "hobbiesPlacholder": "hobbies or interests",
+  "social": "Social Media",
+  "completeButton": "Complete Application",
+  "optional": "optional"
 }

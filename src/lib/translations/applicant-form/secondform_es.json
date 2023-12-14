@@ -1,5 +1,6 @@
 {
-    "headingMoveDate": "Fecha de mudanza",
+    "headingMoveDate": "Fecha estimada de mudanza",
+    "descriptionMoveDate": "disponible a partir del 1 de febrero de 2024",
     "pickDate": "Elegir una fecha",
     "headingETAStay": "Duración estimada de la estadía",
     "months": "Meses",
@@ -10,6 +11,7 @@
     "schedule": "Programado vía WhatsApp",
     "headingMoreInfo": "Más información",
     "specialRequestQuestion": "Tengo una solicitud especial o pregunta...",
-    "nextbutton": "Siguiente"
+    "nextbutton": "Siguiente",
+    "optional": "opcional"
   }
   

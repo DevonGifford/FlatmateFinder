@@ -52,14 +52,14 @@ export default function Navbar() {
           //👀 Default FAQ Button
           <Button
             className="flex flex-row gap-1 transition ease-in-out duration-150 hover:scale-110"
-            size={"sm"}
+            size={"lg"}
             variant={"ghost"}
             onClick={() => {
               navigate("/FAQ");
             }}
           >
-            <HelpCircle size={16} />
-            <span className="block">FAQ</span>
+            <HelpCircle size={24} />
+            <span className="block text-lg">FAQ</span>
           </Button>
         )}
 

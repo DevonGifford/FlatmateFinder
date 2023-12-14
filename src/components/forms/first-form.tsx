@@ -10,7 +10,6 @@ import { useApplicantContext } from "../contexts/applicant/useApplicantContext";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Link } from "lucide-react";
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 import { IoMale, IoFemale, IoMaleFemale } from "react-icons/io5";
 import {
@@ -63,31 +62,35 @@ const firstFormSchema = z.object({
     .string({
       required_error: "⚠",
     })
-    .max(50, {
+    .max(16, {
       message: "⚠ too long",
     }),
-  social_media: z
-    .string()
-    .url()
-    .max(50, {
-      message: "⚠ too long",
-    })
-    .optional(),
   languages: z.array(z.string()).optional(),
 });
 type FirstFormValues = z.infer<typeof firstFormSchema>;
 
 export function FirstForm() {
   const navigate = useNavigate();
-  const { updateApplicantContext } = useApplicantContext();
+  const { updateApplicantContext, applicantProfile } = useApplicantContext();
   const { language } = useLanguageContext();
 
   // ✅ SET CURRENT LANGUAGE:  access language from the context
   const setLanguage: FirstFormData = language === "english" ? Data_EN : Data_ES;
 
+  // ✅ IF EXISTING USERDATA, UPDATE FORMS WITH DATAA
+  // Check if applicantProfile exists and has the necessary data
+  const defaultValues: FirstFormValues = applicantProfile?.firstForm || {
+    name: "",
+    age: "",
+    sex: "",
+    phone: "",
+    languages: [], // Provide default values for arrays too, if needed
+  };
+
   // ✅ ZOD-FORM HOOK :  custom hook initializes a form instance,
   const form = useForm<FirstFormValues>({
     resolver: zodResolver(firstFormSchema),
+    defaultValues,
   });
 
   // ✅ SUBMIT FORM - submit account form
@@ -126,7 +129,7 @@ export function FirstForm() {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="flex text-center justify-center sm:justify-start">
+              <FormLabel className="flex text-center justify-center">
                 {setLanguage.name}
               </FormLabel>
 
@@ -148,10 +151,40 @@ export function FirstForm() {
 
               <FormControl>
                 <Input
-                  placeholder="(+34)"
+                  placeholder=""
                   className="text-center sm:text-left"
                   {...field}
                 />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          name="languages"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem className="rounded-lg border p-4">
+              <FormLabel className="flex flex-col gap-1 text-center justify-center">
+                {setLanguage.spoken}
+                <p className="text-xs font-thin italic">
+                  {setLanguage.optional}
+                </p>
+              </FormLabel>
+              <FormControl>
+                <ToggleGroup
+                  size="sm"
+                  type="multiple"
+                  value={field.value}
+                  onValueChange={(value) => field.onChange(value)}
+                >
+                  {languages.map((lang) => (
+                    <ToggleGroupItem key={lang.label} value={lang.label}>
+                      {lang.label}
+                    </ToggleGroupItem>
+                  ))}
+                </ToggleGroup>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -225,48 +258,6 @@ export function FirstForm() {
             )}
           />
         </div>
-
-        <FormField
-          name="social_media"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem className="rounded-lg border p-4">
-              <FormLabel>{setLanguage.social}</FormLabel>
-              <div className="flex flex-row justify-between items-center gap-3">
-                <Link className="text-devready-green" size={20} />
-                <FormControl>
-                  <Input placeholder="Instagram, LinkedIn etc." {...field} />
-                </FormControl>
-              </div>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          name="languages"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem className="rounded-lg border p-4">
-              <FormLabel>{setLanguage.spoken}</FormLabel>
-              <FormControl>
-                <ToggleGroup
-                  size="sm"
-                  type="multiple"
-                  value={field.value}
-                  onValueChange={(value) => field.onChange(value)}
-                >
-                  {languages.map((lang) => (
-                    <ToggleGroupItem key={lang.label} value={lang.label}>
-                      {lang.label}
-                    </ToggleGroupItem>
-                  ))}
-                </ToggleGroup>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
 
         {/* BUTTONS */}
         <Button
