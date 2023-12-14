@@ -71,15 +71,27 @@ type FirstFormValues = z.infer<typeof firstFormSchema>;
 
 export function FirstForm() {
   const navigate = useNavigate();
-  const { updateApplicantContext } = useApplicantContext();
+  const { updateApplicantContext, applicantProfile } = useApplicantContext();
   const { language } = useLanguageContext();
 
   // ✅ SET CURRENT LANGUAGE:  access language from the context
   const setLanguage: FirstFormData = language === "english" ? Data_EN : Data_ES;
 
+  // ⏳ IF EXISTING USERDATA, UPDATE FORMS WITH DATAA
+  console.log(" 🦺 applicantProfile", applicantProfile);
+  // Check if applicantProfile exists and has the necessary data
+  const defaultValues: FirstFormValues = applicantProfile?.firstForm || {
+    name: "",
+    age: "",
+    sex: "",
+    phone: "",
+    languages: [], // Provide default values for arrays too, if needed
+  };
+
   // ✅ ZOD-FORM HOOK :  custom hook initializes a form instance,
   const form = useForm<FirstFormValues>({
     resolver: zodResolver(firstFormSchema),
+    defaultValues,
   });
 
   // ✅ SUBMIT FORM - submit account form

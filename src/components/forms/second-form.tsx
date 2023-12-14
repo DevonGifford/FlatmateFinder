@@ -53,16 +53,27 @@ type SecondFormValues = z.infer<typeof secondFormSchema>;
 
 export function SecondForm() {
   const navigate = useNavigate();
-  const { updateApplicantContext } = useApplicantContext();
+  const { updateApplicantContext, applicantProfile } = useApplicantContext();
   const { language } = useLanguageContext();
 
   // ✅ SET CURRENT LANGUAGE:  access language from the context
   const setLanguage: SecondFormData =
     language === "english" ? Data_EN : Data_ES;
 
+  // ⏳ IF EXISTING USERDATA, UPDATE FORMS WITH DATAA
+  console.log(" 🦺 applicantProfile", applicantProfile);
+  // Check if applicantProfile exists and has the necessary data
+  const defaultValues: SecondFormValues = applicantProfile?.secondForm || {
+    move_date: new Date(),
+    length_stay: 0,
+    meet_type: "",
+    more_info: "",
+  };
+
   // ✅ ZOD-FORM HOOK :  custom hook initializes a form instance,
   const form = useForm<SecondFormValues>({
     resolver: zodResolver(secondFormSchema),
+    defaultValues,
   });
 
   // ✅ SUBMIT FORM - submit account form
