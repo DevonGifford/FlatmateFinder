@@ -1,12 +1,14 @@
 {
-  "careerTitle": "Título de Carrera",
+  "careerTitle": "Trabajo",
   "wfh": "Tele",
   "hybrid": "Híbrido",
   "office": "Oficina",
   "tellMoreTitle": "Cuéntanos más sobre ti",
+  "tellMoreDescription": "Preséntate en un par de frases",
+  "tellMorePlacholder": "¿Cómo te describirías a ti mismo...",
   "hobbiesTitle": "¿Qué haces en tu tiempo libre?",
-  "picTitle": "Foto",
-  "picButton": "Elegir Archivo",
-  "picPlaceHolder": "Ningún archivo seleccionado",
-  "completeButton": "Completar Solicitud"
+  "hobbiesPlacholder": "hobbies o intereses",
+  "social": "Redes sociales",
+  "completeButton": "Completar Solicitud",
+  "optional": "opcional"
 }

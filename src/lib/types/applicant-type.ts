@@ -5,7 +5,6 @@ export type ApplicantProfile = {
     age: string;
     sex: string;
     phone: string;
-    social_media?: string;
     languages?: string[];
   };
   secondForm: {
@@ -19,7 +18,7 @@ export type ApplicantProfile = {
     job_type: string;
     describe: string;
     hobbies: string;
-    photo: string;
+    social_media?: string;
   };
   applicationDate: Date;
 };
@@ -31,7 +30,6 @@ export const defaultApplicant: ApplicantProfile = {
     age: "25",
     sex: "Male",
     phone: "123-456-7890",
-    social_media: "john.doe",
     languages: ["English", "Spanish"],
   },
   secondForm: {
@@ -44,9 +42,9 @@ export const defaultApplicant: ApplicantProfile = {
     job_title: "Software Engineer",
     job_type: "Full-time",
     describe:
-      "Experienced software engineer with expertise in web development.",
+    "Experienced software engineer with expertise in web development.",
     hobbies: "Reading, hiking, coding",
-    photo: "path/to/default/photo.jpg", // Replace with a default photo path
+    social_media: "john.doe",
   },
   applicationDate: new Date(),
 };

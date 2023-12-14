@@ -1,11 +1,32 @@
 import { useApplicantContext } from "@/components/contexts/applicant/useApplicantContext";
+import { useLanguageContext } from "@/components/contexts/language/useLanguageContext";
+import { Link } from "react-router-dom";
+
+import Data_EN from "@/lib/translations/thankyou-page/thankyou_en.json";
+import Data_ES from "@/lib/translations/thankyou-page/thankyou_es.json";
+import { ThankyouPageData } from "@/lib/types/translation-types";
+import { Button } from "@/components/ui/button";
 
 export default function ThankyouPage() {
   const { applicantProfile } = useApplicantContext();
+  const { language } = useLanguageContext();
+
+  // ✅ SET CURRENT LANGUAGE:  access language from the context
+  const setLanguage: ThankyouPageData =
+    language === "english" ? Data_EN : Data_ES;
+
   return (
     <>
       <div className="flex flex-col items-center justify-center h-screen">
-        <img src="/ThankYouPage.png" className="rounded-full -translate-y-10" width={"500px"} />
+        <img
+          src="/ThankYouPage.png"
+          className="rounded-full -translate-y-10"
+          width={"500px"}
+        />
+        <Link to="/FAQ">
+          <h2 className="text-3xl font-bold">{setLanguage.checkoutHeading}</h2>
+          <Button>{setLanguage.faqheading}</Button>
+        </Link>
       </div>
       <div className="flex flex-col gap-3">
         <div className="flex flex-row gap-3">
@@ -30,7 +51,7 @@ export default function ThankyouPage() {
         </div>
         <div className="flex flex-row gap-3">
           <span>Social Media:</span>
-          <span>{applicantProfile?.firstForm.social_media}</span>
+          <span>{applicantProfile?.thirdForm.social_media}</span>
         </div>
         <div className="flex flex-row gap-3">
           <span>Languages:</span>
@@ -69,10 +90,6 @@ export default function ThankyouPage() {
         <div className="flex flex-row gap-3">
           <span>Hobbies:</span>
           <span>{applicantProfile?.thirdForm.hobbies}</span>
-        </div>
-        <div className="flex flex-row gap-3">
-          <span>Photo:</span>
-          <span>{applicantProfile?.thirdForm.photo}</span>
         </div>
         <div className="flex flex-row gap-3">
           <span>Application Date:</span>

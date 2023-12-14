@@ -53,16 +53,26 @@ type SecondFormValues = z.infer<typeof secondFormSchema>;
 
 export function SecondForm() {
   const navigate = useNavigate();
-  const { updateApplicantContext } = useApplicantContext();
+  const { updateApplicantContext, applicantProfile } = useApplicantContext();
   const { language } = useLanguageContext();
 
   // ✅ SET CURRENT LANGUAGE:  access language from the context
   const setLanguage: SecondFormData =
     language === "english" ? Data_EN : Data_ES;
 
+  // ✅ IF EXISTING USERDATA, UPDATE FORMS WITH DATAA
+  // Check if applicantProfile exists and has the necessary data
+  const defaultValues: SecondFormValues = applicantProfile?.secondForm || {
+    move_date: new Date(),
+    length_stay: 0,
+    meet_type: "",
+    more_info: "",
+  };
+
   // ✅ ZOD-FORM HOOK :  custom hook initializes a form instance,
   const form = useForm<SecondFormValues>({
     resolver: zodResolver(secondFormSchema),
+    defaultValues,
   });
 
   // ✅ SUBMIT FORM - submit account form
@@ -74,6 +84,7 @@ export function SecondForm() {
       const formData: Partial<ApplicantProfile> = {
         secondForm: {
           ...data,
+          more_info: data.more_info || "",
         },
       };
       updateApplicantContext(formData);
@@ -102,7 +113,12 @@ export function SecondForm() {
           control={form.control}
           render={({ field }) => (
             <FormItem className="flex flex-col min-w-[300px]">
-              <FormLabel>{setLanguage.headingMoveDate}</FormLabel>
+              <FormLabel className="flex flex-col gap-1 text-center justify-center">
+                {setLanguage.headingMoveDate}
+                <p className="text-xs font-thin italic">
+                  {setLanguage.descriptionMoveDate}
+                </p>
+              </FormLabel>
 
               <Popover>
                 <PopoverTrigger asChild>
@@ -235,7 +251,12 @@ export function SecondForm() {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{setLanguage.headingMoreInfo}</FormLabel>
+              <FormLabel className="flex flex-col gap-1 text-center justify-center">
+                <p>{setLanguage.headingMoreInfo}</p>
+                <p className="text-xs font-thin italic">
+                  {setLanguage.optional}
+                </p>
+              </FormLabel>
               <FormControl>
                 <Textarea
                   placeholder={`${setLanguage.specialRequestQuestion}`}

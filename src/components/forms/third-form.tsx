@@ -14,7 +14,7 @@ import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 import { Textarea } from "../ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Input } from "../ui/input";
-import { Label } from "../ui/label";
+// import { Label } from "../ui/label";
 import {
   Form,
   FormControl,
@@ -24,7 +24,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import { Building, Check, Home, Video } from "lucide-react";
+import { Building, Check, Home, Link, Video } from "lucide-react";
 import { Spinner } from "../Spinner";
 import { ThirdFormData } from "@/lib/types/translation-types";
 import Data_EN from "@/lib/translations/applicant-form/thirdform_en.json";
@@ -52,7 +52,13 @@ const thirdFormSchema = z.object({
     .max(500, {
       message: "⚠ too long",
     }),
-  photo: z.string().optional(),
+  social_media: z
+    .string()
+    .url()
+    .max(50, {
+      message: "⚠ too long",
+    })
+    .optional(),
 });
 type ThirdFormValues = z.infer<typeof thirdFormSchema>;
 
@@ -70,13 +76,6 @@ export function ThirdForm() {
   const form = useForm<ThirdFormValues>({
     resolver: zodResolver(thirdFormSchema),
   });
-
-  //   🎯 Handle Image Storage Upload 💣 COMPLETE THIS OR REMOVE THIS
-  // - Upload to storage
-  // - Create local state to hold url
-  // - submit form with state.
-  // - uploade to firestore
-  // - return the url string
 
   // ✅ SUBMIT FORM - submit account form
   async function onSubmit(data: ThirdFormValues) {
@@ -101,7 +100,7 @@ export function ThirdForm() {
         const updatedThirdForm = {
           ...applicantProfile.thirdForm,
           ...data,
-          photo: "", //🎯💣 Temporary solution for if photo
+          social_media: data.social_media || "",
         };
 
         const updatedProfile: ApplicantProfile = {
@@ -164,7 +163,7 @@ export function ThirdForm() {
             name="job_title"
             control={form.control}
             render={({ field }) => (
-              <FormItem className="border-none pb-0">
+              <FormItem className="border-none pb-0 min-w-[300px]">
                 <FormLabel className="flex text-center justify-center">
                   {setLanguage.careerTitle}
                 </FormLabel>
@@ -231,7 +230,12 @@ export function ThirdForm() {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{setLanguage.tellMoreTitle}</FormLabel>
+              <FormLabel className="flex flex-col gap-1 text-center justify-center">
+                {setLanguage.tellMoreTitle}
+                <p className="text-xs font-thin italic">
+                  {setLanguage.tellMoreDescription}
+                </p>
+              </FormLabel>
               <FormControl>
                 <Textarea placeholder="" {...field} />
               </FormControl>
@@ -245,7 +249,12 @@ export function ThirdForm() {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{setLanguage.hobbiesTitle}</FormLabel>
+              <FormLabel className="flex flex-col gap-1 text-center justify-center">
+                {setLanguage.hobbiesTitle}
+                <p className="text-xs font-thin italic">
+                  {setLanguage.hobbiesPlacholder}
+                </p>
+              </FormLabel>
               <FormControl>
                 <Textarea placeholder="" {...field} />
               </FormControl>
@@ -254,17 +263,27 @@ export function ThirdForm() {
           )}
         />
 
-        {/* 💣 upload image */}
-        <div className="grid w-full items-center gap-2 rounded-lg border p-4">
-          <Label htmlFor="picture" className="py-2">
-            {setLanguage.picTitle}
-          </Label>
-          <Input
-            id="picture"
-            type="file"
-            placeholder={`${setLanguage.picPlaceHolder}`}
-          />
-        </div>
+        <FormField
+          name="social_media"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem className="rounded-lg border p-4">
+              <FormLabel className="flex flex-col gap-1 text-center justify-center">
+                <p>{setLanguage.social}</p>
+                <p className="text-xs font-thin italic">
+                  {setLanguage.optional}
+                </p>
+              </FormLabel>
+              <div className="flex flex-row justify-between items-center gap-3">
+                <Link className="text-devready-green" size={20} />
+                <FormControl>
+                  <Input placeholder="Instagram, LinkedIn etc." {...field} />
+                </FormControl>
+              </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         {/* BUTTONS */}
         <Button
