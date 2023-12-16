@@ -35,8 +35,8 @@ const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
         alt={alt}
         width={width}
         height={height}
+        style={{ width: `${width}px`, height: `${height}px`, objectFit: "cover" }}
         className={className}
-        style={{ width: "100px", height: "100px", objectFit: "cover" }}
       />
     </a>
   );
