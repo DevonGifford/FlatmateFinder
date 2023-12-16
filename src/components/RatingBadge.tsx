@@ -10,9 +10,11 @@ const RatingBadge: React.FC<RatingBadgeProps> = ({ boolValue, starValue }) => {
 
   return (
     <div
-      className={`${bgColor} text-white p-2 rounded-full justify-center w-10 h-10 text-center items-center`}
+      className={`${bgColor} text-white p-2 rounded-full justify-center h-8 w-8 sm:h-10 sm:w-10 text-center items-center`}
     >
-      <p className="text-xl -translate-y-0.5">{starValue}</p>
+      <p className="sm:text-xl -translate-y-1.5 sm:-translate-y-0.5">
+        {starValue}
+      </p>
     </div>
   );
 };

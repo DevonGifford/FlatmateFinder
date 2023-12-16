@@ -54,7 +54,7 @@ export default function TenantLeaderboardPage() {
               className="flex flex-row justify-between items-center gap-3 border-2 p-4 font-semibold text-lg"
             >
               {/* // 👇 PHOTO & NAME */}
-              <div className="flex flex-row gap-3 items-center shrink-0 w-[180px]">
+              <div className="flex flex-row gap-3 items-center shrink-0 sm:w-[180px]">
                 <ImageWithFallback
                   src={applicant.photo}
                   fallbackSrc="/profile-fallback.svg"
@@ -63,7 +63,7 @@ export default function TenantLeaderboardPage() {
                   height={50}
                   className="flex justify-center items-center rounded-full h-10 w-10"
                 />
-                <p className=" whitespace-nowrap truncate">
+                <p className="hidden sm:block whitespace-nowrap truncate">
                   {applicant.firstForm.name}
                 </p>
               </div>
