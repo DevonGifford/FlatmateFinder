@@ -40,9 +40,10 @@ export const createApplicantDoc = async (
     const docRef: DocumentReference<Data> = doc(collectionRef, documentId);
     const docSnapshot: DocumentSnapshot<Data> = await getDoc(docRef);
     if (docSnapshot.exists()) {
-      console.log(
-        `⚠ Warning -  Document ${documentId} already exists in collection db`
-      );
+      console.log(`⚠ Warning -  Document already exists in collection db`);
+      // console.log(
+      //   `⚠ Warning -  Document ${documentId} already exists in collection db`
+      // );
     } else {
       // 👇 Create a new document with provided user data
       await setDoc(docRef, userData);
@@ -52,15 +53,19 @@ export const createApplicantDoc = async (
 
       // ✔ Handle Success Case
       console.log(
-        `✔ Success - Document ${documentId} created successfully in collection db!`
+        `✔ Success - Document created successfully in collection db!`
       );
+      // console.log(
+      //   `✔ Success - Document ${documentId} created successfully in collection db!`
+      // );
     }
     // ✖ Handle error case
   } catch (error) {
-    console.error(
-      `✖ Error creating the document ${documentId} in given collection `,
-      error
-    );
+    console.error(`✖ Error creating the document in given collection `, error);
+    // console.error(
+    //   `✖ Error creating the document ${documentId} in given collection `,
+    //   error
+    // );
   }
 };
 
@@ -89,19 +94,19 @@ export const updateDocument = async (
     } else {
       // -notfound case
       console.error(
-        `🔥utils/firestore/updateDocument:  ❌ Error:  Document ${documentId} not found in collection ${collectionName}!`
+        `🔥utils/firestore/updateDocument:  ❌ Error:  Document not found in collection!`
       );
       return false;
     }
     // -success case
     console.log(
-      `🔥utils/firestore/updateDocument:  ✔ Success:  Document ${documentId} updated successfully in collection ${collectionName}!`
+      `🔥utils/firestore/updateDocument:  ✔ Success:  Document updated successfully in collection !`
     );
     return true;
   } catch (error) {
     // -error case
     console.error(
-      `🔥utils/firestore/updateDocument:  ❌ Error:  Error updating/creating document ${documentId} in collection ${collectionName}: `,
+      `🔥utils/firestore/updateDocument:  ❌ Error:  Error updating/creating document in collection : `,
       error
     );
     return false;
@@ -144,12 +149,12 @@ export const updateRanking = async (
 
       // ✔ Success case
       console.log(
-        `🔥utils/firestore/updateRanking:  ✔ Success:  Applicant document with ID ${userId} updated successfully.`
+        `🔥utils/firestore/updateRanking:  ✔ Success:  Applicant document updated successfully.`
       );
     } else {
       // ✖ Error case
       console.error(
-        `🔥utils/firestore/updateRanking:  ✖ Error:  Document with ID ${userId} does not exist.`
+        `🔥utils/firestore/updateRanking:  ✖ Error:  Document does not exist.`
       );
     }
   } catch (error) {

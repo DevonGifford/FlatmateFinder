@@ -18,7 +18,7 @@ import { DataProvider } from "./components/contexts/data/DataProvider";
 
 function App() {
   const { adminProfile } = useAdminContext();
-  console.log("adminProfile 🦺", adminProfile);
+  // console.log("adminProfile 🦺", adminProfile);
   return (
     <>
       <Router basename={import.meta.env.VITE_REACT_APP_BASENAME || "/"}>

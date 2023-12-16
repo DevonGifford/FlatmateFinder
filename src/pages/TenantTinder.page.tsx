@@ -131,12 +131,13 @@ export default function TenantTinderPage() {
       const updatedRankings = data[cardIndex]
         .rankings as Partial<ApplicantProfile>;
 
-      // Update the applicant document in Firestore with the updated rankings
-      console.log(
-        "🃏🦺 Tinder onSwipe:  data being sent to the firebase function: ",
-        updatedRankings
-      );
+      // 👇 Update the applicant document in Firestore with the updated rankings
+      // console.log(
+      //   "🃏🦺 Tinder onSwipe:  data being sent to the firebase function: ",
+      //   updatedRankings
+      // );
       updateRanking(data[cardIndex].uuid, updatedRankings);
+      console.log(`🃏 Tinder onSwipe:   ✔ Successs - ranking updated`);
     } else {
       console.error(
         "Error: Unable to retrieve rankings for the specified card index."

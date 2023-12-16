@@ -71,7 +71,7 @@ export default function NavbarAdmin() {
             size={"icon"}
             variant={"ghost"}
             onClick={() => {
-              console.log("Navbar refresh button triggered 💢 ");
+              // console.log("Navbar refresh button triggered 💢 ");
               handleRefresh();
               //🔮 toast notifications
             }}
