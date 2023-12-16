@@ -86,6 +86,8 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
           secondForm: applicantData.secondForm,
           thirdForm: applicantData.thirdForm,
           applicationDate: applicantData.applicationDate,
+          rankings: applicantData.rankigs,
+          photo: applicantData.photo,
         };
         data.push(profile);
       } else {
