@@ -54,27 +54,3 @@ This project is licensed under the [MIT License](LICENSE).
 
 Special thanks to [Vite](https://vitejs.dev/), [TypeScript](https://www.typescriptlang.org/), [Firebase](https://firebase.google.com/), and [Tailwind CSS](https://tailwindcss.com/) for enabling the development of this application.
 
-
-# Release v1.0.0 Final Changes
-
-## Objective
-Prepare for public release by addressing final adjustments and improvements.
-
-## Issues Resolved
-- **Fix Mobile Responsiveness**: Ensure Tinder cards display well on mobile devices.
-- **Remove Unused Icons**: Eliminate unnecessary refresh and save icons from the navbar.
-- **Refactor URL Validation**: Enhance URL validation in application forms.
-- **Add Favicon and App Name**: Implement favicon and include the app's name in production.
-- **Console Log Cleanup**: Remove all console logs to optimize code.
-- **Spanish Language Fixes**: Address minor language corrections suggested by language specialist Adrian.
-
-## Actionable Items
-1. Fix mobile view issues for Tinder cards.
-2. Remove unused icons (refresh, save) from the navbar.
-3. Refactor URL validation logic in application forms.
-4. Add favicon and incorporate app name for the production environment.
-5. Eliminate all console logs for a cleaner codebase.
-6. Implement Spanish language fixes recommended by Adrian.
-
-## Timeline
-These changes aim to be completed and merged into the main branch for the v1.0.0 release

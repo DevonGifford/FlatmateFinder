@@ -3,37 +3,78 @@
         "id": "Adria-Alpha-39461",
         "uuid": "Adria-Alpha-39461",
         "firstForm": {
-            "name": "Adrian",
+            "name": "Ronald Weasley",
+            "phone": "680721466",
+            "sex": "male",
             "languages": [
-                "Español",
-                "Français",
                 "English"
             ],
-            "age": "30",
-            "phone": "680721466",
-            "sex": "other"
+            "age": "30"
         },
         "secondForm": {
+            "more_info": "Prefers quiet neighborhoods.",
             "move_date": {
                 "seconds": 1702558880,
                 "nanoseconds": 828000000
             },
             "meet_type": "inperson",
-            "more_info": "",
             "length_stay": 0
         },
         "thirdForm": {
-            "social_media": "Https://Www.google.com",
-            "hobbies": "Gym",
+            "hobbies": "hobbies include playing wizard chess and attending Quidditch matches.",
             "job_type": "wfh",
-            "job_title": "Engineer",
-            "describe": "Soy yo"
+            "describe": "Friendly and adventurous wizard, looking for a quiet place to stay. I enjoy Quidditch and playing wizard chess in my free time.   Not much for trees.",
+            "social_media": "twitter.com/ronweasley",
+            "job_title": "Auror at the Ministry"
         },
         "applicationDate": {
             "seconds": 1702558880,
             "nanoseconds": 828000000
         },
-        "photo": ""
+        "rankings": {
+            "dev_star": 2,
+            "osc_bool": true,
+            "osc_star": 5,
+            "adr_bool": false,
+            "dev_bool": true,
+            "adr_star": 1
+        },
+        "photo": "https://i.pinimg.com/1200x/7a/32/44/7a32443d0e64c43871c0a29e816b66e3.jpg"
+    },
+    {
+        "id": "Bruce-Alpha-98841",
+        "uuid": "Bruce-Alpha-98841",
+        "firstForm": {
+            "phone": "696617239",
+            "sex": "male",
+            "languages": [
+                "English",
+                "Other"
+            ],
+            "age": "36",
+            "name": "Bruce Wayne"
+        },
+        "secondForm": {
+            "move_date": {
+                "seconds": 1706655600,
+                "nanoseconds": 0
+            },
+            "meet_type": "inperson",
+            "more_info": "\"Preferably seeking a place with a secure and private environment.",
+            "length_stay": 67
+        },
+        "thirdForm": {
+            "social_media": "",
+            "job_title": "Philanthropist",
+            "describe": "\"I am a dedicated businessman with a passion for driving positive change in Gotham City. My work at Wayne Enterprises has been focused on innovation and philanthropy, aiming to create a safer and more prosperous community. In my free time, I appreciate martial arts training and keeping up with the latest technological advancements.",
+            "job_type": "hybrid",
+            "hobbies": "My hobbies include philanthropy work and exploring the city. I value my privacy and tend to keep a low profile in my personal life"
+        },
+        "applicationDate": {
+            "seconds": 1702924578,
+            "nanoseconds": 543000000
+        },
+        "photo": "https://pyxis.nymag.com/v1/imgs/3c3/3db/2ce87c6d76e295b9ff4de24a79db6fdb0a-ben-affleck-smoking.2x.rsocial.w600.jpg"
     },
     {
         "id": "Devon-Alpha-14719",
@@ -42,14 +83,14 @@
             "languages": [
                 "English"
             ],
+            "name": "Tyler Durden",
             "age": "30",
-            "phone": "+34696617233",
-            "name": "Devon Gifford",
-            "sex": "male"
+            "sex": "male",
+            "phone": "+34696617233"
         },
         "secondForm": {
-            "length_stay": 47,
             "meet_type": "inperson",
+            "length_stay": 47,
             "move_date": {
                 "seconds": 1706050800,
                 "nanoseconds": 0
@@ -57,159 +98,241 @@
             "more_info": ""
         },
         "thirdForm": {
-            "hobbies": "test",
-            "photo": "",
-            "job_type": "hybrid",
+            "job_title": "movie projectionist",
             "social_media": "",
-            "describe": "test",
-            "job_title": "engineer"
+            "describe": "Hello, my name's Tyler and I hail from various places around the world. I'm currently involved in several community projects. I have an appreciation for unique interior design and love discussing how to redefine personal spaces.",
+            "hobbies": "I find solace in soap-making, furniture restoration, and exploring unconventional ideologies. Engaging in thought-provoking conversations about society's norms and consumer culture intrigues me.",
+            "job_type": "office",
+            "photo": ""
         },
         "applicationDate": {
             "seconds": 1702553638,
             "nanoseconds": 868000000
         },
-        "photo": ""
+        "rankings": {
+            "osc_bool": true,
+            "osc_star": 5,
+            "adr_star": 5,
+            "dev_star": 4,
+            "adr_bool": true,
+            "dev_bool": false
+        },
+        "photo": "https://edanafashion.files.wordpress.com/2012/12/art-brad-pitt-fight-club-film-hot-favim-com-267353.jpg?w=498"
     },
     {
-        "id": "Devon-Alpha-52603",
-        "uuid": "Devon-Alpha-52603",
+        "id": "Docto-Alpha-85457",
+        "uuid": "Docto-Alpha-85457",
         "firstForm": {
+            "sex": "male",
+            "name": "Doctor Who",
+            "languages": [
+                "Other",
+                "English"
+            ],
+            "age": "33",
+            "phone": "696617239"
+        },
+        "secondForm": {
+            "length_stay": 64,
+            "move_date": {
+                "seconds": 1707087600,
+                "nanoseconds": 0
+            },
+            "meet_type": "inperson",
+            "more_info": "Can I see the apartment today?"
+        },
+        "thirdForm": {
+            "job_title": "Doctor",
+            "hobbies": "As for my interests, I find solace in stargazing, finding beauty in the celestial wonders above. I'm an avid reader, with a particular fondness for ancient texts and lost civilizations. Restoring and tinkering with old gadgets is a cherished hobby that often transports me back in time. Beyond that, I relish the tranquility found in simple moments, embracing nature walks and contemplating the marvels of the world around me",
+            "social_media": "https://github.com/DevonGifford",
+            "describe": "I'm a passionate and curious individual with a profound interest in history and science. My life revolves around exploring the mysteries of the universe, delving into the depths of time and space. Amidst my travels, I've developed a deep appreciation for diverse cultures and their stories, often immersing myself in the lives of the people I encounter.",
+            "job_type": "hybrid"
+        },
+        "applicationDate": {
+            "seconds": 1702908962,
+            "nanoseconds": 578000000
+        },
+        "rankings": {
+            "osc_star": 3,
+            "osc_bool": false,
+            "adr_bool": true,
+            "adr_star": 5,
+            "dev_star": 3,
+            "dev_bool": true
+        },
+        "photo": "https://www.flickfilosopher.com/wp-content/uploads/2010/01/dwendtime2.gif"
+    },
+    {
+        "id": "Oscar-Alpha-21448",
+        "uuid": "Oscar-Alpha-21448",
+        "firstForm": {
+            "age": "28",
+            "sex": "female",
             "languages": [
                 "English",
-                "Other"
+                "Español"
             ],
-            "age": "29",
-            "name": "Devon Gifford",
-            "sex": "female",
-            "social_media": "https://github.com/DevonGifford",
+            "name": "Joffrey Baratheon",
             "phone": "+34696617233"
         },
         "secondForm": {
+            "meet_type": "inperson",
+            "more_info": "I need help carrying my bags",
             "move_date": {
-                "seconds": 1706742000,
+                "seconds": 1706310000,
                 "nanoseconds": 0
             },
-            "length_stay": 65,
-            "meet_type": "inperson",
-            "more_info": "I have a special request, can I hang my paintings?"
+            "length_stay": 48
         },
         "thirdForm": {
-            "photo": "",
-            "hobbies": "I like to sleep",
-            "describe": "I am tired. ",
-            "job_title": "Chef",
-            "job_type": "office"
+            "hobbies": "In my free time, I find pleasure in archery, reading about dynasties, and exploring artistic expressions from different eras. I appreciate a good conversation about leadership and governance",
+            "social_media": "https://github.com/DevonGifford",
+            "job_title": "King",
+            "job_type": "hybrid",
+            "describe": "Greetings, I'm Joffrey, originally from the Seven Kingdoms. I'm engaged in various royal duties but also take time to pursue interests in the arts and history. Creating a comfortable living space is important to me."
         },
         "applicationDate": {
-            "seconds": 1702487479,
-            "nanoseconds": 423000000
+            "seconds": 1702745002,
+            "nanoseconds": 283000000
         },
-        "photo": ""
+        "rankings": {
+            "osc_star": 5,
+            "adr_star": 2,
+            "adr_bool": false,
+            "osc_bool": false,
+            "dev_bool": false,
+            "dev_star": 3
+        },
+        "photo": "https://imgix.bustle.com/rehost/2016/9/13/4adf8a0d-0382-4354-9880-aeed9fea6d30.png?w=800&fit=crop&crop=faces&auto=format%2Ccompress"
     },
     {
         "id": "Riaan-Alpha-33773",
         "uuid": "Riaan-Alpha-33773",
         "firstForm": {
-            "sex": "female",
             "phone": "+34696617233",
-            "name": "Riaan Stiaan",
             "languages": [
                 "English"
             ],
-            "age": "26"
+            "name": "Patrick Bateman",
+            "age": "26",
+            "sex": "female"
         },
         "secondForm": {
+            "length_stay": 58,
             "move_date": {
                 "seconds": 1706310000,
                 "nanoseconds": 0
             },
-            "meet_type": "videocall",
-            "length_stay": 58,
-            "more_info": ""
+            "more_info": "",
+            "meet_type": "videocall"
         },
         "thirdForm": {
-            "social_media": "",
             "job_type": "hybrid",
-            "describe": "I go to clown school",
-            "hobbies": "I drive a small car with my friends.",
-            "job_title": "Clown"
+            "job_title": "Investment Banker",
+            "hobbies": "I indulge in fine dining, fitness routines, and engaging with contemporary literature. Exploring avant-garde exhibitions and cultural events stimulates my creative side.",
+            "describe": "Hi, I'm Patrick, a professional in the finance sector. I value privacy and tranquility, seeking a place to unwind after long workdays. I'm passionate about discussing the psychology behind human behavior and societal roles.",
+            "social_media": ""
         },
         "applicationDate": {
             "seconds": 1702557635,
             "nanoseconds": 757000000
         },
-        "photo": ""
+        "rankings": {
+            "adr_bool": false,
+            "adr_star": 3,
+            "osc_bool": true,
+            "dev_star": 2,
+            "osc_star": 4,
+            "dev_bool": false
+        },
+        "photo": "https://i.imgflip.com/63sla1.jpg?a472008"
     },
     {
         "id": "Simon-Alpha-28152",
         "uuid": "Simon-Alpha-28152",
         "firstForm": {
-            "age": "23",
+            "phone": "6079603030399333838377272727",
+            "sex": "female",
+            "social_media": "https://www.linkedin.com/in/simongifford/",
+            "name": "Anakin Skywalker",
             "languages": [
                 "English"
             ],
-            "name": "Simon Apellidos",
-            "phone": "6079603030399333838377272727",
-            "sex": "female",
-            "social_media": "https://www.linkedin.com/in/simongifford/"
+            "age": "23"
         },
         "secondForm": {
-            "more_info": "cachocghoaw",
+            "meet_type": "videocall",
+            "length_stay": 63,
             "move_date": {
                 "seconds": 1706050800,
                 "nanoseconds": 0
             },
-            "meet_type": "videocall",
-            "length_stay": 63
+            "more_info": "cachocghoaw"
         },
         "thirdForm": {
-            "describe": "smoker",
-            "hobbies": "sleep",
             "job_type": "office",
-            "job_title": "Student",
-            "photo": ""
+            "describe": "Greetings, I'm Anakin, currently engaged in humanitarian efforts across galaxies. I'm on the quest for a peaceful dwelling where I can focus on personal growth. I find the intricacies of technology and craftsmanship intriguing",
+            "job_title": "Jedi Knight",
+            "photo": "",
+            "hobbies": "I enjoy pod racing, astrophysics, and tinkering with mechanical projects. I'm drawn to discussions on ethics and philosophy, and I appreciate learning about different cultures and their traditions"
         },
         "applicationDate": {
             "seconds": 1702502162,
             "nanoseconds": 841000000
-        }
+        },
+        "rankings": {
+            "adr_bool": true,
+            "osc_star": 3,
+            "dev_bool": false,
+            "adr_star": 4,
+            "dev_star": 5,
+            "osc_bool": true
+        },
+        "photo": "https://i0.wp.com/thefutureoftheforce.com/wp-content/uploads/2019/07/anakin-becomes-vader-revenge-of-the-sith.png?resize=640%2C394&ssl=1"
     },
     {
         "id": "Simon-Alpha-87743",
         "uuid": "Simon-Alpha-87743",
         "firstForm": {
-            "sex": "male",
-            "age": "26",
+            "social_media": "https://www.linkedin.com/in/simongifford/",
             "phone": "607950562",
-            "name": "Simon",
+            "age": "26",
             "languages": [
                 "English",
                 "Español",
                 "Other"
             ],
-            "social_media": "https://www.linkedin.com/in/simongifford/"
+            "name": "Simon",
+            "sex": "male"
         },
         "secondForm": {
             "more_info": "bla bla",
-            "meet_type": "inperson",
             "length_stay": 64,
             "move_date": {
                 "seconds": 1706742000,
                 "nanoseconds": 0
-            }
+            },
+            "meet_type": "inperson"
         },
         "thirdForm": {
-            "job_type": "hybrid",
-            "job_title": "Student",
             "describe": "fun guy who drinks too much but dowsnt smole",
             "photo": "",
-            "hobbies": "Work and run"
+            "job_type": "hybrid",
+            "hobbies": "Work and run",
+            "job_title": "Student"
         },
         "applicationDate": {
             "seconds": 1702502162,
             "nanoseconds": 841000000
         },
-        "photo": ""
-        
+        "rankings": {
+            "dev_bool": true,
+            "osc_bool": false,
+            "dev_star": 3,
+            "osc_star": 3,
+            "adr_bool": true,
+            "adr_star": 4
+        },
+        "photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCZth-wFlNUpHCQLsoBpHHFJJSZ371U6GS448E714eZ6EV9JNWAr7-6LMkbnO_Ke6GvQE&usqp=CAU"
     }
 ]
