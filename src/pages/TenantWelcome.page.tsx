@@ -1,6 +1,7 @@
 import { useAdminContext } from "@/components/contexts/admin/useAdminContext";
 import { Button } from "@/components/ui/button";
 import { useRequireAdmin } from "@/lib/hooks/useRequireAdmin";
+import { Link } from "react-router-dom";
 
 export default function TenantWelcomePage() {
   useRequireAdmin();
@@ -20,9 +21,11 @@ export default function TenantWelcomePage() {
 
         <div className="flex flex-col md:flex-row justify-center items-center gap-8">
           <div className="flex flex-col w-full md:w-1/2 border-2 p-10 h-[250px]">
-            <Button>
-              <p className="font-semibold">The Tinderpage.</p>
-            </Button>
+            <Link to={"/admin-tinder"}>
+              <Button>
+                <p className="font-semibold">The Tinderpage.</p>
+              </Button>
+            </Link>
             <p className="italic text-sm py-2">Rate and review applicants.</p>
             <ol className=" list-disc text-start mb-4">
               <li>Give each card a star rating.</li>
@@ -34,9 +37,11 @@ export default function TenantWelcomePage() {
           </div>
 
           <div className="flex flex-col w-full md:w-1/2 border-2 p-10 h-[250px]">
-            <Button>
-              <p className="font-semibold">The Leaderboard.</p>
-            </Button>
+            <Link to={"/admin-leaderboard"}>
+              <Button>
+                <p className="font-semibold">The Leaderboard.</p>
+              </Button>
+            </Link>
 
             <p className="italic text-sm py-2">Based on the received stars.</p>
             <ol className="list-disc text-start mb-4">
