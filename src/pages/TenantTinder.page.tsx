@@ -33,15 +33,17 @@ import { useDataContext } from "@/components/contexts/data/useDataContext";
 import { updateRanking } from "@/lib/firebase/firestore";
 import { ApplicantProfile } from "@/lib/types/applicant-type";
 import ImageWithFallback from "@/components/ProfilePic";
+import { Rankings } from "@/lib/types/rawapplicant-type";
 
 export default function TenantTinderPage() {
   useRequireAdmin();
-  const { data, updateDataContext } = useDataContext();
   const { adminProfile } = useAdminContext();
+  const { data, updateDataContext } = useDataContext();
   const [currentCardIndex, setCurrentCardIndex] = useState(0); //- State to keep track of the current card being shown
   const [starRatings, setStarRatings] = useState<number[]>(
     Array(data?.length).fill(0)
   );
+  const whichAdmin = (adminProfile?.name || "").substring(0, 3);
 
   // ✅ HANDLE STAR RATING - updates ranking field
   const handleStarClick = (starIndex: number, cardIndex: number) => {
@@ -341,7 +343,12 @@ export default function TenantTinderPage() {
                   {[...Array(5)].map((_, starIndex) => (
                     <StarRating
                       key={starIndex}
-                      filled={starIndex < starRatings[index]}
+                      filled={
+                        starIndex <
+                        (dataItem.rankings?.[
+                          `${whichAdmin.toLowerCase()}_star` as keyof Rankings
+                        ] || 0)
+                      }
                       onClick={() => handleStarClick(starIndex, index)}
                     />
                   ))}
