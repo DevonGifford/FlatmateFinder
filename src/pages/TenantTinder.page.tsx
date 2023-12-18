@@ -32,6 +32,7 @@ import { useAdminContext } from "@/components/contexts/admin/useAdminContext";
 import { useDataContext } from "@/components/contexts/data/useDataContext";
 import { updateRanking } from "@/lib/firebase/firestore";
 import { ApplicantProfile } from "@/lib/types/applicant-type";
+import ImageWithFallback from "@/components/ProfilePic";
 
 export default function TenantTinderPage() {
   useRequireAdmin();
@@ -272,12 +273,14 @@ export default function TenantTinderPage() {
                     </a>
                   </div>
                   {/* //👇 PROFILE PICTURE */}
-                  <img
-                    src={dataItem.photo || "/profile-fallback.svg"}
+
+                  <ImageWithFallback
+                    src={dataItem.photo}
+                    fallbackSrc="/profile-fallback.svg"
                     alt="profile-pic"
                     width={90}
                     height={20}
-                    className="flex justify-center items-center rounded-full "
+                    className="flex justify-center items-center rounded-full"
                   />
                 </div>
 
