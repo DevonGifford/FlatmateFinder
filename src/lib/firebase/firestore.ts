@@ -8,6 +8,7 @@ import {
   DocumentReference,
   DocumentSnapshot,
   DocumentData,
+  updateDoc,
 } from "firebase/firestore";
 import db from "./config";
 import { ApplicantProfile } from "../types/applicant-type";
@@ -29,7 +30,7 @@ const firestore: Firestore = db;
  */
 export const createApplicantDoc = async (
   documentId: DocumentId,
-  userData: ApplicantProfile,
+  userData: ApplicantProfile
 ) => {
   console.log("createApplicantDoc:  💢 Triggered");
 
@@ -60,6 +61,68 @@ export const createApplicantDoc = async (
       `✖ Error creating the document ${documentId} in given collection `,
       error
     );
+  }
+};
+
+/**
+ * ✅ HELPER FUNCTION:
+ * Updates a specified document in a specified collection or creates a new document if not found.
+ * @param {string} collectionName - The name of the collection.
+ * @param {string} documentId - The ID of the document to be updated.
+ * @param {object} data - The data to be updated or created.
+ */
+export const updateDocument = async (
+  collectionName: CollectionName,
+  documentId: DocumentId,
+  data: Data
+) => {
+  console.log("🔥utils/firestore/updateDocument:  💢 Triggered");
+  const collectionRef = collection(firestore, collectionName);
+  const docRef: DocumentReference<Data> = doc(collectionRef, documentId);
+
+  try {
+    const docSnapshot: DocumentSnapshot<Data> = await getDoc(docRef);
+
+    // - check if user doc exists and update or else return false
+    if (docSnapshot.exists()) {
+      await updateDoc(docRef, data);
+    } else {
+      // -notfound case
+      console.error(
+        `🔥utils/firestore/updateDocument:  ❌ Error:  Document ${documentId} not found in collection ${collectionName}!`
+      );
+      return false;
+    }
+    // -success case
+    console.log(
+      `🔥utils/firestore/updateDocument:  ✔ Success:  Document ${documentId} updated successfully in collection ${collectionName}!`
+    );
+    return true;
+  } catch (error) {
+    // -error case
+    console.error(
+      `🔥utils/firestore/updateDocument:  ❌ Error:  Error updating/creating document ${documentId} in collection ${collectionName}: `,
+      error
+    );
+    return false;
+  }
+};
+
+export const updateRanking = async (
+  userId: string,
+  updatedRankings: Partial<ApplicantProfile>
+) => {
+  console.log("🔥utils/firestore/updateRanking:  💢 Triggered");
+  const applicantDocRef = doc(db, "applicants", userId); // Replace "applicants" with your collection name
+
+  try {
+    await updateDoc(applicantDocRef, {
+      rankings: updatedRankings,
+    });
+    console.log(`🔥utils/firestore/updateRanking:  ✔ Success:  Applicant document with ID ${userId} updated successfully.`);
+  } catch (error) {
+    console.error("🔥utils/firestore/updateRanking:  ✖ Error:  Error updating document: ", error);
+    // Handle the error as needed
   }
 };
 
