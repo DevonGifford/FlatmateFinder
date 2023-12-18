@@ -107,7 +107,8 @@ export function ThirdForm() {
           ...applicantProfile,
           thirdForm: updatedThirdForm,
           uuid: documentId,
-        };
+          photo: "",
+        }; 
 
         // 👇 Update the userContext with the merged data
         await updateApplicantContext(updatedProfile);

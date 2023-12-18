@@ -9,12 +9,20 @@ import "./App.css";
 import { ApplicantProvider } from "./components/contexts/applicant/ApplicantProvider";
 import ThankyouPage from "./pages/Thankyou.page";
 import FaqPage from "./pages/Faq.page";
+import { useAdminContext } from "./components/contexts/admin/useAdminContext";
+import TenantWelcomePage from "./pages/TenantWelcome.page";
+import TenantTinderPage from "./pages/TenantTinder.page";
+import TenantLeaderboardPage from "./pages/TenantLeaderboard.page";
+import NavbarAdmin from "./components/NavbarAdmin";
+import { DataProvider } from "./components/contexts/data/DataProvider";
 
 function App() {
+  const { adminProfile } = useAdminContext();
+  console.log("adminProfile 🦺", adminProfile);
   return (
     <>
       <Router basename={import.meta.env.VITE_REACT_APP_BASENAME || "/"}>
-        <Navbar />
+        {!adminProfile && <Navbar />}
         <main className="flex flex-col h-auto gap-3 lg:gap-5">
           <Routes>
             <Route path="/" element={<HomePage />} />
@@ -26,6 +34,17 @@ function App() {
               <Route path="/thankyou" element={<ThankyouPage />} />
             </Routes>
           </ApplicantProvider>
+          <DataProvider>
+            {adminProfile && <NavbarAdmin />}
+            <Routes>
+              <Route path="/admin-welcome" element={<TenantWelcomePage />} />
+              <Route path="/admin-tinder" element={<TenantTinderPage />} />
+              <Route
+                path="/admin-leaderboard"
+                element={<TenantLeaderboardPage />}
+              />
+            </Routes>
+          </DataProvider>
         </main>
         <Toaster />
       </Router>

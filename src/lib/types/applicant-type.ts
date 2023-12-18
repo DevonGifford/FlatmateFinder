@@ -20,7 +20,17 @@ export type ApplicantProfile = {
     hobbies: string;
     social_media?: string;
   };
+  rankings?: {
+    dev_star?: number;
+    dev_bool?: boolean;
+    adr_star?: number;
+    adr_bool?: boolean;
+    osc_star?: number;
+    osc_bool?: boolean;
+  };
   applicationDate: Date;
+  id?: string;
+  photo?: string;
 };
 
 export const defaultApplicant: ApplicantProfile = {
@@ -46,5 +56,5 @@ export const defaultApplicant: ApplicantProfile = {
     hobbies: "Reading, hiking, coding",
     social_media: "john.doe",
   },
-  applicationDate: new Date(),
+  applicationDate: new Date() ,
 };
