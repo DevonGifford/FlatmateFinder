@@ -278,8 +278,8 @@ export default function TenantTinderPage() {
                     src={dataItem.photo}
                     fallbackSrc="/profile-fallback.svg"
                     alt="profile-pic"
-                    width={90}
-                    height={20}
+                    width={100}
+                    height={100}
                     className="flex justify-center items-center rounded-full"
                   />
                 </div>
