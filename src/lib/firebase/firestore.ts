@@ -108,6 +108,16 @@ export const updateDocument = async (
   }
 };
 
+/**
+ * ✅ HELPER FUNCTION:
+ * Updates the rankings of a specific user document in the Firestore database.
+ * @param {string} userId - The ID of the user document to be updated.
+ * @param {Partial<ApplicantProfile>} updatedRankings - Partial data containing the updated rankings to be merged.
+ * @returns {Promise<void>} - A Promise indicating the success of the update operation.
+ *
+ * @example
+ * await updateRanking('userID123', { dev_star: 4, osc_bool: true });
+ */
 export const updateRanking = async (
   userId: string,
   updatedRankings: Partial<ApplicantProfile>
@@ -116,12 +126,37 @@ export const updateRanking = async (
   const applicantDocRef = doc(db, "applicants", userId); // Replace "applicants" with your collection name
 
   try {
-    await updateDoc(applicantDocRef, {
-      rankings: updatedRankings,
-    });
-    console.log(`🔥utils/firestore/updateRanking:  ✔ Success:  Applicant document with ID ${userId} updated successfully.`);
+    // 👇 Get the existing document data
+    const docSnapshot = await getDoc(applicantDocRef);
+    if (docSnapshot.exists()) {
+      const existingData = docSnapshot.data() as ApplicantProfile;
+
+      // 👇 Merge the updated rankings with existing rankings using spread syntax
+      const mergedRankings = {
+        ...existingData.rankings,
+        ...updatedRankings,
+      };
+
+      // 👇 Update the document with the merged rankings
+      await updateDoc(applicantDocRef, {
+        rankings: mergedRankings,
+      });
+
+      // ✔ Success case
+      console.log(
+        `🔥utils/firestore/updateRanking:  ✔ Success:  Applicant document with ID ${userId} updated successfully.`
+      );
+    } else {
+      // ✖ Error case
+      console.error(
+        `🔥utils/firestore/updateRanking:  ✖ Error:  Document with ID ${userId} does not exist.`
+      );
+    }
   } catch (error) {
-    console.error("🔥utils/firestore/updateRanking:  ✖ Error:  Error updating document: ", error);
+    console.error(
+      "🔥utils/firestore/updateRanking:  ✖ Error:  Error updating document: ",
+      error
+    );
     // Handle the error as needed
   }
 };
