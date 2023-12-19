@@ -35,7 +35,7 @@ export const ApplicantProvider = ({
         uuid: "", // Set initial properties as needed
         firstForm: { name: "", age: "", sex: "", phone: "" },
         secondForm: { move_date: new Date(), length_stay: 0, meet_type: "" },
-        thirdForm: { job_title: "", job_type:"" ,describe: "", hobbies: "", },
+        thirdForm: { job_title: "", job_type: "", describe: "", hobbies: "" },
         applicationDate: new Date(),
       });
     }
@@ -43,9 +43,7 @@ export const ApplicantProvider = ({
 
   // ✅ HANDLES UPDATING CONTEXT:
   const updateApplicantContext = async (newData: Partial<ApplicantProfile>) => {
-    console.log(
-      "🎭 updateapplicantProfile: 💢 Triggered"
-    );
+    console.log("🎭 updateapplicantProfile: 💢 Triggered");
     try {
       if (!applicantProfile) {
         console.error(
@@ -54,27 +52,30 @@ export const ApplicantProvider = ({
         return;
       }
 
-      console.log(
-        "🦺🎭 updateapplicantProfile: ",  
-        "Pre-existing context data - applicantProfile: ",
-        applicantProfile,
-        "Newdata to updated context - newData: ",
-        newData
-      );
+      // console.log(
+      //   "🦺🎭 updateapplicantProfile: ",
+      //   "Pre-existing context data - applicantProfile: ",
+      //   applicantProfile,
+      //   "Newdata to updated context - newData: ",
+      //   newData
+      // );
 
       //👇 Merge the existing profile with the new data
       const updatedProfile = { ...applicantProfile, ...newData };
-      console.log(
-        "🦺🎭 updateapplicantProfile:  Updated profile after merge",
-        updatedProfile
-      );
+      // console.log(
+      //   "🦺🎭 updateapplicantProfile:  Updated profile after merge",
+      //   updatedProfile
+      // );
 
       //👇 Update the applicantProfile state with the merged profile
       setApplicantProfile(updatedProfile);
       console.log(
-        "🎭 updateapplicantProfile:  ✔  Success:  Successfully updated applicantProfile - new data:",
-        updatedProfile
+        "🎭 updateapplicantProfile:  ✔  Success:  Successfully updated applicantProfile"
       );
+      // console.log(
+      //   "🎭 updateapplicantProfile:  ✔  Success:  Successfully updated applicantProfile - new data:",
+      //   updatedProfile
+      // );
     } catch (error) {
       console.error(
         "🎭 updateapplicantProfile:  ❌ Error:  Error updating applicantProfile",

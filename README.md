@@ -53,3 +53,4 @@ This project is licensed under the [MIT License](LICENSE).
 ## Acknowledgments
 
 Special thanks to [Vite](https://vitejs.dev/), [TypeScript](https://www.typescriptlang.org/), [Firebase](https://firebase.google.com/), and [Tailwind CSS](https://tailwindcss.com/) for enabling the development of this application.
+

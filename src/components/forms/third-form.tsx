@@ -54,8 +54,7 @@ const thirdFormSchema = z.object({
     }),
   social_media: z
     .string()
-    .url()
-    .max(50, {
+    .max(30, {
       message: "⚠ too long",
     })
     .optional(),

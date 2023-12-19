@@ -97,9 +97,12 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
 
     //- Set the data to state
     console.log(
-      "🎭DataContext/fetchUserDataProcess :   ✔ Success - fetched and set data:",
-      data
+      "🎭DataContext/fetchUserDataProcess :   ✔ Success - fetched and set data"
     );
+    // console.log(
+    //   "🎭DataContext/fetchUserDataProcess :   ✔ Success - fetched and set data:",
+    //   data
+    // );
     setData(data);
   };
 
@@ -126,7 +129,8 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
           ...newData[0],
         };
         setData(updatedData);
-        console.log("🎭DataContext/updateRawApplicantProfile:  ✔ Successfully updated dataContext:", updatedData);
+        console.log("🎭DataContext/updateRawApplicantProfile:  ✔ Successfully updated dataContext");
+        // console.log("🎭DataContext/updateRawApplicantProfile:  ✔ Successfully updated dataContext:", updatedData);
       } else {
         console.error("🎭DataContext/updateRawApplicantProfile:  ✖ Error:  Profile not found for update");
       }

@@ -4,20 +4,14 @@ import RatingBadge from "@/components/RatingBadge";
 import { useDataContext } from "@/components/contexts/data/useDataContext";
 // import { Button } from "@/components/ui/button";
 import { useRequireAdmin } from "@/lib/hooks/useRequireAdmin";
-import { RawApplicantProfile } from "@/lib/types/rawapplicant-type";
+import { Rankings, RawApplicantProfile } from "@/lib/types/rawapplicant-type";
 // import { RefreshCwIcon } from "lucide-react";
-
-type Rankings = {
-  dev_star?: number;
-  adr_star?: number;
-  osc_star?: number;
-};
 
 export default function TenantLeaderboardPage() {
   useRequireAdmin();
   const { data } = useDataContext();
 
-  console.log("here is the data in the data context: ", data);
+  // console.log("🦺 here is the data in the data context: ", data);
 
   // ✅ CALCULATE RANKING - function to compute the total rating for an applicant
   const computeTotalRating = (applicant: RawApplicantProfile): number => {
