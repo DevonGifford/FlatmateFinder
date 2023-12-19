@@ -8,7 +8,7 @@ export const useRequireAdmin = () => {
 
   useEffect(() => {
     const checkAdmin = async () => {
-      console.log("🦺 useRequireAdmin Triggered 💢");
+      // console.log("🦺 useRequireAdmin Triggered 💢");
       const admin = await isAdmin();
       if (!admin) {
         console.log("🦺 user is not Admin - sending back to homepage");

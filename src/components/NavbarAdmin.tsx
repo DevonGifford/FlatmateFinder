@@ -65,13 +65,13 @@ export default function NavbarAdmin() {
             </SheetHeader>
           </SheetContent>
         </Sheet>
-        <div className="flex flex-row">
+        <div className="hidden flex-row">
           <Button
             className="transition ease-in-out duration-150 hover:scale-125"
             size={"icon"}
             variant={"ghost"}
             onClick={() => {
-              console.log("Navbar refresh button triggered 💢 ");
+              // console.log("Navbar refresh button triggered 💢 ");
               handleRefresh();
               //🔮 toast notifications
             }}

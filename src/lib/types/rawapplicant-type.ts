@@ -35,3 +35,8 @@ export type RawApplicantProfile = {
   photo?: string;
 };
 
+export type Rankings = {
+  dev_star?: number;
+  adr_star?: number;
+  osc_star?: number;
+};

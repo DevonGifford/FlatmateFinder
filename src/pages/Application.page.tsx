@@ -11,7 +11,7 @@ import { ArrowLeftToLine } from "lucide-react";
 const ApplicationPage: React.FC = () => {
   const { pageId } = useURLState();
   const navigate = useNavigate();
-  console.log("🦺 Application page - page ID params: ", pageId);
+  // console.log("🦺 Application page - page ID params: ", pageId);
 
   // 👇 Logic to determine background color based on pageId and circleId
   const getCircleColor = (circleId: number) => {
@@ -34,8 +34,7 @@ const ApplicationPage: React.FC = () => {
               className={`h-4 w-4 text-xs flex justify-center items-center rounded-full ${getCircleColor(
                 circleId
               )}`}
-            >
-            </div>
+            ></div>
           ))}
         </div>
 
