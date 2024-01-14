@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import { useLanguageContext } from "../../contexts/language/useLanguageContext";
-import { useApplicantContext } from "../../contexts/applicant/useApplicantContext";
 import { toastError, toastFormComplete } from "@/lib/customToast";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Calendar } from "@/components/ui/calendar";
@@ -54,20 +53,18 @@ const secondFormSchema = z.object({
 });
 type SecondFormValues = z.infer<typeof secondFormSchema>;
 
-export function SecondForm() {
-  const navigate = useNavigate();
-  const { updateApplicantContext, applicantProfile } = useApplicantContext();
-  const { language } = useLanguageContext();
+interface SecondFormProps {
+  application: ApplicantProfile | null;
+  setApplication: React.Dispatch<React.SetStateAction<ApplicantProfile>>;
+}
 
+export function SecondForm({ application, setApplication }: SecondFormProps) {
+  const navigate = useNavigate();
+  const { language } = useLanguageContext();
   const setLanguage: SecondFormData =
     language === "english" ? Data_EN : Data_ES;
 
-  const defaultValues: SecondFormValues = applicantProfile?.secondForm || {
-    move_date: new Date(),
-    length_stay: 0,
-    meet_type: "",
-    more_info: "",
-  };
+  const defaultValues: SecondFormValues = application!.secondForm;
   const form = useForm<SecondFormValues>({
     resolver: zodResolver(secondFormSchema),
     defaultValues,
@@ -78,10 +75,16 @@ export function SecondForm() {
       const formData: Partial<ApplicantProfile> = {
         secondForm: {
           ...data,
-          more_info: data.more_info || "",
         },
       };
-      updateApplicantContext(formData);
+
+      setApplication((prevApplication) => {
+        return {
+          ...prevApplication,
+          ...formData,
+        };
+      });
+
       toastFormComplete("2");
       navigate(`/form?pageId=third-form`); //-updating route
     } catch (error) {

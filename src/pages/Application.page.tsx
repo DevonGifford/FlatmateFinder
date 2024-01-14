@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useURLState } from "@/lib/hooks/useUrlState";
 import { Button } from "@/components/ui/button";
@@ -6,10 +6,13 @@ import { FirstForm } from "@/components/forms/first-form";
 import { ThirdForm } from "@/components/forms/third-form";
 import { SecondForm } from "@/components/forms/second-form";
 import { ArrowLeftToLine } from "lucide-react";
+import { ApplicantProfile, defaultApplicant } from "@/lib/types/applicant-type";
 
 const ApplicationPage: React.FC = () => {
   const { pageId } = useURLState();
   const navigate = useNavigate();
+
+  const [application, setApplication] = useState<ApplicantProfile>(defaultApplicant);
 
   const getPageIndicatorStyle = (circleId: number) => {
     if (pageId === "second-form" && circleId === 1) {
@@ -37,8 +40,20 @@ const ApplicationPage: React.FC = () => {
 
         <div className="flex flex-col sm:w-3/5 max-w-xl">
           {/* Conditional rendering based on router query */}
-          {pageId === "second-form" && <SecondForm key="second-form" />}
-          {pageId === "third-form" && <ThirdForm key="third-form" />}
+          {pageId === "second-form" && (
+            <SecondForm
+              key="second-form"
+              application={application}
+              setApplication={setApplication}
+            />
+          )}
+          {pageId === "third-form" && (
+            <ThirdForm
+              key="third-form"
+              application={application}
+              setApplication={setApplication}
+            />
+          )}
 
           {/* 'go back to previous form' button or render first form */}
           {pageId ? (
@@ -55,7 +70,7 @@ const ApplicationPage: React.FC = () => {
               </Button>
             </div>
           ) : (
-            <FirstForm key="first-form" />
+          <FirstForm key="first-form" application={application} setApplication={setApplication} />
           )}
         </div>
       </div>

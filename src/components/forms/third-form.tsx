@@ -5,7 +5,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
-import { useApplicantContext } from "@/contexts/applicant/useApplicantContext";
 import { useLanguageContext } from "@/contexts/language/useLanguageContext";
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -21,7 +20,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Building, Home, Link, Video } from "lucide-react";
-import { ApplicantProfile } from "@/lib/types/applicant-type";
+import { ApplicantProfile, defaultApplicant } from "@/lib/types/applicant-type";
 import { createApplicantDoc } from "@/lib/firebase/firestore";
 import { toastError, toastFormComplete } from "@/lib/customToast";
 import { ThirdFormData } from "@/lib/types/translation-types";
@@ -57,12 +56,16 @@ const thirdFormSchema = z.object({
 });
 type ThirdFormValues = z.infer<typeof thirdFormSchema>;
 
-export function ThirdForm() {
+interface ThirdFormProps {
+  application: ApplicantProfile | null;
+  setApplication: React.Dispatch<React.SetStateAction<ApplicantProfile>>;
+}
+
+export function ThirdForm({ application, setApplication }: ThirdFormProps) {
   const navigate = useNavigate();
-  const { updateApplicantContext, applicantProfile } = useApplicantContext();
   const { language } = useLanguageContext();
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const setLanguage: ThirdFormData = language === "english" ? Data_EN : Data_ES;
 
   const form = useForm<ThirdFormValues>({
@@ -70,44 +73,42 @@ export function ThirdForm() {
   });
 
   async function onSubmit(data: ThirdFormValues) {
-    setIsLoading(true);
-    if (applicantProfile) {
-      //- Generate a unique ID for the user
-      const secretVar = import.meta.env.VITE_SECRET_VARIABLE;
-      const nameFirstFive = applicantProfile.firstForm.name
+    try {
+      setIsLoading(true);
+
+      if (!application) {
+        throw new Error("Error: cannot access applicant context");
+      }
+
+      // - Generate a unique ID for the user
+      const nameFirstFive = application.firstForm.name
         .slice(0, 5)
         .replace(/\s/g, ""); // Extract first 5 letters and remove spaces
       const currentTimeStamp = Date.now().toString().slice(-5); // Extract last 5 digits of current timestamp
-      const documentId = `${nameFirstFive}-${secretVar}-${currentTimeStamp}`;  //-custom ID
+      const documentId = `${nameFirstFive}-${currentTimeStamp}`;
 
-      try {
-        const updatedThirdForm = {
-          ...applicantProfile.thirdForm,
-          ...data,
-          social_media: data.social_media || "",
-        };
-        const updatedProfile: ApplicantProfile = {
-          ...applicantProfile,
-          thirdForm: updatedThirdForm,
-          uuid: documentId,
-          photo: "",
-        };
+      const updatedThirdForm = {
+        ...application.thirdForm,
+        ...data,
+      };
 
-        updateApplicantContext(updatedProfile);
-        await createApplicantDoc(documentId, updatedProfile);
+      const completedApplication: ApplicantProfile = {
+        ...application,
+        thirdForm: updatedThirdForm,
+        uuid: documentId,
+        photo: "",
+      };
 
-        setIsLoading(false);
-        toastFormComplete("3");
-        navigate("/thankyou"); //-updating route
-      } catch (error) {
-        setIsLoading(false);
-        toastError();
-        console.error("Error in submitting data", error);
-      }
-    } else {
+      await createApplicantDoc(documentId, completedApplication);
+
+      setIsLoading(false);
+      toastFormComplete("3");
+      setApplication(defaultApplicant); // Reset application state
+      navigate("/thankyou"); // Update route
+    } catch (error) {
       setIsLoading(false);
       toastError();
-      console.error("Error:  cannot access applicant context");
+      console.error("Error in submitting data", error);
     }
   }
 

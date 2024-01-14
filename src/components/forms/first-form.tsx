@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import { useLanguageContext } from "../../contexts/language/useLanguageContext";
-import { useApplicantContext } from "../../contexts/applicant/useApplicantContext";
 import { toastError, toastFormComplete } from "@/lib/customToast";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -67,20 +66,17 @@ const firstFormSchema = z.object({
 });
 type FirstFormValues = z.infer<typeof firstFormSchema>;
 
-export function FirstForm() {
-  const navigate = useNavigate();
-  const { updateApplicantContext, applicantProfile } = useApplicantContext();
+interface FirstFormProps {
+  application: ApplicantProfile | null;
+  setApplication: React.Dispatch<React.SetStateAction<ApplicantProfile>>;
+}
 
+export function FirstForm({ application, setApplication }: FirstFormProps) {
+  const navigate = useNavigate();
   const { language } = useLanguageContext();
   const setLanguage: FirstFormData = language === "english" ? Data_EN : Data_ES;
 
-  const defaultValues: FirstFormValues = applicantProfile?.firstForm || {
-    name: "",
-    age: "",
-    sex: "",
-    phone: "",
-    languages: [],
-  };
+  const defaultValues: FirstFormValues = application!.firstForm;
   const form = useForm<FirstFormValues>({
     resolver: zodResolver(firstFormSchema),
     defaultValues,
@@ -93,7 +89,14 @@ export function FirstForm() {
           ...data,
         },
       };
-      updateApplicantContext(formData);
+
+      setApplication((prevApplication) => {
+        return {
+          ...prevApplication,
+          ...formData,
+        };
+      });
+
       toastFormComplete("1");
       navigate(`/form?pageId=second-form`); //-updating route
     } catch (error) {
