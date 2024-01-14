@@ -27,7 +27,7 @@ export default function TenantWelcomePage() {
             <p className="italic text-sm py-2 whitespace-nowrap pb-6">
               Rate and review applicants.
             </p>
-            <ol className=" list-disc text-start mb-4">
+            <ol className="list-disc text-start mb-4">
               <li>Rate each candidate</li>
               <li>Swipe the card</li>
             </ol>
