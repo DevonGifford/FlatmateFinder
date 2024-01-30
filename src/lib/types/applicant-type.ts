@@ -1,4 +1,4 @@
-export type ApplicantProfile = {
+export interface ApplicantProfile {
   uuid: string;
   firstForm: {
     name: string;
@@ -31,30 +31,29 @@ export type ApplicantProfile = {
   applicationDate: Date;
   id?: string;
   photo?: string;
-};
+}
 
 export const defaultApplicant: ApplicantProfile = {
-  uuid: "devtesting0000", // Replace with a unique identifier generation logic
+  uuid: "", // Replace with a unique identifier generation logic
   firstForm: {
-    name: "John Doe",
-    age: "25",
-    sex: "Male",
-    phone: "123-456-7890",
-    languages: ["English", "Spanish"],
+    name: "",
+    age: "",
+    sex: "",
+    phone: "",
+    languages: [],
   },
   secondForm: {
     move_date: new Date(),
-    length_stay: 6,
-    meet_type: "In person",
-    more_info: "Additional information about the move",
+    length_stay: 0,
+    meet_type: "",
+    more_info: "",
   },
   thirdForm: {
-    job_title: "Software Engineer",
-    job_type: "Full-time",
-    describe:
-    "Experienced software engineer with expertise in web development.",
-    hobbies: "Reading, hiking, coding",
-    social_media: "john.doe",
+    job_title: "",
+    job_type: "",
+    describe: "",
+    hobbies: "",
+    social_media: "",
   },
-  applicationDate: new Date() ,
+  applicationDate: new Date(),
 };

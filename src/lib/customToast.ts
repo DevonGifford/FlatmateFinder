@@ -16,11 +16,11 @@ export function toastIncorrectPassword() {
   });
 }
 
-export function toastError() {
+export function toastError(message?: string) {
   toast({
     variant: "destructive",
     title: "Uh oh! 🙈",
-    description: "Try again later - Inténtalo más tarde",
+    description: message? `${message}` : "Try again later - Inténtalo más tarde",
   });
 }
 
@@ -29,5 +29,13 @@ export function toastFormComplete(formNumber: string) {
     variant: "form",
     title: "✔",
     description: `${formNumber}/3.`,
+  });
+}
+
+export function toastSuccess(message?: string) {
+  toast({
+    variant: "form",
+    title: "✔",
+    description: `${message}`,
   });
 }

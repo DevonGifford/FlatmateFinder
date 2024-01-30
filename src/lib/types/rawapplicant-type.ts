@@ -1,6 +1,6 @@
 import { Timestamp } from "firebase/firestore";
 
-export type RawApplicantProfile = {
+export interface RawApplicantProfile {
   uuid: string;
   firstForm: {
     name: string;
@@ -33,10 +33,10 @@ export type RawApplicantProfile = {
   applicationDate: Timestamp;
   id?: string;
   photo?: string;
-};
+}
 
-export type Rankings = {
+export interface Rankings {
   dev_star?: number;
   adr_star?: number;
   osc_star?: number;
-};
+}

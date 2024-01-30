@@ -1,23 +1,21 @@
-import { useAdminContext } from "@/components/contexts/admin/useAdminContext";
+import { useAdminContext } from "@/contexts/admin/useAdminContext";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const useRequireAdmin = () => {
-  const { isAdmin } = useAdminContext();
   const navigate = useNavigate();
+  const { adminProfile } = useAdminContext();
+  const signInStatus = adminProfile?.isAdmin;
 
   useEffect(() => {
     const checkAdmin = async () => {
-      // console.log("🦺 useRequireAdmin Triggered 💢");
-      const admin = await isAdmin();
-      if (!admin) {
-        console.log("🦺 user is not Admin - sending back to homepage");
+      if (!signInStatus) {
         navigate("/"); // Redirect to home if not admin
       }
     };
 
     checkAdmin();
-  }, [isAdmin, navigate]);
+  }, [signInStatus, navigate]);
 
-  return null; // This hook doesn't render anything, it just handles redirects
+  return null;
 };

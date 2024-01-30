@@ -1,21 +1,19 @@
-import { useMatch, useNavigate } from "react-router-dom";
 import { useContext } from "react";
-
-import { Button } from "./ui/button";
-import { Avatar, AvatarImage } from "./ui/avatar";
-import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
-import { HelpCircle, HomeIcon, XSquare } from "lucide-react";
+import { useMatch, useNavigate } from "react-router-dom";
 import {
   Language,
   LanguageContext,
-} from "./contexts/language/LanguageProvider";
+} from "@/contexts/language/LanguageProvider";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { HelpCircle, HomeIcon, XSquare } from "lucide-react";
 
 export default function Navbar() {
-  const { language, setLanguage } = useContext(LanguageContext);
   const navigate = useNavigate();
   const match = useMatch("*"); //- match any route
 
-  // ✅ Handles changing website language
+  const { language, setLanguage } = useContext(LanguageContext);
   const changeLanguage = (newLanguage: Language) => {
     setLanguage(newLanguage);
   };
@@ -23,40 +21,34 @@ export default function Navbar() {
   return (
     <>
       <nav className="flex flex-row justify-between">
-        {/* // 👇 FAQ/HOME/QUIT BUTTON */}
+        {/* // 👇 DYNAMIC BUTTON */}
         {match && match.pathname === "/form" ? (
-          //👀 Quit Button if URL is "/form"
+          //👉 Quit Button if URL is "/form"
           <Button
-            className="flex flex-row gap-1 transition ease-in-out duration-150 hover:scale-110"
+            onClick={() => navigate("/")}
             size={"sm"}
             variant={"ghost"}
-            onClick={() => {
-              navigate("/");
-            }}
+            className="flex flex-row gap-1 transition ease-in-out duration-150 hover:scale-110"
           >
             <XSquare size={25} />
           </Button>
         ) : match && match.pathname === "/FAQ" ? (
-          //👀 HOME button if URL is "/FAQ"
+          //👉 HOME button if URL is "/FAQ"
           <Button
-            className="flex flex-row gap-1 transition ease-in-out duration-150 hover:scale-110"
+            onClick={() => navigate("/")}
             size={"sm"}
             variant={"ghost"}
-            onClick={() => {
-              navigate("/");
-            }}
+            className="flex flex-row gap-1 transition ease-in-out duration-150 hover:scale-110"
           >
             <HomeIcon size={22} />
           </Button>
         ) : (
-          //👀 Default FAQ Button
+          //👉 Default FAQ Button
           <Button
-            className="flex flex-row gap-1 transition ease-in-out duration-150 hover:scale-110"
+            onClick={() => navigate("/FAQ")}
             size={"lg"}
             variant={"ghost"}
-            onClick={() => {
-              navigate("/FAQ");
-            }}
+            className="flex flex-row gap-1 transition ease-in-out duration-150 hover:scale-110"
           >
             <HelpCircle size={24} />
             <span className="block text-lg">FAQ</span>

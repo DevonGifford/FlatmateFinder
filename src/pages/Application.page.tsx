@@ -1,7 +1,6 @@
 import React from "react";
-import { useURLState } from "@/lib/hooks/useUrlState";
 import { useNavigate } from "react-router-dom";
-
+import { useURLState } from "@/lib/hooks/useUrlState";
 import { Button } from "@/components/ui/button";
 import { FirstForm } from "@/components/forms/first-form";
 import { ThirdForm } from "@/components/forms/third-form";
@@ -11,10 +10,8 @@ import { ArrowLeftToLine } from "lucide-react";
 const ApplicationPage: React.FC = () => {
   const { pageId } = useURLState();
   const navigate = useNavigate();
-  // console.log("🦺 Application page - page ID params: ", pageId);
 
-  // 👇 Logic to determine background color based on pageId and circleId
-  const getCircleColor = (circleId: number) => {
+  const getPageIndicatorStyle = (circleId: number) => {
     if (pageId === "second-form" && circleId === 1) {
       return "bg-cyan-600/40";
     } else if (pageId === "third-form" && circleId <= 2) {
@@ -26,12 +23,12 @@ const ApplicationPage: React.FC = () => {
   return (
     <>
       <div className="flex flex-col items-center h-[calc(100vh-10vh)] overflow-auto hide-scrollbar">
-        {/* Handle Eaasy Viewing Forms to complete  */}
+        {/* Page Indicator  */}
         <div className="flex flex-row justify-center items-center text-center gap-6 text-xl font-bold py-6">
           {[1, 2, 3].map((circleId) => (
             <div
               key={circleId}
-              className={`h-4 w-4 text-xs flex justify-center items-center rounded-full ${getCircleColor(
+              className={`h-4 w-4 text-xs flex justify-center items-center rounded-full ${getPageIndicatorStyle(
                 circleId
               )}`}
             ></div>
@@ -42,9 +39,8 @@ const ApplicationPage: React.FC = () => {
           {/* Conditional rendering based on router query */}
           {pageId === "second-form" && <SecondForm key="second-form" />}
           {pageId === "third-form" && <ThirdForm key="third-form" />}
-          {/* 🎯{pageId === "complete-form" && INSERT THANK YOU PAGE} */}
 
-          {/* Render 'go back to previous form' button or render first form */}
+          {/* 'go back to previous form' button or render first form */}
           {pageId ? (
             <div>
               <Button
@@ -59,7 +55,7 @@ const ApplicationPage: React.FC = () => {
               </Button>
             </div>
           ) : (
-            <FirstForm key="first-form" /> //👉 change to whatever form for development use
+            <FirstForm key="first-form" />
           )}
         </div>
       </div>
