@@ -5,17 +5,20 @@ import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
-import { useLanguageContext } from "../contexts/language/useLanguageContext";
-import { useApplicantContext } from "../contexts/applicant/useApplicantContext";
-import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
+import { useLanguageContext } from "../../contexts/language/useLanguageContext";
+import { useApplicantContext } from "../../contexts/applicant/useApplicantContext";
 import { toastError, toastFormComplete } from "@/lib/customToast";
-
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { Calendar } from "../ui/calendar";
-import { Textarea } from "../ui/textarea";
-import { Slider } from "../ui/slider";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Calendar } from "@/components/ui/calendar";
+import { Textarea } from "@/components/ui/textarea";
+import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { CalendarIcon, User, Video } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Form,
   FormControl,
@@ -27,10 +30,10 @@ import {
 
 import { SecondFormData } from "@/lib/types/translation-types";
 import { ApplicantProfile } from "@/lib/types/applicant-type";
+
 import Data_EN from "@/lib/translations/applicant-form/secondform_en.json";
 import Data_ES from "@/lib/translations/applicant-form/secondform_es.json";
 
-// 👇 FORM SCHEMA : Account Form
 const secondFormSchema = z.object({
   move_date: z.date({
     required_error: "⚠",
@@ -56,30 +59,21 @@ export function SecondForm() {
   const { updateApplicantContext, applicantProfile } = useApplicantContext();
   const { language } = useLanguageContext();
 
-  // ✅ SET CURRENT LANGUAGE:  access language from the context
   const setLanguage: SecondFormData =
     language === "english" ? Data_EN : Data_ES;
 
-  // ✅ IF EXISTING USERDATA, UPDATE FORMS WITH DATAA
-  // Check if applicantProfile exists and has the necessary data
   const defaultValues: SecondFormValues = applicantProfile?.secondForm || {
     move_date: new Date(),
     length_stay: 0,
     meet_type: "",
     more_info: "",
   };
-
-  // ✅ ZOD-FORM HOOK :  custom hook initializes a form instance,
   const form = useForm<SecondFormValues>({
     resolver: zodResolver(secondFormSchema),
     defaultValues,
   });
 
-  // ✅ SUBMIT FORM - submit account form
   function onSubmit(data: SecondFormValues) {
-    console.log("secondForm/Submit:  💢 Triggered", data);
-
-    // 👇 Update the userContext with form data
     try {
       const formData: Partial<ApplicantProfile> = {
         secondForm: {
@@ -88,14 +82,10 @@ export function SecondForm() {
         },
       };
       updateApplicantContext(formData);
-
-      // ✔ Handle success
       toastFormComplete("2");
-      navigate(`/form?pageId=third-form`); //-chang route
+      navigate(`/form?pageId=third-form`); //-updating route
     } catch (error) {
-      // ✖ Handle errors
       toastError();
-      //📌 db update at end of form flow
     }
   }
 

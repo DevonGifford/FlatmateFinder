@@ -1,33 +1,26 @@
-// import { useAdminContext } from "@/components/contexts/admin/useAdminContext";
-import ImageWithFallback from "@/components/ProfilePic";
-import RatingBadge from "@/components/RatingBadge";
-import { useDataContext } from "@/components/contexts/data/useDataContext";
-// import { Button } from "@/components/ui/button";
+import { useDatabase } from "@/contexts/database/useDatabaseContext";
 import { useRequireAdmin } from "@/lib/hooks/useRequireAdmin";
+import { ErrorMessage } from "@/components/ErrorMessage";
+import { ProfilePic } from "@/components/ProfilePic";
+import { RatingBadge } from "@/components/RatingBadge";
+import { Spinner } from "@/components/Spinner";
 import { Rankings, RawApplicantProfile } from "@/lib/types/rawapplicant-type";
-// import { RefreshCwIcon } from "lucide-react";
 
 export default function TenantLeaderboardPage() {
   useRequireAdmin();
-  const { data } = useDataContext();
+  const { applicantPool, isLoading, error } = useDatabase();
 
-  // console.log("🦺 here is the data in the data context: ", data);
-
-  // ✅ CALCULATE RANKING - function to compute the total rating for an applicant
   const computeTotalRating = (applicant: RawApplicantProfile): number => {
     const {
       dev_star = 0,
       adr_star = 0,
       osc_star = 0,
     }: Rankings = applicant.rankings || {};
-
-    // Calculate the total rating by summing the ratings of three admins
     return dev_star + adr_star + osc_star;
   };
 
-  // ✅ SORT FUNCTIONALITY - by total rating in descending order
-  const sortedApplicants = data
-    ? data.slice().sort((a, b) => {
+  const sortedApplicants = applicantPool
+    ? applicantPool.slice().sort((a, b) => {
         const totalRatingA = computeTotalRating(a);
         const totalRatingB = computeTotalRating(b);
         return totalRatingB - totalRatingA;
@@ -36,10 +29,11 @@ export default function TenantLeaderboardPage() {
 
   return (
     <>
-      {/* ... existing code */}
-      <div className="text-2xl italic py-4 pb-6 border-b-2">
+      <h1 className="text-2xl italic py-4 pb-6 border-b-2">
         Current Leaderboard
-      </div>
+      </h1>
+      {isLoading && <Spinner />}
+      {error && <ErrorMessage />}
       {sortedApplicants.length > 0 ? (
         sortedApplicants.map(
           (applicant: RawApplicantProfile, index: number) => (
@@ -48,8 +42,8 @@ export default function TenantLeaderboardPage() {
               className="flex flex-row justify-between items-center gap-3 border-2 p-4 font-semibold text-lg"
             >
               {/* // 👇 PHOTO & NAME */}
-              <div className="flex flex-row gap-3 items-center shrink-0 sm:w-[180px]">
-                <ImageWithFallback
+              <div className="flex flex-row gap-3 items-center shrink-0 sm:w-[180px] md:w-[220px]">
+                <ProfilePic
                   src={applicant.photo}
                   fallbackSrc="/profile-fallback.svg"
                   alt="profile-pic"
@@ -80,7 +74,6 @@ export default function TenantLeaderboardPage() {
               <p className="text-xl shrink-0">
                 {computeTotalRating(applicant)}
               </p>
-              {/* Add display for individual admin ratings if needed */}
             </div>
           )
         )

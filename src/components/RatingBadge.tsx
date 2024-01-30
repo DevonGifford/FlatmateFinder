@@ -1,11 +1,14 @@
 import React from "react";
 
-type RatingBadgeProps = {
+interface RatingBadgeProps {
   boolValue: boolean | undefined;
   starValue: number | undefined;
-};
+}
 
-const RatingBadge: React.FC<RatingBadgeProps> = ({ boolValue, starValue }) => {
+export const RatingBadge: React.FC<RatingBadgeProps> = ({
+  boolValue,
+  starValue,
+}) => {
   const bgColor = boolValue ? "bg-green-500" : "bg-red-500";
 
   return (
@@ -18,5 +21,3 @@ const RatingBadge: React.FC<RatingBadgeProps> = ({ boolValue, starValue }) => {
     </div>
   );
 };
-
-export default RatingBadge;

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-interface ImageWithFallbackProps {
+interface ProfilePicProps {
   src: string | undefined;
   fallbackSrc: string;
   alt: string;
@@ -9,7 +9,7 @@ interface ImageWithFallbackProps {
   className?: string;
 }
 
-const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
+export const ProfilePic: React.FC<ProfilePicProps> = ({
   src,
   fallbackSrc,
   alt,
@@ -35,11 +35,13 @@ const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
         alt={alt}
         width={width}
         height={height}
-        style={{ width: `${width}px`, height: `${height}px`, objectFit: "cover" }}
+        style={{
+          width: `${width}px`,
+          height: `${height}px`,
+          objectFit: "cover",
+        }}
         className={className}
       />
     </a>
   );
 };
-
-export default ImageWithFallback;

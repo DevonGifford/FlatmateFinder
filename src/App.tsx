@@ -1,24 +1,25 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Toaster } from "./components/ui/toaster";
+import { Toaster } from "@/components/ui/toaster";
+import { useAdminContext } from "@/contexts/admin/useAdminContext";
+import { ApplicantProvider } from "@/contexts/applicant/ApplicantProvider";
+import { DatabaseProvider } from "@/contexts/database/DatabaseProvider";
 
-import Navbar from "./components/Navbar";
-import HomePage from "./pages/Home.page";
-import ApplicationPage from "./pages/Application.page";
+import Navbar from "@/components/Navbar";
+import Sidebar from "@/components/Sidebar";
+
+import HomePage from "@/pages/Home.page";
+import FaqPage from "@/pages/Faq.page";
+import ApplicationPage from "@/pages/Application.page";
+import ThankyouPage from "@/pages/Thankyou.page";
+import TenantWelcomePage from "@/pages/TenantWelcome.page";
+import TenantTinderPage from "@/pages/TenantTinder.page";
+import TenantLeaderboardPage from "@/pages/TenantLeaderboard.page";
 
 import "./App.css";
-import { ApplicantProvider } from "./components/contexts/applicant/ApplicantProvider";
-import ThankyouPage from "./pages/Thankyou.page";
-import FaqPage from "./pages/Faq.page";
-import { useAdminContext } from "./components/contexts/admin/useAdminContext";
-import TenantWelcomePage from "./pages/TenantWelcome.page";
-import TenantTinderPage from "./pages/TenantTinder.page";
-import TenantLeaderboardPage from "./pages/TenantLeaderboard.page";
-import NavbarAdmin from "./components/NavbarAdmin";
-import { DataProvider } from "./components/contexts/data/DataProvider";
 
 function App() {
   const { adminProfile } = useAdminContext();
-  // console.log("adminProfile 🦺", adminProfile);
+
   return (
     <>
       <Router basename={import.meta.env.VITE_REACT_APP_BASENAME || "/"}>
@@ -34,8 +35,8 @@ function App() {
               <Route path="/thankyou" element={<ThankyouPage />} />
             </Routes>
           </ApplicantProvider>
-          <DataProvider>
-            {adminProfile && <NavbarAdmin />}
+          <DatabaseProvider>
+            {adminProfile && <Sidebar />}
             <Routes>
               <Route path="/admin-welcome" element={<TenantWelcomePage />} />
               <Route path="/admin-tinder" element={<TenantTinderPage />} />
@@ -44,7 +45,7 @@ function App() {
                 element={<TenantLeaderboardPage />}
               />
             </Routes>
-          </DataProvider>
+          </DatabaseProvider>
         </main>
         <Toaster />
       </Router>
