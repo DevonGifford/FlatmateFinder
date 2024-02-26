@@ -93,7 +93,12 @@ export default function HomePage() {
         </h1>
       </header>
 
-      <img src="/Tetuan-Splash.jpg" className="rounded-full" width={"500px"} />
+      <img
+        src="/Tetuan-Splash.jpg"
+        alt="splash-image"
+        className="rounded-full"
+        width={"500px"}
+      />
 
       <Form {...form}>
         <form

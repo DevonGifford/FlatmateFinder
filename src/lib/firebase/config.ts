@@ -1,7 +1,7 @@
 import { initializeApp, getApps, FirebaseApp } from "firebase/app";
 import { Firestore, getFirestore } from "firebase/firestore";
 import { FirebaseStorage, getStorage } from "firebase/storage";
-import { getAnalytics } from "firebase/analytics";
+// import { getAnalytics } from "firebase/analytics";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 const firebaseConfig = {
@@ -22,11 +22,11 @@ if (getApps().length === 0) {
   app = getApps()[0];
 }
 //- Firestore exports
-const analytics = getAnalytics(app);
+// const analytics = getAnalytics(app);
 const db : Firestore = getFirestore(app);
 //- Storage exports
 const storage : FirebaseStorage = getStorage(app);
 
 //- Default exports
-export { analytics, storage };
+export { storage };
 export default db;

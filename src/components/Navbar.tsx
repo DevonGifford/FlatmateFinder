@@ -14,9 +14,12 @@ export default function Navbar() {
   const match = useMatch("*"); //- match any route
 
   const { language, setLanguage } = useContext(LanguageContext);
+  
   const changeLanguage = (newLanguage: Language) => {
     setLanguage(newLanguage);
   };
+  
+  // 🎯 to-do-list - refactor 
 
   return (
     <>
@@ -29,6 +32,7 @@ export default function Navbar() {
             size={"sm"}
             variant={"ghost"}
             className="flex flex-row gap-1 transition ease-in-out duration-150 hover:scale-110"
+            aria-label="quit-form"
           >
             <XSquare size={25} />
           </Button>
@@ -39,6 +43,7 @@ export default function Navbar() {
             size={"sm"}
             variant={"ghost"}
             className="flex flex-row gap-1 transition ease-in-out duration-150 hover:scale-110"
+            aria-label="back-home"
           >
             <HomeIcon size={22} />
           </Button>
@@ -49,6 +54,7 @@ export default function Navbar() {
             size={"lg"}
             variant={"ghost"}
             className="flex flex-row gap-1 transition ease-in-out duration-150 hover:scale-110"
+            aria-label="faq-button"
           >
             <HelpCircle size={24} />
             <span className="block text-lg">FAQ</span>
@@ -64,6 +70,7 @@ export default function Navbar() {
             className={`${
               language === "english" ? "bg-cyan-600/20" : "hover:bg-cyan-600/20"
             }`}
+            aria-label="locale-en"
           >
             <Avatar className="h-6 w-6">
               <AvatarImage src="/en-flag.png" />
@@ -76,6 +83,7 @@ export default function Navbar() {
             className={`${
               language === "spanish" ? "bg-cyan-600/20" : "hover:bg-cyan-600/20"
             }`}
+            aria-label="locale-es"
           >
             <Avatar className="h-6 w-6">
               <AvatarImage src="/es-flag.png" />
