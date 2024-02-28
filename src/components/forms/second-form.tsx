@@ -1,11 +1,9 @@
-"use client";
-
 import * as z from "zod";
 import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
-import { useLanguageContext } from "../../contexts/language/useLanguageContext";
+import { useGlobalState } from "@/lib/hooks/useGlobalState";
 import { toastError, toastFormComplete } from "@/lib/customToast";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Calendar } from "@/components/ui/calendar";
@@ -60,9 +58,8 @@ interface SecondFormProps {
 
 export function SecondForm({ application, setApplication }: SecondFormProps) {
   const navigate = useNavigate();
-  const { language } = useLanguageContext();
-  const setLanguage: SecondFormData =
-    language === "english" ? Data_EN : Data_ES;
+  const { locale } = useGlobalState();
+  const setLanguage: SecondFormData = locale === "EN" ? Data_EN : Data_ES;
 
   const defaultValues: SecondFormValues = application!.secondForm;
   const form = useForm<SecondFormValues>({

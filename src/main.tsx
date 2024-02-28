@@ -1,21 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "@/App.tsx";
-
-import { LanguageProvider } from "@/contexts/language/LanguageProvider";
-import { AdminProvider } from "@/contexts/admin/AdminProvider";
-import { DatabaseProvider } from "./contexts/database/DatabaseProvider";
+import { GlobalProvider } from "./contexts/GlobalProvider";
 
 import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <LanguageProvider>
-      <AdminProvider>
-        <DatabaseProvider>
-            <App />
-        </DatabaseProvider>
-      </AdminProvider>
-    </LanguageProvider>
+    <GlobalProvider>
+      <App />
+    </GlobalProvider>
   </React.StrictMode>
 );

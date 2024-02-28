@@ -9,10 +9,13 @@ import {
   DocumentSnapshot,
   DocumentData,
   updateDoc,
+  getDocs,
 } from "firebase/firestore";
 import db from "./config";
 import { ApplicantProfile } from "../types/applicant-type";
 import { toastError, toastSuccess } from "../customToast";
+import { RawApplicantProfile } from "../types/rawapplicant-type";
+import { DispatchAction } from "../types/global-types";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Data = Record<string, any>;
@@ -41,6 +44,44 @@ export const createApplicantDoc = async (
     toastError();
   }
 };
+
+export async function fetchApplicantPool(dispatch: DispatchAction) {
+  try {
+    const querySnapshot = await getDocs(collection(db, "applicants"));
+    const fetchedData: RawApplicantProfile[] = [];
+
+    querySnapshot.forEach((doc) => {
+      const {
+        uuid,
+        firstForm,
+        secondForm,
+        thirdForm,
+        rankings,
+        photo,
+        applicationDate,
+      } = doc.data();
+
+      if (uuid && firstForm && secondForm && thirdForm && applicationDate) {
+        const profile: RawApplicantProfile = {
+          id: doc.id,
+          uuid,
+          firstForm,
+          secondForm,
+          thirdForm,
+          applicationDate,
+          rankings,
+          photo,
+        };
+        fetchedData.push(profile);
+      }
+    });
+
+    dispatch({ type: "FETCH_SUCCESS", payload: fetchedData });
+  } catch (err) {
+    console.error("Error fetching data:", err);
+    dispatch({ type: "FETCH_FAILURE", payload: "Something went wrong" });
+  }
+}
 
 export const updateDocument = async (
   collectionName: CollectionName,

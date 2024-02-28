@@ -1,14 +1,15 @@
 import TinderCard from "react-tinder-card";
 import { useState } from "react";
-import { Rankings } from "@/lib/types/rawapplicant-type";
-import { Timestamp } from "firebase/firestore";
+import { useGlobalState } from "@/lib/hooks/useGlobalState";
+import { useGlobalDispatch } from "@/lib/hooks/useGlobalDispatch";
+import { useRequireTenant } from "@/lib/hooks/useRequireTenant";
 import { updateRanking } from "@/lib/firebase/firestore";
-import { useRequireAdmin } from "@/lib/hooks/useRequireAdmin";
-import { ApplicantProfile } from "@/lib/types/applicant-type";
-import { useDatabase } from "@/contexts/database/useDatabaseContext";
-import { useAdminContext } from "@/contexts/admin/useAdminContext";
+import { toastError } from "@/lib/customToast";
 import { ProfilePic } from "@/components/ProfilePic";
 import { StarRating } from "@/components/StarRating";
+import { Rankings } from "@/lib/types/rawapplicant-type";
+import { ApplicantProfile } from "@/lib/types/applicant-type";
+import { Timestamp } from "firebase/firestore";
 import {
   Card,
   CardContent,
@@ -32,32 +33,30 @@ import {
   Video,
 } from "lucide-react";
 import { IoFemale, IoMale, IoMaleFemale } from "react-icons/io5";
-import { toastError } from "@/lib/customToast";
 
-export default function TenantTinderPage() {
-  useRequireAdmin();
-  const { adminProfile } = useAdminContext();
-  const { applicantPool, updateDatabase } = useDatabase();
+export default function TenantTinderPage() { useRequireTenant();
+  const dispatch = useGlobalDispatch();
+  const { applicantPool, loggedTenant } = useGlobalState();
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [starRatings, setStarRatings] = useState<number[]>(
     Array(applicantPool?.length).fill(0)
   );
-  const adminId = (adminProfile?.name || "").substring(0, 3).toLowerCase();
 
-  //🚀 HANDLE STAR RATING - updates ranking field
+  const adminId = (loggedTenant || "").substring(0, 3).toLowerCase();
+
+  //- Handle star-ranking individual applicants - updates global context
   const handleStarClick = (starIndex: number, cardIndex: number) => {
     const newRatings = [...starRatings];
     newRatings[cardIndex] = starIndex + 1;
     setStarRatings(newRatings);
 
-    if (adminProfile && applicantPool) {
-      const currentAdmin = adminProfile.name;
+    if (loggedTenant && applicantPool) {
       const cardData = applicantPool[cardIndex];
 
       if (cardData) {
         const updatedCard = { ...cardData };
         updatedCard.rankings = updatedCard.rankings || {};
-        switch (currentAdmin) {
+        switch (loggedTenant) {
           case "Devon":
             updatedCard.rankings.dev_star = starIndex + 1;
             break;
@@ -70,22 +69,20 @@ export default function TenantTinderPage() {
           default:
             break;
         }
-
-        updateDatabase([updatedCard]);
+        dispatch({ type: "UPDATE_APPLICANT_POOL", payload: [updatedCard] });
       }
     }
   };
 
-  //🚀 HANDLE SWIPPING - updates boolean field
+  //- Handle swipe-ranking individual applicants - updates global context + sets next card
   const onSwipe = (direction: string, cardIndex: number) => {
-    if (adminProfile && applicantPool) {
-      const currentAdmin = adminProfile.name;
+    if (loggedTenant && applicantPool) {
       const cardData = applicantPool[cardIndex];
 
       if (cardData) {
         const updatedCard = { ...cardData };
         updatedCard.rankings = updatedCard.rankings || {};
-        switch (currentAdmin) {
+        switch (loggedTenant) {
           case "Devon":
             updatedCard.rankings.dev_bool = direction === "right";
             break;
@@ -99,13 +96,13 @@ export default function TenantTinderPage() {
             break;
         }
 
-        updateDatabase([updatedCard]);
+        dispatch({ type: "UPDATE_APPLICANT_POOL", payload: [updatedCard] });
         setCurrentCardIndex(currentCardIndex + 1);
       }
     }
   };
 
-  //🚀 HANADLE CARD LEAVING SCREEN - updates the applicantDoc
+  //- Handle card leaving screen - updates the firestore database
   const onCardLeftScreen = (cardIndex: number) => {
     if (applicantPool && applicantPool[cardIndex]?.rankings) {
       const updatedRankings = applicantPool[cardIndex]
@@ -117,7 +114,7 @@ export default function TenantTinderPage() {
     }
   };
 
-  //🚀 HANDLE ICONS & CONVERSIONS
+  //- General Helper Function - Icons & Conversions
   const genderIcon = (gender: string) => {
     if (gender === "male") {
       return <IoMale />;
@@ -276,7 +273,7 @@ export default function TenantTinderPage() {
                 >
                   <AccordionItem className="border-none py-1" value={"about"}>
                     <AccordionTrigger className="flex-col justify-center sm:gap-1 py-1 text-sm sm:text-lg hover:no-underline">
-                      Appllicant Introduction
+                      Applicant Introduction
                     </AccordionTrigger>
                     <AccordionContent className="mx-8 text-xs sm:text-sm italic font-normal">
                       {dataItem.thirdForm.describe}

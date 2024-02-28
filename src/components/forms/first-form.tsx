@@ -1,10 +1,8 @@
-"use client";
-
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
-import { useLanguageContext } from "../../contexts/language/useLanguageContext";
+import { useGlobalState } from "@/lib/hooks/useGlobalState";
 import { toastError, toastFormComplete } from "@/lib/customToast";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -73,8 +71,8 @@ interface FirstFormProps {
 
 export function FirstForm({ application, setApplication }: FirstFormProps) {
   const navigate = useNavigate();
-  const { language } = useLanguageContext();
-  const setLanguage: FirstFormData = language === "english" ? Data_EN : Data_ES;
+  const { locale } = useGlobalState();
+  const setLanguage: FirstFormData = locale === "EN" ? Data_EN : Data_ES;
 
   const defaultValues: FirstFormValues = application!.firstForm;
   const form = useForm<FirstFormValues>({

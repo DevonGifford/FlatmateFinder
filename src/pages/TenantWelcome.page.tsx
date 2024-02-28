@@ -1,18 +1,18 @@
 import { Link } from "react-router-dom";
-import { useAdminContext } from "@/contexts/admin/useAdminContext";
-import { useRequireAdmin } from "@/lib/hooks/useRequireAdmin";
+import { useRequireTenant } from "@/lib/hooks/useRequireTenant";
 import { Button } from "@/components/ui/button";
+import { useGlobalState } from "@/lib/hooks/useGlobalState";
 
 export default function TenantWelcomePage() {
-  useRequireAdmin();
-  const { adminProfile } = useAdminContext();
+  useRequireTenant();
+  const { loggedTenant } = useGlobalState();
 
   return (
     <div className="flex flex-col justify-center items-center mx-auto max-w-screen-md gap-8 py-8">
       <header className="flex flex-col text-lg font-bold">
         <h1 className="text-2xl italic pb-2 border-b-2">TENANT PAGE</h1>
         <h2 className="font-thin pt-4">
-          Welcome to your profile {adminProfile?.name}
+          Welcome to your profile {loggedTenant}
         </h2>
       </header>
       <article className="text-lg">

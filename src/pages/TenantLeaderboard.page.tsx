@@ -1,5 +1,5 @@
-import { useDatabase } from "@/contexts/database/useDatabaseContext";
-import { useRequireAdmin } from "@/lib/hooks/useRequireAdmin";
+import { useRequireTenant } from "@/lib/hooks/useRequireTenant";
+import { useGlobalState } from "@/lib/hooks/useGlobalState";
 import { ErrorMessage } from "@/components/ErrorMessage";
 import { ProfilePic } from "@/components/ProfilePic";
 import { RatingBadge } from "@/components/RatingBadge";
@@ -7,8 +7,8 @@ import { Spinner } from "@/components/Spinner";
 import { Rankings, RawApplicantProfile } from "@/lib/types/rawapplicant-type";
 
 export default function TenantLeaderboardPage() {
-  useRequireAdmin();
-  const { applicantPool, isLoading, error } = useDatabase();
+  useRequireTenant();
+  const { applicantPool, isLoading, error } = useGlobalState();
 
   const computeTotalRating = (applicant: RawApplicantProfile): number => {
     const {

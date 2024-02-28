@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useURLState } from "@/lib/hooks/useUrlState";
+import { useRequireApplicant } from "@/lib/hooks/useRequireApplicant";
 import { Button } from "@/components/ui/button";
 import { FirstForm } from "@/components/forms/first-form";
 import { ThirdForm } from "@/components/forms/third-form";
@@ -9,10 +10,10 @@ import { ArrowLeftToLine } from "lucide-react";
 import { ApplicantProfile, defaultApplicant } from "@/lib/types/applicant-type";
 
 const ApplicationPage: React.FC = () => {
+  const [application, setApplication] = useState<ApplicantProfile>(defaultApplicant);
   const { pageId } = useURLState();
   const navigate = useNavigate();
-
-  const [application, setApplication] = useState<ApplicantProfile>(defaultApplicant);
+  useRequireApplicant();
 
   const getPageIndicatorStyle = (circleId: number) => {
     if (pageId === "second-form" && circleId === 1) {
@@ -70,7 +71,11 @@ const ApplicationPage: React.FC = () => {
               </Button>
             </div>
           ) : (
-          <FirstForm key="first-form" application={application} setApplication={setApplication} />
+            <FirstForm
+              key="first-form"
+              application={application}
+              setApplication={setApplication}
+            />
           )}
         </div>
       </div>

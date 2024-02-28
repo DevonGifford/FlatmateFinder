@@ -1,11 +1,9 @@
-"use client";
-
 import * as z from "zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
-import { useLanguageContext } from "@/contexts/language/useLanguageContext";
+import { useGlobalState } from "@/lib/hooks/useGlobalState";
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Textarea } from "@/components/ui/textarea";
@@ -63,10 +61,9 @@ interface ThirdFormProps {
 
 export function ThirdForm({ application, setApplication }: ThirdFormProps) {
   const navigate = useNavigate();
-  const { language } = useLanguageContext();
   const [isLoading, setIsLoading] = useState(false);
-
-  const setLanguage: ThirdFormData = language === "english" ? Data_EN : Data_ES;
+  const { locale } = useGlobalState();
+  const setLanguage: ThirdFormData = locale === "EN" ? Data_EN : Data_ES;
 
   const form = useForm<ThirdFormValues>({
     resolver: zodResolver(thirdFormSchema),
@@ -81,15 +78,15 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
       }
 
       // - Generate a unique ID for the user
-      const nameFirstFive = application.firstForm.name
-        .slice(0, 5)
-        .replace(/\s/g, ""); // Extract first 5 letters and remove spaces
+      const nameFirstFive = application.firstForm.name.slice(0, 5).replace(/\s/g, ""); // Extract first 5 letters and remove spaces
       const currentTimeStamp = Date.now().toString().slice(-5); // Extract last 5 digits of current timestamp
       const documentId = `${nameFirstFive}-${currentTimeStamp}`;
 
       const updatedThirdForm = {
         ...application.thirdForm,
         ...data,
+        social_media: data.social_media || "",  //normalize data
+        job_type: data.job_type || "",          //normalize data
       };
 
       const completedApplication: ApplicantProfile = {
@@ -98,7 +95,6 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
         uuid: documentId,
         photo: "",
       };
-
       await createApplicantDoc(documentId, completedApplication);
 
       setIsLoading(false);
