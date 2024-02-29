@@ -20,7 +20,7 @@ import {
   toastIncorrectPassword,
 } from "@/lib/customToast";
 
-import { HomePageData } from "@/lib/types/translation-types";
+import { HomePageData } from "@/lib/interfaces/localeInterfaces";
 import Data_EN from "@/lib/translations/home-page/home_en.json";
 import Data_ES from "@/lib/translations/home-page/home_es.json";
 

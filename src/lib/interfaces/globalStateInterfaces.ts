@@ -1,11 +1,11 @@
-import { RawApplicantProfile } from "./rawapplicant-type";
+import { ApplicantProfile } from "./applicantInterfaces";
 
 export interface GlobalStateInterface {
   isAuthenticatedApplicant: boolean;
   isAuthenticatedTenant: boolean;
   loggedTenant: string;
   locale: "EN" | "ES";
-  applicantPool: RawApplicantProfile[] | null;
+  applicantPool: ApplicantProfile[] | null;
   isLoading: boolean;
   error: string;
 }
@@ -20,11 +20,10 @@ export type ActionType =
   | { type: "SET_LOCALE"; payload: "EN" | "ES" }
   | { type: "FETCH_INIT" }
   | { type: "FETCH_FAILURE"; payload: string }
-  | { type: "FETCH_SUCCESS"; payload: RawApplicantProfile[] }
-  | { type: "UPDATE_APPLICANT_POOL"; payload: Partial<RawApplicantProfile[]> }
+  | { type: "FETCH_SUCCESS"; payload: ApplicantProfile[] }
+  | { type: "UPDATE_APPLICANT_POOL"; payload: Partial<ApplicantProfile[]> }
   | { type: "PURGE_STATE" };
 
-// default or initial state of global values
 export const initialState: GlobalStateInterface = {
   isAuthenticatedApplicant: false,
   isAuthenticatedTenant: false,

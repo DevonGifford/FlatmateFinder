@@ -25,8 +25,8 @@ import {
 } from "@/components/ui/select";
 
 import { languages } from "@/lib/constants/constants";
-import { ApplicantProfile } from "@/lib/types/applicant-type";
-import { FirstFormData } from "@/lib/types/translation-types";
+import { ApplicationInterface } from "@/lib/interfaces/applicationInterfaces";
+import { FirstFormData } from "@/lib/interfaces/localeInterfaces";
 
 import Data_EN from "@/lib/translations/applicant-form/firstform_en.json";
 import Data_ES from "@/lib/translations/applicant-form/firstform_es.json";
@@ -65,14 +65,14 @@ const firstFormSchema = z.object({
 type FirstFormValues = z.infer<typeof firstFormSchema>;
 
 interface FirstFormProps {
-  application: ApplicantProfile | null;
-  setApplication: React.Dispatch<React.SetStateAction<ApplicantProfile>>;
+  application: ApplicationInterface | null;
+  setApplication: React.Dispatch<React.SetStateAction<ApplicationInterface>>;
 }
 
 export function FirstForm({ application, setApplication }: FirstFormProps) {
   const navigate = useNavigate();
   const { locale } = useGlobalState();
-  const setLanguage: FirstFormData = locale === "EN" ? Data_EN : Data_ES;
+  const localeData: FirstFormData = locale === "EN" ? Data_EN : Data_ES;
 
   const defaultValues: FirstFormValues = application!.firstForm;
   const form = useForm<FirstFormValues>({
@@ -82,15 +82,15 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
 
   function onSubmit(data: FirstFormValues) {
     try {
-      const formData: Partial<ApplicantProfile> = {
+      const formData: Partial<ApplicationInterface> = {
         firstForm: {
           ...data,
         },
       };
 
-      setApplication((prevApplication) => {
+      setApplication((existingData) => {
         return {
-          ...prevApplication,
+          ...existingData,
           ...formData,
         };
       });
@@ -116,7 +116,7 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="flex text-center justify-center">
-                {setLanguage.name}
+                {localeData.name}
               </FormLabel>
 
               <FormControl>
@@ -152,9 +152,9 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
           render={({ field }) => (
             <FormItem className="rounded-lg border p-4">
               <FormLabel className="flex flex-col gap-1 text-center justify-center">
-                {setLanguage.spoken}
+                {localeData.spoken}
                 <p className="text-xs font-thin italic">
-                  {setLanguage.optional}
+                  {localeData.optional}
                 </p>
               </FormLabel>
               <FormControl>
@@ -181,7 +181,7 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
             control={form.control}
             render={({ field }) => (
               <FormItem className="rounded-lg border p-4">
-                <FormLabel>{setLanguage.gender}</FormLabel>
+                <FormLabel>{localeData.gender}</FormLabel>
                 <FormControl>
                   <ToggleGroup
                     size="sm"
@@ -209,14 +209,14 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
             control={form.control}
             render={({ field }) => (
               <FormItem className="flex flex-col rounded-lg border p-4 px-8">
-                <FormLabel>{setLanguage.age}</FormLabel>
+                <FormLabel>{localeData.age}</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder={`${setLanguage.age}`} />
+                      <SelectValue placeholder={`${localeData.age}`} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -244,7 +244,7 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
           className="rounded-lg text-sm md:text-base lg:text-xl p-4 px-8 md:px-12 md:py-6"
           size={"lg"}
         >
-          {setLanguage.nextbutton}
+          {localeData.nextbutton}
         </Button>
       </form>
     </Form>

@@ -25,8 +25,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import { SecondFormData } from "@/lib/types/translation-types";
-import { ApplicantProfile } from "@/lib/types/applicant-type";
+import { SecondFormData } from "@/lib/interfaces/localeInterfaces";
+import { ApplicationInterface } from "@/lib/interfaces/applicationInterfaces";
 
 import Data_EN from "@/lib/translations/applicant-form/secondform_en.json";
 import Data_ES from "@/lib/translations/applicant-form/secondform_es.json";
@@ -52,14 +52,14 @@ const secondFormSchema = z.object({
 type SecondFormValues = z.infer<typeof secondFormSchema>;
 
 interface SecondFormProps {
-  application: ApplicantProfile | null;
-  setApplication: React.Dispatch<React.SetStateAction<ApplicantProfile>>;
+  application: ApplicationInterface | null;
+  setApplication: React.Dispatch<React.SetStateAction<ApplicationInterface>>;
 }
 
 export function SecondForm({ application, setApplication }: SecondFormProps) {
   const navigate = useNavigate();
   const { locale } = useGlobalState();
-  const setLanguage: SecondFormData = locale === "EN" ? Data_EN : Data_ES;
+  const localeData: SecondFormData = locale === "EN" ? Data_EN : Data_ES;
 
   const defaultValues: SecondFormValues = application!.secondForm;
   const form = useForm<SecondFormValues>({
@@ -69,15 +69,15 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
 
   function onSubmit(data: SecondFormValues) {
     try {
-      const formData: Partial<ApplicantProfile> = {
+      const formData: Partial<ApplicationInterface> = {
         secondForm: {
           ...data,
         },
       };
 
-      setApplication((prevApplication) => {
+      setApplication((existingData) => {
         return {
-          ...prevApplication,
+          ...existingData,
           ...formData,
         };
       });
@@ -104,9 +104,9 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
           render={({ field }) => (
             <FormItem className="flex flex-col min-w-[300px]">
               <FormLabel className="flex flex-col gap-1 text-center justify-center">
-                {setLanguage.headingMoveDate}
+                {localeData.headingMoveDate}
                 <p className="text-xs font-thin italic">
-                  {setLanguage.descriptionMoveDate}
+                  {localeData.descriptionMoveDate}
                 </p>
               </FormLabel>
 
@@ -124,7 +124,7 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
                         {field.value instanceof Date ? (
                           <span>{field.value.toDateString()}</span>
                         ) : (
-                          <span>{setLanguage.pickDate}</span>
+                          <span>{localeData.pickDate}</span>
                         )}
                       </span>
                       <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
@@ -157,7 +157,7 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
           render={({ field: { onChange } }) => (
             <FormItem className="space-y-5">
               <div className="flex flex-col items-center pb-2">
-                <FormLabel>{setLanguage.headingETAStay}</FormLabel>
+                <FormLabel>{localeData.headingETAStay}</FormLabel>
               </div>
 
               <FormControl className="mx-4 w-11/12">
@@ -175,19 +175,19 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
               <div className="flex justify-between text-xs text-muted-foreground sm:w-11/12">
                 <div className="flex flex-col text-center">
                   <p>3</p>
-                  <p className="w-full">{setLanguage.months}</p>
+                  <p className="w-full">{localeData.months}</p>
                 </div>
                 <div className="flex flex-col text-center">
                   <p>6</p>
-                  <p className="w-full">{setLanguage.months}</p>
+                  <p className="w-full">{localeData.months}</p>
                 </div>
                 <div className="flex flex-col items-center text-center">
                   <p>1</p>
-                  <p>{setLanguage.year}</p>
+                  <p>{localeData.year}</p>
                 </div>
                 <div className="flex flex-col items-center text-center">
                   <p>+?</p>
-                  <p>{setLanguage.year}s</p>
+                  <p>{localeData.year}s</p>
                 </div>
               </div>
 
@@ -202,7 +202,7 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
           control={form.control}
           render={({ field }) => (
             <FormItem className="rounded-lg border p-4">
-              <FormLabel>{setLanguage.headingTypeViewing}</FormLabel>
+              <FormLabel>{localeData.headingTypeViewing}</FormLabel>
               <FormControl>
                 <ToggleGroup
                   type="single"
@@ -215,20 +215,20 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
                     className="flex flex-col items-center justify-center text-center gap-1"
                   >
                     <User className="font-bold" size={18} />
-                    <span className="text-xs">{setLanguage.inPerson}</span>
+                    <span className="text-xs">{localeData.inPerson}</span>
                   </ToggleGroupItem>
                   <ToggleGroupItem
                     value="videocall"
                     className="flex flex-col items-center justify-center text-center gap-1"
                   >
                     <Video size={18} />
-                    <span className="text-xs">{setLanguage.videoCall}</span>
+                    <span className="text-xs">{localeData.videoCall}</span>
                   </ToggleGroupItem>
                 </ToggleGroup>
               </FormControl>
               <span className="text-xs text-slate-500">
                 {" "}
-                *{setLanguage.schedule}
+                *{localeData.schedule}
               </span>
               <FormMessage />
             </FormItem>
@@ -242,14 +242,14 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="flex flex-col gap-1 text-center justify-center">
-                <p>{setLanguage.headingMoreInfo}</p>
+                <p>{localeData.headingMoreInfo}</p>
                 <p className="text-xs font-thin italic">
-                  {setLanguage.optional}
+                  {localeData.optional}
                 </p>
               </FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder={`${setLanguage.specialRequestQuestion}`}
+                  placeholder={`${localeData.specialRequestQuestion}`}
                   {...field}
                 />
               </FormControl>
@@ -264,7 +264,7 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
           className="rounded-lg text-sm md:text-base lg:text-xl p-4 px-8 md:px-12 md:py-6"
           size={"lg"}
         >
-          {setLanguage.nextbutton}
+          {localeData.nextbutton}
         </Button>
       </form>
     </Form>

@@ -7,10 +7,10 @@ import { FirstForm } from "@/components/forms/first-form";
 import { ThirdForm } from "@/components/forms/third-form";
 import { SecondForm } from "@/components/forms/second-form";
 import { ArrowLeftToLine } from "lucide-react";
-import { ApplicantProfile, defaultApplicant } from "@/lib/types/applicant-type";
+import { ApplicationInterface, defaultApplication } from "@/lib/interfaces/applicationInterfaces";
 
 const ApplicationPage: React.FC = () => {
-  const [application, setApplication] = useState<ApplicantProfile>(defaultApplicant);
+  const [application, setApplication] = useState<ApplicationInterface>(defaultApplication);
   const { pageId } = useURLState();
   const navigate = useNavigate();
   useRequireApplicant();

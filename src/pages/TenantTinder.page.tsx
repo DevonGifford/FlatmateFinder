@@ -7,8 +7,8 @@ import { updateRanking } from "@/lib/firebase/firestore";
 import { toastError } from "@/lib/customToast";
 import { ProfilePic } from "@/components/ProfilePic";
 import { StarRating } from "@/components/StarRating";
-import { Rankings } from "@/lib/types/rawapplicant-type";
-import { ApplicantProfile } from "@/lib/types/applicant-type";
+import { Rankings } from "@/lib/interfaces/applicantInterfaces";
+import { ApplicationInterface } from "@/lib/interfaces/applicationInterfaces";
 import { Timestamp } from "firebase/firestore";
 import {
   Card,
@@ -106,7 +106,7 @@ export default function TenantTinderPage() { useRequireTenant();
   const onCardLeftScreen = (cardIndex: number) => {
     if (applicantPool && applicantPool[cardIndex]?.rankings) {
       const updatedRankings = applicantPool[cardIndex]
-        .rankings as Partial<ApplicantProfile>;
+        .rankings as Partial<ApplicationInterface>;
 
       updateRanking(applicantPool[cardIndex].uuid, updatedRankings);
     } else {

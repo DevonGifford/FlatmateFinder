@@ -5,7 +5,7 @@ import {
   ActionType,
   GlobalStateInterface,
   initialState,
-} from "@/lib/types/global-types";
+} from "@/lib/interfaces/globalStateInterfaces";
 
 // Define separate contexts for state and dispatch
 export const GlobalStateContext = createContext<GlobalStateInterface | undefined>(undefined);

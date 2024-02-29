@@ -12,10 +12,10 @@ import {
   getDocs,
 } from "firebase/firestore";
 import db from "./config";
-import { ApplicantProfile } from "../types/applicant-type";
+import { ApplicationInterface } from "../interfaces/applicationInterfaces";
 import { toastError, toastSuccess } from "../customToast";
-import { RawApplicantProfile } from "../types/rawapplicant-type";
-import { DispatchAction } from "../types/global-types";
+import { ApplicantProfile } from "../interfaces/applicantInterfaces";
+import { DispatchAction } from "../interfaces/globalStateInterfaces";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Data = Record<string, any>;
@@ -25,7 +25,7 @@ const firestore: Firestore = db;
 
 export const createApplicantDoc = async (
   documentId: DocumentId,
-  userData: ApplicantProfile
+  userData: ApplicationInterface
 ) => {
   try {
     const collectionRef = collection(firestore, "applicants");
@@ -48,7 +48,7 @@ export const createApplicantDoc = async (
 export async function fetchApplicantPool(dispatch: DispatchAction) {
   try {
     const querySnapshot = await getDocs(collection(db, "applicants"));
-    const fetchedData: RawApplicantProfile[] = [];
+    const fetchedData: ApplicantProfile[] = [];
 
     querySnapshot.forEach((doc) => {
       const {
@@ -62,7 +62,7 @@ export async function fetchApplicantPool(dispatch: DispatchAction) {
       } = doc.data();
 
       if (uuid && firstForm && secondForm && thirdForm && applicationDate) {
-        const profile: RawApplicantProfile = {
+        const profile: ApplicantProfile = {
           id: doc.id,
           uuid,
           firstForm,
@@ -109,14 +109,14 @@ export const updateDocument = async (
 
 export const updateRanking = async (
   userId: string,
-  updatedRankings: Partial<ApplicantProfile>
+  updatedRankings: Partial<ApplicationInterface>
 ) => {
   const applicantDocRef = doc(db, "applicants", userId);
 
   try {
     const docSnapshot = await getDoc(applicantDocRef);
     if (docSnapshot.exists()) {
-      const existingData = docSnapshot.data() as ApplicantProfile;
+      const existingData = docSnapshot.data() as ApplicationInterface;
 
       const mergedRankings = {
         ...existingData.rankings,

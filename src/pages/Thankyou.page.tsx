@@ -1,7 +1,7 @@
 import { useGlobalState } from "@/lib/hooks/useGlobalState";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ThankyouPageData } from "@/lib/types/translation-types";
+import { ThankyouPageData } from "@/lib/interfaces/localeInterfaces";
 
 import Data_EN from "@/lib/translations/thankyou-page/thankyou_en.json";
 import Data_ES from "@/lib/translations/thankyou-page/thankyou_es.json";
