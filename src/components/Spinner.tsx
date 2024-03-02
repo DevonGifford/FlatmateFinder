@@ -26,6 +26,10 @@ export const Spinner = ({ size }: SpinnerProps) => {
         "text-muted-foreground animate-spin slower",
         spinnerVariants({ size })
       )}
+      data-testid="spinner-svg" 
+      role="progressbar" 
+      aria-valuetext="Loading" 
+      aria-busy="true" 
     />
   );
 };

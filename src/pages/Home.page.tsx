@@ -87,6 +87,7 @@ export default function HomePage() {
       });
     }
     navigate("/admin-welcome");
+    toastCorrectPassword();
   }
 
   return (
