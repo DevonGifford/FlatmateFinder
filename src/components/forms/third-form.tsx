@@ -1,12 +1,9 @@
-"use client";
-
 import * as z from "zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
-import { useApplicantContext } from "@/contexts/applicant/useApplicantContext";
-import { useLanguageContext } from "@/contexts/language/useLanguageContext";
+import { useGlobalState } from "@/lib/hooks/useGlobalState";
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Textarea } from "@/components/ui/textarea";
@@ -21,10 +18,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Building, Home, Link, Video } from "lucide-react";
-import { ApplicantProfile } from "@/lib/types/applicant-type";
+import { ApplicationInterface, defaultApplication } from "@/lib/interfaces/applicationInterfaces";
 import { createApplicantDoc } from "@/lib/firebase/firestore";
 import { toastError, toastFormComplete } from "@/lib/customToast";
-import { ThirdFormData } from "@/lib/types/translation-types";
+import { ThirdFormData } from "@/lib/interfaces/localeInterfaces";
 
 import Data_EN from "@/lib/translations/applicant-form/thirdform_en.json";
 import Data_ES from "@/lib/translations/applicant-form/thirdform_es.json";
@@ -57,57 +54,56 @@ const thirdFormSchema = z.object({
 });
 type ThirdFormValues = z.infer<typeof thirdFormSchema>;
 
-export function ThirdForm() {
+interface ThirdFormProps {
+  application: ApplicationInterface | null;
+  setApplication: React.Dispatch<React.SetStateAction<ApplicationInterface>>;
+}
+
+export function ThirdForm({ application, setApplication }: ThirdFormProps) {
   const navigate = useNavigate();
-  const { updateApplicantContext, applicantProfile } = useApplicantContext();
-  const { language } = useLanguageContext();
   const [isLoading, setIsLoading] = useState(false);
-  
-  const setLanguage: ThirdFormData = language === "english" ? Data_EN : Data_ES;
+  const { locale } = useGlobalState();
+  const localeData: ThirdFormData = locale === "EN" ? Data_EN : Data_ES;
 
   const form = useForm<ThirdFormValues>({
     resolver: zodResolver(thirdFormSchema),
   });
 
   async function onSubmit(data: ThirdFormValues) {
-    setIsLoading(true);
-    if (applicantProfile) {
-      //- Generate a unique ID for the user
-      const secretVar = import.meta.env.VITE_SECRET_VARIABLE;
-      const nameFirstFive = applicantProfile.firstForm.name
-        .slice(0, 5)
-        .replace(/\s/g, ""); // Extract first 5 letters and remove spaces
-      const currentTimeStamp = Date.now().toString().slice(-5); // Extract last 5 digits of current timestamp
-      const documentId = `${nameFirstFive}-${secretVar}-${currentTimeStamp}`;  //-custom ID
-
-      try {
-        const updatedThirdForm = {
-          ...applicantProfile.thirdForm,
-          ...data,
-          social_media: data.social_media || "",
-        };
-        const updatedProfile: ApplicantProfile = {
-          ...applicantProfile,
-          thirdForm: updatedThirdForm,
-          uuid: documentId,
-          photo: "",
-        };
-
-        updateApplicantContext(updatedProfile);
-        await createApplicantDoc(documentId, updatedProfile);
-
-        setIsLoading(false);
-        toastFormComplete("3");
-        navigate("/thankyou"); //-updating route
-      } catch (error) {
-        setIsLoading(false);
-        toastError();
-        console.error("Error in submitting data", error);
+    try {
+      setIsLoading(true);
+      if (!application) {
+        throw new Error("Error: cannot access applicant context");
       }
-    } else {
+
+      // - Generate a unique ID for the user
+      const nameFirstFive = application.firstForm.name.slice(0, 5).replace(/\s/g, ""); // Extract first 5 letters and remove spaces
+      const currentTimeStamp = Date.now().toString().slice(-5); // Extract last 5 digits of current timestamp
+      const documentId = `${nameFirstFive}-${currentTimeStamp}`;
+
+      const updatedThirdForm = {
+        ...application.thirdForm,
+        ...data,
+        social_media: data.social_media || "",  //normalize data
+        job_type: data.job_type || "",          //normalize data
+      };
+
+      const completedApplication: ApplicationInterface = {
+        ...application,
+        thirdForm: updatedThirdForm,
+        uuid: documentId,
+        photo: "",
+      };
+      await createApplicantDoc(documentId, completedApplication);
+
+      setIsLoading(false);
+      toastFormComplete("3");
+      setApplication(defaultApplication); // Reset application state
+      navigate("/thankyou");              // Update route
+    } catch (error) {
       setIsLoading(false);
       toastError();
-      console.error("Error:  cannot access applicant context");
+      console.error("Error in submitting data", error);
     }
   }
 
@@ -126,7 +122,8 @@ export function ThirdForm() {
             render={({ field }) => (
               <FormItem className="border-none pb-0 min-w-[300px]">
                 <FormLabel className="flex text-center justify-center">
-                  {setLanguage.careerTitle}
+                  {localeData
+              .careerTitle}
                 </FormLabel>
 
                 <FormControl>
@@ -158,21 +155,24 @@ export function ThirdForm() {
                       className="flex flex-col items-center justify-center text-center gap-1"
                     >
                       <Home />
-                      <span className="text-xs">{setLanguage.wfh}</span>
+                      <span className="text-xs">{localeData
+                  .wfh}</span>
                     </ToggleGroupItem>
                     <ToggleGroupItem
                       value="hybrid"
                       className="flex flex-col items-center justify-center text-center gap-1"
                     >
                       <Video />
-                      <span className="text-xs">{setLanguage.hybrid}</span>
+                      <span className="text-xs">{localeData
+                  .hybrid}</span>
                     </ToggleGroupItem>
                     <ToggleGroupItem
                       value="office"
                       className="flex flex-col items-center justify-center text-center gap-1"
                     >
                       <Building />
-                      <span className="text-xs">{setLanguage.office}</span>
+                      <span className="text-xs">{localeData
+                  .office}</span>
                     </ToggleGroupItem>
                   </ToggleGroup>
                 </FormControl>
@@ -189,9 +189,11 @@ export function ThirdForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="flex flex-col gap-1 text-center justify-center">
-                {setLanguage.tellMoreTitle}
+                {localeData
+            .tellMoreTitle}
                 <p className="text-xs font-thin italic">
-                  {setLanguage.tellMoreDescription}
+                  {localeData
+              .tellMoreDescription}
                 </p>
               </FormLabel>
               <FormControl>
@@ -208,9 +210,11 @@ export function ThirdForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="flex flex-col gap-1 text-center justify-center">
-                {setLanguage.hobbiesTitle}
+                {localeData
+            .hobbiesTitle}
                 <p className="text-xs font-thin italic">
-                  {setLanguage.hobbiesPlacholder}
+                  {localeData
+              .hobbiesPlacholder}
                 </p>
               </FormLabel>
               <FormControl>
@@ -226,9 +230,11 @@ export function ThirdForm() {
           render={({ field }) => (
             <FormItem className="rounded-lg border p-4">
               <FormLabel className="flex flex-col gap-1 text-center justify-center">
-                <p>{setLanguage.social}</p>
+                <p>{localeData
+            .social}</p>
                 <p className="text-xs font-thin italic">
-                  {setLanguage.optional}
+                  {localeData
+              .optional}
                 </p>
               </FormLabel>
               <div className="flex flex-row justify-between items-center gap-3">
@@ -246,7 +252,8 @@ export function ThirdForm() {
           className="rounded-lg text-sm md:text-base lg:text-xl p-4 px-8 md:px-16 md:py-6"
           size={"lg"}
         >
-          {isLoading ? <Spinner /> : `${setLanguage.completeButton}`}
+          {isLoading ? <Spinner /> : `${localeData
+        .completeButton}`}
         </Button>
       </form>
     </Form>

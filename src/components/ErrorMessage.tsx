@@ -1,7 +1,7 @@
-import { useDatabase } from "@/contexts/database/useDatabaseContext";
+import { useGlobalState } from "@/lib/hooks/useGlobalState";
 
 export const ErrorMessage = () => {
-  const { error } = useDatabase();
+  const { error } = useGlobalState();
 
   return (
     <p className="text-2xl">

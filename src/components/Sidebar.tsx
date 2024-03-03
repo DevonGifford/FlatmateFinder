@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useAdminContext } from "@/contexts/admin/useAdminContext";
+import { useGlobalDispatch } from "@/lib/hooks/useGlobalDispatch";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -13,7 +13,7 @@ import { Menu } from "lucide-react";
 
 export default function Sidebar() {
   const navigate = useNavigate();
-  const { signOut } = useAdminContext();
+  const dispatch = useGlobalDispatch();
 
   return (
     <>
@@ -26,9 +26,7 @@ export default function Sidebar() {
           <SheetContent side={"left"}>
             <SheetHeader className=" items-center justify-center py-16">
               <SheetTitle>Quick Links</SheetTitle>
-              <SheetDescription>
-                Calle de Muller
-              </SheetDescription>
+              <SheetDescription>Calle de Muller</SheetDescription>
               <div className="flex flex-col w-full gap-8 py-4">
                 <Link
                   to="/admin-tinder"
@@ -50,9 +48,9 @@ export default function Sidebar() {
                 </Link>
                 <Button
                   onClick={() => {
-                    signOut();
+                    dispatch({ type: "RESET_AUTH" });
                     navigate("/");
-                    window.location.reload();  //🎯 to-do-list remove
+                    window.location.reload(); //🎯 to-do-list remove
                   }}
                   className="flex text-xl font-semibold w-full h-14 rounded-xl justify-center items-center hover:bg-slate-300"
                 >

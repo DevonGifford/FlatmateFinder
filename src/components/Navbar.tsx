@@ -1,25 +1,16 @@
-import { useContext } from "react";
 import { useMatch, useNavigate } from "react-router-dom";
-import {
-  Language,
-  LanguageContext,
-} from "@/contexts/language/LanguageProvider";
+import { useGlobalState } from "@/lib/hooks/useGlobalState";
+import { useGlobalDispatch } from "@/lib/hooks/useGlobalDispatch";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { HelpCircle, HomeIcon, XSquare } from "lucide-react";
 
 export default function Navbar() {
-  const navigate = useNavigate();
   const match = useMatch("*"); //- match any route
-
-  const { language, setLanguage } = useContext(LanguageContext);
-  
-  const changeLanguage = (newLanguage: Language) => {
-    setLanguage(newLanguage);
-  };
-  
-  // 🎯 to-do-list - refactor 
+  const navigate = useNavigate();
+  const dispatch = useGlobalDispatch();
+  const { locale } = useGlobalState();
 
   return (
     <>
@@ -66,9 +57,14 @@ export default function Navbar() {
           <ToggleGroupItem
             variant={"outline"}
             value="EN"
-            onClick={() => changeLanguage("english")}
+            onClick={() =>
+              dispatch({
+                type: "SET_LOCALE",
+                payload: "EN",
+              })
+            }
             className={`${
-              language === "english" ? "bg-cyan-600/20" : "hover:bg-cyan-600/20"
+              locale === "EN" ? "bg-cyan-600/20" : "hover:bg-cyan-600/20"
             }`}
             aria-label="locale-en"
           >
@@ -79,9 +75,14 @@ export default function Navbar() {
           <ToggleGroupItem
             variant={"outline"}
             value="ES"
-            onClick={() => changeLanguage("spanish")}
+            onClick={() =>
+              dispatch({
+                type: "SET_LOCALE",
+                payload: "ES",
+              })
+            }
             className={`${
-              language === "spanish" ? "bg-cyan-600/20" : "hover:bg-cyan-600/20"
+              locale === "ES" ? "bg-cyan-600/20" : "hover:bg-cyan-600/20"
             }`}
             aria-label="locale-es"
           >

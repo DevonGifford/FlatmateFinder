@@ -1,15 +1,14 @@
-import { useLanguageContext } from "@/contexts/language/useLanguageContext";
+import { useGlobalState } from "@/lib/hooks/useGlobalState";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ThankyouPageData } from "@/lib/types/translation-types";
+import { ThankyouPageData } from "@/lib/interfaces/localeInterfaces";
 
 import Data_EN from "@/lib/translations/thankyou-page/thankyou_en.json";
 import Data_ES from "@/lib/translations/thankyou-page/thankyou_es.json";
 
 export default function ThankyouPage() {
-  const { language } = useLanguageContext();
-  const localeData: ThankyouPageData =
-    language === "english" ? Data_EN : Data_ES;
+  const { locale } = useGlobalState();
+  const localeData: ThankyouPageData = locale === "EN" ? Data_EN : Data_ES;
 
   return (
     <>

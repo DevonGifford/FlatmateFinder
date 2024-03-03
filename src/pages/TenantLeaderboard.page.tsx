@@ -1,16 +1,16 @@
-import { useDatabase } from "@/contexts/database/useDatabaseContext";
-import { useRequireAdmin } from "@/lib/hooks/useRequireAdmin";
+import { useRequireTenant } from "@/lib/hooks/useRequireTenant";
+import { useGlobalState } from "@/lib/hooks/useGlobalState";
 import { ErrorMessage } from "@/components/ErrorMessage";
 import { ProfilePic } from "@/components/ProfilePic";
 import { RatingBadge } from "@/components/RatingBadge";
 import { Spinner } from "@/components/Spinner";
-import { Rankings, RawApplicantProfile } from "@/lib/types/rawapplicant-type";
+import { Rankings, ApplicantProfile } from "@/lib/interfaces/applicantInterfaces";
 
 export default function TenantLeaderboardPage() {
-  useRequireAdmin();
-  const { applicantPool, isLoading, error } = useDatabase();
+  useRequireTenant();
+  const { applicantPool, isLoading, error } = useGlobalState();
 
-  const computeTotalRating = (applicant: RawApplicantProfile): number => {
+  const computeTotalRating = (applicant: ApplicantProfile): number => {
     const {
       dev_star = 0,
       adr_star = 0,
@@ -36,7 +36,7 @@ export default function TenantLeaderboardPage() {
       {error && <ErrorMessage />}
       {sortedApplicants.length > 0 ? (
         sortedApplicants.map(
-          (applicant: RawApplicantProfile, index: number) => (
+          (applicant: ApplicantProfile, index: number) => (
             <div
               key={index}
               className="flex flex-row justify-between items-center gap-3 border-2 p-4 font-semibold text-lg"

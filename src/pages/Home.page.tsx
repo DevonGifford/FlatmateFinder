@@ -2,15 +2,10 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useAdminContext } from "@/contexts/admin/useAdminContext";
-import { useLanguageContext } from "@/contexts/language/useLanguageContext";
+import { useGlobalDispatch } from "@/lib/hooks/useGlobalDispatch";
+import { useGlobalState } from "@/lib/hooks/useGlobalState";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { HomePageData } from "@/lib/types/translation-types";
-import {
-  toastCorrectPassword,
-  toastIncorrectPassword,
-} from "@/lib/customToast";
 import {
   Form,
   FormControl,
@@ -20,7 +15,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  toastCorrectPassword,
+  toastIncorrectPassword,
+} from "@/lib/customToast";
 
+import { HomePageData } from "@/lib/interfaces/localeInterfaces";
 import Data_EN from "@/lib/translations/home-page/home_en.json";
 import Data_ES from "@/lib/translations/home-page/home_es.json";
 
@@ -32,10 +32,9 @@ const FormSchema = z.object({
 
 export default function HomePage() {
   const navigate = useNavigate();
-  const { language } = useLanguageContext();
-  const { setAdminProfile } = useAdminContext();
-
-  const localeData: HomePageData = language === "english" ? Data_EN : Data_ES;
+  const dispatch = useGlobalDispatch();
+  const { locale } = useGlobalState();
+  const localeData: HomePageData = locale === "EN" ? Data_EN : Data_ES;
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -47,33 +46,23 @@ export default function HomePage() {
   function onSubmit(data: z.infer<typeof FormSchema>) {
     const { password } = data;
     switch (password) {
-      // ✔  Tennant Password Check
+      // ✔  Tenant Password Check
       case import.meta.env.VITE_PASSWORD_UNO:
-        setAdminProfile({
-          name: import.meta.env.VITE_PASSWORD_ONE,
-          isAdmin: true,
-        });
-        navigate("/admin-welcome");
-        break;
       case import.meta.env.VITE_PASSWORD_DOS:
-        setAdminProfile({
-          name: import.meta.env.VITE_PASSWORD_TWO,
-          isAdmin: true,
-        });
-        navigate("/admin-welcome");
-        break;
       case import.meta.env.VITE_PASSWORD_TRES:
-        setAdminProfile({
-          name: import.meta.env.VITE_PASSWORD_THREE,
-          isAdmin: true,
+        dispatch({
+          type: "SET_TENANT",
         });
-        navigate("/admin-welcome");
+        handleTenantLogin(password);
         break;
       // ✔  Applicant Password Check
       case import.meta.env.VITE_PASSWORD_ALPHA:
       case import.meta.env.VITE_PASSWORD_BETA:
       case import.meta.env.VITE_PASSWORD_MANGO:
       case import.meta.env.VITE_PASSWORD_CHOCOLATE:
+        dispatch({
+          type: "SET_APPLICANT",
+        });
         toastCorrectPassword();
         navigate("/form");
         break;
@@ -82,6 +71,23 @@ export default function HomePage() {
         toastIncorrectPassword();
         break;
     }
+  }
+
+  function handleTenantLogin(password: string) {
+    const passwordPayloadMap: Record<string, string> = {
+      [import.meta.env.VITE_PASSWORD_UNO]: import.meta.env.VITE_PASSWORD_ONE,
+      [import.meta.env.VITE_PASSWORD_DOS]: import.meta.env.VITE_PASSWORD_TWO,
+      [import.meta.env.VITE_PASSWORD_TRES]: import.meta.env.VITE_PASSWORD_THREE,
+    };
+    const payload = passwordPayloadMap[password];
+    if (payload) {
+      dispatch({
+        type: "SET_TENANT_PROFILE",
+        payload,
+      });
+    }
+    navigate("/admin-welcome");
+    toastCorrectPassword();
   }
 
   return (

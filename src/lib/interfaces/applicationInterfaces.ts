@@ -1,6 +1,4 @@
-import { Timestamp } from "firebase/firestore";
-
-export interface RawApplicantProfile {
+export interface ApplicationInterface {
   uuid: string;
   firstForm: {
     name: string;
@@ -10,7 +8,7 @@ export interface RawApplicantProfile {
     languages?: string[];
   };
   secondForm: {
-    move_date: Timestamp;
+    move_date: Date;
     length_stay: number;
     meet_type: string;
     more_info?: string;
@@ -30,13 +28,32 @@ export interface RawApplicantProfile {
     osc_star?: number;
     osc_bool?: boolean;
   };
-  applicationDate: Timestamp;
+  applicationDate: Date;
   id?: string;
   photo?: string;
 }
 
-export interface Rankings {
-  dev_star?: number;
-  adr_star?: number;
-  osc_star?: number;
-}
+export const defaultApplication: ApplicationInterface = {
+  uuid: "", // Replace with a unique identifier generation logic
+  firstForm: {
+    name: "",
+    age: "",
+    sex: "",
+    phone: "",
+    languages: [],
+  },
+  secondForm: {
+    move_date: new Date(),
+    length_stay: 0,
+    meet_type: "",
+    more_info: "",
+  },
+  thirdForm: {
+    job_title: "",
+    job_type: "",
+    describe: "",
+    hobbies: "",
+    social_media: "",
+  },
+  applicationDate: new Date(),
+};

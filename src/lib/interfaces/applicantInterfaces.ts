@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export interface ApplicantProfile {
   uuid: string;
   firstForm: {
@@ -8,7 +10,7 @@ export interface ApplicantProfile {
     languages?: string[];
   };
   secondForm: {
-    move_date: Date;
+    move_date: Timestamp;
     length_stay: number;
     meet_type: string;
     more_info?: string;
@@ -28,32 +30,13 @@ export interface ApplicantProfile {
     osc_star?: number;
     osc_bool?: boolean;
   };
-  applicationDate: Date;
+  applicationDate: Timestamp;
   id?: string;
   photo?: string;
 }
 
-export const defaultApplicant: ApplicantProfile = {
-  uuid: "", // Replace with a unique identifier generation logic
-  firstForm: {
-    name: "",
-    age: "",
-    sex: "",
-    phone: "",
-    languages: [],
-  },
-  secondForm: {
-    move_date: new Date(),
-    length_stay: 0,
-    meet_type: "",
-    more_info: "",
-  },
-  thirdForm: {
-    job_title: "",
-    job_type: "",
-    describe: "",
-    hobbies: "",
-    social_media: "",
-  },
-  applicationDate: new Date(),
-};
+export interface Rankings {
+  dev_star?: number;
+  adr_star?: number;
+  osc_star?: number;
+}

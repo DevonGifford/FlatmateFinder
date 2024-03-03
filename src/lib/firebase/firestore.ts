@@ -9,10 +9,13 @@ import {
   DocumentSnapshot,
   DocumentData,
   updateDoc,
+  getDocs,
 } from "firebase/firestore";
 import db from "./config";
-import { ApplicantProfile } from "../types/applicant-type";
+import { ApplicationInterface } from "../interfaces/applicationInterfaces";
 import { toastError, toastSuccess } from "../customToast";
+import { ApplicantProfile } from "../interfaces/applicantInterfaces";
+import { DispatchAction } from "../interfaces/globalStateInterfaces";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Data = Record<string, any>;
@@ -22,7 +25,7 @@ const firestore: Firestore = db;
 
 export const createApplicantDoc = async (
   documentId: DocumentId,
-  userData: ApplicantProfile
+  userData: ApplicationInterface
 ) => {
   try {
     const collectionRef = collection(firestore, "applicants");
@@ -41,6 +44,44 @@ export const createApplicantDoc = async (
     toastError();
   }
 };
+
+export async function fetchApplicantPool(dispatch: DispatchAction) {
+  try {
+    const querySnapshot = await getDocs(collection(db, "applicants"));
+    const fetchedData: ApplicantProfile[] = [];
+
+    querySnapshot.forEach((doc) => {
+      const {
+        uuid,
+        firstForm,
+        secondForm,
+        thirdForm,
+        rankings,
+        photo,
+        applicationDate,
+      } = doc.data();
+
+      if (uuid && firstForm && secondForm && thirdForm && applicationDate) {
+        const profile: ApplicantProfile = {
+          id: doc.id,
+          uuid,
+          firstForm,
+          secondForm,
+          thirdForm,
+          applicationDate,
+          rankings,
+          photo,
+        };
+        fetchedData.push(profile);
+      }
+    });
+
+    dispatch({ type: "FETCH_SUCCESS", payload: fetchedData });
+  } catch (err) {
+    console.error("Error fetching data:", err);
+    dispatch({ type: "FETCH_FAILURE", payload: "Something went wrong" });
+  }
+}
 
 export const updateDocument = async (
   collectionName: CollectionName,
@@ -68,14 +109,14 @@ export const updateDocument = async (
 
 export const updateRanking = async (
   userId: string,
-  updatedRankings: Partial<ApplicantProfile>
+  updatedRankings: Partial<ApplicationInterface>
 ) => {
   const applicantDocRef = doc(db, "applicants", userId);
 
   try {
     const docSnapshot = await getDoc(applicantDocRef);
     if (docSnapshot.exists()) {
-      const existingData = docSnapshot.data() as ApplicantProfile;
+      const existingData = docSnapshot.data() as ApplicationInterface;
 
       const mergedRankings = {
         ...existingData.rankings,

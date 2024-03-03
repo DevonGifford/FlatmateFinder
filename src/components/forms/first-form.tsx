@@ -1,11 +1,8 @@
-"use client";
-
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
-import { useLanguageContext } from "../../contexts/language/useLanguageContext";
-import { useApplicantContext } from "../../contexts/applicant/useApplicantContext";
+import { useGlobalState } from "@/lib/hooks/useGlobalState";
 import { toastError, toastFormComplete } from "@/lib/customToast";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -28,8 +25,8 @@ import {
 } from "@/components/ui/select";
 
 import { languages } from "@/lib/constants/constants";
-import { ApplicantProfile } from "@/lib/types/applicant-type";
-import { FirstFormData } from "@/lib/types/translation-types";
+import { ApplicationInterface } from "@/lib/interfaces/applicationInterfaces";
+import { FirstFormData } from "@/lib/interfaces/localeInterfaces";
 
 import Data_EN from "@/lib/translations/applicant-form/firstform_en.json";
 import Data_ES from "@/lib/translations/applicant-form/firstform_es.json";
@@ -67,20 +64,17 @@ const firstFormSchema = z.object({
 });
 type FirstFormValues = z.infer<typeof firstFormSchema>;
 
-export function FirstForm() {
+interface FirstFormProps {
+  application: ApplicationInterface | null;
+  setApplication: React.Dispatch<React.SetStateAction<ApplicationInterface>>;
+}
+
+export function FirstForm({ application, setApplication }: FirstFormProps) {
   const navigate = useNavigate();
-  const { updateApplicantContext, applicantProfile } = useApplicantContext();
+  const { locale } = useGlobalState();
+  const localeData: FirstFormData = locale === "EN" ? Data_EN : Data_ES;
 
-  const { language } = useLanguageContext();
-  const setLanguage: FirstFormData = language === "english" ? Data_EN : Data_ES;
-
-  const defaultValues: FirstFormValues = applicantProfile?.firstForm || {
-    name: "",
-    age: "",
-    sex: "",
-    phone: "",
-    languages: [],
-  };
+  const defaultValues: FirstFormValues = application!.firstForm;
   const form = useForm<FirstFormValues>({
     resolver: zodResolver(firstFormSchema),
     defaultValues,
@@ -88,12 +82,19 @@ export function FirstForm() {
 
   function onSubmit(data: FirstFormValues) {
     try {
-      const formData: Partial<ApplicantProfile> = {
+      const formData: Partial<ApplicationInterface> = {
         firstForm: {
           ...data,
         },
       };
-      updateApplicantContext(formData);
+
+      setApplication((existingData) => {
+        return {
+          ...existingData,
+          ...formData,
+        };
+      });
+
       toastFormComplete("1");
       navigate(`/form?pageId=second-form`); //-updating route
     } catch (error) {
@@ -115,7 +116,7 @@ export function FirstForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="flex text-center justify-center">
-                {setLanguage.name}
+                {localeData.name}
               </FormLabel>
 
               <FormControl>
@@ -151,9 +152,9 @@ export function FirstForm() {
           render={({ field }) => (
             <FormItem className="rounded-lg border p-4">
               <FormLabel className="flex flex-col gap-1 text-center justify-center">
-                {setLanguage.spoken}
+                {localeData.spoken}
                 <p className="text-xs font-thin italic">
-                  {setLanguage.optional}
+                  {localeData.optional}
                 </p>
               </FormLabel>
               <FormControl>
@@ -180,7 +181,7 @@ export function FirstForm() {
             control={form.control}
             render={({ field }) => (
               <FormItem className="rounded-lg border p-4">
-                <FormLabel>{setLanguage.gender}</FormLabel>
+                <FormLabel>{localeData.gender}</FormLabel>
                 <FormControl>
                   <ToggleGroup
                     size="sm"
@@ -208,14 +209,14 @@ export function FirstForm() {
             control={form.control}
             render={({ field }) => (
               <FormItem className="flex flex-col rounded-lg border p-4 px-8">
-                <FormLabel>{setLanguage.age}</FormLabel>
+                <FormLabel>{localeData.age}</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder={`${setLanguage.age}`} />
+                      <SelectValue placeholder={`${localeData.age}`} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -243,7 +244,7 @@ export function FirstForm() {
           className="rounded-lg text-sm md:text-base lg:text-xl p-4 px-8 md:px-12 md:py-6"
           size={"lg"}
         >
-          {setLanguage.nextbutton}
+          {localeData.nextbutton}
         </Button>
       </form>
     </Form>
