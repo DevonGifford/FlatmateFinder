@@ -18,6 +18,7 @@ import App from "@/App";
 import Navbar from "@/components/Navbar";
 import FaqPage from "@/pages/Faq.page";
 import TenantLeaderboardPage from "@/pages/TenantLeaderboard.page";
+import TenantTinderPage from "@/pages/TenantTinder.page";
 
 beforeEach(() => {
   window.history.pushState({}, "", "/");
@@ -264,5 +265,50 @@ describe("Testing Global `applicantPool`, with `isLoading` and `error` states", 
 
     //- Assert
     expect(screen.getByText("Ronald Weasley")).toBeDefined();
+  });
+
+  test("React 19 smoke test - tenant tinder card renders", () => {
+    const mockApplicant: ApplicantProfile = {
+      id: "react-19-smoke-test",
+      uuid: "react-19-smoke-test",
+      firstForm: {
+        name: "React 19 Applicant",
+        phone: "680721466",
+        sex: "male",
+        languages: ["English"],
+        age: "30",
+      },
+      secondForm: {
+        move_date: Timestamp.fromDate(new Date(1702558880828)),
+        length_stay: 0,
+        meet_type: "inperson",
+        more_info: "",
+      },
+      thirdForm: {
+        hobbies: "Testing",
+        job_type: "wfh",
+        describe: "React compatibility smoke test.",
+        social_media: "",
+        job_title: "Engineer",
+      },
+      applicationDate: Timestamp.fromDate(new Date(1702558880828)),
+    };
+
+    render(
+      <MemoryRouter>
+        <GlobalProvider
+          initialState={{
+            ...initialState,
+            isAuthenticatedTenant: true,
+            loggedTenant: "Devon",
+            applicantPool: [mockApplicant],
+          }}
+        >
+          <TenantTinderPage />
+        </GlobalProvider>
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText("React 19 Applicant")).toBeDefined();
   });
 });
