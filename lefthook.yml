@@ -1,0 +1,9 @@
+pre-push:
+  parallel: false
+  jobs:
+    - name: lint
+      run: npm run lint
+    - name: typecheck
+      run: npm run typecheck
+    - name: test
+      run: npm run test -- --run

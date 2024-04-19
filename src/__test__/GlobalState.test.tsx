@@ -67,7 +67,6 @@ describe("Testing the testing environment", () => {
 
     //- Assert
     await waitFor(() => {
-      screen.debug();
       const errorToast = screen.getByText(
         "That's not correct - Eso no está bien"
       );
@@ -75,7 +74,6 @@ describe("Testing the testing environment", () => {
     });
   });
 });
-
 // DONE
 describe("Testing Global `locale`, switching between the two locales", () => {
   test("SET_LOCALE - should render with EN and switch to ES", async () => {
@@ -149,7 +147,7 @@ describe("Testing Global `isAuthenticated` and `loggedTenant`, with password sub
     const startButton = screen.getByRole("button", { name: "Start" });
 
     //- Act
-    await userEvent.type(input, "Devon4B");
+    await userEvent.type(input, "test-tenant-password");
     await userEvent.click(startButton);
 
     //- Assert that the toast notification appears
@@ -170,7 +168,7 @@ describe("Testing Global `isAuthenticated` and `loggedTenant`, with password sub
     const startButton = screen.getByRole("button", { name: "Start" });
 
     //- Act
-    await userEvent.type(input, "Mango");
+    await userEvent.type(input, "test-applicant-password-three");
     await userEvent.click(startButton);
 
     //- Assert that the toast notification appears
@@ -263,106 +261,5 @@ describe("Testing Global `applicantPool`, with `isLoading` and `error` states", 
 
     //- Assert
     expect(screen.getByText("Ronald Weasley")).toBeInTheDocument();
-  });
-});
-
-
-// TODO
-// [ ] UPDATE_APPLICANT_POOL
-// [ ] RESET_AUTH 
-// [ ] PURGE_STATE
-
-// WIP - PROTOTYPE TESTING :
-describe.skip("things I am trying out would be great to get some feedback on where I am going wrong", () => {
-  /*
-  ❌ Failed Attempt to mock useNavigate:
-  
-  const mockedUseNavigate = vi.fn();
-  .mock("react-router-dom", async () => {
-    nst mod = await vi.importActual<typeof import("react-router-dom")>(
-      "react-router-dom"
-      );
-      r turn {
-        ...mod,
-        useNavigate: () => mockedUseNavigate,
-      };
-    });
-  */
-
-  test("❌ Attempt: simple test, from root, expected route change - faq button results in faq page", async () => {
-    // - Assemble
-    render(
-      <GlobalProvider initialState={initialState}>
-        <App />
-      </GlobalProvider>
-    );
-    expect(screen.getByText(/Welcome/i)).toBeInTheDocument();
-    const faqButton = screen.getByLabelText("faq-button");
-    expect(faqButton).toBeInTheDocument();
-
-    // - Act
-    await userEvent.click(faqButton);
-
-    // - Assert: verify if the FAQ page content renders as expected after route change
-    await waitFor(() => {
-      // console.log("Location Pathname:", window.location.pathname);
-      expect(screen.getByText(/Frequently/i)).toBeInTheDocument();  //❌BREAKS HERE  still rendering the old page
-    });
-  });
-
-  test("❌ Attempt: simple test, from component, expected route change - faq button results in faq page", async () => {
-    // - Assemble
-    render(
-      <MemoryRouter>
-        <GlobalProvider initialState={initialState}>
-          <Navbar />
-        </GlobalProvider>
-      </MemoryRouter>
-    );
-    const faqButton = screen.getByLabelText("faq-button");
-    expect(faqButton).toBeInTheDocument();
-    expect(window.location.pathname).toBe("/");
-
-    // - Act:  Click on the FAQ button
-    console.log("Before click:", window.location.pathname);
-    await userEvent.click(faqButton);
-    console.log("After click:", window.location.pathname);
-
-    // - Assert: Assert that URL updated
-    await waitFor(() => {
-      console.log("Location Pathname:", window.location.pathname);
-      expect(window.location.pathname).toBe("/FAQ");  //❌BREAKS HERE
-    });
-  });
-
-  test("❌ Attempt: password entry should update page, thus testing global context reducer + password function", async () => {
-    // - Assemble
-    render(
-      <GlobalProvider initialState={initialState}>
-        <App />
-      </GlobalProvider>
-    );
-    const input = screen.getByLabelText("Enter password");
-    const startButton = screen.getByRole("button", { name: "Start" });
-
-    // - Act: enter password and click start button
-    await userEvent.type(input, "Mango");
-    await userEvent.click(startButton);
-
-    // - Assert: toast notification appears
-    await waitFor(() => {
-      const successToast = screen.getByText("Very good - Muy bien");
-      expect(successToast).toBeInTheDocument();
-      screen.debug();
-    });
-
-    // - Assert:  wait for the component to re-render with the application form page
-    // assert the state has been updated - the state action was thus dispatched and route is now 'unlocked' by applicantGaurd
-    await waitFor(() => {
-      const applicationPage = screen.getByText("Whatsapp");
-      expect(applicationPage).toBeInTheDocument();   //❌BREAKS HERE - not rendering new page
-      screen.debug();
-    });
-    //results in the successful toast notif but does not 'update the route and render that page'
   });
 });

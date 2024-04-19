@@ -6,7 +6,8 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs'],
+  // shadcn/ui files are generated vendor components; app code remains linted normally.
+  ignorePatterns: ['dist', '.eslintrc.cjs', 'src/components/ui'],
   parser: '@typescript-eslint/parser',
   plugins: ['react-refresh'],
   rules: {

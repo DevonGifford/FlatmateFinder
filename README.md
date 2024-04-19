@@ -32,7 +32,7 @@ Tech Used in this Project
 
 <!-- -------------------------------------------------------------------------- -->
 
-Flatmate Finder streamlines the flatmate search process with its user-friendly form for potential flatmates. The submitted data is securely stored via Firebase, ensuring privacy and security. Tenants can then conveniently evaluate and rank applicants using a Tinder-like interface.
+Flatmate Finder streamlines the flatmate search process with its user-friendly form for potential flatmates. Submitted applications are stored in Firebase for this small shared-password demo. Tenants can then conveniently evaluate and rank applicants using a Tinder-like interface.
 
 Built with Vite, TypeScript, Firebase, and Tailwind CSS, Flatmate Finder delivers a seamless user experience for both potential flatmates and current tenants.
 
@@ -62,7 +62,7 @@ Built with Vite, TypeScript, Firebase, and Tailwind CSS, Flatmate Finder deliver
 ### For Potential Flatmates
 
 1. **Form Submission**: Fill out the comprehensive form, providing necessary details and preferences.
-2. **Data Storage**: Submitted data is securely stored on Firebase.
+2. **Data Storage**: Submitted data is stored on Firebase for the demo application.
 
 ### For Current Tenants
 
@@ -135,21 +135,27 @@ Before getting started, make sure you have Node.js installed on your machine. Yo
    npm install
    ```
 
-3. **Firebase Configuration:**
-   - Set up your Firebase project and obtain the necessary credentials.
-   - Update the Firebase configuration in the project.
+3. **Configure the environment:**
+   ```bash
+   cp .env.example .env
+   ```
+   Fill in the Firebase credentials and shared passwords in `.env`. The required variables are
+   documented inline in [.env.example](.env.example). Never commit `.env` or real passwords.
 
 4. **Run the Application:**
    ```bash
    npm run dev
    ```
 
-   This command will start the development server, and you can access the application locally at [http://localhost:3000](http://localhost:3000).
+   This command will start the development server, and you can access the application locally at [http://localhost:5173](http://localhost:5173).
 
 ### Notes
 
-- Ensure that your Firebase configuration is correctly set up to enable features such as data storage and retrieval.
-- You will find firebase mock data as well as function for seeding said mockdata to get started quickly. 
+- Firebase is the live data source for the application; the test suite uses its own in-memory fixtures and does not contact Firestore.
+- `src/assets/realmock-db.json` is retained as a reference fixture; there is currently no seed
+  command for loading it into Firebase.
+- `npm run typecheck` runs the TypeScript check independently. Lefthook installs a pre-push gate
+  for lint, type-check, and the one-shot test suite; CI runs those checks plus the production build.
 - If you encounter any issues during installation, please check the [Issues](link-to-your-issues-page) page for existing solutions or create a new issue if needed.
 
 <!-- CLOSING DIV -->
@@ -168,4 +174,3 @@ This project is licensed under the [MIT License](LICENSE).
 <!-- -------------------------------------------------------------------------- -->
 
 Special thanks to [Vite](https://vitejs.dev/), [TypeScript](https://www.typescriptlang.org/), [Firebase](https://firebase.google.com/), [Tailwind CSS](https://tailwindcss.com/) and [ShadCN](https://ui.shadcn.com/) for enabling the development of this application.
-
