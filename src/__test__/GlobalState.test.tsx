@@ -1,6 +1,5 @@
-import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
-import { test, expect, describe } from "vitest";
+import { test, expect, describe, beforeEach } from "vitest";
 import { screen, render, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { GlobalProvider } from "@/contexts/GlobalProvider";
@@ -20,6 +19,10 @@ import Navbar from "@/components/Navbar";
 import FaqPage from "@/pages/Faq.page";
 import TenantLeaderboardPage from "@/pages/TenantLeaderboard.page";
 
+beforeEach(() => {
+  window.history.pushState({}, "", "/");
+});
+
 // DONE
 describe("Testing the testing environment", () => {
   test("simple render test: successfully renders application", () => {
@@ -31,9 +34,9 @@ describe("Testing the testing environment", () => {
     );
     //- Assert
     const mainHeading = screen.getByText("Calle de Muller");
-    expect(mainHeading).toBeInTheDocument();
+    expect(mainHeading).toBeDefined();
     const subHeading = screen.getByText("Welcome to");
-    expect(subHeading).toBeInTheDocument();
+    expect(subHeading).toBeDefined();
   });
 
   test("simple render test: successfully render individual pages", async () => {
@@ -48,7 +51,7 @@ describe("Testing the testing environment", () => {
     );
 
     //- Assert
-    expect(screen.getByText("Frequently Asked Questions")).toBeInTheDocument();
+    expect(screen.getByText("Frequently Asked Questions")).toBeDefined();
   });
 
   test("simple demo test: form submission with incorrect password, shows toast error message", async () => {
@@ -70,7 +73,7 @@ describe("Testing the testing environment", () => {
       const errorToast = screen.getByText(
         "That's not correct - Eso no está bien"
       );
-      expect(errorToast).toBeInTheDocument();
+      expect(errorToast).toBeDefined();
     });
   });
 });
@@ -85,7 +88,7 @@ describe("Testing Global `locale`, switching between the two locales", () => {
     );
     // Assert initially loads with en locale set
     const subHeadingEN = screen.getByText("Welcome to");
-    expect(subHeadingEN).toBeInTheDocument();
+    expect(subHeadingEN).toBeDefined();
 
     // Act
     const localeSpanishButton = screen.getByRole("radio", {
@@ -100,10 +103,10 @@ describe("Testing Global `locale`, switching between the two locales", () => {
       /^Una contraseña secreta compartida contigo/i
     );
     const startButton = screen.getByText(/^Comenzar/i);
-    expect(welcomeHeading).toBeInTheDocument();
-    expect(passwordHeading).toBeInTheDocument();
-    expect(passwordText).toBeInTheDocument();
-    expect(startButton).toBeInTheDocument();
+    expect(welcomeHeading).toBeDefined();
+    expect(passwordHeading).toBeDefined();
+    expect(passwordText).toBeDefined();
+    expect(startButton).toBeDefined();
   });
 
   test("SET_LOCALE - should render with ES and switch to EN", async () => {
@@ -117,9 +120,9 @@ describe("Testing Global `locale`, switching between the two locales", () => {
     const mainHeading = screen.getByText("Calle de Muller");
     const welcomeHeadingES = screen.getByText(/^Bienvenido a/i);
     const passwordHeadingES = screen.getByText(/^Ingresar contraseña/i);
-    expect(mainHeading).toBeInTheDocument();
-    expect(welcomeHeadingES).toBeInTheDocument();
-    expect(passwordHeadingES).toBeInTheDocument();
+    expect(mainHeading).toBeDefined();
+    expect(welcomeHeadingES).toBeDefined();
+    expect(passwordHeadingES).toBeDefined();
 
     // Act
     const localeEnglishButton = screen.getByRole("radio", {
@@ -130,7 +133,7 @@ describe("Testing Global `locale`, switching between the two locales", () => {
 
     // Assert locale has been updated to EN
     const subHeadingEN = screen.getByText("Welcome to");
-    expect(subHeadingEN).toBeInTheDocument();
+    expect(subHeadingEN).toBeDefined();
   });
 });
 
@@ -153,7 +156,7 @@ describe("Testing Global `isAuthenticated` and `loggedTenant`, with password sub
     //- Assert that the toast notification appears
     await waitFor(() => {
       const successToast = screen.getByText("Very good - Muy bien");
-      expect(successToast).toBeInTheDocument();
+      expect(successToast).toBeDefined();
     });
   });
 
@@ -174,7 +177,7 @@ describe("Testing Global `isAuthenticated` and `loggedTenant`, with password sub
     //- Assert that the toast notification appears
     await waitFor(() => {
       const successToast = screen.getByText("Very good - Muy bien");
-      expect(successToast).toBeInTheDocument();
+      expect(successToast).toBeDefined();
     });
   });
 });
@@ -192,7 +195,7 @@ describe("Testing Global `applicantPool`, with `isLoading` and `error` states", 
     );
 
     // Assert
-    expect(screen.getByText("No data available")).toBeInTheDocument();
+    expect(screen.getByText("No data available")).toBeDefined();
   });
 
   test("FETCH_FAILURE - should render loading spinner while waiting for data", () => {
@@ -204,12 +207,12 @@ describe("Testing Global `applicantPool`, with `isLoading` and `error` states", 
 
     // Assert that the Loader is present
     const loadingAnimation = screen.getByTestId("spinner-svg");
-    expect(loadingAnimation).toBeInTheDocument();
+    expect(loadingAnimation).toBeDefined();
 
     // Assert accessibility attributes
-    expect(loadingAnimation).toHaveAttribute("role", "progressbar");
-    expect(loadingAnimation).toHaveAttribute("aria-valuetext", "Loading");
-    expect(loadingAnimation).toHaveAttribute("aria-busy", "true");
+    expect(loadingAnimation.getAttribute("role")).toBe("progressbar");
+    expect(loadingAnimation.getAttribute("aria-valuetext")).toBe("Loading");
+    expect(loadingAnimation.getAttribute("aria-busy")).toBe("true");
   });
 
   test("FETCH_SUCCESS - should render leader board with mock data", () => {
@@ -260,6 +263,6 @@ describe("Testing Global `applicantPool`, with `isLoading` and `error` states", 
     customRenderLeaderBoard(partialState);
 
     //- Assert
-    expect(screen.getByText("Ronald Weasley")).toBeInTheDocument();
+    expect(screen.getByText("Ronald Weasley")).toBeDefined();
   });
 });
