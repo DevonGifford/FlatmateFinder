@@ -101,7 +101,7 @@ export const updateDocument = async (
     }
     toastSuccess();
     return true;
-  } catch (error) {
+  } catch {
     toastError();
     return false;
   }

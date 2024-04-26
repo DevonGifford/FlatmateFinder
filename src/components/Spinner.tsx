@@ -2,7 +2,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 import { Loader } from "lucide-react";
 
-interface SpinnerProps extends VariantProps<typeof spinnerVariants> {}
+type SpinnerProps = VariantProps<typeof spinnerVariants>;
 
 const spinnerVariants = cva("text-muted-foreground animate-spin slower", {
   variants: {

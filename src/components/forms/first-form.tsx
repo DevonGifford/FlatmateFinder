@@ -2,6 +2,7 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
+import type { Dispatch, SetStateAction } from "react";
 import { useGlobalState } from "@/lib/hooks/useGlobalState";
 import { toastError, toastFormComplete } from "@/lib/customToast";
 import { Input } from "@/components/ui/input";
@@ -33,30 +34,22 @@ import Data_ES from "@/lib/translations/applicant-form/firstform_es.json";
 
 const firstFormSchema = z.object({
   name: z
-    .string({
-      required_error: "⚠",
-    })
+    .string({ error: "⚠" })
     .max(50, {
       message: "⚠ too long",
     }),
   age: z
-    .string({
-      required_error: "⚠",
-    })
+    .string({ error: "⚠" })
     .max(10, {
       message: "⚠ too long",
     }),
   sex: z
-    .string({
-      required_error: "⚠",
-    })
+    .string({ error: "⚠" })
     .max(10, {
       message: "⚠ too long",
     }),
   phone: z
-    .string({
-      required_error: "⚠",
-    })
+    .string({ error: "⚠" })
     .max(16, {
       message: "⚠ too long",
     }),
@@ -66,7 +59,7 @@ type FirstFormValues = z.infer<typeof firstFormSchema>;
 
 interface FirstFormProps {
   application: ApplicationInterface | null;
-  setApplication: React.Dispatch<React.SetStateAction<ApplicationInterface>>;
+  setApplication: Dispatch<SetStateAction<ApplicationInterface>>;
 }
 
 export function FirstForm({ application, setApplication }: FirstFormProps) {
@@ -97,7 +90,7 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
 
       toastFormComplete("1");
       navigate(`/form?pageId=second-form`); //-updating route
-    } catch (error) {
+    } catch {
       toastError();
     }
   }
