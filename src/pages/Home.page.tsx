@@ -2,8 +2,8 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useGlobalDispatch } from "@/lib/hooks/useGlobalDispatch";
-import { useGlobalState } from "@/lib/hooks/useGlobalState";
+import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
+import { useGlobalState } from "@/hooks/useGlobalState";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,9 +20,9 @@ import {
   toastIncorrectPassword,
 } from "@/lib/customToast";
 
-import { HomePageData } from "@/lib/interfaces/localeInterfaces";
-import Data_EN from "@/lib/translations/home-page/home_en.json";
-import Data_ES from "@/lib/translations/home-page/home_es.json";
+import { HomePageData } from "@/types/localeInterfaces";
+import Data_EN from "@/locales/home-page/home_en.json";
+import Data_ES from "@/locales/home-page/home_es.json";
 import { applicantAccess, tenantAccess } from "@/lib/auth/accessPasswords";
 
 const FormSchema = z.object({

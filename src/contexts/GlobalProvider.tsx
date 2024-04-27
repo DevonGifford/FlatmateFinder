@@ -4,7 +4,7 @@ import GlobalReducer from "./GlobalReducer";
 import {
   ActionType,
   GlobalStateInterface,
-} from "@/lib/interfaces/globalStateInterfaces";
+} from "@/types/globalStateInterfaces";
 
 // Define separate contexts for state and dispatch
 export const GlobalStateContext = createContext<GlobalStateInterface | undefined>(undefined);

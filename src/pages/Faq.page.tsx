@@ -1,6 +1,6 @@
-import { useGlobalState } from "@/lib/hooks/useGlobalState";
-import faqData_EN from "@/lib/translations/faq-page/faq_en.json";
-import faqData_ES from "@/lib/translations/faq-page/faq_es.json";
+import { useGlobalState } from "@/hooks/useGlobalState";
+import faqData_EN from "@/locales/faq-page/faq_en.json";
+import faqData_ES from "@/locales/faq-page/faq_es.json";
 import {
   Accordion,
   AccordionContent,

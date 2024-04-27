@@ -16,6 +16,8 @@ html/
 
 # Editor directories and files
 docs/*
+docs/
+docs/**
 AGENTS.md
 .vscode/*
 !.vscode/extensions.json

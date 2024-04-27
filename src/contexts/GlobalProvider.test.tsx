@@ -3,16 +3,16 @@ import { test, expect, describe, beforeEach } from "vitest";
 import { screen, render, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { GlobalProvider } from "@/contexts/GlobalProvider";
-import { ApplicantProfile } from "@/lib/interfaces/applicantInterfaces";
+import { ApplicantProfile } from "@/types/applicantInterfaces";
 import { Timestamp } from "@firebase/firestore";
 import {
   GlobalStateInterface,
   initialState,
-} from "@/lib/interfaces/globalStateInterfaces";
+} from "@/types/globalStateInterfaces";
 import {
   customRenderLeaderBoard,
   customRenderApp,
-} from "./testUtils";
+} from "@/testUtils";
 
 import App from "@/App";
 import Navbar from "@/components/Navbar";

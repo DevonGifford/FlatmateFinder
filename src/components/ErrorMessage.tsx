@@ -1,4 +1,4 @@
-import { useGlobalState } from "@/lib/hooks/useGlobalState";
+import { useGlobalState } from "@/hooks/useGlobalState";
 
 export const ErrorMessage = () => {
   const { error } = useGlobalState();

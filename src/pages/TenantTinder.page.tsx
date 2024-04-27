@@ -1,14 +1,14 @@
 import TinderCard from "react-tinder-card";
 import { useState } from "react";
-import { useGlobalState } from "@/lib/hooks/useGlobalState";
-import { useGlobalDispatch } from "@/lib/hooks/useGlobalDispatch";
-import { useRequireTenant } from "@/lib/hooks/useRequireTenant";
+import { useGlobalState } from "@/hooks/useGlobalState";
+import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
+import { useRequireTenant } from "@/hooks/useRequireTenant";
 import { updateRanking } from "@/lib/firebase/firestore";
 import { toastError } from "@/lib/customToast";
 import { ProfilePic } from "@/components/ProfilePic";
 import { StarRating } from "@/components/StarRating";
-import { Rankings } from "@/lib/interfaces/applicantInterfaces";
-import { ApplicationInterface } from "@/lib/interfaces/applicationInterfaces";
+import { Rankings } from "@/types/applicantInterfaces";
+import { ApplicationInterface } from "@/types/applicationInterfaces";
 import { Timestamp } from "firebase/firestore";
 import {
   Card,

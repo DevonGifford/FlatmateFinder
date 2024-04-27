@@ -1,10 +1,10 @@
-import { useRequireTenant } from "@/lib/hooks/useRequireTenant";
-import { useGlobalState } from "@/lib/hooks/useGlobalState";
+import { useRequireTenant } from "@/hooks/useRequireTenant";
+import { useGlobalState } from "@/hooks/useGlobalState";
 import { ErrorMessage } from "@/components/ErrorMessage";
 import { ProfilePic } from "@/components/ProfilePic";
 import { RatingBadge } from "@/components/RatingBadge";
 import { Spinner } from "@/components/Spinner";
-import { Rankings, ApplicantProfile } from "@/lib/interfaces/applicantInterfaces";
+import { Rankings, ApplicantProfile } from "@/types/applicantInterfaces";
 
 export default function TenantLeaderboardPage() {
   useRequireTenant();

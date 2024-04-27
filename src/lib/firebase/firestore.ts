@@ -12,10 +12,10 @@ import {
   getDocs,
 } from "firebase/firestore";
 import db from "./config";
-import { ApplicationInterface } from "../interfaces/applicationInterfaces";
+import { ApplicationInterface } from "@/types/applicationInterfaces";
 import { toastError, toastSuccess } from "../customToast";
-import { ApplicantProfile } from "../interfaces/applicantInterfaces";
-import { DispatchAction } from "../interfaces/globalStateInterfaces";
+import { ApplicantProfile } from "@/types/applicantInterfaces";
+import { DispatchAction } from "@/types/globalStateInterfaces";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Data = Record<string, any>;

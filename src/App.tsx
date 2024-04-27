@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useGlobalState } from "@/lib/hooks/useGlobalState";
+import { useGlobalState } from "@/hooks/useGlobalState";
 import { Toaster } from "@/components/ui/toaster";
 
 import Navbar from "@/components/Navbar";

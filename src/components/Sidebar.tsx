@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useGlobalDispatch } from "@/lib/hooks/useGlobalDispatch";
+import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,

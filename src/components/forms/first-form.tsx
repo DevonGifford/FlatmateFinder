@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import type { Dispatch, SetStateAction } from "react";
-import { useGlobalState } from "@/lib/hooks/useGlobalState";
+import { useGlobalState } from "@/hooks/useGlobalState";
 import { toastError, toastFormComplete } from "@/lib/customToast";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -26,11 +26,11 @@ import {
 } from "@/components/ui/select";
 
 import { languages } from "@/lib/constants/constants";
-import { ApplicationInterface } from "@/lib/interfaces/applicationInterfaces";
-import { FirstFormData } from "@/lib/interfaces/localeInterfaces";
+import { ApplicationInterface } from "@/types/applicationInterfaces";
+import { FirstFormData } from "@/types/localeInterfaces";
 
-import Data_EN from "@/lib/translations/applicant-form/firstform_en.json";
-import Data_ES from "@/lib/translations/applicant-form/firstform_es.json";
+import Data_EN from "@/locales/applicant-form/firstform_en.json";
+import Data_ES from "@/locales/applicant-form/firstform_es.json";
 
 const firstFormSchema = z.object({
   name: z

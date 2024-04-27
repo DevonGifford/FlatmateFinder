@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { GlobalDispatchContext } from "../../contexts/GlobalProvider";
+import { GlobalDispatchContext } from "@/contexts/GlobalProvider";
 
 export const useGlobalDispatch = () => {
   const context = useContext(GlobalDispatchContext);

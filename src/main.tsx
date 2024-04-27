@@ -4,7 +4,7 @@ import App from "@/App.tsx";
 import { GlobalProvider } from "./contexts/GlobalProvider";
 
 import "./index.css";
-import { initialState } from "./lib/interfaces/globalStateInterfaces";
+import { initialState } from "./types/globalStateInterfaces";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

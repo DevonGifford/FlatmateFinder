@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import { useRequireTenant } from "@/lib/hooks/useRequireTenant";
+import { useRequireTenant } from "@/hooks/useRequireTenant";
 import { Button } from "@/components/ui/button";
-import { useGlobalState } from "@/lib/hooks/useGlobalState";
+import { useGlobalState } from "@/hooks/useGlobalState";
 
 export default function TenantWelcomePage() {
   useRequireTenant();

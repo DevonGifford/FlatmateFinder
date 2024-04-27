@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import type { Dispatch, SetStateAction } from "react";
-import { useGlobalState } from "@/lib/hooks/useGlobalState";
+import { useGlobalState } from "@/hooks/useGlobalState";
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Textarea } from "@/components/ui/textarea";
@@ -19,13 +19,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Building, Home, Link, Video } from "lucide-react";
-import { ApplicationInterface, defaultApplication } from "@/lib/interfaces/applicationInterfaces";
+import { ApplicationInterface, defaultApplication } from "@/types/applicationInterfaces";
 import { createApplicantDoc } from "@/lib/firebase/firestore";
 import { toastError, toastFormComplete } from "@/lib/customToast";
-import { ThirdFormData } from "@/lib/interfaces/localeInterfaces";
+import { ThirdFormData } from "@/types/localeInterfaces";
 
-import Data_EN from "@/lib/translations/applicant-form/thirdform_en.json";
-import Data_ES from "@/lib/translations/applicant-form/thirdform_es.json";
+import Data_EN from "@/locales/applicant-form/thirdform_en.json";
+import Data_ES from "@/locales/applicant-form/thirdform_es.json";
 
 const thirdFormSchema = z.object({
   job_title: z.string({ error: "⚠" }),
