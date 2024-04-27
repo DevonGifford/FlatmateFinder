@@ -179,7 +179,7 @@ export default function TenantTinderPage() { useRequireTenant();
             preventSwipe={["up", "down"]}
             className="absolute w-[310px] md:w-[500px]"
           >
-            <Card className="h-fit overflow-x-auto">
+            <Card className="h-fit overflow-x-auto bg-white shadow-2xl">
               <CardHeader>
                 <CardTitle>{dataItem.firstForm.name}</CardTitle>
                 <CardDescription className="flex flex-row justify-center items-center gap-1 text-base font-semibold ">
