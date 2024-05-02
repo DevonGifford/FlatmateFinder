@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useReducer } from "react";
-import { fetchApplicantPool } from "@/lib/firebase/firestore";
+import { fetchApplicantPool, waitForFirebaseAuth } from "@/lib/firebase/firestore";
 import GlobalReducer from "./GlobalReducer";
 import {
   ActionType,
@@ -19,7 +19,9 @@ export const GlobalProvider: React.FC<Props> = ({ children, initialState }) => {
   const [globalState, dispatch] = useReducer(GlobalReducer, initialState);
 
   useEffect(() => {
-    fetchApplicantPool(dispatch);
+    waitForFirebaseAuth()
+      .then(() => fetchApplicantPool(dispatch))
+      .catch(() => dispatch({ type: "FETCH_FAILURE", payload: "Something went wrong" }));
   }, []);
 
   return (

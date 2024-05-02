@@ -18,6 +18,7 @@ vi.mock("@/lib/auth/accessPasswords", () => ({
 vi.mock("@/lib/firebase/firestore", () => ({
   createApplicantDoc: vi.fn(),
   fetchApplicantPool: vi.fn().mockResolvedValue(undefined),
+  waitForFirebaseAuth: vi.fn().mockResolvedValue(undefined),
   specialCreateCollection: vi.fn(),
   updateDocument: vi.fn(),
   updateRanking: vi.fn(),

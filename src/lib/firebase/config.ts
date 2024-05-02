@@ -1,6 +1,7 @@
 import { initializeApp, getApps, FirebaseApp } from "firebase/app";
 import { Firestore, getFirestore } from "firebase/firestore";
 import { FirebaseStorage, getStorage } from "firebase/storage";
+import { getAuth, signInAnonymously } from "firebase/auth";
 // import { getAnalytics } from "firebase/analytics";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -26,6 +27,11 @@ if (getApps().length === 0) {
 const db : Firestore = getFirestore(app);
 //- Storage exports
 const storage : FirebaseStorage = getStorage(app);
+const auth = getAuth(app);
+
+// Firestore rules require an authenticated request, while the product keeps its
+// shared-password demo gate. Establish a temporary Firebase identity at startup.
+export const authReady = signInAnonymously(auth);
 
 //- Default exports
 export { storage };

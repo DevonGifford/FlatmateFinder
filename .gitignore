@@ -16,10 +16,10 @@ html/
 
 # Editor directories and files
 AGENTS.md
-.vscode/*
-!.vscode/extensions.json
 docs/*
 docs/**
+.vscode/*
+!.vscode/extensions.json
 .idea
 .DS_Store
 *.suo

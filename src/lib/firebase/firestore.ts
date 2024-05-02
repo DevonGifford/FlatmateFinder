@@ -11,7 +11,7 @@ import {
   updateDoc,
   getDocs,
 } from "firebase/firestore";
-import db from "./config";
+import db, { authReady } from "./config";
 import { ApplicationInterface } from "@/types/applicationInterfaces";
 import { toastError, toastSuccess } from "../customToast";
 import { ApplicantProfile } from "@/types/applicantInterfaces";
@@ -22,6 +22,8 @@ export type Data = Record<string, any>;
 export type CollectionName = string;
 export type DocumentId = string;
 const firestore: Firestore = db;
+
+export const waitForFirebaseAuth = () => authReady;
 
 export const createApplicantDoc = async (
   documentId: DocumentId,

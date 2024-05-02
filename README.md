@@ -99,6 +99,9 @@ Before getting started, make sure you have Node.js installed on your machine. Yo
 #### Notes
 
 - Firebase is the live data source for the application; the test suite uses its own in-memory fixtures and does not contact Firestore.
+- Before deploying, enable Firebase Authentication's Anonymous provider and deploy the versioned
+  rules with `firebase deploy --only firestore:rules`. See [docs/SECURITY.md](docs/SECURITY.md) for
+  the exact security model and its limitations.
 - `npm run typecheck` runs the TypeScript check independently. Lefthook installs a pre-push gate
   for lint, type-check, and the one-shot test suite; CI runs those checks plus the production build.
 - If you encounter any issues during installation, please check the [Issues](link-to-your-issues-page) page for existing solutions or create a new issue if needed.
@@ -106,4 +109,3 @@ Before getting started, make sure you have Node.js installed on your machine. Yo
 <!-- CLOSING DIV -->
 </details>
 <br/>
-
