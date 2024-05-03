@@ -1,4 +1,8 @@
-import { vi } from "vitest";
+import { beforeEach, vi } from "vitest";
+
+beforeEach(() => {
+  sessionStorage.clear();
+});
 
 vi.mock("@/lib/auth/accessPasswords", () => ({
   tenantAccess: [

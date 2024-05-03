@@ -181,6 +181,46 @@ describe("Testing Global `isAuthenticated` and `loggedTenant`, with password sub
       expect(successToast).toBeDefined();
     });
   });
+
+  test("hydrates a tenant session from session storage", () => {
+    sessionStorage.setItem(
+      "flatmate-finder-auth",
+      JSON.stringify({
+        isAuthenticatedApplicant: false,
+        isAuthenticatedTenant: true,
+        loggedTenant: "Devon",
+      })
+    );
+    window.history.pushState({}, "", "/admin-welcome");
+
+    render(
+      <GlobalProvider initialState={initialState}>
+        <App />
+      </GlobalProvider>
+    );
+
+    expect(screen.getByText("Welcome to your profile Devon")).toBeDefined();
+  });
+
+  test("logout resets auth and clears the persisted session", async () => {
+    render(
+      <GlobalProvider
+        initialState={{
+          ...initialState,
+          isAuthenticatedTenant: true,
+          loggedTenant: "Devon",
+        }}
+      >
+        <App />
+      </GlobalProvider>
+    );
+
+    await userEvent.click(screen.getByRole("button", { name: "" }));
+    await userEvent.click(screen.getByRole("button", { name: "Logout" }));
+
+    expect(sessionStorage.getItem("flatmate-finder-auth")).toBeNull();
+    expect(screen.getByLabelText("Enter password")).toBeDefined();
+  });
 });
 
 // DONE

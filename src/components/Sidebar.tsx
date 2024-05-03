@@ -50,7 +50,6 @@ export default function Sidebar() {
                   onClick={() => {
                     dispatch({ type: "RESET_AUTH" });
                     navigate("/");
-                    window.location.reload(); //🎯 to-do-list remove
                   }}
                   className="flex text-xl font-semibold w-full h-14 rounded-xl justify-center items-center hover:bg-slate-300"
                 >
