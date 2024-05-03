@@ -7,7 +7,11 @@ import { updateRanking } from "@/lib/firebase/firestore";
 import { toastError } from "@/lib/customToast";
 import { ProfilePic } from "@/components/ProfilePic";
 import { StarRating } from "@/components/StarRating";
-import { Rankings } from "@/types/applicantInterfaces";
+import {
+  getTenantByName,
+  TenantBooleanKey,
+  TenantStarKey,
+} from "@/lib/constants/tenants";
 import { Timestamp } from "firebase/firestore";
 import {
   Card,
@@ -41,7 +45,7 @@ export default function TenantTinderPage() { useRequireTenant();
     Array(applicantPool?.length).fill(0)
   );
 
-  const adminId = (loggedTenant || "").substring(0, 3).toLowerCase();
+  const tenant = getTenantByName(loggedTenant);
 
   //- Handle star-ranking individual applicants - updates global context
   const handleStarClick = (starIndex: number, cardIndex: number) => {
@@ -55,18 +59,9 @@ export default function TenantTinderPage() { useRequireTenant();
       if (cardData) {
         const updatedCard = { ...cardData };
         updatedCard.rankings = updatedCard.rankings || {};
-        switch (loggedTenant) {
-          case "Devon":
-            updatedCard.rankings.dev_star = starIndex + 1;
-            break;
-          case "Oscar":
-            updatedCard.rankings.osc_star = starIndex + 1;
-            break;
-          case "Adrian":
-            updatedCard.rankings.adr_star = starIndex + 1;
-            break;
-          default:
-            break;
+        if (tenant) {
+          const rankingKey = `${tenant.id}_star` as TenantStarKey;
+          updatedCard.rankings[rankingKey] = starIndex + 1;
         }
         dispatch({ type: "UPDATE_APPLICANT_POOL", payload: [updatedCard] });
       }
@@ -81,18 +76,9 @@ export default function TenantTinderPage() { useRequireTenant();
       if (cardData) {
         const updatedCard = { ...cardData };
         updatedCard.rankings = updatedCard.rankings || {};
-        switch (loggedTenant) {
-          case "Devon":
-            updatedCard.rankings.dev_bool = direction === "right";
-            break;
-          case "Oscar":
-            updatedCard.rankings.osc_bool = direction === "right";
-            break;
-          case "Adrian":
-            updatedCard.rankings.adr_bool = direction === "right";
-            break;
-          default:
-            break;
+        if (tenant) {
+          const rankingKey = `${tenant.id}_bool` as TenantBooleanKey;
+          updatedCard.rankings[rankingKey] = direction === "right";
         }
 
         dispatch({ type: "UPDATE_APPLICANT_POOL", payload: [updatedCard] });
@@ -309,7 +295,7 @@ export default function TenantTinderPage() { useRequireTenant();
                       filled={
                         starIndex <
                         (dataItem.rankings?.[
-                          `${adminId}_star` as keyof Rankings
+                          `${tenant?.id}_star` as TenantStarKey
                         ] || 0)
                       }
                     />

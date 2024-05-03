@@ -4,19 +4,23 @@ import { ErrorMessage } from "@/components/ErrorMessage";
 import { ProfilePic } from "@/components/ProfilePic";
 import { RatingBadge } from "@/components/RatingBadge";
 import { Spinner } from "@/components/Spinner";
-import { Rankings, ApplicantProfile } from "@/types/applicantInterfaces";
+import { ApplicantProfile } from "@/types/applicantInterfaces";
+import {
+  tenants,
+  TenantBooleanKey,
+  TenantStarKey,
+} from "@/lib/constants/tenants";
 
 export default function TenantLeaderboardPage() {
   useRequireTenant();
   const { applicantPool, isLoading, error } = useGlobalState();
 
   const computeTotalRating = (applicant: ApplicantProfile): number => {
-    const {
-      dev_star = 0,
-      adr_star = 0,
-      osc_star = 0,
-    }: Rankings = applicant.rankings || {};
-    return dev_star + adr_star + osc_star;
+    return tenants.reduce(
+      (total, tenant) =>
+        total + (applicant.rankings?.[`${tenant.id}_star` as TenantStarKey] || 0),
+      0
+    );
   };
 
   const sortedApplicants = applicantPool
@@ -57,18 +61,21 @@ export default function TenantLeaderboardPage() {
               </div>
               {/* // 👇 INDIV RANKINGS */}
               <div className="flex flex-row w-full justify-evenly">
-                <RatingBadge
-                  boolValue={applicant.rankings?.adr_bool}
-                  starValue={applicant.rankings?.adr_star}
-                />
-                <RatingBadge
-                  boolValue={applicant.rankings?.dev_bool}
-                  starValue={applicant.rankings?.dev_star}
-                />
-                <RatingBadge
-                  boolValue={applicant.rankings?.osc_bool}
-                  starValue={applicant.rankings?.osc_star}
-                />
+                {tenants.map((tenant) => (
+                  <RatingBadge
+                    key={tenant.id}
+                    boolValue={
+                      applicant.rankings?.[
+                        `${tenant.id}_bool` as TenantBooleanKey
+                      ]
+                    }
+                    starValue={
+                      applicant.rankings?.[
+                        `${tenant.id}_star` as TenantStarKey
+                      ]
+                    }
+                  />
+                ))}
               </div>
               {/* // 👇 TOTAL */}
               <p className="text-xl shrink-0">

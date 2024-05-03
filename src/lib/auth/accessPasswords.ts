@@ -1,22 +1,20 @@
+import { tenants } from "@/lib/constants/tenants";
+
 export interface AccessCredential {
   password: string | undefined;
   displayName?: string;
 }
 
-export const tenantAccess: AccessCredential[] = [
-  {
-    password: import.meta.env.VITE_PASSWORD_UNO,
-    displayName: import.meta.env.VITE_PASSWORD_ONE,
-  },
-  {
-    password: import.meta.env.VITE_PASSWORD_DOS,
-    displayName: import.meta.env.VITE_PASSWORD_TWO,
-  },
-  {
-    password: import.meta.env.VITE_PASSWORD_TRES,
-    displayName: import.meta.env.VITE_PASSWORD_THREE,
-  },
+const tenantPasswords = [
+  import.meta.env.VITE_PASSWORD_UNO,
+  import.meta.env.VITE_PASSWORD_DOS,
+  import.meta.env.VITE_PASSWORD_TRES,
 ];
+
+export const tenantAccess: AccessCredential[] = tenants.map((tenant, index) => ({
+  password: tenantPasswords[index],
+  displayName: tenant.name,
+}));
 
 export const applicantAccess: AccessCredential[] = [
   { password: import.meta.env.VITE_PASSWORD_ALPHA },

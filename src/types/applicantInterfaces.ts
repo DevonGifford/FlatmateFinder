@@ -1,4 +1,12 @@
 import { Timestamp } from "firebase/firestore";
+import {
+  TenantBooleanKey,
+  TenantStarKey,
+} from "@/lib/constants/tenants";
+
+export type Rankings = Partial<
+  Record<TenantStarKey, number> & Record<TenantBooleanKey, boolean>
+>;
 
 export interface ApplicantProfile {
   uuid: string;
@@ -22,21 +30,8 @@ export interface ApplicantProfile {
     hobbies: string;
     social_media?: string;
   };
-  rankings?: {
-    dev_star?: number;
-    dev_bool?: boolean;
-    adr_star?: number;
-    adr_bool?: boolean;
-    osc_star?: number;
-    osc_bool?: boolean;
-  };
+  rankings?: Rankings;
   applicationDate: Timestamp;
   id?: string;
   photo?: string;
-}
-
-export interface Rankings {
-  dev_star?: number;
-  adr_star?: number;
-  osc_star?: number;
 }

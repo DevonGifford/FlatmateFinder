@@ -1,5 +1,6 @@
 import { Timestamp } from "firebase/firestore";
 import * as z from "zod";
+import { tenants } from "@/lib/constants/tenants";
 
 const timestampSchema = z.custom<Timestamp>(
   (value) => value instanceof Timestamp,
@@ -7,14 +8,14 @@ const timestampSchema = z.custom<Timestamp>(
 );
 
 const rankingsSchema = z
-  .object({
-    dev_star: z.number().optional(),
-    dev_bool: z.boolean().optional(),
-    adr_star: z.number().optional(),
-    adr_bool: z.boolean().optional(),
-    osc_star: z.number().optional(),
-    osc_bool: z.boolean().optional(),
-  })
+  .object(
+    Object.fromEntries(
+      tenants.flatMap(({ id }) => [
+        [`${id}_star`, z.number().optional()],
+        [`${id}_bool`, z.boolean().optional()],
+      ])
+    )
+  )
   .strict();
 
 export const applicantProfileSchema = z
