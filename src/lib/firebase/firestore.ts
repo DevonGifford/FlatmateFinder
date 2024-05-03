@@ -3,7 +3,6 @@ import {
   collection,
   doc,
   setDoc,
-  addDoc,
   getDoc,
   DocumentReference,
   DocumentSnapshot,
@@ -19,7 +18,6 @@ import {
   parseApplicantProfile,
 } from "@/types/applicantSchemas";
 
-export type CollectionName = string;
 export type DocumentId = string;
 const firestore: Firestore = db;
 
@@ -58,24 +56,6 @@ export async function fetchApplicantPool(dispatch: DispatchAction) {
   }
 }
 
-export const updateDocument = async (
-  collectionName: CollectionName,
-  documentId: DocumentId,
-  data: DocumentData
-): Promise<boolean> => {
-  const collectionRef = collection(firestore, collectionName);
-  const docRef: DocumentReference<DocumentData> = doc(
-    collectionRef,
-    documentId
-  );
-
-  const docSnapshot: DocumentSnapshot<DocumentData> = await getDoc(docRef);
-  if (!docSnapshot.exists()) return false;
-
-  await updateDoc(docRef, data);
-  return true;
-};
-
 export const updateRanking = async (
   userId: string,
   updatedRankings: Partial<NonNullable<ApplicantProfile["rankings"]>>
@@ -94,17 +74,4 @@ export const updateRanking = async (
   };
 
   await updateDoc(applicantDocRef, { rankings: mergedRankings });
-};
-
-export const specialCreateCollection = async <T extends DocumentData>(
-  collectionName: string,
-  data: T
-): Promise<boolean> => {
-  try {
-    const dataCollection = collection(firestore, collectionName);
-    await addDoc(dataCollection, data);
-    return true;
-  } catch {
-    return false;
-  }
 };
