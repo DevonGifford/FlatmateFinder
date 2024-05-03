@@ -8,7 +8,6 @@ import { toastError } from "@/lib/customToast";
 import { ProfilePic } from "@/components/ProfilePic";
 import { StarRating } from "@/components/StarRating";
 import { Rankings } from "@/types/applicantInterfaces";
-import { ApplicationInterface } from "@/types/applicationInterfaces";
 import { Timestamp } from "firebase/firestore";
 import {
   Card,
@@ -105,10 +104,11 @@ export default function TenantTinderPage() { useRequireTenant();
   //- Handle card leaving screen - updates the firestore database
   const onCardLeftScreen = (cardIndex: number) => {
     if (applicantPool && applicantPool[cardIndex]?.rankings) {
-      const updatedRankings = applicantPool[cardIndex]
-        .rankings as Partial<ApplicationInterface>;
+      const updatedRankings = applicantPool[cardIndex].rankings;
 
-      updateRanking(applicantPool[cardIndex].uuid, updatedRankings);
+      void updateRanking(applicantPool[cardIndex].uuid, updatedRankings).catch(
+        () => toastError("Something went wrong")
+      );
     } else {
       toastError("Something went wrong");
     }
