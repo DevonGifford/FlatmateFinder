@@ -78,6 +78,7 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
 
   const form = useForm<ThirdFormValues>({
     resolver: zodResolver(thirdFormSchema(locale)),
+    defaultValues: application!.thirdForm,
   });
 
   async function onSubmit(data: ThirdFormValues) {

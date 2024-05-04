@@ -28,6 +28,7 @@ import {
 
 import { SecondFormData } from "@/types/localeInterfaces";
 import { ApplicationInterface } from "@/types/applicationInterfaces";
+import { getFormStepPath } from "@/lib/constants/formSteps";
 
 import Data_EN from "@/locales/applicant-form/secondform_en.json";
 import Data_ES from "@/locales/applicant-form/secondform_es.json";
@@ -89,7 +90,7 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
       });
 
       toastFormComplete("2");
-      navigate(`/form?pageId=third-form`); //-updating route
+      navigate(getFormStepPath("third-form"));
     } catch {
       toastError();
     }

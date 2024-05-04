@@ -8,17 +8,26 @@ import { ThirdForm } from "@/components/forms/third-form";
 import { SecondForm } from "@/components/forms/second-form";
 import { ArrowLeftToLine } from "lucide-react";
 import { ApplicationInterface, defaultApplication } from "@/types/applicationInterfaces";
+import {
+  formSteps,
+  FormStep,
+  getFormStepPath,
+} from "@/lib/constants/formSteps";
 
 const ApplicationPage: React.FC = () => {
   const [application, setApplication] = useState<ApplicationInterface>(defaultApplication);
   const { pageId } = useURLState();
   const navigate = useNavigate();
   useRequireApplicant();
+  const currentStep: FormStep = formSteps.some(({ id }) => id === pageId)
+    ? (pageId as FormStep)
+    : "first-form";
+  const currentStepIndex = formSteps.findIndex(
+    ({ id }) => id === currentStep
+  );
 
   const getPageIndicatorStyle = (circleId: number) => {
-    if (pageId === "second-form" && circleId === 1) {
-      return "bg-cyan-600/40";
-    } else if (pageId === "third-form" && circleId <= 2) {
+    if (circleId <= currentStepIndex) {
       return "bg-cyan-600/40";
     }
     return "bg-cyan-600/10"; // Default color for incomplete circles
@@ -41,14 +50,14 @@ const ApplicationPage: React.FC = () => {
 
         <div className="flex flex-col sm:w-3/5 max-w-xl">
           {/* Conditional rendering based on router query */}
-          {pageId === "second-form" && (
+          {currentStep === "second-form" && (
             <SecondForm
               key="second-form"
               application={application}
               setApplication={setApplication}
             />
           )}
-          {pageId === "third-form" && (
+          {currentStep === "third-form" && (
             <ThirdForm
               key="third-form"
               application={application}
@@ -57,14 +66,14 @@ const ApplicationPage: React.FC = () => {
           )}
 
           {/* 'go back to previous form' button or render first form */}
-          {pageId ? (
+          {currentStep !== "first-form" ? (
             <div>
               <Button
                 className="text-xs font-bold mt-5"
                 variant={"secondary"}
                 size={"sm"}
                 onClick={() => {
-                  navigate(-1);
+                  navigate(getFormStepPath(formSteps[currentStepIndex - 1].id));
                 }}
               >
                 <ArrowLeftToLine />

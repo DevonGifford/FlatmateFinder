@@ -28,6 +28,7 @@ import {
 import { languages } from "@/lib/constants/constants";
 import { ApplicationInterface } from "@/types/applicationInterfaces";
 import { FirstFormData } from "@/types/localeInterfaces";
+import { getFormStepPath } from "@/lib/constants/formSteps";
 
 import Data_EN from "@/locales/applicant-form/firstform_en.json";
 import Data_ES from "@/locales/applicant-form/firstform_es.json";
@@ -91,7 +92,7 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
       });
 
       toastFormComplete("1");
-      navigate(`/form?pageId=second-form`); //-updating route
+      navigate(getFormStepPath("second-form"));
     } catch {
       toastError();
     }

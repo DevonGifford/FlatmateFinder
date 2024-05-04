@@ -128,13 +128,9 @@ export default function TenantTinderPage() { useRequireTenant();
     }
   };
   const lengthStayIcon = (lengthStay: number) => {
-    if (lengthStay < 80) {
-      return "Long";
-    } else if (lengthStay > 80 && lengthStay < 30) {
-      return "Medium";
-    } else {
-      return "Short";
-    }
+    if (lengthStay < 30) return "Short";
+    if (lengthStay < 80) return "Medium";
+    return "Long";
   };
   const convertTimestamp = (timeStamp: Timestamp) => {
     if (timeStamp?.seconds) {
