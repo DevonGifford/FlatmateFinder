@@ -29,6 +29,10 @@ import {
 import { SecondFormData } from "@/types/localeInterfaces";
 import { ApplicationInterface } from "@/types/applicationInterfaces";
 import { getFormStepPath } from "@/lib/constants/formSteps";
+import {
+  getValidationMessages,
+  mergeApplicationSection,
+} from "@/lib/forms/formUtils";
 
 import Data_EN from "@/locales/applicant-form/secondform_en.json";
 import Data_ES from "@/locales/applicant-form/secondform_es.json";
@@ -43,18 +47,13 @@ type SecondFormValues = {
 const secondFormSchema = (
   locale: "EN" | "ES"
 ): z.ZodType<SecondFormValues, SecondFormValues> => {
-  const requiredMessage =
-    locale === "EN" ? "Please complete this field." : "Completa este campo.";
-  const tooLongMessage =
-    locale === "EN"
-      ? "Please use fewer characters."
-      : "Usa menos caracteres.";
+  const { required, tooLong } = getValidationMessages(locale);
 
   return z.object({
-    move_date: z.date({ error: requiredMessage }),
-    length_stay: z.number({ error: requiredMessage }),
-    meet_type: z.string({ error: requiredMessage }).trim().min(1, requiredMessage),
-    more_info: z.string().max(500, tooLongMessage).optional(),
+    move_date: z.date({ error: required }),
+    length_stay: z.number({ error: required }),
+    meet_type: z.string({ error: required }).trim().min(1, required),
+    more_info: z.string().max(500, tooLong).optional(),
   });
 };
 
@@ -76,18 +75,7 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
 
   function onSubmit(data: SecondFormValues) {
     try {
-      const formData: Partial<ApplicationInterface> = {
-        secondForm: {
-          ...data,
-        },
-      };
-
-      setApplication((existingData) => {
-        return {
-          ...existingData,
-          ...formData,
-        };
-      });
+      mergeApplicationSection(setApplication, "secondForm", data);
 
       toastFormComplete("2");
       navigate(getFormStepPath("third-form"));

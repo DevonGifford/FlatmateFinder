@@ -24,6 +24,7 @@ import { createApplicantDoc } from "@/lib/firebase/firestore";
 import { toastError, toastFormComplete } from "@/lib/customToast";
 import { ThirdFormData } from "@/types/localeInterfaces";
 import { normalizeExternalUrl } from "@/lib/utils";
+import { getValidationMessages } from "@/lib/forms/formUtils";
 
 import Data_EN from "@/locales/applicant-form/thirdform_en.json";
 import Data_ES from "@/locales/applicant-form/thirdform_es.json";
@@ -39,27 +40,18 @@ type ThirdFormValues = {
 const thirdFormSchema = (
   locale: "EN" | "ES"
 ): z.ZodType<ThirdFormValues, ThirdFormValues> => {
-  const requiredMessage =
-    locale === "EN" ? "Please complete this field." : "Completa este campo.";
-  const tooLongMessage =
-    locale === "EN"
-      ? "Please use fewer characters."
-      : "Usa menos caracteres.";
-  const urlMessage =
-    locale === "EN"
-      ? "Enter a valid website URL."
-      : "Introduce una URL válida.";
+  const { required, tooLong, invalidUrl } = getValidationMessages(locale);
 
   return z.object({
-    job_title: z.string({ error: requiredMessage }).trim().min(1, requiredMessage),
+    job_title: z.string({ error: required }).trim().min(1, required),
     job_type: z.string().optional(),
-    describe: z.string({ error: requiredMessage }).trim().min(1, requiredMessage).max(500, tooLongMessage),
-    hobbies: z.string({ error: requiredMessage }).trim().min(1, requiredMessage).max(500, tooLongMessage),
+    describe: z.string({ error: required }).trim().min(1, required).max(500, tooLong),
+    hobbies: z.string({ error: required }).trim().min(1, required).max(500, tooLong),
     social_media: z
       .string()
       .trim()
-      .max(2048, tooLongMessage)
-      .refine((value) => normalizeExternalUrl(value) !== null, urlMessage)
+      .max(2048, tooLong)
+      .refine((value) => normalizeExternalUrl(value) !== null, invalidUrl)
       .transform((value) => normalizeExternalUrl(value) ?? "")
       .optional(),
   });

@@ -29,6 +29,10 @@ import { languages } from "@/lib/constants/constants";
 import { ApplicationInterface } from "@/types/applicationInterfaces";
 import { FirstFormData } from "@/types/localeInterfaces";
 import { getFormStepPath } from "@/lib/constants/formSteps";
+import {
+  getValidationMessages,
+  mergeApplicationSection,
+} from "@/lib/forms/formUtils";
 
 import Data_EN from "@/locales/applicant-form/firstform_en.json";
 import Data_ES from "@/locales/applicant-form/firstform_es.json";
@@ -44,18 +48,13 @@ type FirstFormValues = {
 const firstFormSchema = (
   locale: "EN" | "ES"
 ): z.ZodType<FirstFormValues, FirstFormValues> => {
-  const requiredMessage =
-    locale === "EN" ? "Please complete this field." : "Completa este campo.";
-  const tooLongMessage =
-    locale === "EN"
-      ? "Please use fewer characters."
-      : "Usa menos caracteres.";
+  const { required, tooLong } = getValidationMessages(locale);
 
   return z.object({
-    name: z.string({ error: requiredMessage }).trim().min(1, requiredMessage).max(50, tooLongMessage),
-    age: z.string({ error: requiredMessage }).trim().min(1, requiredMessage).max(10, tooLongMessage),
-    sex: z.string({ error: requiredMessage }).trim().min(1, requiredMessage).max(10, tooLongMessage),
-    phone: z.string({ error: requiredMessage }).trim().min(1, requiredMessage).max(16, tooLongMessage),
+    name: z.string({ error: required }).trim().min(1, required).max(50, tooLong),
+    age: z.string({ error: required }).trim().min(1, required).max(10, tooLong),
+    sex: z.string({ error: required }).trim().min(1, required).max(10, tooLong),
+    phone: z.string({ error: required }).trim().min(1, required).max(16, tooLong),
     languages: z.array(z.string()).optional(),
   });
 };
@@ -78,18 +77,7 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
 
   function onSubmit(data: FirstFormValues) {
     try {
-      const formData: Partial<ApplicationInterface> = {
-        firstForm: {
-          ...data,
-        },
-      };
-
-      setApplication((existingData) => {
-        return {
-          ...existingData,
-          ...formData,
-        };
-      });
+      mergeApplicationSection(setApplication, "firstForm", data);
 
       toastFormComplete("1");
       navigate(getFormStepPath("second-form"));
