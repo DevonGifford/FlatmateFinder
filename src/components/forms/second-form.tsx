@@ -32,18 +32,30 @@ import { ApplicationInterface } from "@/types/applicationInterfaces";
 import Data_EN from "@/locales/applicant-form/secondform_en.json";
 import Data_ES from "@/locales/applicant-form/secondform_es.json";
 
-const secondFormSchema = z.object({
-  move_date: z.date({ error: "⚠" }),
-  length_stay: z.number({ error: "⚠" }),
-  meet_type: z.string({ error: "⚠" }),
-  more_info: z
-    .string()
-    .max(500, {
-      message: "⚠ too long",
-    })
-    .optional(),
-});
-type SecondFormValues = z.infer<typeof secondFormSchema>;
+type SecondFormValues = {
+  move_date: Date;
+  length_stay: number;
+  meet_type: string;
+  more_info?: string;
+};
+
+const secondFormSchema = (
+  locale: "EN" | "ES"
+): z.ZodType<SecondFormValues, SecondFormValues> => {
+  const requiredMessage =
+    locale === "EN" ? "Please complete this field." : "Completa este campo.";
+  const tooLongMessage =
+    locale === "EN"
+      ? "Please use fewer characters."
+      : "Usa menos caracteres.";
+
+  return z.object({
+    move_date: z.date({ error: requiredMessage }),
+    length_stay: z.number({ error: requiredMessage }),
+    meet_type: z.string({ error: requiredMessage }).trim().min(1, requiredMessage),
+    more_info: z.string().max(500, tooLongMessage).optional(),
+  });
+};
 
 interface SecondFormProps {
   application: ApplicationInterface | null;
@@ -57,7 +69,7 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
 
   const defaultValues: SecondFormValues = application!.secondForm;
   const form = useForm<SecondFormValues>({
-    resolver: zodResolver(secondFormSchema),
+    resolver: zodResolver(secondFormSchema(locale)),
     defaultValues,
   });
 

@@ -32,30 +32,32 @@ import { FirstFormData } from "@/types/localeInterfaces";
 import Data_EN from "@/locales/applicant-form/firstform_en.json";
 import Data_ES from "@/locales/applicant-form/firstform_es.json";
 
-const firstFormSchema = z.object({
-  name: z
-    .string({ error: "⚠" })
-    .max(50, {
-      message: "⚠ too long",
-    }),
-  age: z
-    .string({ error: "⚠" })
-    .max(10, {
-      message: "⚠ too long",
-    }),
-  sex: z
-    .string({ error: "⚠" })
-    .max(10, {
-      message: "⚠ too long",
-    }),
-  phone: z
-    .string({ error: "⚠" })
-    .max(16, {
-      message: "⚠ too long",
-    }),
-  languages: z.array(z.string()).optional(),
-});
-type FirstFormValues = z.infer<typeof firstFormSchema>;
+type FirstFormValues = {
+  name: string;
+  age: string;
+  sex: string;
+  phone: string;
+  languages?: string[];
+};
+
+const firstFormSchema = (
+  locale: "EN" | "ES"
+): z.ZodType<FirstFormValues, FirstFormValues> => {
+  const requiredMessage =
+    locale === "EN" ? "Please complete this field." : "Completa este campo.";
+  const tooLongMessage =
+    locale === "EN"
+      ? "Please use fewer characters."
+      : "Usa menos caracteres.";
+
+  return z.object({
+    name: z.string({ error: requiredMessage }).trim().min(1, requiredMessage).max(50, tooLongMessage),
+    age: z.string({ error: requiredMessage }).trim().min(1, requiredMessage).max(10, tooLongMessage),
+    sex: z.string({ error: requiredMessage }).trim().min(1, requiredMessage).max(10, tooLongMessage),
+    phone: z.string({ error: requiredMessage }).trim().min(1, requiredMessage).max(16, tooLongMessage),
+    languages: z.array(z.string()).optional(),
+  });
+};
 
 interface FirstFormProps {
   application: ApplicationInterface | null;
@@ -69,7 +71,7 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
 
   const defaultValues: FirstFormValues = application!.firstForm;
   const form = useForm<FirstFormValues>({
-    resolver: zodResolver(firstFormSchema),
+    resolver: zodResolver(firstFormSchema(locale)),
     defaultValues,
   });
 

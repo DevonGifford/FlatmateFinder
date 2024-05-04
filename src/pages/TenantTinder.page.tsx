@@ -5,6 +5,7 @@ import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
 import { useRequireTenant } from "@/hooks/useRequireTenant";
 import { updateRanking } from "@/lib/firebase/firestore";
 import { toastError } from "@/lib/customToast";
+import { normalizeExternalUrl } from "@/lib/utils";
 import { ProfilePic } from "@/components/ProfilePic";
 import { StarRating } from "@/components/StarRating";
 import {
@@ -217,13 +218,17 @@ export default function TenantTinderPage() { useRequireTenant();
                         )}
                     </div>
                     {/* //👇 SOCIAL MEDIA */}
-                    <a
-                      className="flex flex-row items-center gap-1 hover:text-blue-500 pt-1"
-                      href={`${dataItem.thirdForm.social_media}`}
-                    >
-                      <h3>Social Media Link </h3>
-                      <ExternalLinkIcon size={13} />
-                    </a>
+                    {normalizeExternalUrl(dataItem.thirdForm.social_media) && (
+                      <a
+                        className="flex flex-row items-center gap-1 hover:text-blue-500 pt-1"
+                        href={normalizeExternalUrl(dataItem.thirdForm.social_media) ?? undefined}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <h3>Social Media Link </h3>
+                        <ExternalLinkIcon size={13} />
+                      </a>
+                    )}
                   </div>
                   {/* //👇 PROFILE PICTURE */}
                   <ProfilePic

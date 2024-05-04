@@ -23,31 +23,47 @@ import { ApplicationInterface, defaultApplication } from "@/types/applicationInt
 import { createApplicantDoc } from "@/lib/firebase/firestore";
 import { toastError, toastFormComplete } from "@/lib/customToast";
 import { ThirdFormData } from "@/types/localeInterfaces";
+import { normalizeExternalUrl } from "@/lib/utils";
 
 import Data_EN from "@/locales/applicant-form/thirdform_en.json";
 import Data_ES from "@/locales/applicant-form/thirdform_es.json";
 
-const thirdFormSchema = z.object({
-  job_title: z.string({ error: "⚠" }),
-  job_type: z.string().optional(),
-  describe: z
-    .string({ error: "⚠" })
-    .max(500, {
-      message: "⚠ too long",
-    }),
-  hobbies: z
-    .string({ error: "⚠" })
-    .max(500, {
-      message: "⚠ too long",
-    }),
-  social_media: z
-    .string()
-    .max(30, {
-      message: "⚠ too long",
-    })
-    .optional(),
-});
-type ThirdFormValues = z.infer<typeof thirdFormSchema>;
+type ThirdFormValues = {
+  job_title: string;
+  job_type?: string;
+  describe: string;
+  hobbies: string;
+  social_media?: string;
+};
+
+const thirdFormSchema = (
+  locale: "EN" | "ES"
+): z.ZodType<ThirdFormValues, ThirdFormValues> => {
+  const requiredMessage =
+    locale === "EN" ? "Please complete this field." : "Completa este campo.";
+  const tooLongMessage =
+    locale === "EN"
+      ? "Please use fewer characters."
+      : "Usa menos caracteres.";
+  const urlMessage =
+    locale === "EN"
+      ? "Enter a valid website URL."
+      : "Introduce una URL válida.";
+
+  return z.object({
+    job_title: z.string({ error: requiredMessage }).trim().min(1, requiredMessage),
+    job_type: z.string().optional(),
+    describe: z.string({ error: requiredMessage }).trim().min(1, requiredMessage).max(500, tooLongMessage),
+    hobbies: z.string({ error: requiredMessage }).trim().min(1, requiredMessage).max(500, tooLongMessage),
+    social_media: z
+      .string()
+      .trim()
+      .max(2048, tooLongMessage)
+      .refine((value) => normalizeExternalUrl(value) !== null, urlMessage)
+      .transform((value) => normalizeExternalUrl(value) ?? "")
+      .optional(),
+  });
+};
 
 interface ThirdFormProps {
   application: ApplicationInterface | null;
@@ -61,7 +77,7 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
   const localeData: ThirdFormData = locale === "EN" ? Data_EN : Data_ES;
 
   const form = useForm<ThirdFormValues>({
-    resolver: zodResolver(thirdFormSchema),
+    resolver: zodResolver(thirdFormSchema(locale)),
   });
 
   async function onSubmit(data: ThirdFormValues) {
