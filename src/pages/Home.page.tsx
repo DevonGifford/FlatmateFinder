@@ -85,7 +85,7 @@ export default function HomePage() {
 
       <img
         src="/Tetuan-Splash.jpg"
-        alt="splash-image"
+        alt="Tetuan neighborhood"
         className="rounded-full"
         width={"500px"}
       />

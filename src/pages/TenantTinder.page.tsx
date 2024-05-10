@@ -230,7 +230,7 @@ export default function TenantTinderPage() { useRequireTenant();
                   <ProfilePic
                     src={dataItem.photo}
                     fallbackSrc="/profile-fallback.svg"
-                    alt="profile-pic"
+                    alt={`Profile picture for ${dataItem.firstForm.name}`}
                     width={100}
                     height={100}
                     className="flex justify-center items-center rounded-full"
@@ -288,10 +288,15 @@ export default function TenantTinderPage() { useRequireTenant();
 
               <CardFooter className="flex flex-col text-center pt-1 sm:pt-4 justify-center items-center border-t-2 mx-10">
                 {/* //👇 STAR RATING SYSTEM */}
-                <div className="flex flex-row gap-3 pt-1 ">
+                <div
+                  className="flex flex-row gap-3 pt-1"
+                  role="group"
+                  aria-label={`Star rating for ${dataItem.firstForm.name}`}
+                >
                   {[...Array(5)].map((_, starIndex) => (
                     <StarRating
                       key={starIndex}
+                      label={`Set rating to ${starIndex + 1} star${starIndex === 0 ? "" : "s"}`}
                       onClick={() => handleStarClick(starIndex, index)}
                       filled={
                         starIndex <

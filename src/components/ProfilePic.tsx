@@ -27,21 +27,32 @@ export const ProfilePic: React.FC<ProfilePicProps> = ({
     }
   };
 
+  const image = (
+    <img
+      src={imgSrc}
+      onError={onError}
+      alt={alt}
+      width={width}
+      height={height}
+      style={{
+        width: `${width}px`,
+        height: `${height}px`,
+        objectFit: "cover",
+      }}
+      className={className}
+    />
+  );
+
+  if (!imgSrc || imgError) return image;
+
   return (
-    <a href={imgSrc} target="_blank" rel="noopener noreferrer">
-      <img
-        src={imgSrc}
-        onError={onError}
-        alt={alt}
-        width={width}
-        height={height}
-        style={{
-          width: `${width}px`,
-          height: `${height}px`,
-          objectFit: "cover",
-        }}
-        className={className}
-      />
+    <a
+      href={imgSrc}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`Open ${alt} in a new tab`}
+    >
+      {image}
     </a>
   );
 };

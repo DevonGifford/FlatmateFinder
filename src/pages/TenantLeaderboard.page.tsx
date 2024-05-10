@@ -50,7 +50,7 @@ export default function TenantLeaderboardPage() {
                 <ProfilePic
                   src={applicant.photo}
                   fallbackSrc="/profile-fallback.svg"
-                  alt="profile-pic"
+                  alt={`Profile picture for ${applicant.firstForm.name}`}
                   width={50}
                   height={50}
                   className="flex justify-center items-center rounded-full h-10 w-10"
