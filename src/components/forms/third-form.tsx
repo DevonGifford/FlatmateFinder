@@ -158,7 +158,7 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
                   >
                     <ToggleGroupItem
                       value="wfh"
-                      className="flex flex-col items-center justify-center text-center gap-1 aria-pressed:border-2 aria-pressed:border-primary"
+                      className="min-h-12 min-w-20 px-4 py-2 flex flex-col items-center justify-center text-center gap-1 aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md"
                     >
                       <Home />
                       <span className="text-xs">{localeData
@@ -166,7 +166,7 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
                     </ToggleGroupItem>
                     <ToggleGroupItem
                       value="hybrid"
-                      className="flex flex-col items-center justify-center text-center gap-1 aria-pressed:border-2 aria-pressed:border-primary"
+                      className="min-h-12 min-w-20 px-4 py-2 flex flex-col items-center justify-center text-center gap-1 aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md"
                     >
                       <Video />
                       <span className="text-xs">{localeData
@@ -174,7 +174,7 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
                     </ToggleGroupItem>
                     <ToggleGroupItem
                       value="office"
-                      className="flex flex-col items-center justify-center text-center gap-1 aria-pressed:border-2 aria-pressed:border-primary"
+                      className="min-h-12 min-w-20 px-4 py-2 flex flex-col items-center justify-center text-center gap-1 aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md"
                     >
                       <Building />
                       <span className="text-xs">{localeData

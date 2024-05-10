@@ -201,14 +201,14 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
                 >
                   <ToggleGroupItem
                     value="inperson"
-                    className="flex flex-col items-center justify-center text-center gap-1 aria-pressed:border-2 aria-pressed:border-primary"
+                    className="min-h-12 min-w-20 px-4 py-2 flex flex-col items-center justify-center text-center gap-1 aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md"
                   >
                     <User className="font-bold" size={18} />
                     <span className="text-xs">{localeData.inPerson}</span>
                   </ToggleGroupItem>
                   <ToggleGroupItem
                     value="videocall"
-                    className="flex flex-col items-center justify-center text-center gap-1 aria-pressed:border-2 aria-pressed:border-primary"
+                    className="min-h-12 min-w-20 px-4 py-2 flex flex-col items-center justify-center text-center gap-1 aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md"
                   >
                     <Video size={18} />
                     <span className="text-xs">{localeData.videoCall}</span>
