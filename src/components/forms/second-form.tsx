@@ -197,18 +197,18 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
                   type="single"
                   value={field.value}
                   onValueChange={(value) => field.onChange(value)}
-                  className="pt-2 flex flex-row justify-evenly"
+                  className="w-full pt-2 flex flex-row justify-center"
                 >
                   <ToggleGroupItem
                     value="inperson"
-                    className="flex flex-col items-center justify-center text-center gap-1"
+                    className="flex flex-col items-center justify-center text-center gap-1 aria-pressed:border-2 aria-pressed:border-primary"
                   >
                     <User className="font-bold" size={18} />
                     <span className="text-xs">{localeData.inPerson}</span>
                   </ToggleGroupItem>
                   <ToggleGroupItem
                     value="videocall"
-                    className="flex flex-col items-center justify-center text-center gap-1"
+                    className="flex flex-col items-center justify-center text-center gap-1 aria-pressed:border-2 aria-pressed:border-primary"
                   >
                     <Video size={18} />
                     <span className="text-xs">{localeData.videoCall}</span>

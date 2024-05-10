@@ -147,6 +147,7 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
                   type="multiple"
                   value={field.value}
                   onValueChange={(value) => field.onChange(value)}
+                  className="w-full justify-center"
                 >
                   {languages.map((lang) => (
                     <ToggleGroupItem key={lang.label} value={lang.label}>
@@ -172,14 +173,24 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
                     type="single"
                     value={field.value}
                     onValueChange={(value) => field.onChange(value)}
+                    className="w-full justify-center"
                   >
-                    <ToggleGroupItem value="male">
+                    <ToggleGroupItem
+                      value="male"
+                      className="aria-pressed:border-2 aria-pressed:border-primary"
+                    >
                       <IoMale />
                     </ToggleGroupItem>
-                    <ToggleGroupItem value="female">
+                    <ToggleGroupItem
+                      value="female"
+                      className="aria-pressed:border-2 aria-pressed:border-primary"
+                    >
                       <IoFemale />
                     </ToggleGroupItem>
-                    <ToggleGroupItem value="other">
+                    <ToggleGroupItem
+                      value="other"
+                      className="aria-pressed:border-2 aria-pressed:border-primary"
+                    >
                       <IoMaleFemale />
                     </ToggleGroupItem>
                   </ToggleGroup>

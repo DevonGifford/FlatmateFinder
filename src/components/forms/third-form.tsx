@@ -154,11 +154,11 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
                     type="single"
                     value={field.value}
                     onValueChange={(value) => field.onChange(value)}
-                    className="pt-2 flex flex-row justify-evenly"
+                    className="w-full pt-2 flex flex-row justify-center"
                   >
                     <ToggleGroupItem
                       value="wfh"
-                      className="flex flex-col items-center justify-center text-center gap-1"
+                      className="flex flex-col items-center justify-center text-center gap-1 aria-pressed:border-2 aria-pressed:border-primary"
                     >
                       <Home />
                       <span className="text-xs">{localeData
@@ -166,7 +166,7 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
                     </ToggleGroupItem>
                     <ToggleGroupItem
                       value="hybrid"
-                      className="flex flex-col items-center justify-center text-center gap-1"
+                      className="flex flex-col items-center justify-center text-center gap-1 aria-pressed:border-2 aria-pressed:border-primary"
                     >
                       <Video />
                       <span className="text-xs">{localeData
@@ -174,7 +174,7 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
                     </ToggleGroupItem>
                     <ToggleGroupItem
                       value="office"
-                      className="flex flex-col items-center justify-center text-center gap-1"
+                      className="flex flex-col items-center justify-center text-center gap-1 aria-pressed:border-2 aria-pressed:border-primary"
                     >
                       <Building />
                       <span className="text-xs">{localeData
