@@ -153,16 +153,16 @@ export default function TenantTinderPage() { useRequireTenant();
 
   return (
     <>
-      <div className="flex h-[calc(100vh-10vh)] flex-col justify-center items-center sm:mx-20 md:max-w-10/12 sm:max-w-4/6 gap-2 md:gap-8 overscroll-none">
+      <div className="relative flex min-h-[calc(100vh-10vh)] w-full flex-col items-center justify-center gap-3 overflow-hidden px-2 sm:px-6 md:gap-8">
         {applicantPool?.map((dataItem, index) => (
           <TinderCard
             key={index}
             onSwipe={(direction) => dataItem?.id && onSwipe(direction, index)}
             onCardLeftScreen={() => onCardLeftScreen(index)}
             preventSwipe={["up", "down"]}
-            className="absolute w-[310px] md:w-[500px]"
+            className="absolute w-[min(500px,calc(100vw-1rem))]"
           >
-            <Card className="h-fit overflow-x-auto bg-white shadow-2xl">
+            <Card className="max-h-[calc(100vh-6rem)] h-fit overflow-y-auto bg-white shadow-2xl">
               <CardHeader>
                 <CardTitle>{dataItem.firstForm.name}</CardTitle>
                 <CardDescription className="flex flex-row justify-center items-center gap-1 text-base font-semibold ">

@@ -8,8 +8,8 @@ export default function TenantWelcomePage() {
   const { loggedTenant } = useGlobalState();
 
   return (
-    <div className="flex flex-col justify-center items-center mx-auto max-w-screen-md gap-8 py-8">
-      <header className="flex flex-col text-lg font-bold">
+    <div className="mx-auto flex max-w-screen-md flex-col items-center justify-center gap-8 px-4 py-8 sm:px-6">
+      <header className="flex flex-col text-center text-lg font-bold">
         <h1 className="text-2xl italic pb-2 border-b-2">TENANT PAGE</h1>
         <h2 className="font-thin pt-4">
           Welcome to your profile {loggedTenant}
@@ -17,8 +17,8 @@ export default function TenantWelcomePage() {
       </header>
       <article className="text-lg">
         <h2 className="mb-4 text-3xl">Steps to use the app:</h2>
-        <div className="flex flex-col md:flex-row justify-center items-center gap-8">
-          <section className="flex flex-col w-full md:w-1/2 border-2 p-10 h-[250px]">
+        <div className="flex flex-col items-stretch justify-center gap-6 md:flex-row md:items-center md:gap-8">
+          <section className="flex min-h-[250px] w-full flex-col border-2 p-6 sm:p-8 md:w-1/2">
             <Link to={"/admin-tinder"}>
               <Button>
                 <p className="font-semibold">The Tinderpage.</p>
@@ -34,7 +34,7 @@ export default function TenantWelcomePage() {
             <span className="text-sm italic">Left for no - Right for yes.</span>
           </section>
 
-          <section className="flex flex-col w-full md:w-1/2 border-2 p-10 h-[250px]">
+          <section className="flex min-h-[250px] w-full flex-col border-2 p-6 sm:p-8 md:w-1/2">
             <Link to={"/admin-leaderboard"}>
               <Button>
                 <p className="font-semibold">The Leaderboard.</p>
@@ -51,22 +51,6 @@ export default function TenantWelcomePage() {
           </section>
         </div>
       </article>
-      <aside className="mx-6 border-2 p-10">
-        <h3 className="mb-4 text-lg font-semibold">Known issues:</h3>
-        <p className="mb-4 text-base italic">
-          You may encounter some bugs, potentially particullary on mobile
-          devices.
-        </p>
-        <ul className="list-disc text-start mb-4">
-          <li>
-            Tinder card dropdown buttons may be difficult to click on mobile.
-          </li>
-        </ul>
-        <p className="flex flex-col font-thin italic">
-          <span>If you notice any other issues or have feature requests,</span>
-          <span>just let me know.</span>
-        </p>
-      </aside>
       <footer>
         <p className="font-semibold tracking-wider">
           Lets find our next flatmate

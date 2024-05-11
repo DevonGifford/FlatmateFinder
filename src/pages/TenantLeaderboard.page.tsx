@@ -32,8 +32,8 @@ export default function TenantLeaderboardPage() {
     : [];
 
   return (
-    <>
-      <h1 className="text-2xl italic py-4 pb-6 border-b-2">
+    <section className="mx-auto w-full max-w-5xl px-2 pb-6 sm:px-4">
+      <h1 className="border-b-2 py-4 pb-6 text-2xl italic">
         Current Leaderboard
       </h1>
       {isLoading && <Spinner />}
@@ -43,7 +43,7 @@ export default function TenantLeaderboardPage() {
           (applicant: ApplicantProfile, index: number) => (
             <div
               key={index}
-              className="flex flex-row justify-between items-center gap-3 border-2 p-4 font-semibold text-lg"
+              className="grid grid-cols-[auto_1fr_auto] items-center gap-2 border-2 p-3 text-lg font-semibold sm:flex sm:justify-between sm:gap-3 sm:p-4"
             >
               {/* // 👇 PHOTO & NAME */}
               <div className="flex flex-row gap-3 items-center shrink-0 sm:w-[180px] md:w-[220px]">
@@ -60,7 +60,7 @@ export default function TenantLeaderboardPage() {
                 </p>
               </div>
               {/* // 👇 INDIV RANKINGS */}
-              <div className="flex flex-row w-full justify-evenly">
+              <div className="flex w-full flex-row justify-evenly gap-1">
                 {tenants.map((tenant) => (
                   <RatingBadge
                     key={tenant.id}
@@ -87,6 +87,6 @@ export default function TenantLeaderboardPage() {
       ) : (
         <p>No data available</p>
       )}
-    </>
+    </section>
   );
 }
