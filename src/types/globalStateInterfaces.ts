@@ -21,7 +21,7 @@ export type ActionType =
   | { type: "FETCH_INIT" }
   | { type: "FETCH_FAILURE"; payload: string }
   | { type: "FETCH_SUCCESS"; payload: ApplicantProfile[] }
-  | { type: "UPDATE_APPLICANT_POOL"; payload: Partial<ApplicantProfile[]> }
+  | { type: "UPDATE_APPLICANT_POOL"; payload: Partial<ApplicantProfile>[] }
   | { type: "PURGE_STATE" };
 
 export const initialState: GlobalStateInterface = {
