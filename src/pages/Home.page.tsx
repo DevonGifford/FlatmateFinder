@@ -75,10 +75,12 @@ export default function HomePage() {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center sm:mx-20 md:max-w-10/12 sm:max-w-4/6 gap-5 md:gap-8">
-      <header className="flex flex-col pt-3 items-center md:pt-10">
-        <span className="text-2xl italic ">{localeData.subHeading}</span>
-        <h1 className="text-3xl md:text-4xl lg:text-5xl tracking-wide font-extrabold pb-5 mx-10">
+    <section className="mx-auto flex min-h-[calc(100vh-8rem)] w-full max-w-5xl flex-col items-center justify-center gap-8 px-4 py-8 sm:px-8 md:gap-10 md:py-12">
+      <header className="flex max-w-2xl flex-col items-center gap-2 text-center">
+        <span className="text-xl italic text-muted-foreground sm:text-2xl">
+          {localeData.subHeading}
+        </span>
+        <h1 className="text-3xl font-extrabold tracking-wide sm:text-4xl lg:text-5xl">
           {localeData.mainHeading}
         </h1>
       </header>
@@ -86,41 +88,46 @@ export default function HomePage() {
       <img
         src="/Tetuan-Splash.jpg"
         alt="Tetuan neighborhood"
-        className="rounded-full"
-        width={"500px"}
+        className="aspect-[4/3] w-full max-w-xl rounded-2xl object-cover shadow-lg"
+        width={500}
+        height={375}
       />
 
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="md:w-5/12 space-y-6 py-5"
-        >
-          <FormField
-            name="password"
-            control={form.control}
-            render={({ field }) => (
-              <FormItem className="px-8">
-                <FormLabel className="text-xl sm:text-3xl font-bold">
-                  {localeData.passwordLabel}
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder=""
-                    className="text-center"
-                    autoFocus
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>
-                  {localeData.passwordDescription}
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="submit">{localeData.startButton}</Button>
-        </form>
-      </Form>
-    </div>
+      <div className="w-full max-w-md rounded-2xl border bg-card p-5 shadow-sm sm:p-8">
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col gap-6"
+          >
+            <FormField
+              name="password"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-xl font-bold sm:text-2xl">
+                    {localeData.passwordLabel}
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder=""
+                      className="text-center"
+                      autoFocus
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    {localeData.passwordDescription}
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit" className="w-full">
+              {localeData.startButton}
+            </Button>
+          </form>
+        </Form>
+      </div>
+    </section>
   );
 }
