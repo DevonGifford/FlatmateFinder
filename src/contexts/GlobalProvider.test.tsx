@@ -199,7 +199,7 @@ describe("Testing Global `isAuthenticated` and `loggedTenant`, with password sub
       </GlobalProvider>
     );
 
-    expect(screen.getByText("Welcome to your profile Devon")).toBeDefined();
+    expect(screen.getByText("Welcome, Devon")).toBeDefined();
   });
 
   test("logout resets auth and clears the persisted session", async () => {
