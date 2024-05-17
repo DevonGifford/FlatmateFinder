@@ -28,7 +28,7 @@ export default function FaqPage() {
               <AccordionTrigger className="flex-col justify-center gap-1 py-2 text-lg">
                 {faq.question}
               </AccordionTrigger>
-              <AccordionContent className="mx-8">
+              <AccordionContent className="mx-8 text-left">
                 {faq.answer} {faq.emoji}
               </AccordionContent>
             </AccordionItem>
