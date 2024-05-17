@@ -104,7 +104,7 @@ export default function HomePage() {
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-xl font-bold sm:text-2xl">
+                  <FormLabel className="w-full text-center text-xl font-bold sm:text-2xl">
                     {localeData.passwordLabel}
                   </FormLabel>
                   <FormControl>
@@ -115,7 +115,7 @@ export default function HomePage() {
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>
+                  <FormDescription className="text-center">
                     {localeData.passwordDescription}
                   </FormDescription>
                   <FormMessage />

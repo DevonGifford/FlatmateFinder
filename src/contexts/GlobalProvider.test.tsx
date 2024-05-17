@@ -34,7 +34,7 @@ describe("Testing the testing environment", () => {
       </GlobalProvider>
     );
     //- Assert
-    const mainHeading = screen.getByText("Calle de Muller");
+    const mainHeading = screen.getByText("Flatmate Finder");
     expect(mainHeading).toBeDefined();
     const subHeading = screen.getByText("Welcome to");
     expect(subHeading).toBeDefined();
@@ -65,9 +65,9 @@ describe("Testing the testing environment", () => {
 
     //- Act
     const input = screen.getByLabelText("Enter password");
-    const startButton = screen.getByRole("button", { name: "Start" });
+    const continueButton = screen.getByRole("button", { name: "Continue" });
     await userEvent.type(input, "WrongPassword");
-    await userEvent.click(startButton);
+    await userEvent.click(continueButton);
 
     //- Assert
     await waitFor(() => {
@@ -101,13 +101,13 @@ describe("Testing Global `locale`, switching between the two locales", () => {
     const welcomeHeading = screen.getByText(/^Bienvenido a/i);
     const passwordHeading = screen.getByText(/^Ingresar contraseña/i);
     const passwordText = screen.getByText(
-      /^Una contraseña secreta compartida contigo/i
+      /^Usa la contraseña compartida contigo/i
     );
-    const startButton = screen.getByText(/^Comenzar/i);
+    const continueButton = screen.getByText(/^Continuar/i);
     expect(welcomeHeading).toBeDefined();
     expect(passwordHeading).toBeDefined();
     expect(passwordText).toBeDefined();
-    expect(startButton).toBeDefined();
+    expect(continueButton).toBeDefined();
   });
 
   test("SET_LOCALE - should render with ES and switch to EN", async () => {
@@ -118,7 +118,7 @@ describe("Testing Global `locale`, switching between the two locales", () => {
     customRenderApp(partialState);
 
     // Assert initial render with ES Locale set
-    const mainHeading = screen.getByText("Calle de Muller");
+    const mainHeading = screen.getByText("Flatmate Finder");
     const welcomeHeadingES = screen.getByText(/^Bienvenido a/i);
     const passwordHeadingES = screen.getByText(/^Ingresar contraseña/i);
     expect(mainHeading).toBeDefined();
@@ -148,11 +148,11 @@ describe("Testing Global `isAuthenticated` and `loggedTenant`, with password sub
       </GlobalProvider>
     );
     const input = screen.getByLabelText("Enter password");
-    const startButton = screen.getByRole("button", { name: "Start" });
+    const continueButton = screen.getByRole("button", { name: "Continue" });
 
     //- Act
     await userEvent.type(input, "test-tenant-password");
-    await userEvent.click(startButton);
+    await userEvent.click(continueButton);
 
     //- Assert that the toast notification appears
     await waitFor(() => {
@@ -169,11 +169,11 @@ describe("Testing Global `isAuthenticated` and `loggedTenant`, with password sub
       </GlobalProvider>
     );
     const input = screen.getByLabelText("Enter password");
-    const startButton = screen.getByRole("button", { name: "Start" });
+    const continueButton = screen.getByRole("button", { name: "Continue" });
 
     //- Act
     await userEvent.type(input, "test-applicant-password-three");
-    await userEvent.click(startButton);
+    await userEvent.click(continueButton);
 
     //- Assert that the toast notification appears
     await waitFor(() => {
