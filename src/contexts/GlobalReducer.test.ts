@@ -29,6 +29,7 @@ const applicant = {
 const state: GlobalStateInterface = {
   isAuthenticatedApplicant: true,
   isAuthenticatedTenant: true,
+  accessMode: "tenant",
   loggedTenant: "Devon",
   locale: "ES",
   applicantPool: [applicant],
@@ -62,12 +63,31 @@ describe("GlobalReducer", () => {
     });
   });
 
+  it("identifies guest sessions separately from real sessions", () => {
+    const guestApplicant = GlobalReducer(state, {
+      type: "SET_GUEST_APPLICANT",
+    });
+    const guestTenant = GlobalReducer(state, { type: "SET_GUEST_TENANT" });
+
+    expect(guestApplicant).toMatchObject({
+      isAuthenticatedApplicant: true,
+      isAuthenticatedTenant: false,
+      accessMode: "guest-applicant",
+    });
+    expect(guestTenant).toMatchObject({
+      isAuthenticatedApplicant: false,
+      isAuthenticatedTenant: true,
+      accessMode: "guest-tenant",
+    });
+  });
+
   it("purges all state back to the initial state", () => {
     const updatedState = GlobalReducer(state, { type: "PURGE_STATE" });
 
     expect(updatedState).toEqual({
       isAuthenticatedApplicant: false,
       isAuthenticatedTenant: false,
+      accessMode: "none",
       loggedTenant: "",
       locale: "EN",
       applicantPool: null,

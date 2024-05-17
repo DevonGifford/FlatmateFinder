@@ -65,7 +65,7 @@ interface ThirdFormProps {
 export function ThirdForm({ application, setApplication }: ThirdFormProps) {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const { locale } = useGlobalState();
+  const { locale, accessMode } = useGlobalState();
   const localeData: ThirdFormData = locale === "EN" ? Data_EN : Data_ES;
 
   const form = useForm<ThirdFormValues>({
@@ -100,7 +100,15 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
         uuid: documentId,
         photo: "",
       };
-      await createApplicantDoc(documentId, completedApplication);
+      if (accessMode === "guest-applicant") {
+        setIsLoading(false);
+        toastFormComplete("3");
+        setApplication(defaultApplication);
+        navigate("/thankyou");
+        return;
+      }
+
+      await createApplicantDoc(documentId, completedApplication, accessMode);
 
       setIsLoading(false);
       toastFormComplete("3");

@@ -13,7 +13,7 @@ import {
 import db, { authReady } from "./config";
 import { ApplicationInterface } from "@/types/applicationInterfaces";
 import { ApplicantProfile } from "@/types/applicantInterfaces";
-import { DispatchAction } from "@/types/globalStateInterfaces";
+import { AccessMode, DispatchAction } from "@/types/globalStateInterfaces";
 import {
   parseApplicantProfile,
 } from "@/types/applicantSchemas";
@@ -25,8 +25,13 @@ export const waitForFirebaseAuth = () => authReady;
 
 export const createApplicantDoc = async (
   documentId: DocumentId,
-  userData: ApplicationInterface
+  userData: ApplicationInterface,
+  accessMode: AccessMode
 ) => {
+  if (accessMode !== "applicant") {
+    throw new Error("Demo sessions cannot write applicant data");
+  }
+
   const collectionRef = collection(firestore, "applicants");
   const docRef: DocumentReference<DocumentData> = doc(
     collectionRef,
@@ -58,8 +63,13 @@ export async function fetchApplicantPool(dispatch: DispatchAction) {
 
 export const updateRanking = async (
   userId: string,
-  updatedRankings: Partial<NonNullable<ApplicantProfile["rankings"]>>
+  updatedRankings: Partial<NonNullable<ApplicantProfile["rankings"]>>,
+  accessMode: AccessMode
 ): Promise<void> => {
+  if (accessMode !== "tenant") {
+    throw new Error("Demo sessions cannot write applicant rankings");
+  }
+
   const applicantDocRef = doc(db, "applicants", userId);
 
   const docSnapshot = await getDoc(applicantDocRef);

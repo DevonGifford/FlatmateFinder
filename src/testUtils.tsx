@@ -12,6 +12,7 @@ export function customRenderApp(
   const defaultState: GlobalStateInterface = {
     isAuthenticatedApplicant: false,
     isAuthenticatedTenant: false,
+    accessMode: "none",
     loggedTenant: "",
     locale: "EN",
     isLoading: false,
@@ -34,6 +35,7 @@ export function customRenderLeaderBoard(
   const defaultState: GlobalStateInterface = {
     isAuthenticatedApplicant: false,
     isAuthenticatedTenant: false,
+    accessMode: "none",
     loggedTenant: "",
     locale: "EN",
     isLoading: false,

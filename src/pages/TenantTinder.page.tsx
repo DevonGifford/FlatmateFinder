@@ -40,7 +40,8 @@ import { IoFemale, IoMale, IoMaleFemale } from "react-icons/io5";
 
 export default function TenantTinderPage() { useRequireTenant();
   const dispatch = useGlobalDispatch();
-  const { applicantPool, loggedTenant } = useGlobalState();
+  const { applicantPool, loggedTenant, accessMode } = useGlobalState();
+  const isGuestSession = accessMode === "guest-tenant";
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [starRatings, setStarRatings] = useState<number[]>(
     Array(applicantPool?.length).fill(0)
@@ -93,9 +94,13 @@ export default function TenantTinderPage() { useRequireTenant();
     if (applicantPool && applicantPool[cardIndex]?.rankings) {
       const updatedRankings = applicantPool[cardIndex].rankings;
 
-      void updateRanking(applicantPool[cardIndex].uuid, updatedRankings).catch(
-        () => toastError("Something went wrong")
-      );
+      if (!isGuestSession) {
+        void updateRanking(
+          applicantPool[cardIndex].uuid,
+          updatedRankings,
+          accessMode
+        ).catch(() => toastError("Something went wrong"));
+      }
     } else {
       toastError("Something went wrong");
     }

@@ -138,6 +138,54 @@ describe("Testing Global `locale`, switching between the two locales", () => {
   });
 });
 
+describe("Testing guest access", () => {
+  test("guest applicant can enter the applicant experience", async () => {
+    customRenderApp({});
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "Guest applicant" })
+    );
+
+    expect(screen.getByText("Guest mode — changes are not saved")).toBeDefined();
+    expect(screen.getByLabelText("Name & Surname")).toBeDefined();
+  });
+
+  test("guest tenant can enter the tenant experience", async () => {
+    customRenderApp({});
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "Guest tenant" })
+    );
+
+    expect(screen.getByText("Guest mode — changes are not saved")).toBeDefined();
+    expect(screen.getByText("Welcome, Devon")).toBeDefined();
+  });
+
+  test("guest access copy follows the selected Spanish locale", async () => {
+    customRenderApp({ locale: "ES" });
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "Solicitante invitado" })
+    );
+
+    expect(screen.getByText("Modo invitado — los cambios no se guardan")).toBeDefined();
+  });
+
+  test("clears a persisted guest session on a public page", async () => {
+    window.history.pushState({}, "", "/FAQ");
+    customRenderApp({
+      isAuthenticatedTenant: true,
+      accessMode: "guest-tenant",
+      loggedTenant: "Devon",
+    });
+
+    expect(screen.queryByText("Guest mode — changes are not saved")).toBeNull();
+    await waitFor(() => {
+      expect(sessionStorage.getItem("flatmate-finder-auth")).toBeNull();
+    });
+  });
+});
+
 // DONE
 describe("Testing Global `isAuthenticated` and `loggedTenant`, with password submission form", () => {
   test("SET_TENANT + PROFILE - correct password should result in success toast notif", async () => {
