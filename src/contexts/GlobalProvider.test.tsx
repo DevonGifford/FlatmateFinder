@@ -215,7 +215,9 @@ describe("Testing Global `isAuthenticated` and `loggedTenant`, with password sub
       </GlobalProvider>
     );
 
-    await userEvent.click(screen.getByRole("button", { name: "" }));
+    await userEvent.click(
+      screen.getByRole("button", { name: "Open tenant menu" })
+    );
     await userEvent.click(screen.getByRole("button", { name: "Logout" }));
 
     expect(sessionStorage.getItem("flatmate-finder-auth")).toBeNull();
