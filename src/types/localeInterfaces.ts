@@ -60,3 +60,7 @@ export interface ThankyouPageData {
   checkoutHeading: string;
   faqheading: string;
 }
+
+export interface TenantPageData {
+  [key: string]: string;
+}

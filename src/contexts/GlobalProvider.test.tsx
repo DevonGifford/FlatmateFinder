@@ -171,6 +171,28 @@ describe("Testing guest access", () => {
     expect(screen.getByText("Modo invitado — los cambios no se guardan")).toBeDefined();
   });
 
+  test("Spanish guest tenants see localized tenant navigation and pages", async () => {
+    customRenderApp({ locale: "ES" });
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "Inquilino invitado" })
+    );
+
+    expect(screen.getByText("Bienvenido, Devon")).toBeDefined();
+    expect(
+      screen.getByText(/Este es el panel de inquilinos/)
+    ).toBeDefined();
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "Open tenant menu" })
+    );
+    expect(screen.getByText("Panel principal")).toBeDefined();
+    expect(screen.getByText("Clasificación")).toBeDefined();
+
+    await userEvent.click(screen.getByText("Clasificación"));
+    expect(screen.getByText("Clasificación actual")).toBeDefined();
+  });
+
   test("clears a persisted guest session on a public page", async () => {
     window.history.pushState({}, "", "/FAQ");
     customRenderApp({

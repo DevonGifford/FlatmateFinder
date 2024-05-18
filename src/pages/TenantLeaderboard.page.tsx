@@ -1,5 +1,8 @@
 import { useRequireTenant } from "@/hooks/useRequireTenant";
 import { useGlobalState } from "@/hooks/useGlobalState";
+import tenantData_EN from "@/locales/tenant-pages/tenant_en.json";
+import tenantData_ES from "@/locales/tenant-pages/tenant_es.json";
+import { TenantPageData } from "@/types/localeInterfaces";
 import { ErrorMessage } from "@/components/ErrorMessage";
 import { ProfilePic } from "@/components/ProfilePic";
 import { RatingBadge } from "@/components/RatingBadge";
@@ -13,7 +16,8 @@ import {
 
 export default function TenantLeaderboardPage() {
   useRequireTenant();
-  const { applicantPool, isLoading, error } = useGlobalState();
+  const { applicantPool, isLoading, error, locale } = useGlobalState();
+  const localeData: TenantPageData = locale === "EN" ? tenantData_EN : tenantData_ES;
 
   const computeTotalRating = (applicant: ApplicantProfile): number => {
     return tenants.reduce(
@@ -35,21 +39,21 @@ export default function TenantLeaderboardPage() {
     <section className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-2 pb-8 sm:px-4">
       <header className="border-b-2 py-4 pb-5">
         <p className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-          Tenant rankings
+          {localeData.rankingsEyebrow}
         </p>
         <h1 className="text-2xl font-bold italic sm:text-3xl">
-          Current Leaderboard
+          {localeData.currentLeaderboard}
         </h1>
       </header>
       {isLoading && <Spinner />}
       {error && <ErrorMessage />}
       {sortedApplicants.length > 0 ? (
-        <div className="flex flex-col gap-3" role="list" aria-label="Applicant rankings">
+        <div className="flex flex-col gap-3" role="list" aria-label={localeData.applicantRankings}>
           <div className="hidden items-center gap-4 px-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground sm:flex">
-            <span className="w-8">Rank</span>
-            <span className="w-[220px]">Applicant</span>
-            <span className="flex-1 text-center">Tenant ratings</span>
-            <span className="w-14 text-center">Total</span>
+            <span className="w-8">{localeData.rank}</span>
+            <span className="w-[220px]">{localeData.applicant}</span>
+            <span className="flex-1 text-center">{localeData.tenantRatings}</span>
+            <span className="w-14 text-center">{localeData.total}</span>
           </div>
           {sortedApplicants.map((applicant: ApplicantProfile, index: number) => (
             <article
@@ -99,7 +103,7 @@ export default function TenantLeaderboardPage() {
               </div>
               <div className="flex w-14 shrink-0 flex-col items-center rounded-lg bg-muted px-2 py-1">
                 <span className="text-xs font-medium text-muted-foreground sm:hidden">
-                  Total
+                  {localeData.total}
                 </span>
                 <span className="text-xl font-bold">
                   {computeTotalRating(applicant)}
@@ -110,7 +114,7 @@ export default function TenantLeaderboardPage() {
         </div>
       ) : (
         <p className="rounded-xl border border-dashed p-8 text-center text-muted-foreground">
-          No data available
+          {localeData.noData}
         </p>
       )}
     </section>

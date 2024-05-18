@@ -1,6 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
+import { useGlobalState } from "@/hooks/useGlobalState";
+import tenantData_EN from "@/locales/tenant-pages/tenant_en.json";
+import tenantData_ES from "@/locales/tenant-pages/tenant_es.json";
+import { TenantPageData } from "@/types/localeInterfaces";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -21,6 +25,8 @@ import {
 export default function Sidebar() {
   const navigate = useNavigate();
   const dispatch = useGlobalDispatch();
+  const { locale } = useGlobalState();
+  const localeData: TenantPageData = locale === "EN" ? tenantData_EN : tenantData_ES;
   const [open, setOpen] = useState(false);
 
   const closeMenu = () => setOpen(false);
@@ -35,17 +41,17 @@ export default function Sidebar() {
         </SheetTrigger>
         <SheetContent side="left" className="gap-0">
           <SheetHeader className="items-center justify-center border-b py-10">
-            <SheetTitle className="text-xl">Tenant menu</SheetTitle>
-            <SheetDescription>Navigate your dashboard</SheetDescription>
+            <SheetTitle className="text-xl">{localeData.sidebarTitle}</SheetTitle>
+            <SheetDescription>{localeData.sidebarDescription}</SheetDescription>
           </SheetHeader>
           <div className="flex flex-1 flex-col gap-3 p-4 pt-8">
             <Link to="/admin-welcome" onClick={closeMenu} className={menuItemClass}>
               <Home className="h-5 w-5" />
-              Dashboard
+              {localeData.dashboard}
             </Link>
             <Link to="/admin-tinder" onClick={closeMenu} className={menuItemClass}>
               <Heart className="h-5 w-5" />
-              Tinder Review
+              {localeData.tinderReview}
             </Link>
             <Link
               to="/admin-leaderboard"
@@ -53,7 +59,7 @@ export default function Sidebar() {
               className={menuItemClass}
             >
               <ListChecks className="h-5 w-5" />
-              Leaderboard
+              {localeData.leaderboard}
             </Link>
             <div className="mt-auto border-t pt-5">
               <Button
@@ -65,16 +71,15 @@ export default function Sidebar() {
                 }}
                 className="h-14 w-full justify-start gap-3 rounded-xl px-5 text-lg font-semibold"
               >
-                <LogOut className="h-5 w-5" />
-                Logout
+              <LogOut className="h-5 w-5" />
+              {localeData.logout}
               </Button>
               <p className="mt-4 border-t px-2 pb-6 pt-4 text-center text-sm leading-relaxed text-muted-foreground">
-                <strong className="font-semibold">Tenant space only</strong>
+                <strong className="font-semibold">{localeData.tenantSpaceOnly}</strong>
                 <br />
-                Only current tenants can log in to review applicants and view
-                the leaderboard.
+                {localeData.tenantAccess}
                 <br />
-                Applicants can’t access these pages.
+                {localeData.applicantAccess}
               </p>
             </div>
           </div>
