@@ -3,5 +3,9 @@
   "mainHeading": "Flatmate Finder",
   "passwordLabel": "Enter password",
   "passwordDescription": "Use the password shared with you.",
-  "startButton": "Continue"
+  "startButton": "Continue",
+  "guestPrompt": "Just exploring?",
+  "guestApplicant": "Guest applicant",
+  "guestTenant": "Guest tenant",
+  "guestBanner": "Guest mode — changes are not saved"
 }

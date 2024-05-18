@@ -74,6 +74,17 @@ export default function HomePage() {
     toastCorrectPassword();
   }
 
+  function handleGuestApplicant() {
+    dispatch({ type: "SET_GUEST_APPLICANT" });
+    navigate("/form");
+  }
+
+  function handleGuestTenant() {
+    dispatch({ type: "SET_GUEST_TENANT" });
+    dispatch({ type: "SET_TENANT_PROFILE", payload: "Devon" });
+    navigate("/admin-welcome");
+  }
+
   return (
     <section className="mx-auto flex min-h-[calc(100vh-8rem)] w-full max-w-5xl flex-col items-center justify-center gap-8 px-4 py-8 sm:px-8 md:gap-10 md:py-12">
       <header className="flex max-w-2xl flex-col items-center gap-2 text-center">
@@ -127,6 +138,27 @@ export default function HomePage() {
             </Button>
           </form>
         </Form>
+      </div>
+      <div className="flex flex-col items-center gap-3 text-center">
+        <p className="text-sm text-muted-foreground">{localeData.guestPrompt}</p>
+        <div className="flex flex-wrap justify-center gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={handleGuestApplicant}
+            className="transition hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.98]"
+          >
+            {localeData.guestApplicant}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={handleGuestTenant}
+            className="transition hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.98]"
+          >
+            {localeData.guestTenant}
+          </Button>
+        </div>
       </div>
     </section>
   );
