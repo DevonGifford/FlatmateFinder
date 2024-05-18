@@ -127,15 +127,15 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
         onSubmit={form.handleSubmit((data) => {
           onSubmit(data);
         })}
-        className="space-y-6 w-full "
+        className="w-full space-y-8"
       >
-        <div className="flex flex-col rounded-lg border">
+        <div className="flex flex-col rounded-xl border border-border bg-card p-1 shadow-sm">
           <FormField
             name="job_title"
             control={form.control}
             render={({ field }) => (
-              <FormItem className="border-none pb-0 min-w-[300px]">
-                <FormLabel className="flex text-center justify-center">
+              <FormItem className="min-w-0 border-none pb-0 shadow-none">
+                <FormLabel className="flex justify-center text-center">
                   {localeData
               .careerTitle}
                 </FormLabel>
@@ -155,18 +155,18 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
             name="job_type"
             control={form.control}
             render={({ field }) => (
-              <FormItem className="rounded-lg border-none p-4">
+              <FormItem className="rounded-lg border-none p-5 shadow-none">
                 <FormControl>
                   <ToggleGroup
                     size="sm"
                     type="single"
                     value={field.value}
                     onValueChange={(value) => field.onChange(value)}
-                    className="w-full pt-2 flex flex-row justify-center"
+                    className="w-full flex-row justify-center gap-2 pt-2"
                   >
                     <ToggleGroupItem
                       value="wfh"
-                      className="min-h-12 min-w-20 px-4 py-2 flex flex-col items-center justify-center text-center gap-1 aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md"
+                      className="min-h-14 min-w-24 flex-col items-center justify-center gap-1 px-4 py-2 text-center aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md focus-visible:ring-2"
                     >
                       <Home />
                       <span className="text-xs">{localeData
@@ -174,7 +174,7 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
                     </ToggleGroupItem>
                     <ToggleGroupItem
                       value="hybrid"
-                      className="min-h-12 min-w-20 px-4 py-2 flex flex-col items-center justify-center text-center gap-1 aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md"
+                      className="min-h-14 min-w-24 flex-col items-center justify-center gap-1 px-4 py-2 text-center aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md focus-visible:ring-2"
                     >
                       <Video />
                       <span className="text-xs">{localeData
@@ -182,7 +182,7 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
                     </ToggleGroupItem>
                     <ToggleGroupItem
                       value="office"
-                      className="min-h-12 min-w-20 px-4 py-2 flex flex-col items-center justify-center text-center gap-1 aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md"
+                      className="min-h-14 min-w-24 flex-col items-center justify-center gap-1 px-4 py-2 text-center aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md focus-visible:ring-2"
                     >
                       <Building />
                       <span className="text-xs">{localeData
@@ -202,10 +202,10 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="flex flex-col gap-1 text-center justify-center">
+              <FormLabel className="flex flex-col justify-center gap-1 text-center">
                 {localeData
             .tellMoreTitle}
-                <p className="text-xs font-thin italic">
+                <p className="text-sm font-normal italic text-muted-foreground">
                   {localeData
               .tellMoreDescription}
                 </p>
@@ -223,10 +223,10 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="flex flex-col gap-1 text-center justify-center">
+              <FormLabel className="flex flex-col justify-center gap-1 text-center">
                 {localeData
             .hobbiesTitle}
-                <p className="text-xs font-thin italic">
+                <p className="text-sm font-normal italic text-muted-foreground">
                   {localeData
               .hobbiesPlacholder}
                 </p>
@@ -242,11 +242,11 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
           name="social_media"
           control={form.control}
           render={({ field }) => (
-            <FormItem className="rounded-lg border p-4">
-              <FormLabel className="flex flex-col gap-1 text-center justify-center">
+            <FormItem className="p-5">
+              <FormLabel className="flex flex-col justify-center gap-1 text-center">
                 <p>{localeData
             .social}</p>
-                <p className="text-xs font-thin italic">
+                <p className="text-sm font-normal italic text-muted-foreground">
                   {localeData
               .optional}
                 </p>
@@ -263,7 +263,7 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
         />
         <Button
           type="submit"
-          className="rounded-lg text-sm md:text-base lg:text-xl p-4 px-8 md:px-16 md:py-6"
+          className="min-h-11 w-full rounded-lg px-6 text-base font-semibold sm:px-16"
           size={"lg"}
         >
           {isLoading ? <Spinner /> : `${localeData

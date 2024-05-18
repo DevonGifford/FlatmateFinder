@@ -90,17 +90,17 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
         onSubmit={form.handleSubmit((data) => {
           onSubmit(data);
         })}
-        className="space-y-6 w-full "
+        className="w-full space-y-8"
       >
         {/* SET MOVE DATE */}
         <FormField
           name="move_date"
           control={form.control}
           render={({ field }) => (
-            <FormItem className="flex flex-col min-w-[300px]">
-              <FormLabel className="flex flex-col gap-1 text-center justify-center">
+            <FormItem className="flex min-w-0 flex-col p-5">
+              <FormLabel className="flex flex-col justify-center gap-1 text-center">
                 {localeData.headingMoveDate}
-                <p className="text-xs font-thin italic">
+                <p className="text-sm font-normal italic text-muted-foreground">
                   {localeData.descriptionMoveDate}
                 </p>
               </FormLabel>
@@ -111,7 +111,7 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
                     <Button
                       variant={"secondary"}
                       className={cn(
-                        "w-full pl-3 text-left font-normal",
+                        "h-10 w-full pl-3 text-left font-normal",
                         !field.value && "text-muted-foreground"
                       )}
                     />
@@ -143,25 +143,25 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
         <FormField
           name="length_stay"
           control={form.control}
-          render={({ field: { onChange } }) => (
-            <FormItem className="space-y-5">
+          render={({ field }) => (
+            <FormItem className="space-y-6 p-5">
               <div className="flex flex-col items-center pb-2">
                 <FormLabel>{localeData.headingETAStay}</FormLabel>
               </div>
 
-              <FormControl className="mx-4 w-11/12">
+              <FormControl className="mx-auto w-11/12">
                 <Slider
                   min={0}
                   max={100}
                   step={1}
-                  defaultValue={[0]}
+                  value={[field.value]}
                   onValueChange={(vals) => {
-                    onChange(Array.isArray(vals) ? vals[0] : vals);
+                    field.onChange(Array.isArray(vals) ? vals[0] : vals);
                   }}
                 />
               </FormControl>
 
-              <div className="flex justify-between text-xs text-muted-foreground sm:w-11/12">
+              <div className="flex justify-between text-sm text-muted-foreground sm:w-11/12">
                 <div className="flex flex-col text-center">
                   <p>3</p>
                   <p className="w-full">{localeData.months}</p>
@@ -190,32 +190,32 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
           name="meet_type"
           control={form.control}
           render={({ field }) => (
-            <FormItem className="rounded-lg border p-4">
+            <FormItem className="p-5">
               <FormLabel>{localeData.headingTypeViewing}</FormLabel>
               <FormControl>
                 <ToggleGroup
                   type="single"
                   value={field.value}
                   onValueChange={(value) => field.onChange(value)}
-                  className="w-full pt-2 flex flex-row justify-center"
+                  className="w-full flex-row justify-center gap-2 pt-2"
                 >
                   <ToggleGroupItem
                     value="inperson"
-                    className="min-h-12 min-w-20 px-4 py-2 flex flex-col items-center justify-center text-center gap-1 aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md"
+                    className="min-h-14 min-w-24 flex-col items-center justify-center gap-1 px-4 py-2 text-center aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md focus-visible:ring-2"
                   >
                     <User className="font-bold" size={18} />
                     <span className="text-xs">{localeData.inPerson}</span>
                   </ToggleGroupItem>
                   <ToggleGroupItem
                     value="videocall"
-                    className="min-h-12 min-w-20 px-4 py-2 flex flex-col items-center justify-center text-center gap-1 aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md"
+                    className="min-h-14 min-w-24 flex-col items-center justify-center gap-1 px-4 py-2 text-center aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md focus-visible:ring-2"
                   >
                     <Video size={18} />
                     <span className="text-xs">{localeData.videoCall}</span>
                   </ToggleGroupItem>
                 </ToggleGroup>
               </FormControl>
-              <span className="text-xs text-slate-500">
+              <span className="text-sm text-muted-foreground">
                 {" "}
                 *{localeData.schedule}
               </span>
@@ -230,9 +230,9 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="flex flex-col gap-1 text-center justify-center">
+              <FormLabel className="flex flex-col justify-center gap-1 text-center">
                 <p>{localeData.headingMoreInfo}</p>
-                <p className="text-xs font-thin italic">
+                <p className="text-sm font-normal italic text-muted-foreground">
                   {localeData.optional}
                 </p>
               </FormLabel>
@@ -250,7 +250,7 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
         {/* BUTTONS */}
         <Button
           type="submit"
-          className="rounded-lg text-sm md:text-base lg:text-xl p-4 px-8 md:px-12 md:py-6"
+          className="min-h-11 w-full rounded-lg px-6 text-base font-semibold sm:px-12"
           size={"lg"}
         >
           {localeData.nextbutton}
