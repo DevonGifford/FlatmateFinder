@@ -4,8 +4,9 @@
   "passwordLabel": "Enter password",
   "passwordDescription": "Use the password shared with you.",
   "startButton": "Continue",
-  "guestPrompt": "Just exploring?",
-  "guestApplicant": "Guest applicant",
-  "guestTenant": "Guest tenant",
-  "guestBanner": "Guest mode — changes are not saved"
+  "demoPrompt": "Just exploring?",
+  "demoPromptDescription": "Preview the app as either an applicant or tenant.",
+  "demoApplicant": "Applicant",
+  "demoTenant": "Tenant",
+  "demoBanner": "Demo mode — changes are not saved"
 }

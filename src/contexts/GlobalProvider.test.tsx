@@ -143,10 +143,10 @@ describe("Testing guest access", () => {
     customRenderApp({});
 
     await userEvent.click(
-      screen.getByRole("button", { name: "Guest applicant" })
+      screen.getByRole("button", { name: "Applicant" })
     );
 
-    expect(screen.getByText("Guest mode — changes are not saved")).toBeDefined();
+    expect(screen.getByText("Demo mode — changes are not saved")).toBeDefined();
     expect(screen.getByLabelText("Name & Surname")).toBeDefined();
   });
 
@@ -154,10 +154,10 @@ describe("Testing guest access", () => {
     customRenderApp({});
 
     await userEvent.click(
-      screen.getByRole("button", { name: "Guest tenant" })
+      screen.getByRole("button", { name: "Tenant" })
     );
 
-    expect(screen.getByText("Guest mode — changes are not saved")).toBeDefined();
+    expect(screen.getByText("Demo mode — changes are not saved")).toBeDefined();
     expect(screen.getByText("Welcome, Devon")).toBeDefined();
   });
 
@@ -165,17 +165,17 @@ describe("Testing guest access", () => {
     customRenderApp({ locale: "ES" });
 
     await userEvent.click(
-      screen.getByRole("button", { name: "Solicitante invitado" })
+      screen.getByRole("button", { name: "Solicitante" })
     );
 
-    expect(screen.getByText("Modo invitado — los cambios no se guardan")).toBeDefined();
+    expect(screen.getByText("Modo demo — los cambios no se guardan")).toBeDefined();
   });
 
   test("Spanish guest tenants see localized tenant navigation and pages", async () => {
     customRenderApp({ locale: "ES" });
 
     await userEvent.click(
-      screen.getByRole("button", { name: "Inquilino invitado" })
+      screen.getByRole("button", { name: "Inquilino" })
     );
 
     expect(screen.getByText("Bienvenido, Devon")).toBeDefined();
@@ -201,7 +201,7 @@ describe("Testing guest access", () => {
       loggedTenant: "Devon",
     });
 
-    expect(screen.queryByText("Guest mode — changes are not saved")).toBeNull();
+    expect(screen.queryByText("Demo mode — changes are not saved")).toBeNull();
     await waitFor(() => {
       expect(sessionStorage.getItem("flatmate-finder-auth")).toBeNull();
     });
