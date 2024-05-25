@@ -138,7 +138,7 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
             name="sex"
             control={form.control}
             render={({ field }) => (
-              <FormItem className="min-w-[140px] flex-1 p-5 sm:min-w-[180px]">
+              <FormItem className="min-w-35 flex-1 p-5 sm:min-w-45">
                 <FormLabel className="text-center">{localeData.gender}</FormLabel>
                 <FormControl>
                   <ToggleGroup
@@ -176,14 +176,14 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
             name="age"
             control={form.control}
             render={({ field }) => (
-              <FormItem className="min-w-[140px] flex-1 items-center p-5 sm:min-w-[180px]">
+              <FormItem className="min-w-35 flex-1 items-center p-5 sm:min-w-45">
                 <FormLabel>{localeData.age}</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger className="h-10">
+                    <SelectTrigger className="h-10 w-full justify-center">
                       <SelectValue placeholder={`${localeData.age}`} />
                     </SelectTrigger>
                   </FormControl>
