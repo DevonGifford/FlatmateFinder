@@ -38,9 +38,6 @@ export default function TenantWelcomePage() {
             <ClipboardCheck className="h-5 w-5" />
             <h2 className="text-xl font-bold">{localeData.howItWorks}</h2>
           </div>
-          <p className="max-w-xl text-sm text-muted-foreground">
-            {localeData.howItWorksDescription}
-          </p>
         </div>
         <ol className="grid gap-5 text-sm text-muted-foreground sm:grid-cols-3 sm:gap-6">
           <li className="flex flex-col items-center gap-3 text-center">

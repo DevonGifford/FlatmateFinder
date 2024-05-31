@@ -12,7 +12,6 @@
   "welcome": "Bienvenido",
   "dashboardDescription": "Este es el panel de inquilinos, donde los inquilinos actuales pueden revisar candidatos y comparar valoraciones.",
   "howItWorks": "Cómo funciona",
-  "howItWorksDescription": "Un proceso de revisión rápido para ayudar a comparar candidatos de forma coherente.",
   "stepOne": "Abre la lista de candidatos y lee cada perfil.",
   "stepTwo": "Asigna una valoración con estrellas y desliza a la izquierda o a la derecha.",
   "stepThree": "Usa la clasificación para comparar la lista final.",
