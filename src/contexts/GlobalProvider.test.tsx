@@ -158,7 +158,7 @@ describe("Testing guest access", () => {
     );
 
     expect(screen.getByText("Demo mode — changes are not saved")).toBeDefined();
-    expect(screen.getByText("Welcome, Devon")).toBeDefined();
+    expect(screen.getByText("Welcome, Demo Tenant")).toBeDefined();
   });
 
   test("guest access copy follows the selected Spanish locale", async () => {
@@ -178,7 +178,7 @@ describe("Testing guest access", () => {
       screen.getByRole("button", { name: "Inquilino" })
     );
 
-    expect(screen.getByText("Bienvenido, Devon")).toBeDefined();
+    expect(screen.getByText("Bienvenido, Demo Tenant")).toBeDefined();
     expect(
       screen.getByText(/Este es el panel de inquilinos/)
     ).toBeDefined();
