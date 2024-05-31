@@ -78,12 +78,12 @@ export default function HomePage() {
   }
 
   function handleDemoApplicant() {
-    dispatch({ type: "SET_GUEST_APPLICANT" });
+    dispatch({ type: "SET_DEMO_APPLICANT" });
     navigate("/form");
   }
 
   function handleDemoTenant() {
-    dispatch({ type: "SET_GUEST_TENANT" });
+    dispatch({ type: "SET_DEMO_TENANT" });
     dispatch({ type: "SET_TENANT_PROFILE", payload: "Devon" });
     navigate("/admin-welcome");
   }

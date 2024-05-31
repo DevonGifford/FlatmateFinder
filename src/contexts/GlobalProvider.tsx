@@ -8,6 +8,11 @@ import {
 
 const AUTH_STORAGE_KEY = "flatmate-finder-auth";
 
+const legacyDemoAccessModes = {
+  "guest-applicant": "demo-applicant",
+  "guest-tenant": "demo-tenant",
+} as const;
+
 type PersistedAuth = Pick<
   GlobalStateInterface,
   "isAuthenticatedApplicant" | "isAuthenticatedTenant" | "accessMode" | "loggedTenant"
@@ -33,21 +38,28 @@ function readPersistedAuth(): PersistedAuth | null {
     }
 
     const persistedMode = authRecord.accessMode;
+    const normalizedMode =
+      typeof persistedMode === "string"
+        ? legacyDemoAccessModes[persistedMode as keyof typeof legacyDemoAccessModes] ??
+          persistedMode
+        : undefined;
     const accessMode =
-      typeof persistedMode === "string" &&
+      typeof normalizedMode === "string" &&
       [
         "none",
         "applicant",
         "tenant",
-        "guest-applicant",
-        "guest-tenant",
-      ].includes(persistedMode)
-        ? (persistedMode as PersistedAuth["accessMode"])
-        : authRecord.isAuthenticatedTenant
-          ? "tenant"
-          : authRecord.isAuthenticatedApplicant
-            ? "applicant"
-            : "none";
+        "demo-applicant",
+        "demo-tenant",
+      ].includes(normalizedMode)
+        ? (normalizedMode as PersistedAuth["accessMode"])
+        : persistedMode === undefined
+          ? authRecord.isAuthenticatedTenant
+            ? "tenant"
+            : authRecord.isAuthenticatedApplicant
+              ? "applicant"
+              : "none"
+          : "none";
 
     return {
       isAuthenticatedApplicant: authRecord.isAuthenticatedApplicant,

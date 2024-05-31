@@ -17,7 +17,7 @@ export default function TenantWelcomePage() {
   const { loggedTenant, accessMode, locale } = useGlobalState();
   const localeData: TenantPageData = locale === "EN" ? tenantData_EN : tenantData_ES;
   // Keep the internal tenant identity available for demo ranking behavior.
-  const tenantDisplayName = accessMode === "guest-tenant" ? "Demo-Tenant" : loggedTenant;
+  const tenantDisplayName = accessMode === "demo-tenant" ? "Demo-Tenant" : loggedTenant;
 
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-col gap-8 px-4 py-8 sm:px-6 lg:gap-10 lg:py-12">

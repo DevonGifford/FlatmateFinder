@@ -24,19 +24,19 @@ const globalReducer = (
         isAuthenticatedTenant: true,
         accessMode: "tenant",
       };
-    case "SET_GUEST_APPLICANT":
+    case "SET_DEMO_APPLICANT":
       return {
         ...state,
         isAuthenticatedApplicant: true,
         isAuthenticatedTenant: false,
-        accessMode: "guest-applicant",
+        accessMode: "demo-applicant",
       };
-    case "SET_GUEST_TENANT":
+    case "SET_DEMO_TENANT":
       return {
         ...state,
         isAuthenticatedApplicant: false,
         isAuthenticatedTenant: true,
-        accessMode: "guest-tenant",
+        accessMode: "demo-tenant",
       };
     case "SET_TENANT_PROFILE":
       return {

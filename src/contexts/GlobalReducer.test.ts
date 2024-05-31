@@ -63,21 +63,21 @@ describe("GlobalReducer", () => {
     });
   });
 
-  it("identifies guest sessions separately from real sessions", () => {
-    const guestApplicant = GlobalReducer(state, {
-      type: "SET_GUEST_APPLICANT",
+  it("identifies demo sessions separately from real sessions", () => {
+    const demoApplicant = GlobalReducer(state, {
+      type: "SET_DEMO_APPLICANT",
     });
-    const guestTenant = GlobalReducer(state, { type: "SET_GUEST_TENANT" });
+    const demoTenant = GlobalReducer(state, { type: "SET_DEMO_TENANT" });
 
-    expect(guestApplicant).toMatchObject({
+    expect(demoApplicant).toMatchObject({
       isAuthenticatedApplicant: true,
       isAuthenticatedTenant: false,
-      accessMode: "guest-applicant",
+      accessMode: "demo-applicant",
     });
-    expect(guestTenant).toMatchObject({
+    expect(demoTenant).toMatchObject({
       isAuthenticatedApplicant: false,
       isAuthenticatedTenant: true,
-      accessMode: "guest-tenant",
+      accessMode: "demo-tenant",
     });
   });
 

@@ -15,16 +15,16 @@ export type AccessMode =
   | "none"
   | "applicant"
   | "tenant"
-  | "guest-applicant"
-  | "guest-tenant";
+  | "demo-applicant"
+  | "demo-tenant";
 
 export type DispatchAction = (action: ActionType) => void;
 
 export type ActionType =
   | { type: "SET_TENANT" }
   | { type: "SET_APPLICANT" }
-  | { type: "SET_GUEST_TENANT" }
-  | { type: "SET_GUEST_APPLICANT" }
+  | { type: "SET_DEMO_TENANT" }
+  | { type: "SET_DEMO_APPLICANT" }
   | { type: "SET_TENANT_PROFILE"; payload: string }
   | { type: "RESET_AUTH" }
   | { type: "SET_LOCALE"; payload: "EN" | "ES" }

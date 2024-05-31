@@ -100,7 +100,7 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
         uuid: documentId,
         photo: "",
       };
-      if (accessMode === "guest-applicant") {
+      if (accessMode === "demo-applicant") {
         setIsLoading(false);
         toastFormComplete("3");
         setApplication(defaultApplication);
