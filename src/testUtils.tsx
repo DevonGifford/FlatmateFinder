@@ -34,9 +34,9 @@ export function customRenderLeaderBoard(
 ) {
   const defaultState: GlobalStateInterface = {
     isAuthenticatedApplicant: false,
-    isAuthenticatedTenant: false,
-    accessMode: "none",
-    loggedTenant: "",
+    isAuthenticatedTenant: true,
+    accessMode: "tenant",
+    loggedTenant: "Devon",
     locale: "EN",
     isLoading: false,
     error: "",

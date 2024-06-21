@@ -1,5 +1,5 @@
 import userEvent from "@testing-library/user-event";
-import { test, expect, describe, beforeEach } from "vitest";
+import { test, expect, describe, beforeEach, vi } from "vitest";
 import { screen, render, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { GlobalProvider } from "@/contexts/GlobalProvider";
@@ -19,6 +19,7 @@ import Navbar from "@/components/Navbar";
 import FaqPage from "@/pages/Faq.page";
 import TenantLeaderboardPage from "@/pages/TenantLeaderboard.page";
 import TenantTinderPage from "@/pages/TenantTinder.page";
+import { fetchApplicantPool } from "@/lib/firebase/firestore";
 
 beforeEach(() => {
   window.history.pushState({}, "", "/");
@@ -75,6 +76,39 @@ describe("Testing the testing environment", () => {
         "That's not correct - Eso no está bien"
       );
       expect(errorToast).toBeDefined();
+    });
+  });
+
+  test("does not fetch applicant data on public routes", async () => {
+    render(
+      <GlobalProvider initialState={initialState}>
+        <App />
+      </GlobalProvider>
+    );
+
+    await waitFor(() => {
+      expect(vi.mocked(fetchApplicantPool)).not.toHaveBeenCalled();
+    });
+  });
+
+  test("fetches applicant data when a tenant enters a tenant route", async () => {
+    window.history.pushState({}, "", "/admin-welcome");
+
+    render(
+      <GlobalProvider
+        initialState={{
+          ...initialState,
+          isAuthenticatedTenant: true,
+          accessMode: "tenant",
+          loggedTenant: "Devon",
+        }}
+      >
+        <App />
+      </GlobalProvider>
+    );
+
+    await waitFor(() => {
+      expect(vi.mocked(fetchApplicantPool)).toHaveBeenCalledOnce();
     });
   });
 });
@@ -252,7 +286,7 @@ describe("Testing Global `isAuthenticated` and `loggedTenant`, with password sub
     });
   });
 
-  test("hydrates a tenant session from session storage", () => {
+  test("hydrates a tenant session from session storage", async () => {
     sessionStorage.setItem(
       "flatmate-finder-auth",
       JSON.stringify({
@@ -269,7 +303,9 @@ describe("Testing Global `isAuthenticated` and `loggedTenant`, with password sub
       </GlobalProvider>
     );
 
-    expect(screen.getByText("Welcome, Devon")).toBeDefined();
+    await waitFor(() => {
+      expect(screen.getByText("Welcome, Devon")).toBeDefined();
+    });
   });
 
   test("migrates a legacy demo session without treating it as real access", async () => {

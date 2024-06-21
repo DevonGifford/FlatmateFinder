@@ -2,21 +2,14 @@ import {
   Firestore,
   collection,
   doc,
-  setDoc,
-  getDoc,
-  DocumentReference,
-  DocumentSnapshot,
-  DocumentData,
-  updateDoc,
   getDocs,
+  runTransaction,
 } from "firebase/firestore";
 import db, { authReady } from "./config";
 import { ApplicationInterface } from "@/types/applicationInterfaces";
 import { ApplicantProfile } from "@/types/applicantInterfaces";
-import { AccessMode, DispatchAction } from "@/types/globalStateInterfaces";
-import {
-  parseApplicantProfile,
-} from "@/types/applicantSchemas";
+import { AccessMode } from "@/types/globalStateInterfaces";
+import { parseApplicantProfile } from "@/types/applicantSchemas";
 
 export type DocumentId = string;
 const firestore: Firestore = db;
@@ -24,41 +17,39 @@ const firestore: Firestore = db;
 export const waitForFirebaseAuth = () => authReady;
 
 export const createApplicantDoc = async (
-  documentId: DocumentId,
   userData: ApplicationInterface,
   accessMode: AccessMode
-) => {
+): Promise<DocumentId> => {
   if (accessMode !== "applicant") {
     throw new Error("Demo sessions cannot write applicant data");
   }
 
   const collectionRef = collection(firestore, "applicants");
-  const docRef: DocumentReference<DocumentData> = doc(
-    collectionRef,
-    documentId
-  );
-  const docSnapshot: DocumentSnapshot<DocumentData> = await getDoc(docRef);
-  if (docSnapshot.exists()) {
-    throw new Error("Applicant document already exists");
-  }
+  const docRef = doc(collectionRef);
+  const persistedUserData = { ...userData, uuid: docRef.id };
 
-  await setDoc(docRef, userData);
+  await runTransaction(firestore, async (transaction) => {
+    const docSnapshot = await transaction.get(docRef);
+    if (docSnapshot.exists()) {
+      throw new Error("Applicant document already exists");
+    }
+
+    transaction.set(docRef, persistedUserData);
+  });
+
+  return docRef.id;
 };
 
-export async function fetchApplicantPool(dispatch: DispatchAction) {
-  try {
-    const querySnapshot = await getDocs(collection(db, "applicants"));
-    const fetchedData: ApplicantProfile[] = [];
+export async function fetchApplicantPool(): Promise<ApplicantProfile[]> {
+  const querySnapshot = await getDocs(collection(firestore, "applicants"));
+  const fetchedData: ApplicantProfile[] = [];
 
-    querySnapshot.forEach((doc) => {
-      const profile = parseApplicantProfile(doc.id, doc.data());
-      if (profile) fetchedData.push(profile);
-    });
+  querySnapshot.forEach((document) => {
+    const profile = parseApplicantProfile(document.id, document.data());
+    if (profile) fetchedData.push(profile);
+  });
 
-    dispatch({ type: "FETCH_SUCCESS", payload: fetchedData });
-  } catch {
-    dispatch({ type: "FETCH_FAILURE", payload: "Something went wrong" });
-  }
+  return fetchedData;
 }
 
 export const updateRanking = async (
@@ -72,16 +63,18 @@ export const updateRanking = async (
 
   const applicantDocRef = doc(db, "applicants", userId);
 
-  const docSnapshot = await getDoc(applicantDocRef);
-  if (!docSnapshot.exists()) throw new Error("Applicant document not found");
+  await runTransaction(firestore, async (transaction) => {
+    const docSnapshot = await transaction.get(applicantDocRef);
+    if (!docSnapshot.exists()) throw new Error("Applicant document not found");
 
-  const existingData = parseApplicantProfile(userId, docSnapshot.data());
-  if (!existingData) throw new Error("Applicant document is invalid");
+    const existingData = parseApplicantProfile(userId, docSnapshot.data());
+    if (!existingData) throw new Error("Applicant document is invalid");
 
-  const mergedRankings = {
-    ...existingData.rankings,
-    ...updatedRankings,
-  };
+    const mergedRankings = {
+      ...existingData.rankings,
+      ...updatedRankings,
+    };
 
-  await updateDoc(applicantDocRef, { rankings: mergedRankings });
+    transaction.update(applicantDocRef, { rankings: mergedRankings });
+  });
 };

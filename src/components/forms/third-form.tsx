@@ -80,13 +80,6 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
         throw new Error("Error: cannot access applicant context");
       }
 
-      // - Generate a unique ID for the user
-      const nameFirstFive = application.firstForm.name.slice(0, 5).replace(/\s/g, ""); // Extract first 5 letters and remove spaces
-      // This runs from the submit event, not during render.
-      // eslint-disable-next-line react-hooks/purity
-      const currentTimeStamp = Date.now().toString().slice(-5); // Extract last 5 digits of current timestamp
-      const documentId = `${nameFirstFive}-${currentTimeStamp}`;
-
       const updatedThirdForm = {
         ...application.thirdForm,
         ...data,
@@ -97,7 +90,6 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
       const completedApplication: ApplicationInterface = {
         ...application,
         thirdForm: updatedThirdForm,
-        uuid: documentId,
         photo: "",
       };
       if (accessMode === "demo-applicant") {
@@ -108,7 +100,7 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
         return;
       }
 
-      await createApplicantDoc(documentId, completedApplication, accessMode);
+      await createApplicantDoc(completedApplication, accessMode);
 
       setIsLoading(false);
       toastFormComplete("3");

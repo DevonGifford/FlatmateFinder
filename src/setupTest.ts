@@ -2,6 +2,7 @@ import { beforeEach, vi } from "vitest";
 
 beforeEach(() => {
   sessionStorage.clear();
+  vi.clearAllMocks();
 });
 
 vi.mock("@/lib/auth/accessPasswords", () => ({
@@ -21,7 +22,7 @@ vi.mock("@/lib/auth/accessPasswords", () => ({
 // GlobalProvider fetches on mount. Keep the suite hermetic and offline.
 vi.mock("@/lib/firebase/firestore", () => ({
   createApplicantDoc: vi.fn(),
-  fetchApplicantPool: vi.fn().mockResolvedValue(undefined),
+  fetchApplicantPool: vi.fn().mockResolvedValue([]),
   waitForFirebaseAuth: vi.fn().mockResolvedValue(undefined),
   updateRanking: vi.fn(),
 }));

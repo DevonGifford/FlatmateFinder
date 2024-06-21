@@ -51,7 +51,7 @@ describe("GlobalReducer", () => {
     });
   });
 
-  it("resets authentication without clearing unrelated state", () => {
+  it("resets authentication and clears tenant-only applicant data", () => {
     const updatedState = GlobalReducer(state, { type: "RESET_AUTH" });
 
     expect(updatedState).toMatchObject({
@@ -59,7 +59,9 @@ describe("GlobalReducer", () => {
       isAuthenticatedTenant: false,
       loggedTenant: "",
       locale: "ES",
-      applicantPool: [applicant],
+      applicantPool: null,
+      isLoading: false,
+      error: "",
     });
   });
 

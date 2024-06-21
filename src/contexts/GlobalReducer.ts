@@ -50,6 +50,9 @@ const globalReducer = (
         isAuthenticatedTenant: false,
         accessMode: "none",
         loggedTenant: "",
+        applicantPool: null,
+        isLoading: false,
+        error: "",
       };
     //- locale actions
     case "SET_LOCALE":

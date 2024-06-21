@@ -36,6 +36,7 @@ import {
 
 import Data_EN from "@/locales/applicant-form/secondform_en.json";
 import Data_ES from "@/locales/applicant-form/secondform_es.json";
+import { lengthOfStayRange } from "@/lib/constants/constants";
 
 type SecondFormValues = {
   move_date: Date;
@@ -51,7 +52,11 @@ const secondFormSchema = (
 
   return z.object({
     move_date: z.date({ error: required }),
-    length_stay: z.number({ error: required }),
+    length_stay: z
+      .number({ error: required })
+      .int()
+      .min(lengthOfStayRange.min)
+      .max(lengthOfStayRange.max),
     meet_type: z.string({ error: required }).trim().min(1, required),
     more_info: z.string().max(500, tooLong).optional(),
   });
@@ -149,8 +154,8 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
 
               <FormControl className="mx-auto w-11/12">
                 <Slider
-                  min={0}
-                  max={100}
+                  min={lengthOfStayRange.min}
+                  max={lengthOfStayRange.max}
                   step={1}
                   value={[field.value]}
                   onValueChange={(vals) => {

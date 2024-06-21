@@ -1,6 +1,10 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import { useGlobalState } from "@/hooks/useGlobalState";
 import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
+import {
+  fetchApplicantPool,
+  waitForFirebaseAuth,
+} from "@/lib/firebase/firestore";
 import { Toaster } from "@/components/ui/toaster";
 import homeData_EN from "@/locales/home-page/home_en.json";
 import homeData_ES from "@/locales/home-page/home_es.json";
@@ -20,6 +24,12 @@ import TenantLeaderboardPage from "@/pages/TenantLeaderboard.page";
 
 import "./App.css";
 
+const tenantRoutes = [
+  "/admin-welcome",
+  "/admin-tinder",
+  "/admin-leaderboard",
+] as const;
+
 function App() {
   return (
     <Router basename={import.meta.env.VITE_REACT_APP_BASENAME || "/"}>
@@ -30,13 +40,20 @@ function App() {
 }
 
 function AppContent() {
-  const { isAuthenticatedTenant, isAuthenticatedApplicant, accessMode } =
-    useGlobalState();
-  const { locale } = useGlobalState();
+  const {
+    isAuthenticatedTenant,
+    isAuthenticatedApplicant,
+    accessMode,
+    applicantPool,
+    locale,
+  } = useGlobalState();
   const dispatch = useGlobalDispatch();
   const location = useLocation();
   const localeData: HomePageData = locale === "EN" ? homeData_EN : homeData_ES;
   const isPublicRoute = location.pathname === "/" || location.pathname === "/FAQ";
+  const isTenantRoute = tenantRoutes.includes(
+    location.pathname as (typeof tenantRoutes)[number]
+  );
   const isDemoApplicantArea =
     accessMode === "demo-applicant" &&
     ["/form", "/thankyou"].includes(location.pathname);
@@ -61,6 +78,35 @@ function AppContent() {
     }
     wasInDemoArea.current = isDemoArea;
   }, [dispatch, isDemoArea, isDemoSession, isPublicRoute]);
+
+  useEffect(() => {
+    if (!isAuthenticatedTenant || !isTenantRoute || applicantPool !== null) {
+      return;
+    }
+
+    let cancelled = false;
+    dispatch({ type: "FETCH_INIT" });
+
+    void waitForFirebaseAuth()
+      .then(() => fetchApplicantPool())
+      .then((fetchedApplicants) => {
+        if (!cancelled) {
+          dispatch({ type: "FETCH_SUCCESS", payload: fetchedApplicants });
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          dispatch({
+            type: "FETCH_FAILURE",
+            payload: "Something went wrong",
+          });
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [applicantPool, dispatch, isAuthenticatedTenant, isTenantRoute]);
 
   const showTenantShell =
     isAuthenticatedTenant && (!isDemoSession || isDemoTenantArea);
