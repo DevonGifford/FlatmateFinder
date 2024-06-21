@@ -98,6 +98,7 @@ export default function HomePage() {
         className="aspect-[4/3] w-full max-w-xl rounded-2xl object-cover shadow-lg"
         width={500}
         height={375}
+        decoding="async"
       />
 
       <div className="w-full max-w-md rounded-2xl border bg-card p-5 shadow-sm sm:p-8">
@@ -132,7 +133,11 @@ export default function HomePage() {
                       variant="ghost"
                       size="icon-sm"
                       onClick={() => setShowPassword((visible) => !visible)}
-                      aria-label={showPassword ? "Hide password" : "Show password"}
+                      aria-label={
+                        showPassword
+                          ? localeData.hidePassword
+                          : localeData.showPassword
+                      }
                       className="absolute right-1 top-1/2 -translate-y-1/2"
                     >
                       {showPassword ? <EyeOff /> : <Eye />}

@@ -1,6 +1,8 @@
 {
   "sidebarTitle": "Tenant menu",
   "sidebarDescription": "Navigate your dashboard",
+  "openMenu": "Open tenant menu",
+  "closeMenu": "Close tenant menu",
   "dashboard": "Dashboard",
   "tinderReview": "Tinder Review",
   "leaderboard": "Leaderboard",
@@ -45,9 +47,11 @@
   "hobbiesInterests": "Hobbies & Interests",
   "specialRequest": "Special Request",
   "profilePictureAlt": "Profile picture for",
+  "openProfilePicture": "Open profile picture in a new tab for",
   "starRatingFor": "Star rating for",
   "setRatingTo": "Set rating to",
   "star": "star",
   "stars": "stars",
+  "notRated": "Not rated",
   "invalidDate": "Invalid Date"
 }

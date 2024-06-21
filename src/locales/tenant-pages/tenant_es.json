@@ -1,6 +1,8 @@
 {
   "sidebarTitle": "Menú de inquilinos",
   "sidebarDescription": "Navega por tu panel",
+  "openMenu": "Abrir menú de inquilino",
+  "closeMenu": "Cerrar menú de inquilino",
   "dashboard": "Panel principal",
   "tinderReview": "Revisar candidatos",
   "leaderboard": "Clasificación",
@@ -45,9 +47,11 @@
   "hobbiesInterests": "Aficiones e intereses",
   "specialRequest": "Solicitud especial",
   "profilePictureAlt": "Foto de perfil de",
+  "openProfilePicture": "Abrir la foto de perfil en una pestaña nueva de",
   "starRatingFor": "Valoración con estrellas de",
   "setRatingTo": "Asignar una valoración de",
   "star": "estrella",
   "stars": "estrellas",
+  "notRated": "Sin valorar",
   "invalidDate": "Fecha no válida"
 }

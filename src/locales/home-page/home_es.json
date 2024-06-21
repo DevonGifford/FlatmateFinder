@@ -8,5 +8,13 @@
   "demoPromptDescription": "Prueba la aplicación como solicitante o inquilino.",
   "demoApplicant": "Solicitante",
   "demoTenant": "Inquilino",
-  "demoBanner": "Modo demo — los cambios no se guardan"
+  "demoBanner": "Modo demo — los cambios no se guardan",
+  "faqButton": "Preguntas frecuentes",
+  "backButton": "Volver",
+  "quitForm": "Salir de la solicitud",
+  "showPassword": "Mostrar contraseña",
+  "hidePassword": "Ocultar contraseña",
+  "languageEnglish": "Inglés",
+  "languageSpanish": "Español",
+  "navigationLabel": "Navegación principal"
 }

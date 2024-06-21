@@ -20,6 +20,7 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -103,12 +104,12 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
           control={form.control}
           render={({ field }) => (
             <FormItem className="flex min-w-0 flex-col p-5">
-              <FormLabel className="flex flex-col justify-center gap-1 text-center">
-                {localeData.headingMoveDate}
-                <p className="text-sm font-normal italic text-muted-foreground">
+              <div className="flex flex-col justify-center gap-1 text-center">
+                <FormLabel>{localeData.headingMoveDate}</FormLabel>
+                <FormDescription className="font-normal italic">
                   {localeData.descriptionMoveDate}
-                </p>
-              </FormLabel>
+                </FormDescription>
+              </div>
 
               <Popover>
                 <PopoverTrigger
@@ -206,14 +207,14 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
                     value="inperson"
                     className="min-h-14 min-w-24 flex-col items-center justify-center gap-1 px-4 py-2 text-center aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md focus-visible:ring-2"
                   >
-                    <User className="font-bold" size={18} />
+                    <User className="font-bold" size={18} aria-hidden="true" />
                     <span className="text-xs">{localeData.inPerson}</span>
                   </ToggleGroupItem>
                   <ToggleGroupItem
                     value="videocall"
                     className="min-h-14 min-w-24 flex-col items-center justify-center gap-1 px-4 py-2 text-center aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md focus-visible:ring-2"
                   >
-                    <Video size={18} />
+                    <Video size={18} aria-hidden="true" />
                     <span className="text-xs">{localeData.videoCall}</span>
                   </ToggleGroupItem>
                 </ToggleGroup>
@@ -233,12 +234,12 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="flex flex-col justify-center gap-1 text-center">
-                <p>{localeData.headingMoreInfo}</p>
-                <p className="text-sm font-normal italic text-muted-foreground">
+              <div className="flex flex-col justify-center gap-1 text-center">
+                <FormLabel>{localeData.headingMoreInfo}</FormLabel>
+                <FormDescription className="font-normal italic">
                   {localeData.optional}
-                </p>
-              </FormLabel>
+                </FormDescription>
+              </div>
               <FormControl>
                 <Textarea
                   placeholder={`${localeData.specialRequestQuestion}`}

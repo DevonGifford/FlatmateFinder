@@ -12,6 +12,7 @@ import { IoMale, IoFemale, IoMaleFemale } from "react-icons/io5";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -116,7 +117,7 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="flex justify-center text-center sm:justify-start sm:text-left">
-                Whatsapp
+                {localeData.whatsapp}
               </FormLabel>
 
               <FormControl>
@@ -150,21 +151,24 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
                   >
                     <ToggleGroupItem
                       value="male"
+                      aria-label={localeData.male}
                       className="min-h-11 min-w-11 aria-pressed:border-2 aria-pressed:border-primary focus-visible:ring-2"
                     >
-                      <IoMale />
+                      <IoMale aria-hidden="true" />
                     </ToggleGroupItem>
                     <ToggleGroupItem
                       value="female"
+                      aria-label={localeData.female}
                       className="min-h-11 min-w-11 aria-pressed:border-2 aria-pressed:border-primary focus-visible:ring-2"
                     >
-                      <IoFemale />
+                      <IoFemale aria-hidden="true" />
                     </ToggleGroupItem>
                     <ToggleGroupItem
                       value="other"
+                      aria-label={localeData.otherGender}
                       className="min-h-11 min-w-11 aria-pressed:border-2 aria-pressed:border-primary focus-visible:ring-2"
                     >
-                      <IoMaleFemale />
+                      <IoMaleFemale aria-hidden="true" />
                     </ToggleGroupItem>
                   </ToggleGroup>
                 </FormControl>
@@ -212,12 +216,12 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
           control={form.control}
           render={({ field }) => (
             <FormItem className="p-5">
-              <FormLabel className="flex flex-col justify-center gap-1 text-center">
-                {localeData.spoken}
-                <p className="text-sm font-normal italic text-muted-foreground">
+              <div className="flex flex-col justify-center gap-1 text-center">
+                <FormLabel>{localeData.spoken}</FormLabel>
+                <FormDescription className="font-normal italic">
                   {localeData.optional}
-                </p>
-              </FormLabel>
+                </FormDescription>
+              </div>
               <FormControl>
                 <ToggleGroup
                   size="sm"

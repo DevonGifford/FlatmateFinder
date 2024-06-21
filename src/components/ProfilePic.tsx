@@ -7,6 +7,7 @@ interface ProfilePicProps {
   width: number;
   height: number;
   className?: string;
+  openLabel?: string;
 }
 
 export const ProfilePic: React.FC<ProfilePicProps> = ({
@@ -16,6 +17,7 @@ export const ProfilePic: React.FC<ProfilePicProps> = ({
   width,
   height,
   className,
+  openLabel,
 }) => {
   const [imgSrc, setImgSrc] = useState<string | undefined>(src);
   const [imgError, setImgError] = useState<boolean>(false);
@@ -34,6 +36,8 @@ export const ProfilePic: React.FC<ProfilePicProps> = ({
       alt={alt}
       width={width}
       height={height}
+      loading="lazy"
+      decoding="async"
       style={{
         width: `${width}px`,
         height: `${height}px`,
@@ -50,7 +54,7 @@ export const ProfilePic: React.FC<ProfilePicProps> = ({
       href={imgSrc}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label={`Open ${alt} in a new tab`}
+      aria-label={openLabel ?? `Open ${alt} in a new tab`}
     >
       {image}
     </a>

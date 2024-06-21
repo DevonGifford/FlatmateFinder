@@ -18,6 +18,8 @@ export default function ThankyouPage() {
           alt="Thank you illustration"
           className="rounded-full -translate-y-10"
           width={"500px"}
+          loading="lazy"
+          decoding="async"
         />
         <Link to="/FAQ">
           <h2 className="text-3xl font-bold">{localeData.checkoutHeading}</h2>

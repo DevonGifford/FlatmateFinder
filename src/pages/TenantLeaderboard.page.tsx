@@ -68,7 +68,8 @@ export default function TenantLeaderboardPage() {
                 <ProfilePic
                   src={applicant.photo}
                   fallbackSrc="/profile-fallback.svg"
-                  alt={`Profile picture for ${applicant.firstForm.name}`}
+                  alt={`${localeData.profilePictureAlt} ${applicant.firstForm.name}`}
+                  openLabel={`${localeData.openProfilePicture} ${applicant.firstForm.name}`}
                   width={50}
                   height={50}
                   className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
@@ -78,28 +79,40 @@ export default function TenantLeaderboardPage() {
                 </p>
               </div>
               <div className="grid w-full grid-cols-3 gap-2 sm:flex sm:flex-1 sm:justify-evenly">
-                {tenants.map((tenant) => (
-                  <div
-                    key={tenant.id}
-                    className="flex flex-col items-center gap-1"
-                  >
-                    <span className="text-xs font-medium text-muted-foreground sm:hidden">
-                      {tenant.name}
-                    </span>
-                    <RatingBadge
-                      boolValue={
-                        applicant.rankings?.[
-                          `${tenant.id}_bool` as TenantBooleanKey
-                        ]
-                      }
-                      starValue={
-                        applicant.rankings?.[
-                          `${tenant.id}_star` as TenantStarKey
-                        ]
-                      }
-                    />
-                  </div>
-                ))}
+                {tenants.map((tenant) => {
+                  const starValue =
+                    applicant.rankings?.[
+                      `${tenant.id}_star` as TenantStarKey
+                    ];
+                  const ratingLabel =
+                    starValue === undefined
+                      ? `${tenant.name}: ${localeData.notRated}`
+                      : `${tenant.name}: ${starValue} ${
+                          starValue === 1
+                            ? localeData.star
+                            : localeData.stars
+                        }`;
+
+                  return (
+                    <div
+                      key={tenant.id}
+                      className="flex flex-col items-center gap-1"
+                    >
+                      <span className="text-xs font-medium text-muted-foreground sm:hidden">
+                        {tenant.name}
+                      </span>
+                      <RatingBadge
+                        ariaLabel={ratingLabel}
+                        boolValue={
+                          applicant.rankings?.[
+                            `${tenant.id}_bool` as TenantBooleanKey
+                          ]
+                        }
+                        starValue={starValue}
+                      />
+                    </div>
+                  );
+                })}
               </div>
               <div className="flex w-14 shrink-0 flex-col items-center rounded-lg bg-muted px-2 py-1">
                 <span className="text-xs font-medium text-muted-foreground sm:hidden">

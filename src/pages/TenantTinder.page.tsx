@@ -114,27 +114,27 @@ export default function TenantTinderPage() {
   //- General Helper Function - Icons & Conversions
   const genderIcon = (gender: string) => {
     if (gender === "male") {
-      return <IoMale />;
+      return <IoMale aria-hidden="true" />;
     } else if (gender === "female") {
-      return <IoFemale />;
+      return <IoFemale aria-hidden="true" />;
     } else {
-      return <IoMaleFemale />;
+      return <IoMaleFemale aria-hidden="true" />;
     }
   };
   const jobtypeIcon = (jobType: string) => {
     if (jobType === "wfh") {
-      return <Home size={16} />;
+      return <Home size={16} aria-hidden="true" />;
     } else if (jobType === "office") {
-      return <Building size={16} />;
+      return <Building size={16} aria-hidden="true" />;
     } else {
-      return <Video size={16} />;
+      return <Video size={16} aria-hidden="true" />;
     }
   };
   const viewingtypeIcon = (viewType: string) => {
     if (viewType === "meet_type") {
-      return <User className="font-bold" size={18} />;
+      return <User className="font-bold" size={18} aria-hidden="true" />;
     } else {
-      return <Video size={18} />;
+      return <Video size={18} aria-hidden="true" />;
     }
   };
   const lengthStayIcon = (lengthStay: number) => {
@@ -184,7 +184,7 @@ export default function TenantTinderPage() {
               <CardContent className="flex flex-col gap-1 sm:gap-3">
                 {/* //👇 ENTRY DATE  */}
                 <div className="flex flex-row items-center gap-1 text-sm">
-                  <CalendarClockIcon size={16} />
+                  <CalendarClockIcon size={16} aria-hidden="true" />
                   <p className=" font-semibold">{localeData.desiredEntry}</p>
                   <span className="font-normal pl-1">
                     {convertTimestamp(dataItem.secondForm.move_date)}
@@ -241,6 +241,7 @@ export default function TenantTinderPage() {
                     src={dataItem.photo}
                     fallbackSrc="/profile-fallback.svg"
                     alt={`${localeData.profilePictureAlt} ${dataItem.firstForm.name}`}
+                    openLabel={`${localeData.openProfilePicture} ${dataItem.firstForm.name}`}
                     width={100}
                     height={100}
                     className="flex justify-center items-center rounded-full"
@@ -300,7 +301,8 @@ export default function TenantTinderPage() {
                 {/* //👇 STAR RATING SYSTEM */}
                 <div
                   className="flex flex-row gap-3 pt-1"
-                  role="group"
+                  role="radiogroup"
+                  aria-orientation="horizontal"
                   aria-label={`${localeData.starRatingFor} ${dataItem.firstForm.name}`}
                 >
                   {[...Array(5)].map((_, starIndex) => (
@@ -310,6 +312,12 @@ export default function TenantTinderPage() {
                       onClick={() => handleStarClick(starIndex, index)}
                       filled={
                         starIndex <
+                        (dataItem.rankings?.[
+                          `${tenant?.id}_star` as TenantStarKey
+                        ] || 0)
+                      }
+                      selected={
+                        starIndex + 1 ===
                         (dataItem.rankings?.[
                           `${tenant?.id}_star` as TenantStarKey
                         ] || 0)

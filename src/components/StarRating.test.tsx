@@ -12,8 +12,8 @@ describe("StarRating", () => {
       <StarRating filled={false} label="Set rating to 1 star" onClick={onClick} />
     );
 
-    const button = screen.getByRole("button", { name: "Set rating to 1 star" });
-    expect(button.getAttribute("aria-pressed")).toBe("false");
+    const button = screen.getByRole("radio", { name: "Set rating to 1 star" });
+    expect(button.getAttribute("aria-checked")).toBe("false");
 
     button.focus();
     await user.keyboard("{Enter}");

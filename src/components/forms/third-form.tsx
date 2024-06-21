@@ -13,6 +13,7 @@ import { Spinner } from "@/components/Spinner";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -129,8 +130,7 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
             render={({ field }) => (
               <FormItem className="min-w-0 border-none pb-0 shadow-none">
                 <FormLabel className="flex justify-center text-center">
-                  {localeData
-              .careerTitle}
+                  {localeData.careerTitle}
                 </FormLabel>
 
                 <FormControl>
@@ -161,7 +161,7 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
                       value="wfh"
                       className="min-h-14 min-w-24 flex-col items-center justify-center gap-1 px-4 py-2 text-center aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md focus-visible:ring-2"
                     >
-                      <Home />
+                      <Home aria-hidden="true" />
                       <span className="text-xs">{localeData
                   .wfh}</span>
                     </ToggleGroupItem>
@@ -169,7 +169,7 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
                       value="hybrid"
                       className="min-h-14 min-w-24 flex-col items-center justify-center gap-1 px-4 py-2 text-center aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md focus-visible:ring-2"
                     >
-                      <Video />
+                      <Video aria-hidden="true" />
                       <span className="text-xs">{localeData
                   .hybrid}</span>
                     </ToggleGroupItem>
@@ -177,7 +177,7 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
                       value="office"
                       className="min-h-14 min-w-24 flex-col items-center justify-center gap-1 px-4 py-2 text-center aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md focus-visible:ring-2"
                     >
-                      <Building />
+                      <Building aria-hidden="true" />
                       <span className="text-xs">{localeData
                   .office}</span>
                     </ToggleGroupItem>
@@ -195,14 +195,12 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="flex flex-col justify-center gap-1 text-center">
-                {localeData
-            .tellMoreTitle}
-                <p className="text-sm font-normal italic text-muted-foreground">
-                  {localeData
-              .tellMoreDescription}
-                </p>
-              </FormLabel>
+              <div className="flex flex-col justify-center gap-1 text-center">
+                <FormLabel>{localeData.tellMoreTitle}</FormLabel>
+                <FormDescription className="font-normal italic">
+                  {localeData.tellMoreDescription}
+                </FormDescription>
+              </div>
               <FormControl>
                 <Textarea placeholder="" {...field} />
               </FormControl>
@@ -216,14 +214,12 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="flex flex-col justify-center gap-1 text-center">
-                {localeData
-            .hobbiesTitle}
-                <p className="text-sm font-normal italic text-muted-foreground">
-                  {localeData
-              .hobbiesPlacholder}
-                </p>
-              </FormLabel>
+              <div className="flex flex-col justify-center gap-1 text-center">
+                <FormLabel>{localeData.hobbiesTitle}</FormLabel>
+                <FormDescription className="font-normal italic">
+                  {localeData.hobbiesPlacholder}
+                </FormDescription>
+              </div>
               <FormControl>
                 <Textarea placeholder="" {...field} />
               </FormControl>
@@ -236,16 +232,18 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
           control={form.control}
           render={({ field }) => (
             <FormItem className="p-5">
-              <FormLabel className="flex flex-col justify-center gap-1 text-center">
-                <p>{localeData
-            .social}</p>
-                <p className="text-sm font-normal italic text-muted-foreground">
-                  {localeData
-              .optional}
-                </p>
-              </FormLabel>
+              <div className="flex flex-col justify-center gap-1 text-center">
+                <FormLabel>{localeData.social}</FormLabel>
+                <FormDescription className="font-normal italic">
+                  {localeData.optional}
+                </FormDescription>
+              </div>
               <div className="flex flex-row justify-between items-center gap-3">
-                <Link className="text-devready-green" size={20} />
+                <Link
+                  className="text-devready-green"
+                  size={20}
+                  aria-hidden="true"
+                />
                 <FormControl>
                   <Input placeholder="Instagram, LinkedIn etc." {...field} />
                 </FormControl>

@@ -124,9 +124,7 @@ describe("Testing Global `locale`, switching between the two locales", () => {
     expect(subHeadingEN).toBeDefined();
 
     // Act
-    const localeSpanishButton = screen.getByRole("radio", {
-      name: "locale-es",
-    });
+    const localeSpanishButton = screen.getByRole("radio", { name: "Spanish" });
     await userEvent.click(localeSpanishButton);
 
     // Assert locale has updated
@@ -158,9 +156,7 @@ describe("Testing Global `locale`, switching between the two locales", () => {
     expect(passwordHeadingES).toBeDefined();
 
     // Act
-    const localeEnglishButton = screen.getByRole("radio", {
-      name: "locale-en",
-    });
+    const localeEnglishButton = screen.getByRole("radio", { name: "Inglés" });
 
     await userEvent.click(localeEnglishButton);
 
@@ -216,7 +212,7 @@ describe("Testing demo access", () => {
     ).toBeDefined();
 
     await userEvent.click(
-      screen.getByRole("button", { name: "Open tenant menu" })
+      screen.getByRole("button", { name: "Abrir menú de inquilino" })
     );
     expect(screen.getByText("Panel principal")).toBeDefined();
     expect(screen.getByText("Clasificación")).toBeDefined();
@@ -402,8 +398,9 @@ describe("Testing Global `applicantPool`, with `isLoading` and `error` states", 
     expect(loadingAnimation).toBeDefined();
 
     // Assert accessibility attributes
-    expect(loadingAnimation.getAttribute("role")).toBe("progressbar");
-    expect(loadingAnimation.getAttribute("aria-valuetext")).toBe("Loading");
+    expect(loadingAnimation.getAttribute("role")).toBe("status");
+    expect(loadingAnimation.getAttribute("aria-label")).toBe("Loading");
+    expect(loadingAnimation.getAttribute("aria-live")).toBe("polite");
     expect(loadingAnimation.getAttribute("aria-busy")).toBe("true");
   });
 

@@ -4,10 +4,10 @@ export const ErrorMessage = () => {
   const { error } = useGlobalState();
 
   return (
-    <p className="text-2xl">
-      <span>⛔️</span>
+    <p className="text-2xl" role="alert">
+      <span aria-hidden="true">⛔️</span>
       {error}
-      <span>⛔️</span>
+      <span aria-hidden="true">⛔️</span>
     </p>
   );
 };
