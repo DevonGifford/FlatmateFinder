@@ -51,7 +51,6 @@ export default function HomePage() {
     const { password } = data;
     const tenant = tenantAccess.find((credential) => credential.password === password);
     if (tenant) {
-      dispatch({ type: "SET_TENANT" });
       handleTenantLogin(tenant);
       return;
     }
@@ -67,12 +66,7 @@ export default function HomePage() {
   }
 
   function handleTenantLogin(tenant: (typeof tenantAccess)[number]) {
-    if (tenant.displayName) {
-      dispatch({
-        type: "SET_TENANT_PROFILE",
-        payload: tenant.displayName,
-      });
-    }
+    dispatch({ type: "SET_TENANT", payload: tenant.tenantId });
     navigate("/admin-welcome");
     toastCorrectPassword();
   }
@@ -83,8 +77,7 @@ export default function HomePage() {
   }
 
   function handleDemoTenant() {
-    dispatch({ type: "SET_DEMO_TENANT" });
-    dispatch({ type: "SET_TENANT_PROFILE", payload: "Devon" });
+    dispatch({ type: "SET_DEMO_TENANT", payload: "dev" });
     navigate("/admin-welcome");
   }
 

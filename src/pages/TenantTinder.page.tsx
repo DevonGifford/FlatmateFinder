@@ -12,7 +12,7 @@ import { normalizeExternalUrl } from "@/lib/utils";
 import { ProfilePic } from "@/components/ProfilePic";
 import { StarRating } from "@/components/StarRating";
 import {
-  getTenantByName,
+  getTenantById,
   TenantBooleanKey,
   TenantStarKey,
 } from "@/lib/constants/tenants";
@@ -41,17 +41,18 @@ import {
 } from "lucide-react";
 import { IoFemale, IoMale, IoMaleFemale } from "react-icons/io5";
 
-export default function TenantTinderPage() { useRequireTenant();
+export default function TenantTinderPage() {
+  useRequireTenant();
   const dispatch = useGlobalDispatch();
-  const { applicantPool, loggedTenant, accessMode, locale } = useGlobalState();
+  const { applicantPool, session, locale } = useGlobalState();
   const localeData: TenantPageData = locale === "EN" ? tenantData_EN : tenantData_ES;
-  const isDemoSession = accessMode === "demo-tenant";
+  const isDemoSession = session.role === "tenant" && session.mode === "demo";
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [starRatings, setStarRatings] = useState<number[]>(
     Array(applicantPool?.length).fill(0)
   );
 
-  const tenant = getTenantByName(loggedTenant);
+  const tenant = session.role === "tenant" ? getTenantById(session.tenantId) : undefined;
 
   //- Handle star-ranking individual applicants - updates global context
   const handleStarClick = (starIndex: number, cardIndex: number) => {
@@ -59,7 +60,7 @@ export default function TenantTinderPage() { useRequireTenant();
     newRatings[cardIndex] = starIndex + 1;
     setStarRatings(newRatings);
 
-    if (loggedTenant && applicantPool) {
+    if (tenant && applicantPool) {
       const cardData = applicantPool[cardIndex];
 
       if (cardData) {
@@ -76,7 +77,7 @@ export default function TenantTinderPage() { useRequireTenant();
 
   //- Handle swipe-ranking individual applicants - updates global context + sets next card
   const onSwipe = (direction: string, cardIndex: number) => {
-    if (loggedTenant && applicantPool) {
+    if (tenant && applicantPool) {
       const cardData = applicantPool[cardIndex];
 
       if (cardData) {
@@ -102,7 +103,7 @@ export default function TenantTinderPage() { useRequireTenant();
         void updateRanking(
           applicantPool[cardIndex].uuid,
           updatedRankings,
-          accessMode
+          session
         ).catch(() => toastError("Something went wrong"));
       }
     } else {

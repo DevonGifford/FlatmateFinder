@@ -2,22 +2,19 @@ import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
 import { useGlobalState } from "@/hooks/useGlobalState";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { isTenantSession } from "@/types/globalStateInterfaces";
 
 export const useRequireTenant = () => {
   const navigate = useNavigate();
   const dispatch = useGlobalDispatch();
-  const { isAuthenticatedTenant } = useGlobalState();
+  const { session } = useGlobalState();
 
   useEffect(() => {
-    const checkAdmin = async () => {
-      if (!isAuthenticatedTenant) {
+    if (!isTenantSession(session)) {
+      if (session.role !== "none") {
         dispatch({ type: "RESET_AUTH" });
-        navigate("/");
       }
-    };
-
-    checkAdmin();
-  }, [dispatch, isAuthenticatedTenant, navigate]);
-
-  return null;
+      navigate("/");
+    }
+  }, [dispatch, navigate, session]);
 };

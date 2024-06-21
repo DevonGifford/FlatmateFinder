@@ -4,6 +4,7 @@ import { useGlobalState } from "@/hooks/useGlobalState";
 import tenantData_EN from "@/locales/tenant-pages/tenant_en.json";
 import tenantData_ES from "@/locales/tenant-pages/tenant_es.json";
 import { TenantPageData } from "@/types/localeInterfaces";
+import { getTenantById } from "@/lib/constants/tenants";
 import {
   ArrowRight,
   ClipboardCheck,
@@ -14,10 +15,14 @@ import {
 
 export default function TenantWelcomePage() {
   useRequireTenant();
-  const { loggedTenant, accessMode, locale } = useGlobalState();
+  const { session, locale } = useGlobalState();
   const localeData: TenantPageData = locale === "EN" ? tenantData_EN : tenantData_ES;
-  // Keep the internal tenant identity available for demo ranking behavior.
-  const tenantDisplayName = accessMode === "demo-tenant" ? "Demo-Tenant" : loggedTenant;
+  const tenantDisplayName =
+    session.role === "tenant" && session.mode === "demo"
+      ? "Demo-Tenant"
+      : session.role === "tenant"
+        ? getTenantById(session.tenantId)?.name
+        : "";
 
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-col gap-8 px-4 py-8 sm:px-6 lg:gap-10 lg:py-12">

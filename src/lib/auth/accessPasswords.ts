@@ -1,8 +1,13 @@
 import { tenants } from "@/lib/constants/tenants";
+import type { TenantId } from "@/lib/constants/tenants";
 
-export interface AccessCredential {
+interface ApplicantAccessCredential {
   password: string | undefined;
-  displayName?: string;
+}
+
+interface TenantAccessCredential {
+  password: string | undefined;
+  tenantId: TenantId;
 }
 
 const tenantPasswords = [
@@ -11,12 +16,12 @@ const tenantPasswords = [
   import.meta.env.VITE_PASSWORD_TRES,
 ];
 
-export const tenantAccess: AccessCredential[] = tenants.map((tenant, index) => ({
+export const tenantAccess: TenantAccessCredential[] = tenants.map((tenant, index) => ({
   password: tenantPasswords[index],
-  displayName: tenant.name,
+  tenantId: tenant.id,
 }));
 
-export const applicantAccess: AccessCredential[] = [
+export const applicantAccess: ApplicantAccessCredential[] = [
   { password: import.meta.env.VITE_PASSWORD_ALPHA },
   { password: import.meta.env.VITE_PASSWORD_BETA },
   { password: import.meta.env.VITE_PASSWORD_MANGO },

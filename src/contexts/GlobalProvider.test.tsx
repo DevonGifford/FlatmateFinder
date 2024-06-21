@@ -98,9 +98,7 @@ describe("Testing the testing environment", () => {
       <GlobalProvider
         initialState={{
           ...initialState,
-          isAuthenticatedTenant: true,
-          accessMode: "tenant",
-          loggedTenant: "Devon",
+          session: { role: "tenant", mode: "real", tenantId: "dev" },
         }}
       >
         <App />
@@ -230,9 +228,7 @@ describe("Testing demo access", () => {
   test("clears a persisted demo session on a public page", async () => {
     window.history.pushState({}, "", "/FAQ");
     customRenderApp({
-      isAuthenticatedTenant: true,
-      accessMode: "demo-tenant",
-      loggedTenant: "Devon",
+      session: { role: "tenant", mode: "demo", tenantId: "dev" },
     });
 
     expect(screen.queryByText("Demo mode — changes are not saved")).toBeNull();
@@ -243,7 +239,7 @@ describe("Testing demo access", () => {
 });
 
 // DONE
-describe("Testing Global `isAuthenticated` and `loggedTenant`, with password submission form", () => {
+describe("Testing session state and password submission", () => {
   test("SET_TENANT + PROFILE - correct password should result in success toast notif", async () => {
     //- Assemble
     render(
@@ -308,6 +304,24 @@ describe("Testing Global `isAuthenticated` and `loggedTenant`, with password sub
     });
   });
 
+  test("hydrates a stable tenant id from the current session format", async () => {
+    sessionStorage.setItem(
+      "flatmate-finder-auth",
+      JSON.stringify({ role: "tenant", mode: "real", tenantId: "osc" })
+    );
+    window.history.pushState({}, "", "/admin-welcome");
+
+    render(
+      <GlobalProvider initialState={initialState}>
+        <App />
+      </GlobalProvider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("Welcome, Oscar")).toBeDefined();
+    });
+  });
+
   test("migrates a legacy demo session without treating it as real access", async () => {
     sessionStorage.setItem(
       "flatmate-finder-auth",
@@ -330,7 +344,11 @@ describe("Testing Global `isAuthenticated` and `loggedTenant`, with password sub
       const storedAuth = JSON.parse(
         sessionStorage.getItem("flatmate-finder-auth") ?? "{}"
       ) as { accessMode?: string };
-      expect(storedAuth.accessMode).toBe("demo-tenant");
+      expect(storedAuth).toMatchObject({
+        role: "tenant",
+        mode: "demo",
+        tenantId: "dev",
+      });
     });
   });
 
@@ -339,8 +357,7 @@ describe("Testing Global `isAuthenticated` and `loggedTenant`, with password sub
       <GlobalProvider
         initialState={{
           ...initialState,
-          isAuthenticatedTenant: true,
-          loggedTenant: "Devon",
+          session: { role: "tenant", mode: "real", tenantId: "dev" },
         }}
       >
         <App />
@@ -473,8 +490,7 @@ describe("Testing Global `applicantPool`, with `isLoading` and `error` states", 
         <GlobalProvider
           initialState={{
             ...initialState,
-            isAuthenticatedTenant: true,
-            loggedTenant: "Devon",
+            session: { role: "tenant", mode: "real", tenantId: "dev" },
             applicantPool: [mockApplicant],
           }}
         >

@@ -5,6 +5,11 @@ import {
   fetchApplicantPool,
   waitForFirebaseAuth,
 } from "@/lib/firebase/firestore";
+import {
+  isApplicantSession,
+  isDemoSession,
+  isTenantSession,
+} from "@/types/globalStateInterfaces";
 import { Toaster } from "@/components/ui/toaster";
 import homeData_EN from "@/locales/home-page/home_en.json";
 import homeData_ES from "@/locales/home-page/home_es.json";
@@ -24,6 +29,8 @@ import TenantLeaderboardPage from "@/pages/TenantLeaderboard.page";
 
 import "./App.css";
 
+const publicRoutes = ["/", "/FAQ"] as const;
+const applicantRoutes = ["/form", "/thankyou"] as const;
 const tenantRoutes = [
   "/admin-welcome",
   "/admin-tinder",
@@ -40,47 +47,42 @@ function App() {
 }
 
 function AppContent() {
-  const {
-    isAuthenticatedTenant,
-    isAuthenticatedApplicant,
-    accessMode,
-    applicantPool,
-    locale,
-  } = useGlobalState();
+  const { session, applicantPool, locale } = useGlobalState();
   const dispatch = useGlobalDispatch();
   const location = useLocation();
   const localeData: HomePageData = locale === "EN" ? homeData_EN : homeData_ES;
-  const isPublicRoute = location.pathname === "/" || location.pathname === "/FAQ";
+  const isPublicRoute = publicRoutes.includes(
+    location.pathname as (typeof publicRoutes)[number]
+  );
   const isTenantRoute = tenantRoutes.includes(
     location.pathname as (typeof tenantRoutes)[number]
   );
   const isDemoApplicantArea =
-    accessMode === "demo-applicant" &&
-    ["/form", "/thankyou"].includes(location.pathname);
-  const isDemoTenantArea =
-    accessMode === "demo-tenant" &&
-    ["/admin-welcome", "/admin-tinder", "/admin-leaderboard"].includes(
-      location.pathname
+    isApplicantSession(session) &&
+    session.mode === "demo" &&
+    applicantRoutes.includes(
+      location.pathname as (typeof applicantRoutes)[number]
     );
+  const isDemoTenantArea =
+    isTenantSession(session) && session.mode === "demo" && isTenantRoute;
   const isDemoArea = isDemoApplicantArea || isDemoTenantArea;
-  const isDemoSession =
-    accessMode === "demo-applicant" || accessMode === "demo-tenant";
-  const demoSessionOnMount = useRef(isDemoSession);
+  const hasDemoSession = isDemoSession(session);
+  const demoSessionOnMount = useRef(hasDemoSession);
   const wasInDemoArea = useRef(isDemoArea);
 
   useEffect(() => {
     if (
-      isDemoSession &&
+      hasDemoSession &&
       isPublicRoute &&
       (demoSessionOnMount.current || wasInDemoArea.current)
     ) {
       dispatch({ type: "RESET_AUTH" });
     }
     wasInDemoArea.current = isDemoArea;
-  }, [dispatch, isDemoArea, isDemoSession, isPublicRoute]);
+  }, [dispatch, hasDemoSession, isDemoArea, isPublicRoute]);
 
   useEffect(() => {
-    if (!isAuthenticatedTenant || !isTenantRoute || applicantPool !== null) {
+    if (!isTenantSession(session) || !isTenantRoute || applicantPool !== null) {
       return;
     }
 
@@ -106,16 +108,16 @@ function AppContent() {
     return () => {
       cancelled = true;
     };
-  }, [applicantPool, dispatch, isAuthenticatedTenant, isTenantRoute]);
+  }, [applicantPool, dispatch, isTenantRoute, session]);
 
   const showTenantShell =
-    isAuthenticatedTenant && (!isDemoSession || isDemoTenantArea);
+    isTenantSession(session) && (!hasDemoSession || isDemoTenantArea);
 
   return (
     <>
       {!showTenantShell && <Navbar />}
       {showTenantShell && <Sidebar />}
-      <main className="flex flex-col h-auto gap-3 lg:gap-5">
+      <main className="flex h-auto flex-col gap-3 lg:gap-5">
         {isDemoArea && (
           <p className="mx-auto rounded-full bg-muted px-4 py-1 text-center text-sm text-muted-foreground">
             {localeData.demoBanner}
@@ -124,13 +126,13 @@ function AppContent() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/FAQ" element={<FaqPage />} />
-          {(isAuthenticatedApplicant || accessMode === "demo-applicant") && (
+          {isApplicantSession(session) && (
             <>
               <Route path="/form" element={<ApplicationPage />} />
               <Route path="/thankyou" element={<ThankyouPage />} />
             </>
           )}
-          {(isAuthenticatedTenant || accessMode === "demo-tenant") && (
+          {isTenantSession(session) && (
             <>
               <Route path="/admin-welcome" element={<TenantWelcomePage />} />
               <Route path="/admin-tinder" element={<TenantTinderPage />} />
@@ -142,7 +144,6 @@ function AppContent() {
           )}
         </Routes>
       </main>
-
     </>
   );
 }

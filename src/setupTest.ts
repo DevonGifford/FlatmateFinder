@@ -7,9 +7,9 @@ beforeEach(() => {
 
 vi.mock("@/lib/auth/accessPasswords", () => ({
   tenantAccess: [
-    { password: "test-tenant-password", displayName: "Devon" },
-    { password: "test-tenant-password-two", displayName: "Oscar" },
-    { password: "test-tenant-password-three", displayName: "Adrian" },
+    { password: "test-tenant-password", tenantId: "dev" },
+    { password: "test-tenant-password-two", tenantId: "osc" },
+    { password: "test-tenant-password-three", tenantId: "adr" },
   ],
   applicantAccess: [
     { password: "test-applicant-password" },

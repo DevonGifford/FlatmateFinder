@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { GlobalProvider } from "@/contexts/GlobalProvider";
-import { GlobalStateInterface } from "@/types/globalStateInterfaces";
+import type { GlobalStateInterface } from "@/types/globalStateInterfaces";
 
 import App from "@/App";
 import TenantLeaderboardPage from "@/pages/TenantLeaderboard.page";
@@ -10,10 +10,7 @@ export function customRenderApp(
   partialState: Partial<GlobalStateInterface>
 ) {
   const defaultState: GlobalStateInterface = {
-    isAuthenticatedApplicant: false,
-    isAuthenticatedTenant: false,
-    accessMode: "none",
-    loggedTenant: "",
+    session: { role: "none", mode: "none" },
     locale: "EN",
     isLoading: false,
     error: "",
@@ -33,10 +30,7 @@ export function customRenderLeaderBoard(
   partialState: Partial<GlobalStateInterface>
 ) {
   const defaultState: GlobalStateInterface = {
-    isAuthenticatedApplicant: false,
-    isAuthenticatedTenant: true,
-    accessMode: "tenant",
-    loggedTenant: "Devon",
+    session: { role: "tenant", mode: "real", tenantId: "dev" },
     locale: "EN",
     isLoading: false,
     error: "",

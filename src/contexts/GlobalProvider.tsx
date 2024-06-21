@@ -1,23 +1,87 @@
 import React, { createContext, useEffect, useReducer } from "react";
 import GlobalReducer from "./GlobalReducer";
 import {
-  ActionType,
-  GlobalStateInterface,
+  type AppSession,
+  type ActionType,
+  type GlobalStateInterface,
 } from "@/types/globalStateInterfaces";
+import {
+  getTenantByName,
+  getTenantById,
+  type TenantId,
+} from "@/lib/constants/tenants";
 
 const AUTH_STORAGE_KEY = "flatmate-finder-auth";
 
-const legacyDemoAccessModes = {
-  "guest-applicant": "demo-applicant",
-  "guest-tenant": "demo-tenant",
-} as const;
+const sessionModes = ["real", "demo"] as const;
 
-type PersistedAuth = Pick<
-  GlobalStateInterface,
-  "isAuthenticatedApplicant" | "isAuthenticatedTenant" | "accessMode" | "loggedTenant"
->;
+type LegacyPersistedAuth = {
+  isAuthenticatedApplicant: boolean;
+  isAuthenticatedTenant: boolean;
+  accessMode?: string;
+  loggedTenant: string;
+};
 
-function readPersistedAuth(): PersistedAuth | null {
+function isTenantId(value: unknown): value is TenantId {
+  return (
+    typeof value === "string" &&
+    getTenantById(value as TenantId) !== undefined
+  );
+}
+
+function isAppSession(value: unknown): value is AppSession {
+  if (typeof value !== "object" || value === null) return false;
+
+  const session = value as Record<string, unknown>;
+  if (session.role === "none") return session.mode === "none";
+  if (!sessionModes.includes(session.mode as (typeof sessionModes)[number])) {
+    return false;
+  }
+  if (session.role === "applicant") return true;
+  return session.role === "tenant" && isTenantId(session.tenantId);
+}
+
+function migrateLegacyAuth(auth: LegacyPersistedAuth): AppSession | null {
+  const normalizedMode =
+    auth.accessMode === "guest-applicant"
+      ? "demo-applicant"
+      : auth.accessMode === "guest-tenant"
+        ? "demo-tenant"
+        : auth.accessMode;
+
+  if (normalizedMode === "applicant") {
+    return { role: "applicant", mode: "real" };
+  }
+  if (normalizedMode === "demo-applicant") {
+    return { role: "applicant", mode: "demo" };
+  }
+
+  if (normalizedMode === "tenant" || normalizedMode === "demo-tenant") {
+    const tenant = getTenantByName(auth.loggedTenant);
+    if (!tenant) return null;
+
+    return {
+      role: "tenant",
+      mode: normalizedMode === "demo-tenant" ? "demo" : "real",
+      tenantId: tenant.id,
+    };
+  }
+
+  if (auth.accessMode !== undefined) return null;
+  if (auth.isAuthenticatedApplicant === auth.isAuthenticatedTenant) {
+    return null;
+  }
+  if (auth.isAuthenticatedApplicant) {
+    return { role: "applicant", mode: "real" };
+  }
+
+  const tenant = getTenantByName(auth.loggedTenant);
+  return tenant
+    ? { role: "tenant", mode: "real", tenantId: tenant.id }
+    : null;
+}
+
+function readPersistedSession(): AppSession | null {
   try {
     const storedAuth = window.sessionStorage.getItem(AUTH_STORAGE_KEY);
     if (!storedAuth) return null;
@@ -26,6 +90,8 @@ function readPersistedAuth(): PersistedAuth | null {
     if (typeof parsedAuth !== "object" || parsedAuth === null) {
       return null;
     }
+
+    if (isAppSession(parsedAuth)) return parsedAuth;
 
     const authRecord = parsedAuth as Record<string, unknown>;
     if (
@@ -36,80 +102,54 @@ function readPersistedAuth(): PersistedAuth | null {
       return null;
     }
 
-    const persistedMode = authRecord.accessMode;
-    const normalizedMode =
-      typeof persistedMode === "string"
-        ? legacyDemoAccessModes[persistedMode as keyof typeof legacyDemoAccessModes] ??
-          persistedMode
-        : undefined;
-    const accessMode =
-      typeof normalizedMode === "string" &&
-      [
-        "none",
-        "applicant",
-        "tenant",
-        "demo-applicant",
-        "demo-tenant",
-      ].includes(normalizedMode)
-        ? (normalizedMode as PersistedAuth["accessMode"])
-        : persistedMode === undefined
-          ? authRecord.isAuthenticatedTenant
-            ? "tenant"
-            : authRecord.isAuthenticatedApplicant
-              ? "applicant"
-              : "none"
-          : "none";
-
-    return {
+    return migrateLegacyAuth({
       isAuthenticatedApplicant: authRecord.isAuthenticatedApplicant,
       isAuthenticatedTenant: authRecord.isAuthenticatedTenant,
-      accessMode,
+      accessMode:
+        typeof authRecord.accessMode === "string"
+          ? authRecord.accessMode
+          : undefined,
       loggedTenant: authRecord.loggedTenant,
-    };
+    });
   } catch {
     return null;
   }
 }
 
 // Define separate contexts for state and dispatch
-export const GlobalStateContext = createContext<GlobalStateInterface | undefined>(undefined);
-export const GlobalDispatchContext = createContext<React.Dispatch<ActionType> | undefined>(undefined);
+export const GlobalStateContext = createContext<
+  GlobalStateInterface | undefined
+>(undefined);
+export const GlobalDispatchContext = createContext<
+  React.Dispatch<ActionType> | undefined
+>(undefined);
 
-interface Props { 
-  children: React.ReactNode; 
-  initialState: GlobalStateInterface
+interface Props {
+  children: React.ReactNode;
+  initialState: GlobalStateInterface;
 }
 
 export const GlobalProvider: React.FC<Props> = ({ children, initialState }) => {
-  const persistedAuth = readPersistedAuth();
+  const persistedSession = readPersistedSession();
   const [globalState, dispatch] = useReducer(GlobalReducer, {
     ...initialState,
-    ...(persistedAuth ?? {}),
+    ...(persistedSession ? { session: persistedSession } : {}),
   });
 
   useEffect(() => {
-    const auth: PersistedAuth = {
-      isAuthenticatedApplicant: globalState.isAuthenticatedApplicant,
-      isAuthenticatedTenant: globalState.isAuthenticatedTenant,
-      accessMode: globalState.accessMode,
-      loggedTenant: globalState.loggedTenant,
-    };
-
     try {
-      if (auth.isAuthenticatedApplicant || auth.isAuthenticatedTenant) {
-        window.sessionStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(auth));
+      if (globalState.session.role !== "none") {
+        window.sessionStorage.setItem(
+          AUTH_STORAGE_KEY,
+          JSON.stringify(globalState.session)
+        );
       } else {
         window.sessionStorage.removeItem(AUTH_STORAGE_KEY);
       }
     } catch {
       // Session persistence is a convenience and must not block the app.
     }
-  }, [
-    globalState.isAuthenticatedApplicant,
-    globalState.isAuthenticatedTenant,
-    globalState.accessMode,
-    globalState.loggedTenant,
-  ]);
+  }, [globalState.session]);
 
   return (
     <GlobalStateContext.Provider value={globalState}>

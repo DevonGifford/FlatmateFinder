@@ -1,6 +1,6 @@
 import {
-  ActionType,
-  GlobalStateInterface,
+  type ActionType,
+  type GlobalStateInterface,
   initialState,
 } from "@/types/globalStateInterfaces";
 
@@ -13,43 +13,27 @@ const globalReducer = (
     case "SET_APPLICANT":
       return {
         ...state,
-        isAuthenticatedApplicant: true,
-        isAuthenticatedTenant: false,
-        accessMode: "applicant",
+        session: { role: "applicant", mode: "real" },
       };
     case "SET_TENANT":
       return {
         ...state,
-        isAuthenticatedApplicant: false,
-        isAuthenticatedTenant: true,
-        accessMode: "tenant",
+        session: { role: "tenant", mode: "real", tenantId: action.payload },
       };
     case "SET_DEMO_APPLICANT":
       return {
         ...state,
-        isAuthenticatedApplicant: true,
-        isAuthenticatedTenant: false,
-        accessMode: "demo-applicant",
+        session: { role: "applicant", mode: "demo" },
       };
     case "SET_DEMO_TENANT":
       return {
         ...state,
-        isAuthenticatedApplicant: false,
-        isAuthenticatedTenant: true,
-        accessMode: "demo-tenant",
-      };
-    case "SET_TENANT_PROFILE":
-      return {
-        ...state,
-        loggedTenant: action.payload,
+        session: { role: "tenant", mode: "demo", tenantId: action.payload },
       };
     case "RESET_AUTH":
       return {
         ...state,
-        isAuthenticatedApplicant: false,
-        isAuthenticatedTenant: false,
-        accessMode: "none",
-        loggedTenant: "",
+        session: { role: "none", mode: "none" },
         applicantPool: null,
         isLoading: false,
         error: "",

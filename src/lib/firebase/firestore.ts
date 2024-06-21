@@ -8,7 +8,11 @@ import {
 import db, { authReady } from "./config";
 import { ApplicationInterface } from "@/types/applicationInterfaces";
 import { ApplicantProfile } from "@/types/applicantInterfaces";
-import { AccessMode } from "@/types/globalStateInterfaces";
+import {
+  type AppSession,
+  isApplicantSession,
+  isTenantSession,
+} from "@/types/globalStateInterfaces";
 import { parseApplicantProfile } from "@/types/applicantSchemas";
 
 export type DocumentId = string;
@@ -18,9 +22,9 @@ export const waitForFirebaseAuth = () => authReady;
 
 export const createApplicantDoc = async (
   userData: ApplicationInterface,
-  accessMode: AccessMode
+  session: AppSession
 ): Promise<DocumentId> => {
-  if (accessMode !== "applicant") {
+  if (!isApplicantSession(session) || session.mode !== "real") {
     throw new Error("Demo sessions cannot write applicant data");
   }
 
@@ -55,9 +59,9 @@ export async function fetchApplicantPool(): Promise<ApplicantProfile[]> {
 export const updateRanking = async (
   userId: string,
   updatedRankings: Partial<NonNullable<ApplicantProfile["rankings"]>>,
-  accessMode: AccessMode
+  session: AppSession
 ): Promise<void> => {
-  if (accessMode !== "tenant") {
+  if (!isTenantSession(session) || session.mode !== "real") {
     throw new Error("Demo sessions cannot write applicant rankings");
   }
 

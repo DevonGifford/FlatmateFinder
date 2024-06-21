@@ -25,6 +25,7 @@ import { toastError, toastFormComplete } from "@/lib/customToast";
 import { ThirdFormData } from "@/types/localeInterfaces";
 import { normalizeExternalUrl } from "@/lib/utils";
 import { getValidationMessages } from "@/lib/forms/formUtils";
+import { isApplicantSession } from "@/types/globalStateInterfaces";
 
 import Data_EN from "@/locales/applicant-form/thirdform_en.json";
 import Data_ES from "@/locales/applicant-form/thirdform_es.json";
@@ -65,7 +66,7 @@ interface ThirdFormProps {
 export function ThirdForm({ application, setApplication }: ThirdFormProps) {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const { locale, accessMode } = useGlobalState();
+  const { locale, session } = useGlobalState();
   const localeData: ThirdFormData = locale === "EN" ? Data_EN : Data_ES;
 
   const form = useForm<ThirdFormValues>({
@@ -92,7 +93,7 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
         thirdForm: updatedThirdForm,
         photo: "",
       };
-      if (accessMode === "demo-applicant") {
+      if (isApplicantSession(session) && session.mode === "demo") {
         setIsLoading(false);
         toastFormComplete("3");
         setApplication(defaultApplication);
@@ -100,7 +101,7 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
         return;
       }
 
-      await createApplicantDoc(completedApplication, accessMode);
+      await createApplicantDoc(completedApplication, session);
 
       setIsLoading(false);
       toastFormComplete("3");
