@@ -1,10 +1,3 @@
-import { Link } from "react-router-dom";
-import { useRequireTenant } from "@/hooks/useRequireTenant";
-import { useGlobalState } from "@/hooks/useGlobalState";
-import tenantData_EN from "@/locales/tenant-pages/tenant_en.json";
-import tenantData_ES from "@/locales/tenant-pages/tenant_es.json";
-import { TenantPageData } from "@/types/localeInterfaces";
-import { getTenantById } from "@/lib/constants/tenants";
 import {
   ArrowRight,
   ClipboardCheck,
@@ -12,11 +5,20 @@ import {
   ListChecks,
   Sparkles,
 } from "lucide-react";
+import { Link } from "react-router-dom";
+
+import { useGlobalState } from "@/hooks/useGlobalState";
+import { useRequireTenant } from "@/hooks/useRequireTenant";
+import { getTenantById } from "@/lib/constants/tenants";
+import tenantData_EN from "@/locales/tenant-pages/tenant_en.json";
+import tenantData_ES from "@/locales/tenant-pages/tenant_es.json";
+import { TenantPageData } from "@/types/localeInterfaces";
 
 export default function TenantWelcomePage() {
   useRequireTenant();
   const { session, locale } = useGlobalState();
-  const localeData: TenantPageData = locale === "EN" ? tenantData_EN : tenantData_ES;
+  const localeData: TenantPageData =
+    locale === "EN" ? tenantData_EN : tenantData_ES;
   const tenantDisplayName =
     session.role === "tenant" && session.mode === "demo"
       ? "Demo-Tenant"
@@ -67,10 +69,10 @@ export default function TenantWelcomePage() {
           </li>
         </ol>
         <div className="mt-6 border-t pt-5 text-center text-sm text-muted-foreground">
-          <p className="font-semibold text-foreground">{localeData.ratingReminder}</p>
-          <p className="mt-1">
-            {localeData.ratingReminderDescription}
+          <p className="font-semibold text-foreground">
+            {localeData.ratingReminder}
           </p>
+          <p className="mt-1">{localeData.ratingReminderDescription}</p>
         </div>
       </section>
 
@@ -83,7 +85,9 @@ export default function TenantWelcomePage() {
             <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-primary-foreground">
               <Heart className="h-5 w-5" />
             </div>
-            <h2 className="text-2xl font-bold">{localeData.tinderReviewTitle}</h2>
+            <h2 className="text-2xl font-bold">
+              {localeData.tinderReviewTitle}
+            </h2>
             <p className="mt-2 text-muted-foreground">
               {localeData.tinderReviewDescription}
             </p>
@@ -102,7 +106,9 @@ export default function TenantWelcomePage() {
             <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-primary-foreground">
               <ListChecks className="h-5 w-5" />
             </div>
-            <h2 className="text-2xl font-bold">{localeData.viewLeaderboardTitle}</h2>
+            <h2 className="text-2xl font-bold">
+              {localeData.viewLeaderboardTitle}
+            </h2>
             <p className="mt-2 text-muted-foreground">
               {localeData.viewLeaderboardDescription}
             </p>

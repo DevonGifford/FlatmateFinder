@@ -1,11 +1,10 @@
-import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
-import { useGlobalState } from "@/hooks/useGlobalState";
-import { Input } from "@/components/ui/input";
+import * as z from "zod";
+
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -16,16 +15,17 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
+import { useGlobalState } from "@/hooks/useGlobalState";
+import { applicantAccess, tenantAccess } from "@/lib/auth/accessPasswords";
 import {
   toastCorrectPassword,
   toastIncorrectPassword,
 } from "@/lib/customToast";
-
-import { HomePageData } from "@/types/localeInterfaces";
 import Data_EN from "@/locales/home-page/home_en.json";
 import Data_ES from "@/locales/home-page/home_es.json";
-import { applicantAccess, tenantAccess } from "@/lib/auth/accessPasswords";
-import { Eye, EyeOff } from "lucide-react";
+import { HomePageData } from "@/types/localeInterfaces";
 
 const FormSchema = z.object({
   password: z.string().min(5, {
@@ -49,13 +49,17 @@ export default function HomePage() {
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     const { password } = data;
-    const tenant = tenantAccess.find((credential) => credential.password === password);
+    const tenant = tenantAccess.find(
+      (credential) => credential.password === password,
+    );
     if (tenant) {
       handleTenantLogin(tenant);
       return;
     }
 
-    if (applicantAccess.some((credential) => credential.password === password)) {
+    if (
+      applicantAccess.some((credential) => credential.password === password)
+    ) {
       dispatch({ type: "SET_APPLICANT" });
       toastCorrectPassword();
       navigate("/form");
@@ -123,7 +127,6 @@ export default function HomePage() {
                       <Input
                         placeholder=""
                         className="pr-10 text-center"
-                        autoFocus
                         type={showPassword ? "text" : "password"}
                         {...field}
                       />

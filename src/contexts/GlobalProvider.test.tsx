@@ -1,25 +1,22 @@
-import userEvent from "@testing-library/user-event";
-import { test, expect, describe, beforeEach, vi } from "vitest";
-import { screen, render, waitFor } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
-import { GlobalProvider } from "@/contexts/GlobalProvider";
-import { ApplicantProfile } from "@/types/applicantInterfaces";
 import { Timestamp } from "@firebase/firestore";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { MemoryRouter } from "react-router-dom";
+import { beforeEach, describe, expect, test, vi } from "vitest";
+
+import App from "@/App";
+import Navbar from "@/components/Navbar";
+import { GlobalProvider } from "@/contexts/GlobalProvider";
+import { fetchApplicantPool } from "@/lib/firebase/firestore";
+import FaqPage from "@/pages/Faq.page";
+import TenantLeaderboardPage from "@/pages/TenantLeaderboard.page";
+import TenantTinderPage from "@/pages/TenantTinder.page";
+import { customRenderApp, customRenderLeaderBoard } from "@/testUtils";
+import { ApplicantProfile } from "@/types/applicantInterfaces";
 import {
   GlobalStateInterface,
   initialState,
 } from "@/types/globalStateInterfaces";
-import {
-  customRenderLeaderBoard,
-  customRenderApp,
-} from "@/testUtils";
-
-import App from "@/App";
-import Navbar from "@/components/Navbar";
-import FaqPage from "@/pages/Faq.page";
-import TenantLeaderboardPage from "@/pages/TenantLeaderboard.page";
-import TenantTinderPage from "@/pages/TenantTinder.page";
-import { fetchApplicantPool } from "@/lib/firebase/firestore";
 
 beforeEach(() => {
   window.history.pushState({}, "", "/");
@@ -32,7 +29,7 @@ describe("Testing the testing environment", () => {
     render(
       <GlobalProvider initialState={initialState}>
         <App />
-      </GlobalProvider>
+      </GlobalProvider>,
     );
     //- Assert
     const mainHeading = screen.getByText("Flatmate Finder");
@@ -49,7 +46,7 @@ describe("Testing the testing environment", () => {
           <Navbar />
           <FaqPage />
         </GlobalProvider>
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     //- Assert
@@ -61,7 +58,7 @@ describe("Testing the testing environment", () => {
     render(
       <GlobalProvider initialState={initialState}>
         <App />
-      </GlobalProvider>
+      </GlobalProvider>,
     );
 
     //- Act
@@ -73,7 +70,7 @@ describe("Testing the testing environment", () => {
     //- Assert
     await waitFor(() => {
       const errorToast = screen.getByText(
-        "That's not correct - Eso no está bien"
+        "That's not correct - Eso no está bien",
       );
       expect(errorToast).toBeDefined();
     });
@@ -83,7 +80,7 @@ describe("Testing the testing environment", () => {
     render(
       <GlobalProvider initialState={initialState}>
         <App />
-      </GlobalProvider>
+      </GlobalProvider>,
     );
 
     await waitFor(() => {
@@ -102,7 +99,7 @@ describe("Testing the testing environment", () => {
         }}
       >
         <App />
-      </GlobalProvider>
+      </GlobalProvider>,
     );
 
     await waitFor(() => {
@@ -117,7 +114,7 @@ describe("Testing Global `locale`, switching between the two locales", () => {
     render(
       <GlobalProvider initialState={initialState}>
         <App />
-      </GlobalProvider>
+      </GlobalProvider>,
     );
     // Assert initially loads with en locale set
     const subHeadingEN = screen.getByText("Welcome to");
@@ -131,7 +128,7 @@ describe("Testing Global `locale`, switching between the two locales", () => {
     const welcomeHeading = screen.getByText(/^Bienvenido a/i);
     const passwordHeading = screen.getByText(/^Ingresar contraseña/i);
     const passwordText = screen.getByText(
-      /^Usa la contraseña compartida contigo/i
+      /^Usa la contraseña compartida contigo/i,
     );
     const continueButton = screen.getByText(/^Continuar/i);
     expect(welcomeHeading).toBeDefined();
@@ -170,9 +167,7 @@ describe("Testing demo access", () => {
   test("demo applicant can enter the applicant experience", async () => {
     customRenderApp({});
 
-    await userEvent.click(
-      screen.getByRole("button", { name: "Applicant" })
-    );
+    await userEvent.click(screen.getByRole("button", { name: "Applicant" }));
 
     expect(screen.getByText("Demo mode — changes are not saved")).toBeDefined();
     expect(screen.getByLabelText("Name & Surname")).toBeDefined();
@@ -181,9 +176,7 @@ describe("Testing demo access", () => {
   test("demo tenant can enter the tenant experience", async () => {
     customRenderApp({});
 
-    await userEvent.click(
-      screen.getByRole("button", { name: "Tenant" })
-    );
+    await userEvent.click(screen.getByRole("button", { name: "Tenant" }));
 
     expect(screen.getByText("Demo mode — changes are not saved")).toBeDefined();
     expect(screen.getByText("Welcome, Demo-Tenant")).toBeDefined();
@@ -192,27 +185,23 @@ describe("Testing demo access", () => {
   test("demo access copy follows the selected Spanish locale", async () => {
     customRenderApp({ locale: "ES" });
 
-    await userEvent.click(
-      screen.getByRole("button", { name: "Solicitante" })
-    );
+    await userEvent.click(screen.getByRole("button", { name: "Solicitante" }));
 
-    expect(screen.getByText("Modo demo — los cambios no se guardan")).toBeDefined();
+    expect(
+      screen.getByText("Modo demo — los cambios no se guardan"),
+    ).toBeDefined();
   });
 
   test("Spanish demo tenants see localized tenant navigation and pages", async () => {
     customRenderApp({ locale: "ES" });
 
-    await userEvent.click(
-      screen.getByRole("button", { name: "Inquilino" })
-    );
+    await userEvent.click(screen.getByRole("button", { name: "Inquilino" }));
 
     expect(screen.getByText("Bienvenido, Demo-Tenant")).toBeDefined();
-    expect(
-      screen.getByText(/Este es el panel de inquilinos/)
-    ).toBeDefined();
+    expect(screen.getByText(/Este es el panel de inquilinos/)).toBeDefined();
 
     await userEvent.click(
-      screen.getByRole("button", { name: "Abrir menú de inquilino" })
+      screen.getByRole("button", { name: "Abrir menú de inquilino" }),
     );
     expect(screen.getByText("Panel principal")).toBeDefined();
     expect(screen.getByText("Clasificación")).toBeDefined();
@@ -241,7 +230,7 @@ describe("Testing session state and password submission", () => {
     render(
       <GlobalProvider initialState={initialState}>
         <App />
-      </GlobalProvider>
+      </GlobalProvider>,
     );
     const input = screen.getByLabelText("Enter password");
     const continueButton = screen.getByRole("button", { name: "Continue" });
@@ -262,7 +251,7 @@ describe("Testing session state and password submission", () => {
     render(
       <GlobalProvider initialState={initialState}>
         <App />
-      </GlobalProvider>
+      </GlobalProvider>,
     );
     const input = screen.getByLabelText("Enter password");
     const continueButton = screen.getByRole("button", { name: "Continue" });
@@ -285,14 +274,14 @@ describe("Testing session state and password submission", () => {
         isAuthenticatedApplicant: false,
         isAuthenticatedTenant: true,
         loggedTenant: "Devon",
-      })
+      }),
     );
     window.history.pushState({}, "", "/admin-welcome");
 
     render(
       <GlobalProvider initialState={initialState}>
         <App />
-      </GlobalProvider>
+      </GlobalProvider>,
     );
 
     await waitFor(() => {
@@ -303,14 +292,14 @@ describe("Testing session state and password submission", () => {
   test("hydrates a stable tenant id from the current session format", async () => {
     sessionStorage.setItem(
       "flatmate-finder-auth",
-      JSON.stringify({ role: "tenant", mode: "real", tenantId: "osc" })
+      JSON.stringify({ role: "tenant", mode: "real", tenantId: "osc" }),
     );
     window.history.pushState({}, "", "/admin-welcome");
 
     render(
       <GlobalProvider initialState={initialState}>
         <App />
-      </GlobalProvider>
+      </GlobalProvider>,
     );
 
     await waitFor(() => {
@@ -326,19 +315,19 @@ describe("Testing session state and password submission", () => {
         isAuthenticatedTenant: true,
         accessMode: "guest-tenant",
         loggedTenant: "Devon",
-      })
+      }),
     );
     window.history.pushState({}, "", "/admin-welcome");
 
     render(
       <GlobalProvider initialState={initialState}>
         <App />
-      </GlobalProvider>
+      </GlobalProvider>,
     );
 
     await waitFor(() => {
       const storedAuth = JSON.parse(
-        sessionStorage.getItem("flatmate-finder-auth") ?? "{}"
+        sessionStorage.getItem("flatmate-finder-auth") ?? "{}",
       ) as { accessMode?: string };
       expect(storedAuth).toMatchObject({
         role: "tenant",
@@ -357,11 +346,11 @@ describe("Testing session state and password submission", () => {
         }}
       >
         <App />
-      </GlobalProvider>
+      </GlobalProvider>,
     );
 
     await userEvent.click(
-      screen.getByRole("button", { name: "Open tenant menu" })
+      screen.getByRole("button", { name: "Open tenant menu" }),
     );
     await userEvent.click(screen.getByRole("button", { name: "Logout" }));
 
@@ -379,7 +368,7 @@ describe("Testing Global `applicantPool`, with `isLoading` and `error` states", 
         <GlobalProvider initialState={initialState}>
           <TenantLeaderboardPage />
         </GlobalProvider>
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     // Assert
@@ -493,7 +482,7 @@ describe("Testing Global `applicantPool`, with `isLoading` and `error` states", 
         >
           <TenantTinderPage />
         </GlobalProvider>
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     expect(screen.getByText("React 19 Applicant")).toBeDefined();

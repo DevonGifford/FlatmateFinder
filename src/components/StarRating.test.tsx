@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
+
 import { StarRating } from "./StarRating";
 
 describe("StarRating", () => {
@@ -9,7 +10,11 @@ describe("StarRating", () => {
     const onClick = vi.fn();
 
     render(
-      <StarRating filled={false} label="Set rating to 1 star" onClick={onClick} />
+      <StarRating
+        filled={false}
+        label="Set rating to 1 star"
+        onClick={onClick}
+      />,
     );
 
     const button = screen.getByRole("radio", { name: "Set rating to 1 star" });

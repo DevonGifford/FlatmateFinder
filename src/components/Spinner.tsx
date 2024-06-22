@@ -1,6 +1,7 @@
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
 import { Loader } from "lucide-react";
+
+import { cn } from "@/lib/utils";
 
 type SpinnerProps = VariantProps<typeof spinnerVariants>;
 
@@ -24,7 +25,7 @@ export const Spinner = ({ size }: SpinnerProps) => {
     <span
       className={cn(
         "inline-flex shrink-0 items-center justify-center text-muted-foreground animate-spin slower",
-        spinnerVariants({ size })
+        spinnerVariants({ size }),
       )}
       data-testid="spinner-svg"
       role="status"

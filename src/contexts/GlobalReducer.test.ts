@@ -1,7 +1,9 @@
 import { Timestamp } from "firebase/firestore";
 import { describe, expect, it } from "vitest";
-import GlobalReducer from "./GlobalReducer";
+
 import type { GlobalStateInterface } from "@/types/globalStateInterfaces";
+
+import GlobalReducer from "./GlobalReducer";
 
 const applicant = {
   id: "applicant-1",

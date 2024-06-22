@@ -2,10 +2,12 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
-import { FirstForm } from "./first-form";
+
 import { GlobalProvider } from "@/contexts/GlobalProvider";
 import { defaultApplication } from "@/types/applicationInterfaces";
 import { initialState } from "@/types/globalStateInterfaces";
+
+import { FirstForm } from "./first-form";
 
 describe("FirstForm", () => {
   it("blocks progression when required fields are blank", async () => {
@@ -20,7 +22,7 @@ describe("FirstForm", () => {
             setApplication={setApplication}
           />
         </GlobalProvider>
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     await user.click(screen.getByRole("button", { name: "Next" }));

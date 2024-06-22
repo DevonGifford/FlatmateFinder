@@ -6,7 +6,7 @@ import {
 
 const globalReducer = (
   state: GlobalStateInterface,
-  action: ActionType
+  action: ActionType,
 ): GlobalStateInterface => {
   switch (action.type) {
     //- auth actions
@@ -72,7 +72,7 @@ const globalReducer = (
         ...state,
         applicantPool: state.applicantPool.map((applicantDoc) => {
           const updatedApplicantDoc = action.payload.find(
-            (updatedDoc) => updatedDoc?.id === applicantDoc.id
+            (updatedDoc) => updatedDoc?.id === applicantDoc.id,
           );
           return updatedApplicantDoc
             ? { ...applicantDoc, ...updatedApplicantDoc }

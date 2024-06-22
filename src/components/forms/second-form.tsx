@@ -1,22 +1,12 @@
-import * as z from "zod";
-import { cn } from "@/lib/utils";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "react-router-dom";
-import type { Dispatch, SetStateAction } from "react";
-import { useGlobalState } from "@/hooks/useGlobalState";
-import { toastError, toastFormComplete } from "@/lib/customToast";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Calendar } from "@/components/ui/calendar";
-import { Textarea } from "@/components/ui/textarea";
-import { Slider } from "@/components/ui/slider";
-import { Button } from "@/components/ui/button";
 import { User, Video } from "lucide-react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import type { Dispatch, SetStateAction } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import * as z from "zod";
+
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Form,
   FormControl,
@@ -26,18 +16,27 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-
-import { SecondFormData } from "@/types/localeInterfaces";
-import { ApplicationInterface } from "@/types/applicationInterfaces";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Slider } from "@/components/ui/slider";
+import { Textarea } from "@/components/ui/textarea";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { useGlobalState } from "@/hooks/useGlobalState";
+import { lengthOfStayRange } from "@/lib/constants/constants";
 import { getFormStepPath } from "@/lib/constants/formSteps";
+import { toastError, toastFormComplete } from "@/lib/customToast";
 import {
   getValidationMessages,
   mergeApplicationSection,
 } from "@/lib/forms/formUtils";
-
+import { cn } from "@/lib/utils";
 import Data_EN from "@/locales/applicant-form/secondform_en.json";
 import Data_ES from "@/locales/applicant-form/secondform_es.json";
-import { lengthOfStayRange } from "@/lib/constants/constants";
+import { ApplicationInterface } from "@/types/applicationInterfaces";
+import { SecondFormData } from "@/types/localeInterfaces";
 
 type SecondFormValues = {
   move_date: Date;
@@ -53,7 +52,7 @@ function getToday() {
 }
 
 const secondFormSchema = (
-  locale: "EN" | "ES"
+  locale: "EN" | "ES",
 ): z.ZodType<SecondFormValues, SecondFormValues> => {
   const { required, tooLong } = getValidationMessages(locale);
 
@@ -126,13 +125,15 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
                       variant={"secondary"}
                       className={cn(
                         "h-10 w-full pl-3 text-left font-normal",
-                        !field.value && "text-muted-foreground"
+                        !field.value && "text-muted-foreground",
                       )}
                     />
                   }
                 >
                   <span>
-                    {field.value instanceof Date ? field.value.toDateString() : localeData.pickDate}
+                    {field.value instanceof Date
+                      ? field.value.toDateString()
+                      : localeData.pickDate}
                   </span>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="center">

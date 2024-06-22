@@ -1,5 +1,6 @@
 import { Timestamp } from "firebase/firestore";
 import { describe, expect, it } from "vitest";
+
 import { parseApplicantProfile } from "./applicantSchemas";
 
 const validApplicant = {
@@ -37,7 +38,7 @@ describe("parseApplicantProfile", () => {
       parseApplicantProfile("doc-1", {
         ...validApplicant,
         secondForm: { ...validApplicant.secondForm, length_stay: "long" },
-      })
+      }),
     ).toBeNull();
   });
 
@@ -46,7 +47,7 @@ describe("parseApplicantProfile", () => {
       parseApplicantProfile("doc-1", {
         ...validApplicant,
         rankings: { dev_star: 6 },
-      })
+      }),
     ).toBeNull();
   });
 
@@ -55,7 +56,7 @@ describe("parseApplicantProfile", () => {
       parseApplicantProfile("doc-1", {
         ...validApplicant,
         secondForm: { ...validApplicant.secondForm, length_stay: 101 },
-      })
+      }),
     ).toBeNull();
   });
 });

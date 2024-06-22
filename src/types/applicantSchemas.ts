@@ -1,14 +1,12 @@
 import { Timestamp } from "firebase/firestore";
 import * as z from "zod";
+
+import { lengthOfStayRange, ratingRange } from "@/lib/constants/constants";
 import { tenants } from "@/lib/constants/tenants";
-import {
-  lengthOfStayRange,
-  ratingRange,
-} from "@/lib/constants/constants";
 
 const timestampSchema = z.custom<Timestamp>(
   (value) => value instanceof Timestamp,
-  "Expected a Firestore timestamp"
+  "Expected a Firestore timestamp",
 );
 
 const rankingsSchema = z
@@ -17,16 +15,11 @@ const rankingsSchema = z
       tenants.flatMap(({ id }) => [
         [
           `${id}_star`,
-          z
-            .number()
-            .int()
-            .min(ratingRange.min)
-            .max(ratingRange.max)
-            .optional(),
+          z.number().int().min(ratingRange.min).max(ratingRange.max).optional(),
         ],
         [`${id}_bool`, z.boolean().optional()],
-      ])
-    )
+      ]),
+    ),
   )
   .strict();
 
@@ -74,7 +67,7 @@ export type ParsedApplicantProfile = z.infer<typeof applicantProfileSchema>;
 
 export function parseApplicantProfile(
   id: string,
-  data: unknown
+  data: unknown,
 ): ParsedApplicantProfile | null {
   const document =
     typeof data === "object" && data !== null ? { id, ...data } : { id };

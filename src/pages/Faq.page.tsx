@@ -1,12 +1,12 @@
-import { useGlobalState } from "@/hooks/useGlobalState";
-import faqData_EN from "@/locales/faq-page/faq_en.json";
-import faqData_ES from "@/locales/faq-page/faq_es.json";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useGlobalState } from "@/hooks/useGlobalState";
+import faqData_EN from "@/locales/faq-page/faq_en.json";
+import faqData_ES from "@/locales/faq-page/faq_es.json";
 
 export default function FaqPage() {
   const { locale } = useGlobalState();

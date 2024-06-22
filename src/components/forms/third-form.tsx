@@ -1,15 +1,13 @@
-import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Building, Home, Link, Video } from "lucide-react";
+import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
-import type { Dispatch, SetStateAction } from "react";
-import { useGlobalState } from "@/hooks/useGlobalState";
-import { Button } from "@/components/ui/button";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
+import * as z from "zod";
+
 import { Spinner } from "@/components/Spinner";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -19,17 +17,22 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Building, Home, Link, Video } from "lucide-react";
-import { ApplicationInterface, defaultApplication } from "@/types/applicationInterfaces";
-import { createApplicantDoc } from "@/lib/firebase/firestore";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { useGlobalState } from "@/hooks/useGlobalState";
 import { toastError, toastFormComplete } from "@/lib/customToast";
-import { ThirdFormData } from "@/types/localeInterfaces";
-import { normalizeExternalUrl } from "@/lib/utils";
+import { createApplicantDoc } from "@/lib/firebase/firestore";
 import { getValidationMessages } from "@/lib/forms/formUtils";
-import { isApplicantSession } from "@/types/globalStateInterfaces";
-
+import { normalizeExternalUrl } from "@/lib/utils";
 import Data_EN from "@/locales/applicant-form/thirdform_en.json";
 import Data_ES from "@/locales/applicant-form/thirdform_es.json";
+import {
+  ApplicationInterface,
+  defaultApplication,
+} from "@/types/applicationInterfaces";
+import { isApplicantSession } from "@/types/globalStateInterfaces";
+import { ThirdFormData } from "@/types/localeInterfaces";
 
 type ThirdFormValues = {
   job_title: string;
@@ -40,15 +43,23 @@ type ThirdFormValues = {
 };
 
 const thirdFormSchema = (
-  locale: "EN" | "ES"
+  locale: "EN" | "ES",
 ): z.ZodType<ThirdFormValues, ThirdFormValues> => {
   const { required, tooLong, invalidUrl } = getValidationMessages(locale);
 
   return z.object({
     job_title: z.string({ error: required }).trim().min(1, required),
     job_type: z.string().optional(),
-    describe: z.string({ error: required }).trim().min(1, required).max(500, tooLong),
-    hobbies: z.string({ error: required }).trim().min(1, required).max(500, tooLong),
+    describe: z
+      .string({ error: required })
+      .trim()
+      .min(1, required)
+      .max(500, tooLong),
+    hobbies: z
+      .string({ error: required })
+      .trim()
+      .min(1, required)
+      .max(500, tooLong),
     social_media: z
       .string()
       .trim()
@@ -85,8 +96,8 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
       const updatedThirdForm = {
         ...application.thirdForm,
         ...data,
-        social_media: data.social_media || "",  //normalize data
-        job_type: data.job_type || "",          //normalize data
+        social_media: data.social_media || "", //normalize data
+        job_type: data.job_type || "", //normalize data
       };
 
       const completedApplication: ApplicationInterface = {
@@ -107,7 +118,7 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
       setIsLoading(false);
       toastFormComplete("3");
       setApplication(defaultApplication); // Reset application state
-      navigate("/thankyou");              // Update route
+      navigate("/thankyou"); // Update route
     } catch (error) {
       setIsLoading(false);
       toastError();
@@ -162,24 +173,21 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
                       className="min-h-14 min-w-24 flex-col items-center justify-center gap-1 px-4 py-2 text-center aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md focus-visible:ring-2"
                     >
                       <Home aria-hidden="true" />
-                      <span className="text-xs">{localeData
-                  .wfh}</span>
+                      <span className="text-xs">{localeData.wfh}</span>
                     </ToggleGroupItem>
                     <ToggleGroupItem
                       value="hybrid"
                       className="min-h-14 min-w-24 flex-col items-center justify-center gap-1 px-4 py-2 text-center aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md focus-visible:ring-2"
                     >
                       <Video aria-hidden="true" />
-                      <span className="text-xs">{localeData
-                  .hybrid}</span>
+                      <span className="text-xs">{localeData.hybrid}</span>
                     </ToggleGroupItem>
                     <ToggleGroupItem
                       value="office"
                       className="min-h-14 min-w-24 flex-col items-center justify-center gap-1 px-4 py-2 text-center aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md focus-visible:ring-2"
                     >
                       <Building aria-hidden="true" />
-                      <span className="text-xs">{localeData
-                  .office}</span>
+                      <span className="text-xs">{localeData.office}</span>
                     </ToggleGroupItem>
                   </ToggleGroup>
                 </FormControl>
@@ -257,8 +265,7 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
           className="min-h-11 w-full rounded-lg px-6 text-base font-semibold sm:px-16"
           size={"lg"}
         >
-          {isLoading ? <Spinner /> : `${localeData
-        .completeButton}`}
+          {isLoading ? <Spinner /> : `${localeData.completeButton}`}
         </Button>
       </form>
     </Form>

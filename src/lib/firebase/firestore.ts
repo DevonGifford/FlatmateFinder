@@ -1,19 +1,21 @@
 import {
-  Firestore,
   collection,
   doc,
+  Firestore,
   getDocs,
   runTransaction,
 } from "firebase/firestore";
-import db, { authReady } from "./config";
-import { ApplicationInterface } from "@/types/applicationInterfaces";
+
 import { ApplicantProfile } from "@/types/applicantInterfaces";
+import { parseApplicantProfile } from "@/types/applicantSchemas";
+import { ApplicationInterface } from "@/types/applicationInterfaces";
 import {
   type AppSession,
   isApplicantSession,
   isTenantSession,
 } from "@/types/globalStateInterfaces";
-import { parseApplicantProfile } from "@/types/applicantSchemas";
+
+import db, { authReady } from "./config";
 
 export type DocumentId = string;
 const firestore: Firestore = db;
@@ -22,7 +24,7 @@ export const waitForFirebaseAuth = () => authReady;
 
 export const createApplicantDoc = async (
   userData: ApplicationInterface,
-  session: AppSession
+  session: AppSession,
 ): Promise<DocumentId> => {
   if (!isApplicantSession(session) || session.mode !== "real") {
     throw new Error("Demo sessions cannot write applicant data");
@@ -59,7 +61,7 @@ export async function fetchApplicantPool(): Promise<ApplicantProfile[]> {
 export const updateRanking = async (
   userId: string,
   updatedRankings: Partial<NonNullable<ApplicantProfile["rankings"]>>,
-  session: AppSession
+  session: AppSession,
 ): Promise<void> => {
   if (!isTenantSession(session) || session.mode !== "real") {
     throw new Error("Demo sessions cannot write applicant rankings");

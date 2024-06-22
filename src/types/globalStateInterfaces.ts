@@ -1,5 +1,6 @@
-import type { ApplicantProfile } from "./applicantInterfaces";
 import type { TenantId } from "@/lib/constants/tenants";
+
+import type { ApplicantProfile } from "./applicantInterfaces";
 
 export interface GlobalStateInterface {
   session: AppSession;
@@ -15,12 +16,12 @@ export type AppSession =
   | { role: "tenant"; mode: "real" | "demo"; tenantId: TenantId };
 
 export const isApplicantSession = (
-  session: AppSession
+  session: AppSession,
 ): session is Extract<AppSession, { role: "applicant" }> =>
   session.role === "applicant";
 
 export const isTenantSession = (
-  session: AppSession
+  session: AppSession,
 ): session is Extract<AppSession, { role: "tenant" }> =>
   session.role === "tenant";
 

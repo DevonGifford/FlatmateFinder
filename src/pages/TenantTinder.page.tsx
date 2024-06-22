@@ -1,35 +1,4 @@
-import TinderCard from "react-tinder-card";
-import { useGlobalState } from "@/hooks/useGlobalState";
-import tenantData_EN from "@/locales/tenant-pages/tenant_en.json";
-import tenantData_ES from "@/locales/tenant-pages/tenant_es.json";
-import { TenantPageData } from "@/types/localeInterfaces";
-import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
-import { useRequireTenant } from "@/hooks/useRequireTenant";
-import { updateRanking } from "@/lib/firebase/firestore";
-import { toastError } from "@/lib/customToast";
-import { normalizeExternalUrl } from "@/lib/utils";
-import { ProfilePic } from "@/components/ProfilePic";
-import { StarRating } from "@/components/StarRating";
-import {
-  getTenantById,
-  TenantBooleanKey,
-  TenantStarKey,
-} from "@/lib/constants/tenants";
 import { Timestamp } from "firebase/firestore";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import {
   Building,
   CalendarClockIcon,
@@ -39,15 +8,49 @@ import {
   Video,
 } from "lucide-react";
 import { IoFemale, IoMale, IoMaleFemale } from "react-icons/io5";
+import TinderCard from "react-tinder-card";
+
+import { ProfilePic } from "@/components/ProfilePic";
+import { StarRating } from "@/components/StarRating";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
+import { useGlobalState } from "@/hooks/useGlobalState";
+import { useRequireTenant } from "@/hooks/useRequireTenant";
+import {
+  getTenantById,
+  TenantBooleanKey,
+  TenantStarKey,
+} from "@/lib/constants/tenants";
+import { toastError } from "@/lib/customToast";
+import { updateRanking } from "@/lib/firebase/firestore";
+import { normalizeExternalUrl } from "@/lib/utils";
+import tenantData_EN from "@/locales/tenant-pages/tenant_en.json";
+import tenantData_ES from "@/locales/tenant-pages/tenant_es.json";
+import { TenantPageData } from "@/types/localeInterfaces";
 
 export default function TenantTinderPage() {
   useRequireTenant();
   const dispatch = useGlobalDispatch();
   const { applicantPool, session, locale } = useGlobalState();
-  const localeData: TenantPageData = locale === "EN" ? tenantData_EN : tenantData_ES;
+  const localeData: TenantPageData =
+    locale === "EN" ? tenantData_EN : tenantData_ES;
   const isDemoSession = session.role === "tenant" && session.mode === "demo";
 
-  const tenant = session.role === "tenant" ? getTenantById(session.tenantId) : undefined;
+  const tenant =
+    session.role === "tenant" ? getTenantById(session.tenantId) : undefined;
 
   //- Handle star-ranking individual applicants - updates global context
   const handleStarClick = (starIndex: number, cardIndex: number) => {
@@ -93,7 +96,7 @@ export default function TenantTinderPage() {
         void updateRanking(
           applicantPool[cardIndex].uuid,
           updatedRankings,
-          session
+          session,
         ).catch(() => toastError("Something went wrong"));
       }
     } else {
@@ -136,14 +139,17 @@ export default function TenantTinderPage() {
     if (timeStamp?.seconds) {
       //-Firestore Timestamp-like object ~ seconds and nanoseconds
       const date = new Date(
-        timeStamp.seconds * 1000 + timeStamp.nanoseconds / 1000000
+        timeStamp.seconds * 1000 + timeStamp.nanoseconds / 1000000,
       );
 
-      const formattedDate = date.toLocaleDateString(locale === "EN" ? "en-US" : "es-ES", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      });
+      const formattedDate = date.toLocaleDateString(
+        locale === "EN" ? "en-US" : "es-ES",
+        {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        },
+      );
 
       return formattedDate;
     } else {
@@ -207,7 +213,7 @@ export default function TenantTinderPage() {
                                   >
                                     {lang}
                                   </span>
-                                )
+                                ),
                               )}
                             </div>
                           </div>
@@ -217,7 +223,11 @@ export default function TenantTinderPage() {
                     {normalizeExternalUrl(dataItem.thirdForm.social_media) && (
                       <a
                         className="flex flex-row items-center gap-1 hover:text-blue-500 pt-1"
-                        href={normalizeExternalUrl(dataItem.thirdForm.social_media) ?? undefined}
+                        href={
+                          normalizeExternalUrl(
+                            dataItem.thirdForm.social_media,
+                          ) ?? undefined
+                        }
                         target="_blank"
                         rel="noreferrer"
                       >

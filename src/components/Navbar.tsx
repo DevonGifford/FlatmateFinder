@@ -1,10 +1,11 @@
-import { useMatch, useNavigate } from "react-router-dom";
-import { useGlobalState } from "@/hooks/useGlobalState";
-import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { ArrowLeft, HelpCircle, XSquare } from "lucide-react";
+import { useMatch, useNavigate } from "react-router-dom";
+
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
+import { useGlobalState } from "@/hooks/useGlobalState";
 import homeData_EN from "@/locales/home-page/home_en.json";
 import homeData_ES from "@/locales/home-page/home_es.json";
 import type { HomePageData } from "@/types/localeInterfaces";
@@ -71,8 +72,9 @@ export default function Navbar() {
                 payload: "EN",
               })
             }
-            className={`${locale === "EN" ? "bg-cyan-600/20" : "hover:bg-cyan-600/20"
-              } aria-pressed:bg-cyan-600/20 aria-pressed:text-foreground aria-pressed:hover:bg-cyan-600/20`}
+            className={`${
+              locale === "EN" ? "bg-cyan-600/20" : "hover:bg-cyan-600/20"
+            } aria-pressed:bg-cyan-600/20 aria-pressed:text-foreground aria-pressed:hover:bg-cyan-600/20`}
             aria-label={localeData.languageEnglish}
           >
             <Avatar className="h-6 w-6">
@@ -88,8 +90,9 @@ export default function Navbar() {
                 payload: "ES",
               })
             }
-            className={`${locale === "ES" ? "bg-cyan-600/20" : "hover:bg-cyan-600/20"
-              } aria-pressed:bg-cyan-600/20 aria-pressed:text-foreground aria-pressed:hover:bg-cyan-600/20`}
+            className={`${
+              locale === "ES" ? "bg-cyan-600/20" : "hover:bg-cyan-600/20"
+            } aria-pressed:bg-cyan-600/20 aria-pressed:text-foreground aria-pressed:hover:bg-cyan-600/20`}
             aria-label={localeData.languageSpanish}
           >
             <Avatar className="h-6 w-6">

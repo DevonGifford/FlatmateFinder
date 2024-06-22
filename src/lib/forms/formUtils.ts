@@ -1,4 +1,5 @@
 import type { Dispatch, SetStateAction } from "react";
+
 import { ApplicationInterface } from "@/types/applicationInterfaces";
 
 export function getValidationMessages(locale: "EN" | "ES") {
@@ -17,11 +18,11 @@ export function getValidationMessages(locale: "EN" | "ES") {
 }
 
 export function mergeApplicationSection<
-  Section extends "firstForm" | "secondForm" | "thirdForm"
+  Section extends "firstForm" | "secondForm" | "thirdForm",
 >(
   setApplication: Dispatch<SetStateAction<ApplicationInterface>>,
   section: Section,
-  values: Partial<ApplicationInterface[Section]>
+  values: Partial<ApplicationInterface[Section]>,
 ) {
   setApplication((currentApplication) => ({
     ...currentApplication,

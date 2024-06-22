@@ -1,10 +1,10 @@
-import { useGlobalState } from "@/hooks/useGlobalState";
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { ThankyouPageData } from "@/types/localeInterfaces";
 
+import { Button } from "@/components/ui/button";
+import { useGlobalState } from "@/hooks/useGlobalState";
 import Data_EN from "@/locales/thankyou-page/thankyou_en.json";
 import Data_ES from "@/locales/thankyou-page/thankyou_es.json";
+import { ThankyouPageData } from "@/types/localeInterfaces";
 
 export default function ThankyouPage() {
   const { locale } = useGlobalState();

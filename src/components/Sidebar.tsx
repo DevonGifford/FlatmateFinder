@@ -1,10 +1,7 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Heart, Home, ListChecks, LogOut, Menu } from "lucide-react";
 import { useState } from "react";
-import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
-import { useGlobalState } from "@/hooks/useGlobalState";
-import tenantData_EN from "@/locales/tenant-pages/tenant_en.json";
-import tenantData_ES from "@/locales/tenant-pages/tenant_es.json";
-import { TenantPageData } from "@/types/localeInterfaces";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -14,20 +11,19 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import {
-  Heart,
-  Home,
-  ListChecks,
-  LogOut,
-  Menu,
-} from "lucide-react";
+import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
+import { useGlobalState } from "@/hooks/useGlobalState";
+import tenantData_EN from "@/locales/tenant-pages/tenant_en.json";
+import tenantData_ES from "@/locales/tenant-pages/tenant_es.json";
+import { TenantPageData } from "@/types/localeInterfaces";
 
 export default function Sidebar() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useGlobalDispatch();
   const { locale } = useGlobalState();
-  const localeData: TenantPageData = locale === "EN" ? tenantData_EN : tenantData_ES;
+  const localeData: TenantPageData =
+    locale === "EN" ? tenantData_EN : tenantData_ES;
   const [open, setOpen] = useState(false);
 
   const closeMenu = () => setOpen(false);
@@ -52,7 +48,9 @@ export default function Sidebar() {
           closeLabel={localeData.closeMenu}
         >
           <SheetHeader className="items-center justify-center border-b py-10">
-            <SheetTitle className="text-xl">{localeData.sidebarTitle}</SheetTitle>
+            <SheetTitle className="text-xl">
+              {localeData.sidebarTitle}
+            </SheetTitle>
             <SheetDescription>{localeData.sidebarDescription}</SheetDescription>
           </SheetHeader>
           <div className="flex flex-1 flex-col gap-3 p-4 pt-8">
@@ -99,11 +97,13 @@ export default function Sidebar() {
                 }}
                 className="h-14 w-full justify-start gap-3 rounded-xl px-5 text-lg font-semibold"
               >
-              <LogOut className="h-5 w-5" aria-hidden="true" />
-              {localeData.logout}
+                <LogOut className="h-5 w-5" aria-hidden="true" />
+                {localeData.logout}
               </Button>
               <p className="mt-4 border-t px-2 pb-6 pt-4 text-center text-sm leading-relaxed text-muted-foreground">
-                <strong className="font-semibold">{localeData.tenantSpaceOnly}</strong>
+                <strong className="font-semibold">
+                  {localeData.tenantSpaceOnly}
+                </strong>
                 <br />
                 {localeData.tenantAccess}
                 <br />

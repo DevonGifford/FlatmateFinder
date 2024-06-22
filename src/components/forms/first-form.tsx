@@ -1,14 +1,11 @@
-import * as z from "zod";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "react-router-dom";
 import type { Dispatch, SetStateAction } from "react";
-import { useGlobalState } from "@/hooks/useGlobalState";
-import { toastError, toastFormComplete } from "@/lib/customToast";
-import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form";
+import { IoFemale, IoMale, IoMaleFemale } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
+import * as z from "zod";
+
 import { Button } from "@/components/ui/button";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { IoMale, IoFemale, IoMaleFemale } from "react-icons/io5";
 import {
   Form,
   FormControl,
@@ -18,6 +15,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -25,18 +23,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { useGlobalState } from "@/hooks/useGlobalState";
 import { languages } from "@/lib/constants/constants";
-import { ApplicationInterface } from "@/types/applicationInterfaces";
-import { FirstFormData } from "@/types/localeInterfaces";
 import { getFormStepPath } from "@/lib/constants/formSteps";
+import { toastError, toastFormComplete } from "@/lib/customToast";
 import {
   getValidationMessages,
   mergeApplicationSection,
 } from "@/lib/forms/formUtils";
-
 import Data_EN from "@/locales/applicant-form/firstform_en.json";
 import Data_ES from "@/locales/applicant-form/firstform_es.json";
+import { ApplicationInterface } from "@/types/applicationInterfaces";
+import { FirstFormData } from "@/types/localeInterfaces";
 
 type FirstFormValues = {
   name: string;
@@ -47,15 +46,23 @@ type FirstFormValues = {
 };
 
 const firstFormSchema = (
-  locale: "EN" | "ES"
+  locale: "EN" | "ES",
 ): z.ZodType<FirstFormValues, FirstFormValues> => {
   const { required, tooLong } = getValidationMessages(locale);
 
   return z.object({
-    name: z.string({ error: required }).trim().min(1, required).max(50, tooLong),
+    name: z
+      .string({ error: required })
+      .trim()
+      .min(1, required)
+      .max(50, tooLong),
     age: z.string({ error: required }).trim().min(1, required).max(10, tooLong),
     sex: z.string({ error: required }).trim().min(1, required).max(10, tooLong),
-    phone: z.string({ error: required }).trim().min(1, required).max(25, tooLong),
+    phone: z
+      .string({ error: required })
+      .trim()
+      .min(1, required)
+      .max(25, tooLong),
     languages: z.array(z.string()).optional(),
   });
 };
@@ -100,9 +107,7 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>
-                {localeData.name}
-              </FormLabel>
+              <FormLabel>{localeData.name}</FormLabel>
 
               <FormControl>
                 <Input placeholder="" {...field} />
@@ -140,7 +145,9 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
             control={form.control}
             render={({ field }) => (
               <FormItem className="min-w-35 flex-1 p-5 sm:min-w-45">
-                <FormLabel className="text-center">{localeData.gender}</FormLabel>
+                <FormLabel className="text-center">
+                  {localeData.gender}
+                </FormLabel>
                 <FormControl>
                   <ToggleGroup
                     size="sm"
@@ -201,7 +208,7 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
                         >
                           {String(age)}
                         </SelectItem>
-                      )
+                      ),
                     )}
                   </SelectContent>
                 </Select>

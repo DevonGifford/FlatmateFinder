@@ -1,15 +1,17 @@
 import React, { createContext, useEffect, useReducer } from "react";
-import GlobalReducer from "./GlobalReducer";
+
 import {
-  type AppSession,
-  type ActionType,
-  type GlobalStateInterface,
-} from "@/types/globalStateInterfaces";
-import {
-  getTenantByName,
   getTenantById,
+  getTenantByName,
   type TenantId,
 } from "@/lib/constants/tenants";
+import {
+  type ActionType,
+  type AppSession,
+  type GlobalStateInterface,
+} from "@/types/globalStateInterfaces";
+
+import GlobalReducer from "./GlobalReducer";
 
 const AUTH_STORAGE_KEY = "flatmate-finder-auth";
 
@@ -24,8 +26,7 @@ type LegacyPersistedAuth = {
 
 function isTenantId(value: unknown): value is TenantId {
   return (
-    typeof value === "string" &&
-    getTenantById(value as TenantId) !== undefined
+    typeof value === "string" && getTenantById(value as TenantId) !== undefined
   );
 }
 
@@ -76,9 +77,7 @@ function migrateLegacyAuth(auth: LegacyPersistedAuth): AppSession | null {
   }
 
   const tenant = getTenantByName(auth.loggedTenant);
-  return tenant
-    ? { role: "tenant", mode: "real", tenantId: tenant.id }
-    : null;
+  return tenant ? { role: "tenant", mode: "real", tenantId: tenant.id } : null;
 }
 
 function readPersistedSession(): AppSession | null {
@@ -141,7 +140,7 @@ export const GlobalProvider: React.FC<Props> = ({ children, initialState }) => {
       if (globalState.session.role !== "none") {
         window.sessionStorage.setItem(
           AUTH_STORAGE_KEY,
-          JSON.stringify(globalState.session)
+          JSON.stringify(globalState.session),
         );
       } else {
         window.sessionStorage.removeItem(AUTH_STORAGE_KEY);
