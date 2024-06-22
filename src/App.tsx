@@ -27,7 +27,6 @@ import TenantWelcomePage from "@/pages/TenantWelcome.page";
 import TenantTinderPage from "@/pages/TenantTinder.page";
 import TenantLeaderboardPage from "@/pages/TenantLeaderboard.page";
 
-import "./App.css";
 
 const publicRoutes = ["/", "/FAQ"] as const;
 const applicantRoutes = ["/form", "/thankyou"] as const;
