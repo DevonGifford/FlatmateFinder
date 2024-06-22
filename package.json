@@ -12,6 +12,7 @@
     "prepare": "lefthook install",
     "typecheck": "tsc --noEmit",
     "test": "vitest",
+    "test:run": "vitest run",
     "coverage": "vitest run --coverage",
     "preview": "vite preview"
   },
