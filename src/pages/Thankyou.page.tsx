@@ -21,10 +21,8 @@ export default function ThankyouPage() {
           loading="lazy"
           decoding="async"
         />
-        <Link to="/FAQ">
-          <h2 className="text-3xl font-bold">{localeData.checkoutHeading}</h2>
-          <Button>{localeData.faqheading}</Button>
-        </Link>
+        <h2 className="text-3xl font-bold">{localeData.checkoutHeading}</h2>
+        <Button render={<Link to="/FAQ" />}>{localeData.faqheading}</Button>
       </div>
     </>
   );

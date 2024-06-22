@@ -19,13 +19,13 @@ export const ProfilePic: React.FC<ProfilePicProps> = ({
   className,
   openLabel,
 }) => {
-  const [imgSrc, setImgSrc] = useState<string | undefined>(src);
-  const [imgError, setImgError] = useState<boolean>(false);
+  const [failedSrc, setFailedSrc] = useState<string | null>(null);
+  const imgError = src !== undefined && failedSrc === src;
+  const imgSrc = imgError ? fallbackSrc : src;
 
   const onError = () => {
-    if (!imgError) {
-      setImgSrc(fallbackSrc);
-      setImgError(true);
+    if (src !== undefined && failedSrc !== src) {
+      setFailedSrc(src);
     }
   };
 

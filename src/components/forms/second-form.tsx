@@ -46,6 +46,12 @@ type SecondFormValues = {
   more_info?: string;
 };
 
+function getToday() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return today;
+}
+
 const secondFormSchema = (
   locale: "EN" | "ES"
 ): z.ZodType<SecondFormValues, SecondFormValues> => {
@@ -72,6 +78,7 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
   const navigate = useNavigate();
   const { locale } = useGlobalState();
   const localeData: SecondFormData = locale === "EN" ? Data_EN : Data_ES;
+  const minimumMoveDate = getToday();
 
   const defaultValues: SecondFormValues = application!.secondForm;
   const form = useForm<SecondFormValues>({
@@ -133,7 +140,7 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
                     mode="single"
                     selected={field.value}
                     onSelect={field.onChange}
-                    disabled={(date) => date < new Date("2026-09-01")}
+                    disabled={(date) => date < minimumMoveDate}
                   />
                 </PopoverContent>
               </Popover>

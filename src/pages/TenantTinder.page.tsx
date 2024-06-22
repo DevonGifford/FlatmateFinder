@@ -1,5 +1,4 @@
 import TinderCard from "react-tinder-card";
-import { useState } from "react";
 import { useGlobalState } from "@/hooks/useGlobalState";
 import tenantData_EN from "@/locales/tenant-pages/tenant_en.json";
 import tenantData_ES from "@/locales/tenant-pages/tenant_es.json";
@@ -47,19 +46,11 @@ export default function TenantTinderPage() {
   const { applicantPool, session, locale } = useGlobalState();
   const localeData: TenantPageData = locale === "EN" ? tenantData_EN : tenantData_ES;
   const isDemoSession = session.role === "tenant" && session.mode === "demo";
-  const [currentCardIndex, setCurrentCardIndex] = useState(0);
-  const [starRatings, setStarRatings] = useState<number[]>(
-    Array(applicantPool?.length).fill(0)
-  );
 
   const tenant = session.role === "tenant" ? getTenantById(session.tenantId) : undefined;
 
   //- Handle star-ranking individual applicants - updates global context
   const handleStarClick = (starIndex: number, cardIndex: number) => {
-    const newRatings = [...starRatings];
-    newRatings[cardIndex] = starIndex + 1;
-    setStarRatings(newRatings);
-
     if (tenant && applicantPool) {
       const cardData = applicantPool[cardIndex];
 
@@ -89,7 +80,6 @@ export default function TenantTinderPage() {
         }
 
         dispatch({ type: "UPDATE_APPLICANT_POOL", payload: [updatedCard] });
-        setCurrentCardIndex(currentCardIndex + 1);
       }
     }
   };
@@ -131,7 +121,7 @@ export default function TenantTinderPage() {
     }
   };
   const viewingtypeIcon = (viewType: string) => {
-    if (viewType === "meet_type") {
+    if (viewType === "inperson") {
       return <User className="font-bold" size={18} aria-hidden="true" />;
     } else {
       return <Video size={18} aria-hidden="true" />;

@@ -11,16 +11,21 @@ export const RatingBadge: React.FC<RatingBadgeProps> = ({
   starValue,
   ariaLabel,
 }) => {
-  const bgColor = boolValue ? "bg-green-500" : "bg-red-500";
+  const color =
+    boolValue === undefined
+      ? "border border-border bg-muted text-muted-foreground"
+      : boolValue
+        ? "bg-green-500 text-white"
+        : "bg-red-500 text-white";
 
   return (
     <div
-      className={`${bgColor} text-white p-2 rounded-full justify-center h-8 w-8 sm:h-10 sm:w-10 text-center items-center`}
+      className={`${color} flex h-8 w-8 items-center justify-center rounded-full p-2 text-center sm:h-10 sm:w-10`}
       role="img"
       aria-label={ariaLabel}
     >
       <p className="sm:text-xl -translate-y-1.5 sm:-translate-y-0.5">
-        {starValue}
+        {starValue ?? "—"}
       </p>
     </div>
   );
