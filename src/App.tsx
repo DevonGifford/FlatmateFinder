@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import {
   BrowserRouter as Router,
+  Navigate,
   Route,
   Routes,
   useLocation,
@@ -14,6 +15,12 @@ import { useDemoSessionLifecycle } from "@/hooks/useDemoSessionLifecycle";
 import { useGlobalState } from "@/hooks/useGlobalState";
 import { usePageMetadata } from "@/hooks/usePageMetadata";
 import { useTenantApplicants } from "@/hooks/useTenantApplicants";
+import {
+  isApplicantRoute,
+  isPublicRoute,
+  isTenantRoute,
+  ROUTES,
+} from "@/lib/routes";
 import homeData_EN from "@/locales/home/home_en.json";
 import homeData_ES from "@/locales/home/home_es.json";
 import FAQPage from "@/pages/FAQ.page";
@@ -35,14 +42,6 @@ const TenantLeaderboardPage = lazy(
 const TenantTinderPage = lazy(() => import("@/pages/TenantTinder.page"));
 const TenantWelcomePage = lazy(() => import("@/pages/TenantWelcome.page"));
 
-const publicRoutes = ["/", "/FAQ"] as const;
-const applicantRoutes = ["/form", "/thankyou"] as const;
-const tenantRoutes = [
-  "/admin-welcome",
-  "/admin-tinder",
-  "/admin-leaderboard",
-] as const;
-
 function App() {
   return (
     <Router basename={import.meta.env.VITE_REACT_APP_BASENAME || "/"}>
@@ -56,26 +55,20 @@ function AppContent() {
   const { session, applicantPool, locale } = useGlobalState();
   const location = useLocation();
   const localeData: HomePageData = locale === "EN" ? homeData_EN : homeData_ES;
-  const isPublicRoute = publicRoutes.includes(
-    location.pathname as (typeof publicRoutes)[number],
-  );
-  const isTenantRoute = tenantRoutes.includes(
-    location.pathname as (typeof tenantRoutes)[number],
-  );
+  const publicRoute = isPublicRoute(location.pathname);
+  const tenantRoute = isTenantRoute(location.pathname);
   const isDemoApplicantArea =
     isApplicantSession(session) &&
     session.mode === "demo" &&
-    applicantRoutes.includes(
-      location.pathname as (typeof applicantRoutes)[number],
-    );
+    isApplicantRoute(location.pathname);
   const isDemoTenantArea =
-    isTenantSession(session) && session.mode === "demo" && isTenantRoute;
+    isTenantSession(session) && session.mode === "demo" && tenantRoute;
   const isDemoArea = isDemoApplicantArea || isDemoTenantArea;
   const hasDemoSession = isDemoSession(session);
 
   usePageMetadata(location.pathname, locale);
-  useDemoSessionLifecycle({ session, isDemoArea, isPublicRoute });
-  useTenantApplicants({ session, applicantPool, isTenantRoute });
+  useDemoSessionLifecycle({ session, isDemoArea, isPublicRoute: publicRoute });
+  useTenantApplicants({ session, applicantPool, isTenantRoute: tenantRoute });
 
   const showTenantShell =
     isTenantSession(session) && (!hasDemoSession || isDemoTenantArea);
@@ -98,24 +91,37 @@ function AppContent() {
           }
         >
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/FAQ" element={<FAQPage />} />
+            <Route path={ROUTES.home} element={<HomePage />} />
+            <Route path={ROUTES.faq} element={<FAQPage />} />
             {isApplicantSession(session) && (
               <>
-                <Route path="/form" element={<ApplicantFormPage />} />
-                <Route path="/thankyou" element={<ApplicantThankYouPage />} />
+                <Route
+                  path={ROUTES.applicant.form}
+                  element={<ApplicantFormPage />}
+                />
+                <Route
+                  path={ROUTES.applicant.thankYou}
+                  element={<ApplicantThankYouPage />}
+                />
               </>
             )}
             {isTenantSession(session) && (
               <>
-                <Route path="/admin-welcome" element={<TenantWelcomePage />} />
-                <Route path="/admin-tinder" element={<TenantTinderPage />} />
                 <Route
-                  path="/admin-leaderboard"
+                  path={ROUTES.tenant.welcome}
+                  element={<TenantWelcomePage />}
+                />
+                <Route
+                  path={ROUTES.tenant.tinder}
+                  element={<TenantTinderPage />}
+                />
+                <Route
+                  path={ROUTES.tenant.leaderboard}
                   element={<TenantLeaderboardPage />}
                 />
               </>
             )}
+            <Route path="*" element={<Navigate to={ROUTES.home} replace />} />
           </Routes>
         </Suspense>
       </main>
