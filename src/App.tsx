@@ -1,11 +1,5 @@
 import { lazy, Suspense } from "react";
-import {
-  BrowserRouter as Router,
-  Navigate,
-  Route,
-  Routes,
-  useLocation,
-} from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 
 import { Spinner } from "@/components/custom/Spinner";
 import Navbar from "@/components/layout/Navbar";
@@ -43,15 +37,6 @@ const TenantTinderPage = lazy(() => import("@/pages/TenantTinder.page"));
 const TenantWelcomePage = lazy(() => import("@/pages/TenantWelcome.page"));
 
 function App() {
-  return (
-    <Router basename={import.meta.env.VITE_REACT_APP_BASENAME || "/"}>
-      <AppContent />
-      <Toaster />
-    </Router>
-  );
-}
-
-function AppContent() {
   const { session, applicantPool, locale } = useGlobalState();
   const location = useLocation();
   const localeData: HomePageData = locale === "EN" ? homeData_EN : homeData_ES;
@@ -125,6 +110,7 @@ function AppContent() {
           </Routes>
         </Suspense>
       </main>
+      <Toaster />
     </>
   );
 }

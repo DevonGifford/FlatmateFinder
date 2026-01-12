@@ -25,9 +25,11 @@ beforeEach(() => {
 describe("Testing the testing environment", () => {
   test("simple render test: successfully renders application", () => {
     render(
-      <GlobalProvider initialState={initialState}>
-        <App />
-      </GlobalProvider>,
+      <MemoryRouter initialEntries={[window.location.pathname]}>
+        <GlobalProvider initialState={initialState}>
+          <App />
+        </GlobalProvider>
+      </MemoryRouter>,
     );
     const mainHeading = screen.getByText("Flatmate Finder");
     expect(mainHeading).toBeDefined();
@@ -50,9 +52,11 @@ describe("Testing the testing environment", () => {
 
   test("simple demo test: form submission with incorrect password, shows toast error message", async () => {
     render(
-      <GlobalProvider initialState={initialState}>
-        <App />
-      </GlobalProvider>,
+      <MemoryRouter initialEntries={[window.location.pathname]}>
+        <GlobalProvider initialState={initialState}>
+          <App />
+        </GlobalProvider>
+      </MemoryRouter>,
     );
 
     const input = screen.getByLabelText("Enter password");
@@ -70,9 +74,11 @@ describe("Testing the testing environment", () => {
 
   test("does not fetch applicant data on public routes", async () => {
     render(
-      <GlobalProvider initialState={initialState}>
-        <App />
-      </GlobalProvider>,
+      <MemoryRouter initialEntries={[window.location.pathname]}>
+        <GlobalProvider initialState={initialState}>
+          <App />
+        </GlobalProvider>
+      </MemoryRouter>,
     );
 
     await waitFor(() => {
@@ -84,14 +90,16 @@ describe("Testing the testing environment", () => {
     window.history.pushState({}, "", "/admin-welcome");
 
     render(
-      <GlobalProvider
-        initialState={{
-          ...initialState,
-          session: { role: "tenant", mode: "real", tenantId: "dev" },
-        }}
-      >
-        <App />
-      </GlobalProvider>,
+      <MemoryRouter initialEntries={[window.location.pathname]}>
+        <GlobalProvider
+          initialState={{
+            ...initialState,
+            session: { role: "tenant", mode: "real", tenantId: "dev" },
+          }}
+        >
+          <App />
+        </GlobalProvider>
+      </MemoryRouter>,
     );
 
     await waitFor(() => {
@@ -102,9 +110,11 @@ describe("Testing the testing environment", () => {
 describe("Testing Global `locale`, switching between the two locales", () => {
   test("SET_LOCALE - should render with EN and switch to ES", async () => {
     render(
-      <GlobalProvider initialState={initialState}>
-        <App />
-      </GlobalProvider>,
+      <MemoryRouter initialEntries={[window.location.pathname]}>
+        <GlobalProvider initialState={initialState}>
+          <App />
+        </GlobalProvider>
+      </MemoryRouter>,
     );
     const subHeadingEN = screen.getByText("Welcome to");
     expect(subHeadingEN).toBeDefined();
@@ -227,9 +237,11 @@ describe("Testing demo access", () => {
 describe("Testing session state and password submission", () => {
   test("SET_TENANT + PROFILE - correct password should result in success toast notif", async () => {
     render(
-      <GlobalProvider initialState={initialState}>
-        <App />
-      </GlobalProvider>,
+      <MemoryRouter initialEntries={[window.location.pathname]}>
+        <GlobalProvider initialState={initialState}>
+          <App />
+        </GlobalProvider>
+      </MemoryRouter>,
     );
     const input = screen.getByLabelText("Enter password");
     const continueButton = screen.getByRole("button", { name: "Continue" });
@@ -245,9 +257,11 @@ describe("Testing session state and password submission", () => {
 
   test("SET_APPLICANT - correct password should result in success toast notif", async () => {
     render(
-      <GlobalProvider initialState={initialState}>
-        <App />
-      </GlobalProvider>,
+      <MemoryRouter initialEntries={[window.location.pathname]}>
+        <GlobalProvider initialState={initialState}>
+          <App />
+        </GlobalProvider>
+      </MemoryRouter>,
     );
     const input = screen.getByLabelText("Enter password");
     const continueButton = screen.getByRole("button", { name: "Continue" });
@@ -273,9 +287,11 @@ describe("Testing session state and password submission", () => {
     window.history.pushState({}, "", "/admin-welcome");
 
     render(
-      <GlobalProvider initialState={initialState}>
-        <App />
-      </GlobalProvider>,
+      <MemoryRouter initialEntries={[window.location.pathname]}>
+        <GlobalProvider initialState={initialState}>
+          <App />
+        </GlobalProvider>
+      </MemoryRouter>,
     );
 
     await waitFor(() => {
@@ -291,9 +307,11 @@ describe("Testing session state and password submission", () => {
     window.history.pushState({}, "", "/admin-welcome");
 
     render(
-      <GlobalProvider initialState={initialState}>
-        <App />
-      </GlobalProvider>,
+      <MemoryRouter initialEntries={[window.location.pathname]}>
+        <GlobalProvider initialState={initialState}>
+          <App />
+        </GlobalProvider>
+      </MemoryRouter>,
     );
 
     await waitFor(() => {
@@ -314,9 +332,11 @@ describe("Testing session state and password submission", () => {
     window.history.pushState({}, "", "/admin-welcome");
 
     render(
-      <GlobalProvider initialState={initialState}>
-        <App />
-      </GlobalProvider>,
+      <MemoryRouter initialEntries={[window.location.pathname]}>
+        <GlobalProvider initialState={initialState}>
+          <App />
+        </GlobalProvider>
+      </MemoryRouter>,
     );
 
     await waitFor(() => {
@@ -333,14 +353,16 @@ describe("Testing session state and password submission", () => {
 
   test("logout resets auth and clears the persisted session", async () => {
     render(
-      <GlobalProvider
-        initialState={{
-          ...initialState,
-          session: { role: "tenant", mode: "real", tenantId: "dev" },
-        }}
-      >
-        <App />
-      </GlobalProvider>,
+      <MemoryRouter initialEntries={[window.location.pathname]}>
+        <GlobalProvider
+          initialState={{
+            ...initialState,
+            session: { role: "tenant", mode: "real", tenantId: "dev" },
+          }}
+        >
+          <App />
+        </GlobalProvider>
+      </MemoryRouter>,
     );
 
     await userEvent.click(

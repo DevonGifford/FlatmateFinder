@@ -2,6 +2,7 @@ import "./index.css";
 
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 
 import App from "@/App.tsx";
 
@@ -11,7 +12,9 @@ import { initialState } from "./types/globalState";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <GlobalProvider initialState={initialState}>
-      <App />
+      <BrowserRouter basename={import.meta.env.VITE_REACT_APP_BASENAME || "/"}>
+        <App />
+      </BrowserRouter>
     </GlobalProvider>
   </React.StrictMode>,
 );

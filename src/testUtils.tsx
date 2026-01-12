@@ -18,9 +18,11 @@ export function customRenderApp(partialState: Partial<GlobalState>) {
   const mergedState = { ...defaultState, ...partialState };
 
   return render(
-    <GlobalProvider initialState={mergedState}>
-      <App />
-    </GlobalProvider>,
+    <MemoryRouter initialEntries={[window.location.pathname]}>
+      <GlobalProvider initialState={mergedState}>
+        <App />
+      </GlobalProvider>
+    </MemoryRouter>,
   );
 }
 
