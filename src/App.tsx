@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef } from "react";
+import { lazy, Suspense } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -10,8 +10,10 @@ import { Spinner } from "@/components/custom/Spinner";
 import Navbar from "@/components/layout/Navbar";
 import Sidebar from "@/components/layout/Sidebar";
 import { Toaster } from "@/components/ui/toaster";
-import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
+import { useDemoSessionLifecycle } from "@/hooks/useDemoSessionLifecycle";
 import { useGlobalState } from "@/hooks/useGlobalState";
+import { usePageMetadata } from "@/hooks/usePageMetadata";
+import { useTenantApplicants } from "@/hooks/useTenantApplicants";
 import homeData_EN from "@/locales/home/home_en.json";
 import homeData_ES from "@/locales/home/home_es.json";
 import FAQPage from "@/pages/FAQ.page";
@@ -41,30 +43,6 @@ const tenantRoutes = [
   "/admin-leaderboard",
 ] as const;
 
-function getPageTitle(pathname: string, locale: "EN" | "ES") {
-  if (pathname === "/FAQ") {
-    return locale === "ES"
-      ? "Preguntas frecuentes | Flatmate Finder"
-      : "Frequently Asked Questions | Flatmate Finder";
-  }
-  if (pathname === "/form") {
-    return locale === "ES"
-      ? "Solicitud | Flatmate Finder"
-      : "Application | Flatmate Finder";
-  }
-  if (pathname === "/thankyou") {
-    return locale === "ES"
-      ? "Gracias | Flatmate Finder"
-      : "Thank you | Flatmate Finder";
-  }
-  if (pathname.startsWith("/admin")) {
-    return locale === "ES"
-      ? "Área de inquilinos | Flatmate Finder"
-      : "Tenant area | Flatmate Finder";
-  }
-  return "Flatmate Finder";
-}
-
 function App() {
   return (
     <Router basename={import.meta.env.VITE_REACT_APP_BASENAME || "/"}>
@@ -76,7 +54,6 @@ function App() {
 
 function AppContent() {
   const { session, applicantPool, locale } = useGlobalState();
-  const dispatch = useGlobalDispatch();
   const location = useLocation();
   const localeData: HomePageData = locale === "EN" ? homeData_EN : homeData_ES;
   const isPublicRoute = publicRoutes.includes(
@@ -95,62 +72,10 @@ function AppContent() {
     isTenantSession(session) && session.mode === "demo" && isTenantRoute;
   const isDemoArea = isDemoApplicantArea || isDemoTenantArea;
   const hasDemoSession = isDemoSession(session);
-  const demoSessionOnMount = useRef(hasDemoSession);
-  const wasInDemoArea = useRef(isDemoArea);
 
-  useEffect(() => {
-    document.documentElement.lang = locale === "ES" ? "es" : "en";
-    document.title = getPageTitle(location.pathname, locale);
-  }, [locale, location.pathname]);
-
-  useEffect(() => {
-    if (
-      hasDemoSession &&
-      isPublicRoute &&
-      (demoSessionOnMount.current || wasInDemoArea.current)
-    ) {
-      dispatch({ type: "RESET_AUTH" });
-    }
-    wasInDemoArea.current = isDemoArea;
-  }, [dispatch, hasDemoSession, isDemoArea, isPublicRoute]);
-
-  useEffect(() => {
-    if (!isTenantSession(session) || !isTenantRoute || applicantPool !== null) {
-      return;
-    }
-
-    let cancelled = false;
-    dispatch({ type: "FETCH_INIT" });
-
-    const applicantsPromise =
-      session.mode === "demo"
-        ? import("@/data/demoApplicants").then(
-            ({ demoApplicants }) => demoApplicants,
-          )
-        : import("@/lib/firebase/firestore").then(
-            ({ fetchApplicantPool, waitForFirebaseAuth }) =>
-              waitForFirebaseAuth().then(() => fetchApplicantPool()),
-          );
-
-    void applicantsPromise
-      .then((fetchedApplicants) => {
-        if (!cancelled) {
-          dispatch({ type: "FETCH_SUCCESS", payload: fetchedApplicants });
-        }
-      })
-      .catch(() => {
-        if (!cancelled) {
-          dispatch({
-            type: "FETCH_FAILURE",
-            payload: "Something went wrong",
-          });
-        }
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [applicantPool, dispatch, isTenantRoute, session]);
+  usePageMetadata(location.pathname, locale);
+  useDemoSessionLifecycle({ session, isDemoArea, isPublicRoute });
+  useTenantApplicants({ session, applicantPool, isTenantRoute });
 
   const showTenantShell =
     isTenantSession(session) && (!hasDemoSession || isDemoTenantArea);
