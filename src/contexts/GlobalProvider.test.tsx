@@ -11,7 +11,10 @@ import { fetchApplicantPool } from "@/lib/firebase/firestore";
 import FAQPage from "@/pages/FAQ.page";
 import TenantLeaderboardPage from "@/pages/TenantLeaderboard.page";
 import TenantTinderPage from "@/pages/TenantTinder.page";
-import { customRenderApp, customRenderLeaderBoard } from "@/testUtils";
+import {
+  customRenderApp,
+  customRenderLeaderBoard,
+} from "@/test/testUtils";
 import type { ApplicantProfile } from "@/types/applicant";
 import {
   GlobalState,
