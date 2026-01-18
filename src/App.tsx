@@ -24,7 +24,6 @@ import {
   isDemoSession,
   isTenantSession,
 } from "@/types/globalState";
-import type { HomePageData } from "@/types/locale";
 
 const ApplicantFormPage = lazy(() => import("@/pages/ApplicantForm.page"));
 const ApplicantThankYouPage = lazy(
@@ -36,45 +35,50 @@ const TenantLeaderboardPage = lazy(
 const TenantTinderPage = lazy(() => import("@/pages/TenantTinder.page"));
 const TenantWelcomePage = lazy(() => import("@/pages/TenantWelcome.page"));
 
+function PageLoader() {
+  return (
+    <div className="flex min-h-[50vh] items-center justify-center">
+      <Spinner size="screen" />
+    </div>
+  );
+}
+
 function App() {
   const { session, applicantPool, locale } = useGlobalState();
-  const location = useLocation();
-  const localeData: HomePageData = locale === "EN" ? homeData_EN : homeData_ES;
-  const publicRoute = isPublicRoute(location.pathname);
-  const tenantRoute = isTenantRoute(location.pathname);
-  const isDemoApplicantArea =
-    isApplicantSession(session) &&
-    session.mode === "demo" &&
-    isApplicantRoute(location.pathname);
-  const isDemoTenantArea =
-    isTenantSession(session) && session.mode === "demo" && tenantRoute;
+  const { pathname } = useLocation();
+
+  const localeData = locale === "EN" ? homeData_EN : homeData_ES;
+
+  const isPublicPath = isPublicRoute(pathname);
+  const isTenantPath = isTenantRoute(pathname);
+
+  const isDemoApplicant =
+    isApplicantSession(session) && session.mode === "demo";
+  const isDemoTenant = isTenantSession(session) && session.mode === "demo";
+
+  const isDemoApplicantArea = isDemoApplicant && isApplicantRoute(pathname);
+  const isDemoTenantArea = isDemoTenant && isTenantPath;
   const isDemoArea = isDemoApplicantArea || isDemoTenantArea;
   const hasDemoSession = isDemoSession(session);
 
-  usePageMetadata(location.pathname, locale);
-  useDemoSessionLifecycle({ session, isDemoArea, isPublicRoute: publicRoute });
-  useTenantApplicants({ session, applicantPool, isTenantRoute: tenantRoute });
+  usePageMetadata(pathname, locale);
+  useDemoSessionLifecycle({ session, isDemoArea, isPublicRoute: isPublicPath });
+  useTenantApplicants({ session, applicantPool, isTenantRoute: isTenantPath });
 
   const showTenantShell =
     isTenantSession(session) && (!hasDemoSession || isDemoTenantArea);
 
   return (
     <>
-      {!showTenantShell && <Navbar />}
-      {showTenantShell && <Sidebar />}
+      {showTenantShell ? <Sidebar /> : <Navbar />}
+
       <main className="flex h-auto flex-col gap-3 lg:gap-5">
         {isDemoArea && (
           <p className="mx-auto rounded-full bg-muted px-4 py-1 text-center text-sm text-muted-foreground">
             {localeData.demoBanner}
           </p>
         )}
-        <Suspense
-          fallback={
-            <div className="flex min-h-[50vh] items-center justify-center">
-              <Spinner size="screen" />
-            </div>
-          }
-        >
+        <Suspense fallback={<PageLoader />}>
           <Routes>
             <Route path={ROUTES.home} element={<HomePage />} />
             <Route path={ROUTES.faq} element={<FAQPage />} />
