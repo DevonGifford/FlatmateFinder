@@ -4,17 +4,25 @@ import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
 import type { AppSession } from "@/types/globalState";
 import { isDemoSession } from "@/types/globalState";
 
-interface Options {
+interface UseDemoSessionLifecycleOptions {
   session: AppSession;
   isDemoArea: boolean;
   isPublicRoute: boolean;
 }
 
+/**
+ * Clears stale demo sessions when returning to a public route.
+ *
+ * @param options - Current session and route-area state.
+ *
+ * @example
+ * useDemoSessionLifecycle({ session, isDemoArea, isPublicRoute });
+ */
 export function useDemoSessionLifecycle({
   session,
   isDemoArea,
   isPublicRoute,
-}: Options) {
+}: UseDemoSessionLifecycleOptions) {
   const dispatch = useGlobalDispatch();
   const hasDemoSession = isDemoSession(session);
   const demoSessionOnMount = useRef(hasDemoSession);

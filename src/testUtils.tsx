@@ -26,9 +26,7 @@ export function customRenderApp(partialState: Partial<GlobalState>) {
   );
 }
 
-export function customRenderLeaderBoard(
-  partialState: Partial<GlobalState>,
-) {
+export function customRenderLeaderBoard(partialState: Partial<GlobalState>) {
   const defaultState: GlobalState = {
     session: { role: "tenant", mode: "real", tenantId: "dev" },
     locale: "EN",

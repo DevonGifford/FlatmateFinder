@@ -5,17 +5,26 @@ import type { ApplicantProfile } from "@/types/applicant";
 import type { AppSession } from "@/types/globalState";
 import { isTenantSession } from "@/types/globalState";
 
-interface Options {
+interface UseTenantApplicantsOptions {
   session: AppSession;
   applicantPool: ApplicantProfile[] | null;
   isTenantRoute: boolean;
 }
 
+/**
+ * Loads applicant data for tenant routes. Demo sessions use local fixtures,
+ * while real sessions load from Firebase.
+ *
+ * @param options - Current session and tenant route state.
+ *
+ * @example
+ * useTenantApplicants({ session, applicantPool, isTenantRoute });
+ */
 export function useTenantApplicants({
   session,
   applicantPool,
   isTenantRoute,
-}: Options) {
+}: UseTenantApplicantsOptions) {
   const dispatch = useGlobalDispatch();
 
   useEffect(() => {
