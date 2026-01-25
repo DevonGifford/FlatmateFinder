@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components -- contexts intentionally live with their provider. */
 import React, { createContext, useEffect, useReducer } from "react";
 
 import { getTenantById, getTenantByName, type TenantId } from "@/lib/constants/tenants";
