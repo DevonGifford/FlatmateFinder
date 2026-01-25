@@ -1,12 +1,5 @@
 import { Timestamp } from "firebase/firestore";
-import {
-  Building,
-  CalendarClockIcon,
-  ExternalLinkIcon,
-  Home,
-  User,
-  Video,
-} from "lucide-react";
+import { Building, CalendarClockIcon, ExternalLinkIcon, Home, User, Video } from "lucide-react";
 import { IoFemale, IoMale, IoMaleFemale } from "react-icons/io5";
 import TinderCard from "react-tinder-card";
 
@@ -29,11 +22,7 @@ import {
 import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
 import { useGlobalState } from "@/hooks/useGlobalState";
 import { useRequireTenant } from "@/hooks/useRequireTenant";
-import {
-  getTenantById,
-  TenantBooleanKey,
-  TenantStarKey,
-} from "@/lib/constants/tenants";
+import { getTenantById, TenantBooleanKey, TenantStarKey } from "@/lib/constants/tenants";
 import { updateRanking } from "@/lib/firebase/firestore";
 import { toastError } from "@/lib/toast";
 import { normalizeExternalUrl } from "@/lib/utils";
@@ -45,12 +34,10 @@ export default function TenantTinderPage() {
   useRequireTenant();
   const dispatch = useGlobalDispatch();
   const { applicantPool, session, locale } = useGlobalState();
-  const localeData: TenantPageData =
-    locale === "EN" ? tenantData_EN : tenantData_ES;
+  const localeData: TenantPageData = locale === "EN" ? tenantData_EN : tenantData_ES;
   const isDemoSession = session.role === "tenant" && session.mode === "demo";
 
-  const tenant =
-    session.role === "tenant" ? getTenantById(session.tenantId) : undefined;
+  const tenant = session.role === "tenant" ? getTenantById(session.tenantId) : undefined;
 
   const handleStarClick = (starIndex: number, cardIndex: number) => {
     if (tenant && applicantPool) {
@@ -90,11 +77,9 @@ export default function TenantTinderPage() {
       const updatedRankings = applicantPool[cardIndex].rankings;
 
       if (!isDemoSession) {
-        void updateRanking(
-          applicantPool[cardIndex].uuid,
-          updatedRankings,
-          session,
-        ).catch(() => toastError("Something went wrong"));
+        void updateRanking(applicantPool[cardIndex].uuid, updatedRankings, session).catch(() =>
+          toastError("Something went wrong"),
+        );
       }
     } else {
       toastError("Something went wrong");
@@ -133,18 +118,13 @@ export default function TenantTinderPage() {
   };
   const convertTimestamp = (timeStamp: Timestamp) => {
     if (timeStamp?.seconds) {
-      const date = new Date(
-        timeStamp.seconds * 1000 + timeStamp.nanoseconds / 1000000,
-      );
+      const date = new Date(timeStamp.seconds * 1000 + timeStamp.nanoseconds / 1000000);
 
-      const formattedDate = date.toLocaleDateString(
-        locale === "EN" ? "en-US" : "es-ES",
-        {
-          day: "2-digit",
-          month: "short",
-          year: "numeric",
-        },
-      );
+      const formattedDate = date.toLocaleDateString(locale === "EN" ? "en-US" : "es-ES", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      });
 
       return formattedDate;
     } else {
@@ -193,32 +173,25 @@ export default function TenantTinderPage() {
                       </div>
                     </div>
                     <div>
-                      {dataItem.firstForm.languages &&
-                        dataItem.firstForm.languages.length > 0 && (
-                          <div>
-                            <div className="flex flex-wrap gap-2">
-                              {dataItem.firstForm.languages.map(
-                                (lang, index) => (
-                                  <span
-                                    key={index}
-                                    className="p-1 px-2 text-xs font-semibold rounded-xl bg-sky-400/20"
-                                  >
-                                    {lang}
-                                  </span>
-                                ),
-                              )}
-                            </div>
+                      {dataItem.firstForm.languages && dataItem.firstForm.languages.length > 0 && (
+                        <div>
+                          <div className="flex flex-wrap gap-2">
+                            {dataItem.firstForm.languages.map((lang, index) => (
+                              <span
+                                key={index}
+                                className="p-1 px-2 text-xs font-semibold rounded-xl bg-sky-400/20"
+                              >
+                                {lang}
+                              </span>
+                            ))}
                           </div>
-                        )}
+                        </div>
+                      )}
                     </div>
                     {normalizeExternalUrl(dataItem.thirdForm.social_media) && (
                       <a
                         className="flex flex-row items-center gap-1 hover:text-blue-500 pt-1"
-                        href={
-                          normalizeExternalUrl(
-                            dataItem.thirdForm.social_media,
-                          ) ?? undefined
-                        }
+                        href={normalizeExternalUrl(dataItem.thirdForm.social_media) ?? undefined}
                         target="_blank"
                         rel="noreferrer"
                       >
@@ -252,11 +225,7 @@ export default function TenantTinderPage() {
                     </span>
                   </div>
                 </div>
-                <Accordion
-                  type="single"
-                  collapsible
-                  className="w-full text-center"
-                >
+                <Accordion type="single" collapsible className="w-full text-center">
                   <AccordionItem className="border-none py-1" value={"about"}>
                     <AccordionTrigger className="flex-col justify-center sm:gap-1 py-1 text-sm sm:text-lg hover:no-underline">
                       {localeData.applicantIntroduction}
@@ -299,15 +268,11 @@ export default function TenantTinderPage() {
                       onClick={() => handleStarClick(starIndex, index)}
                       filled={
                         starIndex <
-                        (dataItem.rankings?.[
-                          `${tenant?.id}_star` as TenantStarKey
-                        ] || 0)
+                        (dataItem.rankings?.[`${tenant?.id}_star` as TenantStarKey] || 0)
                       }
                       selected={
                         starIndex + 1 ===
-                        (dataItem.rankings?.[
-                          `${tenant?.id}_star` as TenantStarKey
-                        ] || 0)
+                        (dataItem.rankings?.[`${tenant?.id}_star` as TenantStarKey] || 0)
                       }
                     />
                   ))}

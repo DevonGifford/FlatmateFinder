@@ -37,12 +37,9 @@ export function useTenantApplicants({
 
     const applicantsPromise =
       session.mode === "demo"
-        ? import("@/data/demoApplicants").then(
-            ({ demoApplicants }) => demoApplicants,
-          )
-        : import("@/lib/firebase/firestore").then(
-            ({ fetchApplicantPool, waitForFirebaseAuth }) =>
-              waitForFirebaseAuth().then(() => fetchApplicantPool()),
+        ? import("@/data/demoApplicants").then(({ demoApplicants }) => demoApplicants)
+        : import("@/lib/firebase/firestore").then(({ fetchApplicantPool, waitForFirebaseAuth }) =>
+            waitForFirebaseAuth().then(() => fetchApplicantPool()),
           );
 
     void applicantsPromise

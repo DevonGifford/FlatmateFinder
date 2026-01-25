@@ -9,14 +9,10 @@ function getPageTitle(pathname: string, locale: "EN" | "ES") {
       : "Frequently Asked Questions | Flatmate Finder";
   }
   if (pathname === ROUTES.applicant.form) {
-    return locale === "ES"
-      ? "Solicitud | Flatmate Finder"
-      : "Application | Flatmate Finder";
+    return locale === "ES" ? "Solicitud | Flatmate Finder" : "Application | Flatmate Finder";
   }
   if (pathname === ROUTES.applicant.thankYou) {
-    return locale === "ES"
-      ? "Gracias | Flatmate Finder"
-      : "Thank you | Flatmate Finder";
+    return locale === "ES" ? "Gracias | Flatmate Finder" : "Thank you | Flatmate Finder";
   }
   if (pathname.startsWith("/admin")) {
     return locale === "ES"

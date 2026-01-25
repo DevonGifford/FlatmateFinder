@@ -30,8 +30,7 @@ export const demoApplicants: ApplicantProfile[] = [
       job_type: "wfh",
       describe:
         "Friendly and adventurous wizard, looking for a quiet place to stay. I enjoy Quidditch and playing wizard chess in my free time. Not much for trees.",
-      hobbies:
-        "Hobbies include playing wizard chess and attending Quidditch matches.",
+      hobbies: "Hobbies include playing wizard chess and attending Quidditch matches.",
       social_media: "twitter.com/ronweasley",
     },
     rankings: {

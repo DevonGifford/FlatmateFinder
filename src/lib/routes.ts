@@ -14,11 +14,7 @@ export const ROUTES = {
 
 const publicRoutes = [ROUTES.home, ROUTES.faq];
 const applicantRoutes = [ROUTES.applicant.form, ROUTES.applicant.thankYou];
-const tenantRoutes = [
-  ROUTES.tenant.welcome,
-  ROUTES.tenant.tinder,
-  ROUTES.tenant.leaderboard,
-];
+const tenantRoutes = [ROUTES.tenant.welcome, ROUTES.tenant.tinder, ROUTES.tenant.leaderboard];
 
 export function isPublicRoute(pathname: string) {
   return publicRoutes.includes(pathname as (typeof publicRoutes)[number]);

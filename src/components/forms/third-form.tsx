@@ -27,10 +27,7 @@ import { toastError, toastFormComplete } from "@/lib/toast";
 import { normalizeExternalUrl } from "@/lib/utils";
 import Data_EN from "@/locales/applicant-form/third-form_en.json";
 import Data_ES from "@/locales/applicant-form/third-form_es.json";
-import {
-  Application,
-  defaultApplication,
-} from "@/types/application";
+import { Application, defaultApplication } from "@/types/application";
 import { isApplicantSession } from "@/types/globalState";
 import type { ThirdFormData } from "@/types/locale";
 
@@ -42,24 +39,14 @@ type ThirdFormValues = {
   social_media?: string;
 };
 
-const thirdFormSchema = (
-  locale: "EN" | "ES",
-): z.ZodType<ThirdFormValues, ThirdFormValues> => {
+const thirdFormSchema = (locale: "EN" | "ES"): z.ZodType<ThirdFormValues, ThirdFormValues> => {
   const { required, tooLong, invalidUrl } = getValidationMessages(locale);
 
   return z.object({
     job_title: z.string({ error: required }).trim().min(1, required),
     job_type: z.string().optional(),
-    describe: z
-      .string({ error: required })
-      .trim()
-      .min(1, required)
-      .max(500, tooLong),
-    hobbies: z
-      .string({ error: required })
-      .trim()
-      .min(1, required)
-      .max(500, tooLong),
+    describe: z.string({ error: required }).trim().min(1, required).max(500, tooLong),
+    hobbies: z.string({ error: required }).trim().min(1, required).max(500, tooLong),
     social_media: z
       .string()
       .trim()
@@ -145,11 +132,7 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
                 </FormLabel>
 
                 <FormControl>
-                  <Input
-                    placeholder=""
-                    className="text-center sm:text-left"
-                    {...field}
-                  />
+                  <Input placeholder="" className="text-center sm:text-left" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -248,11 +231,7 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
                 </FormDescription>
               </div>
               <div className="flex flex-row justify-between items-center gap-3">
-                <Link
-                  className="text-devready-green"
-                  size={20}
-                  aria-hidden="true"
-                />
+                <Link className="text-devready-green" size={20} aria-hidden="true" />
                 <FormControl>
                   <Input placeholder="Instagram, LinkedIn etc." {...field} />
                 </FormControl>

@@ -9,29 +9,16 @@ import { useDemoSessionLifecycle } from "@/hooks/useDemoSessionLifecycle";
 import { useGlobalState } from "@/hooks/useGlobalState";
 import { usePageMetadata } from "@/hooks/usePageMetadata";
 import { useTenantApplicants } from "@/hooks/useTenantApplicants";
-import {
-  isApplicantRoute,
-  isPublicRoute,
-  isTenantRoute,
-  ROUTES,
-} from "@/lib/routes";
+import { isApplicantRoute, isPublicRoute, isTenantRoute, ROUTES } from "@/lib/routes";
 import homeData_EN from "@/locales/home/home_en.json";
 import homeData_ES from "@/locales/home/home_es.json";
 import FAQPage from "@/pages/FAQ.page";
 import HomePage from "@/pages/Home.page";
-import {
-  isApplicantSession,
-  isDemoSession,
-  isTenantSession,
-} from "@/types/globalState";
+import { isApplicantSession, isDemoSession, isTenantSession } from "@/types/globalState";
 
 const ApplicantFormPage = lazy(() => import("@/pages/ApplicantForm.page"));
-const ApplicantThankYouPage = lazy(
-  () => import("@/pages/ApplicantThankYou.page"),
-);
-const TenantLeaderboardPage = lazy(
-  () => import("@/pages/TenantLeaderboard.page"),
-);
+const ApplicantThankYouPage = lazy(() => import("@/pages/ApplicantThankYou.page"));
+const TenantLeaderboardPage = lazy(() => import("@/pages/TenantLeaderboard.page"));
 const TenantTinderPage = lazy(() => import("@/pages/TenantTinder.page"));
 const TenantWelcomePage = lazy(() => import("@/pages/TenantWelcome.page"));
 
@@ -52,8 +39,7 @@ function App() {
   const isPublicPath = isPublicRoute(pathname);
   const isTenantPath = isTenantRoute(pathname);
 
-  const isDemoApplicant =
-    isApplicantSession(session) && session.mode === "demo";
+  const isDemoApplicant = isApplicantSession(session) && session.mode === "demo";
   const isDemoTenant = isTenantSession(session) && session.mode === "demo";
 
   const isDemoApplicantArea = isDemoApplicant && isApplicantRoute(pathname);
@@ -65,8 +51,7 @@ function App() {
   useDemoSessionLifecycle({ session, isDemoArea, isPublicRoute: isPublicPath });
   useTenantApplicants({ session, applicantPool, isTenantRoute: isTenantPath });
 
-  const showTenantShell =
-    isTenantSession(session) && (!hasDemoSession || isDemoTenantArea);
+  const showTenantShell = isTenantSession(session) && (!hasDemoSession || isDemoTenantArea);
 
   return (
     <>
@@ -84,30 +69,15 @@ function App() {
             <Route path={ROUTES.faq} element={<FAQPage />} />
             {isApplicantSession(session) && (
               <>
-                <Route
-                  path={ROUTES.applicant.form}
-                  element={<ApplicantFormPage />}
-                />
-                <Route
-                  path={ROUTES.applicant.thankYou}
-                  element={<ApplicantThankYouPage />}
-                />
+                <Route path={ROUTES.applicant.form} element={<ApplicantFormPage />} />
+                <Route path={ROUTES.applicant.thankYou} element={<ApplicantThankYouPage />} />
               </>
             )}
             {isTenantSession(session) && (
               <>
-                <Route
-                  path={ROUTES.tenant.welcome}
-                  element={<TenantWelcomePage />}
-                />
-                <Route
-                  path={ROUTES.tenant.tinder}
-                  element={<TenantTinderPage />}
-                />
-                <Route
-                  path={ROUTES.tenant.leaderboard}
-                  element={<TenantLeaderboardPage />}
-                />
+                <Route path={ROUTES.tenant.welcome} element={<TenantWelcomePage />} />
+                <Route path={ROUTES.tenant.tinder} element={<TenantTinderPage />} />
+                <Route path={ROUTES.tenant.leaderboard} element={<TenantLeaderboardPage />} />
               </>
             )}
             <Route path="*" element={<Navigate to={ROUTES.home} replace />} />

@@ -1,13 +1,6 @@
-import {
-  type ActionType,
-  type GlobalState,
-  initialState,
-} from "@/types/globalState";
+import { type ActionType, type GlobalState, initialState } from "@/types/globalState";
 
-const globalReducer = (
-  state: GlobalState,
-  action: ActionType,
-): GlobalState => {
+const globalReducer = (state: GlobalState, action: ActionType): GlobalState => {
   switch (action.type) {
     case "SET_APPLICANT":
       return {
@@ -71,9 +64,7 @@ const globalReducer = (
           const updatedApplicantDoc = action.payload.find(
             (updatedDoc) => updatedDoc?.id === applicantDoc.id,
           );
-          return updatedApplicantDoc
-            ? { ...applicantDoc, ...updatedApplicantDoc }
-            : applicantDoc;
+          return updatedApplicantDoc ? { ...applicantDoc, ...updatedApplicantDoc } : applicantDoc;
         }),
       };
     case "PURGE_STATE":

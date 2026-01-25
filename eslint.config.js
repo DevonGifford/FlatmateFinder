@@ -40,10 +40,7 @@ export default [
     rules: {
       ...tseslint.configs.recommended.rules,
       ...jsxA11y.configs.recommended.rules,
-      "react-refresh/only-export-components": [
-        "warn",
-        { allowConstantExport: true },
-      ],
+      "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
       "simple-import-sort/imports": "error",
       "simple-import-sort/exports": "error",
       "tailwindcss/no-contradicting-classname": "error",

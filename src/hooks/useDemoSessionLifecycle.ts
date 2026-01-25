@@ -29,11 +29,7 @@ export function useDemoSessionLifecycle({
   const wasInDemoArea = useRef(isDemoArea);
 
   useEffect(() => {
-    if (
-      hasDemoSession &&
-      isPublicRoute &&
-      (demoSessionOnMount.current || wasInDemoArea.current)
-    ) {
+    if (hasDemoSession && isPublicRoute && (demoSessionOnMount.current || wasInDemoArea.current)) {
       dispatch({ type: "RESET_AUTH" });
     }
 

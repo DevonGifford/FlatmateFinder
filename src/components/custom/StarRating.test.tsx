@@ -9,13 +9,7 @@ describe("StarRating", () => {
     const user = userEvent.setup();
     const onClick = vi.fn();
 
-    render(
-      <StarRating
-        filled={false}
-        label="Set rating to 1 star"
-        onClick={onClick}
-      />,
-    );
+    render(<StarRating filled={false} label="Set rating to 1 star" onClick={onClick} />);
 
     const button = screen.getByRole("radio", { name: "Set rating to 1 star" });
     expect(button.getAttribute("aria-checked")).toBe("false");

@@ -1,10 +1,7 @@
 import { Timestamp } from "firebase/firestore";
 import * as z from "zod";
 
-import {
-  lengthOfStayRange,
-  ratingRange,
-} from "@/lib/constants/applicantConstraints";
+import { lengthOfStayRange, ratingRange } from "@/lib/constants/applicantConstraints";
 import { tenants } from "@/lib/constants/tenants";
 
 const timestampSchema = z.custom<Timestamp>(
@@ -16,10 +13,7 @@ const rankingsSchema = z
   .object(
     Object.fromEntries(
       tenants.flatMap(({ id }) => [
-        [
-          `${id}_star`,
-          z.number().int().min(ratingRange.min).max(ratingRange.max).optional(),
-        ],
+        [`${id}_star`, z.number().int().min(ratingRange.min).max(ratingRange.max).optional()],
         [`${id}_bool`, z.boolean().optional()],
       ]),
     ),
@@ -42,11 +36,7 @@ export const applicantProfileSchema = z
     secondForm: z
       .object({
         move_date: timestampSchema,
-        length_stay: z
-          .number()
-          .int()
-          .min(lengthOfStayRange.min)
-          .max(lengthOfStayRange.max),
+        length_stay: z.number().int().min(lengthOfStayRange.min).max(lengthOfStayRange.max),
         meet_type: z.string(),
         more_info: z.string().optional(),
       })
@@ -69,12 +59,8 @@ export const applicantProfileSchema = z
 export type ParsedApplicantProfile = z.infer<typeof applicantProfileSchema>;
 
 /** Validates an unknown Firestore document and attaches its document ID. */
-export function parseApplicantProfile(
-  id: string,
-  data: unknown,
-): ParsedApplicantProfile | null {
-  const document =
-    typeof data === "object" && data !== null ? { id, ...data } : { id };
+export function parseApplicantProfile(id: string, data: unknown): ParsedApplicantProfile | null {
+  const document = typeof data === "object" && data !== null ? { id, ...data } : { id };
   const result = applicantProfileSchema.safeParse(document);
 
   return result.success ? result.data : null;

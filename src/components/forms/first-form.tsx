@@ -27,10 +27,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useGlobalState } from "@/hooks/useGlobalState";
 import { languages } from "@/lib/constants/formOptions";
 import { getFormStepPath } from "@/lib/constants/formSteps";
-import {
-  getValidationMessages,
-  mergeApplicationSection,
-} from "@/lib/forms/formUtils";
+import { getValidationMessages, mergeApplicationSection } from "@/lib/forms/formUtils";
 import { toastError, toastFormComplete } from "@/lib/toast";
 import Data_EN from "@/locales/applicant-form/first-form_en.json";
 import Data_ES from "@/locales/applicant-form/first-form_es.json";
@@ -45,24 +42,14 @@ type FirstFormValues = {
   languages?: string[];
 };
 
-const firstFormSchema = (
-  locale: "EN" | "ES",
-): z.ZodType<FirstFormValues, FirstFormValues> => {
+const firstFormSchema = (locale: "EN" | "ES"): z.ZodType<FirstFormValues, FirstFormValues> => {
   const { required, tooLong } = getValidationMessages(locale);
 
   return z.object({
-    name: z
-      .string({ error: required })
-      .trim()
-      .min(1, required)
-      .max(50, tooLong),
+    name: z.string({ error: required }).trim().min(1, required).max(50, tooLong),
     age: z.string({ error: required }).trim().min(1, required).max(10, tooLong),
     sex: z.string({ error: required }).trim().min(1, required).max(10, tooLong),
-    phone: z
-      .string({ error: required })
-      .trim()
-      .min(1, required)
-      .max(25, tooLong),
+    phone: z.string({ error: required }).trim().min(1, required).max(25, tooLong),
     languages: z.array(z.string()).optional(),
   });
 };
@@ -145,9 +132,7 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
             control={form.control}
             render={({ field }) => (
               <FormItem className="min-w-35 flex-1 p-5 sm:min-w-45">
-                <FormLabel className="text-center">
-                  {localeData.gender}
-                </FormLabel>
+                <FormLabel className="text-center">{localeData.gender}</FormLabel>
                 <FormControl>
                   <ToggleGroup
                     size="sm"
@@ -192,27 +177,22 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
             render={({ field }) => (
               <FormItem className="min-w-35 flex-1 items-center p-5 sm:min-w-45">
                 <FormLabel>{localeData.age}</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger className="h-10 w-full justify-center">
                       <SelectValue placeholder={`${localeData.age}`} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {Array.from({ length: 14 }, (_, index) => index + 23).map(
-                      (age) => (
-                        <SelectItem
-                          key={age}
-                          value={String(age)}
-                          className="flex flex-row justify-center items-center"
-                        >
-                          {String(age)}
-                        </SelectItem>
-                      ),
-                    )}
+                    {Array.from({ length: 14 }, (_, index) => index + 23).map((age) => (
+                      <SelectItem
+                        key={age}
+                        value={String(age)}
+                        className="flex flex-row justify-center items-center"
+                      >
+                        {String(age)}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <FormMessage />
