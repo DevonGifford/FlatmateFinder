@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import * as z from "zod";
 
-import { Spinner } from "@/components/Spinner";
+import { Spinner } from "@/components/custom/Spinner";
 import { Button } from "@/components/ui/button";
 import {
   Form,

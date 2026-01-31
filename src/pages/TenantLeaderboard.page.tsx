@@ -1,7 +1,7 @@
-import { ErrorMessage } from "@/components/ErrorMessage";
-import { ProfilePic } from "@/components/ProfilePic";
-import { RatingBadge } from "@/components/RatingBadge";
-import { Spinner } from "@/components/Spinner";
+import { ErrorMessage } from "@/components/custom/ErrorMessage";
+import { ProfilePic } from "@/components/custom/ProfilePic";
+import { RatingBadge } from "@/components/custom/RatingBadge";
+import { Spinner } from "@/components/custom/Spinner";
 import { useGlobalState } from "@/hooks/useGlobalState";
 import { useRequireTenant } from "@/hooks/useRequireTenant";
 import {

@@ -5,7 +5,7 @@ import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
 import App from "@/App";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/layout/Navbar";
 import { GlobalProvider } from "@/contexts/GlobalProvider";
 import { fetchApplicantPool } from "@/lib/firebase/firestore";
 import FaqPage from "@/pages/Faq.page";

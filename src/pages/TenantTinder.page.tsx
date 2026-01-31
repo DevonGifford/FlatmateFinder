@@ -10,8 +10,8 @@ import {
 import { IoFemale, IoMale, IoMaleFemale } from "react-icons/io5";
 import TinderCard from "react-tinder-card";
 
-import { ProfilePic } from "@/components/ProfilePic";
-import { StarRating } from "@/components/StarRating";
+import { ProfilePic } from "@/components/custom/ProfilePic";
+import { StarRating } from "@/components/custom/StarRating";
 import {
   Accordion,
   AccordionContent,
