@@ -30,9 +30,9 @@ import Data_ES from "@/locales/applicant-form/thirdform_es.json";
 import {
   ApplicationInterface,
   defaultApplication,
-} from "@/types/applicationInterfaces";
-import { isApplicantSession } from "@/types/globalStateInterfaces";
-import { ThirdFormData } from "@/types/localeInterfaces";
+} from "@/types/application";
+import { isApplicantSession } from "@/types/globalState";
+import type { ThirdFormData } from "@/types/locale";
 
 type ThirdFormValues = {
   job_title: string;

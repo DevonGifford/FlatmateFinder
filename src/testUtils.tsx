@@ -4,7 +4,7 @@ import { MemoryRouter } from "react-router-dom";
 import App from "@/App";
 import { GlobalProvider } from "@/contexts/GlobalProvider";
 import TenantLeaderboardPage from "@/pages/TenantLeaderboard.page";
-import type { GlobalStateInterface } from "@/types/globalStateInterfaces";
+import type { GlobalStateInterface } from "@/types/globalState";
 
 export function customRenderApp(partialState: Partial<GlobalStateInterface>) {
   const defaultState: GlobalStateInterface = {

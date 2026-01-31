@@ -34,8 +34,8 @@ import {
 } from "@/lib/forms/formUtils";
 import Data_EN from "@/locales/applicant-form/firstform_en.json";
 import Data_ES from "@/locales/applicant-form/firstform_es.json";
-import { ApplicationInterface } from "@/types/applicationInterfaces";
-import { FirstFormData } from "@/types/localeInterfaces";
+import type { ApplicationInterface } from "@/types/application";
+import type { FirstFormData } from "@/types/locale";
 
 type FirstFormValues = {
   name: string;

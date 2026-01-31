@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useGlobalState } from "@/hooks/useGlobalState";
 import Data_EN from "@/locales/thankyou-page/thankyou_en.json";
 import Data_ES from "@/locales/thankyou-page/thankyou_es.json";
-import { ThankYouPageData } from "@/types/localeInterfaces";
+import type { ThankYouPageData } from "@/types/locale";
 
 export default function ApplicantThankYouPage() {
   const { locale } = useGlobalState();

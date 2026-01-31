@@ -25,7 +25,7 @@ import {
 } from "@/lib/customToast";
 import Data_EN from "@/locales/home-page/home_en.json";
 import Data_ES from "@/locales/home-page/home_es.json";
-import { HomePageData } from "@/types/localeInterfaces";
+import type { HomePageData } from "@/types/locale";
 
 const FormSchema = z.object({
   password: z.string().min(5, {

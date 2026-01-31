@@ -6,14 +6,14 @@ import {
   runTransaction,
 } from "firebase/firestore";
 
-import { ApplicantProfile } from "@/types/applicantInterfaces";
+import type { ApplicantProfile } from "@/types/applicant";
 import { parseApplicantProfile } from "@/types/applicantSchemas";
-import { ApplicationInterface } from "@/types/applicationInterfaces";
+import type { ApplicationInterface } from "@/types/application";
 import {
   type AppSession,
   isApplicantSession,
   isTenantSession,
-} from "@/types/globalStateInterfaces";
+} from "@/types/globalState";
 
 import db, { authReady } from "./config";
 

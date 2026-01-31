@@ -28,8 +28,8 @@ import {
   isApplicantSession,
   isDemoSession,
   isTenantSession,
-} from "@/types/globalStateInterfaces";
-import { HomePageData } from "@/types/localeInterfaces";
+} from "@/types/globalState";
+import type { HomePageData } from "@/types/locale";
 
 const publicRoutes = ["/", "/FAQ"] as const;
 const applicantRoutes = ["/form", "/thankyou"] as const;

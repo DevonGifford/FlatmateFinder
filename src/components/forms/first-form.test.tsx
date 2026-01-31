@@ -4,8 +4,8 @@ import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
 
 import { GlobalProvider } from "@/contexts/GlobalProvider";
-import { defaultApplication } from "@/types/applicationInterfaces";
-import { initialState } from "@/types/globalStateInterfaces";
+import { defaultApplication } from "@/types/application";
+import { initialState } from "@/types/globalState";
 
 import { FirstForm } from "./first-form";
 

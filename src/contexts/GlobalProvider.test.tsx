@@ -12,11 +12,11 @@ import FAQPage from "@/pages/FAQ.page";
 import TenantLeaderboardPage from "@/pages/TenantLeaderboard.page";
 import TenantTinderPage from "@/pages/TenantTinder.page";
 import { customRenderApp, customRenderLeaderBoard } from "@/testUtils";
-import { ApplicantProfile } from "@/types/applicantInterfaces";
+import type { ApplicantProfile } from "@/types/applicant";
 import {
   GlobalStateInterface,
   initialState,
-} from "@/types/globalStateInterfaces";
+} from "@/types/globalState";
 
 beforeEach(() => {
   window.history.pushState({}, "", "/");

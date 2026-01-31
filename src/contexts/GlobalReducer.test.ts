@@ -1,7 +1,7 @@
 import { Timestamp } from "firebase/firestore";
 import { describe, expect, it } from "vitest";
 
-import type { GlobalStateInterface } from "@/types/globalStateInterfaces";
+import type { GlobalStateInterface } from "@/types/globalState";
 
 import GlobalReducer from "./GlobalReducer";
 

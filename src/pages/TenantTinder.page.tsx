@@ -39,7 +39,7 @@ import { updateRanking } from "@/lib/firebase/firestore";
 import { normalizeExternalUrl } from "@/lib/utils";
 import tenantData_EN from "@/locales/tenant-pages/tenant_en.json";
 import tenantData_ES from "@/locales/tenant-pages/tenant_es.json";
-import { TenantPageData } from "@/types/localeInterfaces";
+import type { TenantPageData } from "@/types/locale";
 
 export default function TenantTinderPage() {
   useRequireTenant();

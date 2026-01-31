@@ -35,8 +35,8 @@ import {
 import { cn } from "@/lib/utils";
 import Data_EN from "@/locales/applicant-form/secondform_en.json";
 import Data_ES from "@/locales/applicant-form/secondform_es.json";
-import { ApplicationInterface } from "@/types/applicationInterfaces";
-import { SecondFormData } from "@/types/localeInterfaces";
+import type { ApplicationInterface } from "@/types/application";
+import type { SecondFormData } from "@/types/locale";
 
 type SecondFormValues = {
   move_date: Date;

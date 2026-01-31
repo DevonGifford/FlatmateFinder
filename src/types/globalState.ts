@@ -1,6 +1,6 @@
 import type { TenantId } from "@/lib/constants/tenants";
 
-import type { ApplicantProfile } from "./applicantInterfaces";
+import type { ApplicantProfile } from "./applicant";
 
 export interface GlobalStateInterface {
   session: AppSession;

@@ -16,7 +16,7 @@ import {
 import {
   ApplicationInterface,
   defaultApplication,
-} from "@/types/applicationInterfaces";
+} from "@/types/application";
 
 const ApplicantFormPage: React.FC = () => {
   const [application, setApplication] =

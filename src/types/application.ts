@@ -1,4 +1,4 @@
-import { Rankings } from "@/types/applicantInterfaces";
+import type { Rankings } from "@/types/applicant";
 
 export interface ApplicationInterface {
   uuid: string;

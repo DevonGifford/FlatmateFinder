@@ -1,6 +1,6 @@
 import type { Dispatch, SetStateAction } from "react";
 
-import { ApplicationInterface } from "@/types/applicationInterfaces";
+import type { ApplicationInterface } from "@/types/application";
 
 export function getValidationMessages(locale: "EN" | "ES") {
   return {

@@ -11,8 +11,8 @@ import {
 } from "@/lib/constants/tenants";
 import tenantData_EN from "@/locales/tenant-pages/tenant_en.json";
 import tenantData_ES from "@/locales/tenant-pages/tenant_es.json";
-import { ApplicantProfile } from "@/types/applicantInterfaces";
-import { TenantPageData } from "@/types/localeInterfaces";
+import type { ApplicantProfile } from "@/types/applicant";
+import type { TenantPageData } from "@/types/locale";
 
 export default function TenantLeaderboardPage() {
   useRequireTenant();

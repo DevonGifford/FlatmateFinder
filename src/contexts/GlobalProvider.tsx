@@ -9,7 +9,7 @@ import {
   type ActionType,
   type AppSession,
   type GlobalStateInterface,
-} from "@/types/globalStateInterfaces";
+} from "@/types/globalState";
 
 import GlobalReducer from "./GlobalReducer";
 

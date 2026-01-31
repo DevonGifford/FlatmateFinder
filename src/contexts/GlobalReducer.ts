@@ -2,7 +2,7 @@ import {
   type ActionType,
   type GlobalStateInterface,
   initialState,
-} from "@/types/globalStateInterfaces";
+} from "@/types/globalState";
 
 const globalReducer = (
   state: GlobalStateInterface,
