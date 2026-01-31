@@ -8,7 +8,7 @@ import { useGlobalState } from "@/hooks/useGlobalState";
 import faqData_EN from "@/locales/faq-page/faq_en.json";
 import faqData_ES from "@/locales/faq-page/faq_es.json";
 
-export default function FaqPage() {
+export default function FAQPage() {
   const { locale } = useGlobalState();
   const localeData = locale === "EN" ? faqData_EN : faqData_ES;
 

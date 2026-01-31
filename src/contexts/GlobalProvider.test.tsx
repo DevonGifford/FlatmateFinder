@@ -8,7 +8,7 @@ import App from "@/App";
 import Navbar from "@/components/layout/Navbar";
 import { GlobalProvider } from "@/contexts/GlobalProvider";
 import { fetchApplicantPool } from "@/lib/firebase/firestore";
-import FaqPage from "@/pages/Faq.page";
+import FAQPage from "@/pages/FAQ.page";
 import TenantLeaderboardPage from "@/pages/TenantLeaderboard.page";
 import TenantTinderPage from "@/pages/TenantTinder.page";
 import { customRenderApp, customRenderLeaderBoard } from "@/testUtils";
@@ -44,7 +44,7 @@ describe("Testing the testing environment", () => {
       <MemoryRouter>
         <GlobalProvider initialState={initialState}>
           <Navbar />
-          <FaqPage />
+          <FAQPage />
         </GlobalProvider>
       </MemoryRouter>,
     );

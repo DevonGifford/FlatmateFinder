@@ -4,11 +4,11 @@ import { Button } from "@/components/ui/button";
 import { useGlobalState } from "@/hooks/useGlobalState";
 import Data_EN from "@/locales/thankyou-page/thankyou_en.json";
 import Data_ES from "@/locales/thankyou-page/thankyou_es.json";
-import { ThankyouPageData } from "@/types/localeInterfaces";
+import { ThankYouPageData } from "@/types/localeInterfaces";
 
-export default function ThankyouPage() {
+export default function ApplicantThankYouPage() {
   const { locale } = useGlobalState();
-  const localeData: ThankyouPageData = locale === "EN" ? Data_EN : Data_ES;
+  const localeData: ThankYouPageData = locale === "EN" ? Data_EN : Data_ES;
 
   return (
     <>

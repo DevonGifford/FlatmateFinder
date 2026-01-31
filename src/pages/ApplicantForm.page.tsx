@@ -18,7 +18,7 @@ import {
   defaultApplication,
 } from "@/types/applicationInterfaces";
 
-const ApplicationPage: React.FC = () => {
+const ApplicantFormPage: React.FC = () => {
   const [application, setApplication] =
     useState<ApplicationInterface>(defaultApplication);
   const { pageId } = useURLState();
@@ -98,4 +98,4 @@ const ApplicationPage: React.FC = () => {
   );
 };
 
-export default ApplicationPage;
+export default ApplicantFormPage;
