@@ -27,11 +27,11 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useGlobalState } from "@/hooks/useGlobalState";
 import { languages } from "@/lib/constants/formOptions";
 import { getFormStepPath } from "@/lib/constants/formSteps";
-import { toastError, toastFormComplete } from "@/lib/customToast";
 import {
   getValidationMessages,
   mergeApplicationSection,
 } from "@/lib/forms/formUtils";
+import { toastError, toastFormComplete } from "@/lib/toast";
 import Data_EN from "@/locales/applicant-form/first-form_en.json";
 import Data_ES from "@/locales/applicant-form/first-form_es.json";
 import type { ApplicationInterface } from "@/types/application";

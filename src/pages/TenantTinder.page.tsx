@@ -34,8 +34,8 @@ import {
   TenantBooleanKey,
   TenantStarKey,
 } from "@/lib/constants/tenants";
-import { toastError } from "@/lib/customToast";
 import { updateRanking } from "@/lib/firebase/firestore";
+import { toastError } from "@/lib/toast";
 import { normalizeExternalUrl } from "@/lib/utils";
 import tenantData_EN from "@/locales/tenant/tenant_en.json";
 import tenantData_ES from "@/locales/tenant/tenant_es.json";

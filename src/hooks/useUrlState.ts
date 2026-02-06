@@ -1,6 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 
-export function useURLState() {
+export function useUrlState() {
   const [searchParams] = useSearchParams();
   const pageId = searchParams.get("pageId");
   return { pageId };

@@ -7,7 +7,7 @@ import { SecondForm } from "@/components/forms/second-form";
 import { ThirdForm } from "@/components/forms/third-form";
 import { Button } from "@/components/ui/button";
 import { useRequireApplicant } from "@/hooks/useRequireApplicant";
-import { useURLState } from "@/hooks/useUrlState";
+import { useUrlState } from "@/hooks/useUrlState";
 import {
   FormStep,
   formSteps,
@@ -21,7 +21,7 @@ import {
 const ApplicantFormPage: React.FC = () => {
   const [application, setApplication] =
     useState<ApplicationInterface>(defaultApplication);
-  const { pageId } = useURLState();
+  const { pageId } = useUrlState();
   const navigate = useNavigate();
   useRequireApplicant();
   const currentStep: FormStep = formSteps.some(({ id }) => id === pageId)

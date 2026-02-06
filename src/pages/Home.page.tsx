@@ -22,7 +22,7 @@ import { applicantAccess, tenantAccess } from "@/lib/auth/accessPasswords";
 import {
   toastCorrectPassword,
   toastIncorrectPassword,
-} from "@/lib/customToast";
+} from "@/lib/toast";
 import Data_EN from "@/locales/home/home_en.json";
 import Data_ES from "@/locales/home/home_es.json";
 import type { HomePageData } from "@/types/locale";
