@@ -25,8 +25,8 @@ import { toastError, toastFormComplete } from "@/lib/customToast";
 import { createApplicantDoc } from "@/lib/firebase/firestore";
 import { getValidationMessages } from "@/lib/forms/formUtils";
 import { normalizeExternalUrl } from "@/lib/utils";
-import Data_EN from "@/locales/applicant-form/thirdform_en.json";
-import Data_ES from "@/locales/applicant-form/thirdform_es.json";
+import Data_EN from "@/locales/applicant-form/third-form_en.json";
+import Data_ES from "@/locales/applicant-form/third-form_es.json";
 import {
   ApplicationInterface,
   defaultApplication,

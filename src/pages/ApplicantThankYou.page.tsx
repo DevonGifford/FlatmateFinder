@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import { useGlobalState } from "@/hooks/useGlobalState";
-import Data_EN from "@/locales/thankyou-page/thankyou_en.json";
-import Data_ES from "@/locales/thankyou-page/thankyou_es.json";
+import Data_EN from "@/locales/applicant-thank-you/thank-you_en.json";
+import Data_ES from "@/locales/applicant-thank-you/thank-you_es.json";
 import type { ThankYouPageData } from "@/types/locale";
 
 export default function ApplicantThankYouPage() {

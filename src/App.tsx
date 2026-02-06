@@ -15,8 +15,8 @@ import {
   fetchApplicantPool,
   waitForFirebaseAuth,
 } from "@/lib/firebase/firestore";
-import homeData_EN from "@/locales/home-page/home_en.json";
-import homeData_ES from "@/locales/home-page/home_es.json";
+import homeData_EN from "@/locales/home/home_en.json";
+import homeData_ES from "@/locales/home/home_es.json";
 import ApplicantFormPage from "@/pages/ApplicantForm.page";
 import ApplicantThankYouPage from "@/pages/ApplicantThankYou.page";
 import FAQPage from "@/pages/FAQ.page";

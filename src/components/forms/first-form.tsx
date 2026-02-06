@@ -32,8 +32,8 @@ import {
   getValidationMessages,
   mergeApplicationSection,
 } from "@/lib/forms/formUtils";
-import Data_EN from "@/locales/applicant-form/firstform_en.json";
-import Data_ES from "@/locales/applicant-form/firstform_es.json";
+import Data_EN from "@/locales/applicant-form/first-form_en.json";
+import Data_ES from "@/locales/applicant-form/first-form_es.json";
 import type { ApplicationInterface } from "@/types/application";
 import type { FirstFormData } from "@/types/locale";
 

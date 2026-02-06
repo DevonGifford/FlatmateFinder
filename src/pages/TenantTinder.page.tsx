@@ -37,8 +37,8 @@ import {
 import { toastError } from "@/lib/customToast";
 import { updateRanking } from "@/lib/firebase/firestore";
 import { normalizeExternalUrl } from "@/lib/utils";
-import tenantData_EN from "@/locales/tenant-pages/tenant_en.json";
-import tenantData_ES from "@/locales/tenant-pages/tenant_es.json";
+import tenantData_EN from "@/locales/tenant/tenant_en.json";
+import tenantData_ES from "@/locales/tenant/tenant_es.json";
 import type { TenantPageData } from "@/types/locale";
 
 export default function TenantTinderPage() {

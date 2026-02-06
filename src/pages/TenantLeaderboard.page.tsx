@@ -9,8 +9,8 @@ import {
   tenants,
   TenantStarKey,
 } from "@/lib/constants/tenants";
-import tenantData_EN from "@/locales/tenant-pages/tenant_en.json";
-import tenantData_ES from "@/locales/tenant-pages/tenant_es.json";
+import tenantData_EN from "@/locales/tenant/tenant_en.json";
+import tenantData_ES from "@/locales/tenant/tenant_es.json";
 import type { ApplicantProfile } from "@/types/applicant";
 import type { TenantPageData } from "@/types/locale";
 

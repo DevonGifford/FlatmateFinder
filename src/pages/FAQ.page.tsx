@@ -5,8 +5,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useGlobalState } from "@/hooks/useGlobalState";
-import faqData_EN from "@/locales/faq-page/faq_en.json";
-import faqData_ES from "@/locales/faq-page/faq_es.json";
+import faqData_EN from "@/locales/faq/faq_en.json";
+import faqData_ES from "@/locales/faq/faq_es.json";
 
 export default function FAQPage() {
   const { locale } = useGlobalState();
