@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useGlobalState } from "@/hooks/useGlobalState";
-import { languages } from "@/lib/constants/constants";
+import { languages } from "@/lib/constants/formOptions";
 import { getFormStepPath } from "@/lib/constants/formSteps";
 import { toastError, toastFormComplete } from "@/lib/customToast";
 import {

@@ -1,7 +1,10 @@
 import { Timestamp } from "firebase/firestore";
 import * as z from "zod";
 
-import { lengthOfStayRange, ratingRange } from "@/lib/constants/constants";
+import {
+  lengthOfStayRange,
+  ratingRange,
+} from "@/lib/constants/applicantConstraints";
 import { tenants } from "@/lib/constants/tenants";
 
 const timestampSchema = z.custom<Timestamp>(

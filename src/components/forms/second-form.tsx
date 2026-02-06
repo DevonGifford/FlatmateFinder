@@ -25,7 +25,7 @@ import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useGlobalState } from "@/hooks/useGlobalState";
-import { lengthOfStayRange } from "@/lib/constants/constants";
+import { lengthOfStayRange } from "@/lib/constants/applicantConstraints";
 import { getFormStepPath } from "@/lib/constants/formSteps";
 import { toastError, toastFormComplete } from "@/lib/customToast";
 import {

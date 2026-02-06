@@ -1,4 +1,3 @@
-// 👇 Profile-form
 export const locations = [
   { label: "United States", value: "US" },
   { label: "Canada", value: "CA" },
@@ -29,7 +28,6 @@ export const languages = [
   { label: "Other", value: "more" },
 ] as const;
 
-// 👇 Account-form
 export const ageList = [
   { label: "23" },
   { label: "24" },
@@ -46,15 +44,3 @@ export const ageList = [
   { label: "35" },
   { label: "36" },
 ] as const;
-
-export const ratingRange = {
-  min: 1,
-  max: 5,
-} as const;
-
-// The slider stores its existing 0–100 scale, which the tenant UI maps to
-// short, medium, and long stays.
-export const lengthOfStayRange = {
-  min: 0,
-  max: 100,
-} as const;
