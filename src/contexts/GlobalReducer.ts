@@ -1,13 +1,13 @@
 import {
   type ActionType,
-  type GlobalStateInterface,
+  type GlobalState,
   initialState,
 } from "@/types/globalState";
 
 const globalReducer = (
-  state: GlobalStateInterface,
+  state: GlobalState,
   action: ActionType,
-): GlobalStateInterface => {
+): GlobalState => {
   switch (action.type) {
     //- auth actions
     case "SET_APPLICANT":

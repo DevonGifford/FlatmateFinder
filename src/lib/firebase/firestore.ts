@@ -8,7 +8,7 @@ import {
 
 import type { ApplicantProfile } from "@/types/applicant";
 import { parseApplicantProfile } from "@/types/applicantSchemas";
-import type { ApplicationInterface } from "@/types/application";
+import type { Application } from "@/types/application";
 import {
   type AppSession,
   isApplicantSession,
@@ -23,7 +23,7 @@ const firestore: Firestore = db;
 export const waitForFirebaseAuth = () => authReady;
 
 export const createApplicantDoc = async (
-  userData: ApplicationInterface,
+  userData: Application,
   session: AppSession,
 ): Promise<DocumentId> => {
   if (!isApplicantSession(session) || session.mode !== "real") {

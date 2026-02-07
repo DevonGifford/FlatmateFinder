@@ -2,7 +2,7 @@ import type { TenantId } from "@/lib/constants/tenants";
 
 import type { ApplicantProfile } from "./applicant";
 
-export interface GlobalStateInterface {
+export interface GlobalState {
   session: AppSession;
   locale: "EN" | "ES";
   applicantPool: ApplicantProfile[] | null;
@@ -27,8 +27,6 @@ export const isTenantSession = (
 
 export const isDemoSession = (session: AppSession) => session.mode === "demo";
 
-export type DispatchAction = (action: ActionType) => void;
-
 export type ActionType =
   | { type: "SET_APPLICANT" }
   | { type: "SET_TENANT"; payload: TenantId }
@@ -42,7 +40,7 @@ export type ActionType =
   | { type: "UPDATE_APPLICANT_POOL"; payload: Partial<ApplicantProfile>[] }
   | { type: "PURGE_STATE" };
 
-export const initialState: GlobalStateInterface = {
+export const initialState: GlobalState = {
   session: { role: "none", mode: "none" },
   locale: "EN",
   applicantPool: null,

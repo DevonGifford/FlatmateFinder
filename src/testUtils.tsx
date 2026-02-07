@@ -4,10 +4,10 @@ import { MemoryRouter } from "react-router-dom";
 import App from "@/App";
 import { GlobalProvider } from "@/contexts/GlobalProvider";
 import TenantLeaderboardPage from "@/pages/TenantLeaderboard.page";
-import type { GlobalStateInterface } from "@/types/globalState";
+import type { GlobalState } from "@/types/globalState";
 
-export function customRenderApp(partialState: Partial<GlobalStateInterface>) {
-  const defaultState: GlobalStateInterface = {
+export function customRenderApp(partialState: Partial<GlobalState>) {
+  const defaultState: GlobalState = {
     session: { role: "none", mode: "none" },
     locale: "EN",
     isLoading: false,
@@ -25,9 +25,9 @@ export function customRenderApp(partialState: Partial<GlobalStateInterface>) {
 }
 
 export function customRenderLeaderBoard(
-  partialState: Partial<GlobalStateInterface>,
+  partialState: Partial<GlobalState>,
 ) {
-  const defaultState: GlobalStateInterface = {
+  const defaultState: GlobalState = {
     session: { role: "tenant", mode: "real", tenantId: "dev" },
     locale: "EN",
     isLoading: false,

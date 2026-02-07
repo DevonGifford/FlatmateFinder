@@ -28,7 +28,7 @@ import { normalizeExternalUrl } from "@/lib/utils";
 import Data_EN from "@/locales/applicant-form/third-form_en.json";
 import Data_ES from "@/locales/applicant-form/third-form_es.json";
 import {
-  ApplicationInterface,
+  Application,
   defaultApplication,
 } from "@/types/application";
 import { isApplicantSession } from "@/types/globalState";
@@ -71,8 +71,8 @@ const thirdFormSchema = (
 };
 
 interface ThirdFormProps {
-  application: ApplicationInterface | null;
-  setApplication: Dispatch<SetStateAction<ApplicationInterface>>;
+  application: Application | null;
+  setApplication: Dispatch<SetStateAction<Application>>;
 }
 
 export function ThirdForm({ application, setApplication }: ThirdFormProps) {
@@ -100,14 +100,14 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
         job_type: data.job_type || "", //normalize data
       };
 
-      const completedApplication: ApplicationInterface = {
+      const completedApplication: Application = {
         ...application,
         thirdForm: updatedThirdForm,
         photo: "",
       };
       if (isApplicantSession(session) && session.mode === "demo") {
         setIsLoading(false);
-        toastFormComplete("3");
+        toastFormComplete(3);
         setApplication(defaultApplication);
         navigate("/thankyou");
         return;
@@ -116,7 +116,7 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
       await createApplicantDoc(completedApplication, session);
 
       setIsLoading(false);
-      toastFormComplete("3");
+      toastFormComplete(3);
       setApplication(defaultApplication); // Reset application state
       navigate("/thankyou"); // Update route
     } catch (error) {

@@ -14,7 +14,7 @@ import TenantTinderPage from "@/pages/TenantTinder.page";
 import { customRenderApp, customRenderLeaderBoard } from "@/testUtils";
 import type { ApplicantProfile } from "@/types/applicant";
 import {
-  GlobalStateInterface,
+  GlobalState,
   initialState,
 } from "@/types/globalState";
 
@@ -139,7 +139,7 @@ describe("Testing Global `locale`, switching between the two locales", () => {
 
   test("SET_LOCALE - should render with ES and switch to EN", async () => {
     // Assemble
-    const partialState: Partial<GlobalStateInterface> = {
+    const partialState: Partial<GlobalState> = {
       locale: "ES",
     };
     customRenderApp(partialState);
@@ -377,7 +377,7 @@ describe("Testing Global `applicantPool`, with `isLoading` and `error` states", 
 
   test("FETCH_FAILURE - should render loading spinner while waiting for data", () => {
     // Assemble
-    const partialState: Partial<GlobalStateInterface> = {
+    const partialState: Partial<GlobalState> = {
       isLoading: true,
     };
     customRenderLeaderBoard(partialState);
@@ -435,7 +435,7 @@ describe("Testing Global `applicantPool`, with `isLoading` and `error` states", 
           "https://i.pinimg.com/1200x/7a/32/44/7a32443d0e64c43871c0a29e816b66e3.jpg",
       },
     ];
-    const partialState: Partial<GlobalStateInterface> = {
+    const partialState: Partial<GlobalState> = {
       applicantPool: mockApplicantPool,
     };
     customRenderLeaderBoard(partialState);

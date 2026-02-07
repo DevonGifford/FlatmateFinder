@@ -14,13 +14,13 @@ import {
   getFormStepPath,
 } from "@/lib/constants/formSteps";
 import {
-  ApplicationInterface,
+  Application,
   defaultApplication,
 } from "@/types/application";
 
 const ApplicantFormPage: React.FC = () => {
   const [application, setApplication] =
-    useState<ApplicationInterface>(defaultApplication);
+    useState<Application>(defaultApplication);
   const { pageId } = useUrlState();
   const navigate = useNavigate();
   useRequireApplicant();

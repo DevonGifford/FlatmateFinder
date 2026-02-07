@@ -8,7 +8,7 @@ import {
 import {
   type ActionType,
   type AppSession,
-  type GlobalStateInterface,
+  type GlobalState,
 } from "@/types/globalState";
 
 import GlobalReducer from "./GlobalReducer";
@@ -117,7 +117,7 @@ function readPersistedSession(): AppSession | null {
 
 // Define separate contexts for state and dispatch
 export const GlobalStateContext = createContext<
-  GlobalStateInterface | undefined
+  GlobalState | undefined
 >(undefined);
 export const GlobalDispatchContext = createContext<
   React.Dispatch<ActionType> | undefined
@@ -125,7 +125,7 @@ export const GlobalDispatchContext = createContext<
 
 interface Props {
   children: React.ReactNode;
-  initialState: GlobalStateInterface;
+  initialState: GlobalState;
 }
 
 export const GlobalProvider: React.FC<Props> = ({ children, initialState }) => {

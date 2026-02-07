@@ -34,7 +34,7 @@ import {
 import { toastError, toastFormComplete } from "@/lib/toast";
 import Data_EN from "@/locales/applicant-form/first-form_en.json";
 import Data_ES from "@/locales/applicant-form/first-form_es.json";
-import type { ApplicationInterface } from "@/types/application";
+import type { Application } from "@/types/application";
 import type { FirstFormData } from "@/types/locale";
 
 type FirstFormValues = {
@@ -68,8 +68,8 @@ const firstFormSchema = (
 };
 
 interface FirstFormProps {
-  application: ApplicationInterface | null;
-  setApplication: Dispatch<SetStateAction<ApplicationInterface>>;
+  application: Application | null;
+  setApplication: Dispatch<SetStateAction<Application>>;
 }
 
 export function FirstForm({ application, setApplication }: FirstFormProps) {
@@ -87,7 +87,7 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
     try {
       mergeApplicationSection(setApplication, "firstForm", data);
 
-      toastFormComplete("1");
+      toastFormComplete(1);
       navigate(getFormStepPath("second-form"));
     } catch {
       toastError();
