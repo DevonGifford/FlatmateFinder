@@ -42,7 +42,6 @@ const ApplicantFormPage: React.FC = () => {
   return (
     <>
       <div className="flex flex-col items-center h-[calc(100vh-10vh)] overflow-auto hide-scrollbar px-2 sm:px-4">
-        {/* Page Indicator  */}
         <div className="flex flex-row justify-center items-center text-center gap-8 py-7">
           {[1, 2, 3].map((circleId) => (
             <div
@@ -55,7 +54,6 @@ const ApplicantFormPage: React.FC = () => {
         </div>
 
         <div className="flex w-full max-w-2xl flex-col">
-          {/* Conditional rendering based on router query */}
           {currentStep === "second-form" && (
             <SecondForm
               key="second-form"
@@ -71,7 +69,6 @@ const ApplicantFormPage: React.FC = () => {
             />
           )}
 
-          {/* 'go back to previous form' button or render first form */}
           {currentStep !== "first-form" ? (
             <div>
               <Button

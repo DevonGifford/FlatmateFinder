@@ -104,7 +104,6 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
         })}
         className="w-full space-y-8"
       >
-        {/* SET MOVE DATE */}
         <FormField
           name="move_date"
           control={form.control}
@@ -151,7 +150,6 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
           )}
         />
 
-        {/* LENGTH OF STAY */}
         <FormField
           name="length_stay"
           control={form.control}
@@ -197,7 +195,6 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
           )}
         />
 
-        {/* TYPE OF VIEWING */}
         <FormField
           name="meet_type"
           control={form.control}
@@ -236,7 +233,6 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
           )}
         />
 
-        {/* MORE_INFO */}
         <FormField
           name="more_info"
           control={form.control}
@@ -259,7 +255,6 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
           )}
         />
 
-        {/* BUTTONS */}
         <Button
           type="submit"
           className="min-h-11 w-full rounded-lg px-6 text-base font-semibold sm:px-12"

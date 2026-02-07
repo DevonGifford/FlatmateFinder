@@ -9,7 +9,6 @@ const globalReducer = (
   action: ActionType,
 ): GlobalState => {
   switch (action.type) {
-    //- auth actions
     case "SET_APPLICANT":
       return {
         ...state,
@@ -38,13 +37,11 @@ const globalReducer = (
         isLoading: false,
         error: "",
       };
-    //- locale actions
     case "SET_LOCALE":
       return {
         ...state,
         locale: action.payload,
       };
-    //- applicant pool actions
     case "FETCH_INIT":
       return {
         ...state,
@@ -79,7 +76,6 @@ const globalReducer = (
             : applicantDoc;
         }),
       };
-    //- ALL
     case "PURGE_STATE":
       return initialState;
     default:

@@ -68,6 +68,7 @@ export const applicantProfileSchema = z
 
 export type ParsedApplicantProfile = z.infer<typeof applicantProfileSchema>;
 
+/** Validates an unknown Firestore document and attaches its document ID. */
 export function parseApplicantProfile(
   id: string,
   data: unknown,

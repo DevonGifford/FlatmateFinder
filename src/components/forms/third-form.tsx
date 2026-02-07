@@ -197,7 +197,6 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
             )}
           />
         </div>
-        {/* TELL US ABOUT YOURSELF */}
         <FormField
           name="describe"
           control={form.control}
@@ -216,7 +215,6 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
             </FormItem>
           )}
         />
-        {/* WHAT YOU DO FOR FUN */}
         <FormField
           name="hobbies"
           control={form.control}
