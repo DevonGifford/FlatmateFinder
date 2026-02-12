@@ -151,9 +151,12 @@ describe("Testing demo access", () => {
     customRenderApp({});
 
     await userEvent.click(screen.getByRole("button", { name: "Applicant" }));
-
+    expect(
+      await screen.findByLabelText("Name & Surname", undefined, {
+        timeout: 5000,
+      }),
+    ).toBeDefined();
     expect(screen.getByText("Demo mode — changes are not saved")).toBeDefined();
-    expect(screen.getByLabelText("Name & Surname")).toBeDefined();
   });
 
   test("demo tenant can enter the tenant experience", async () => {
@@ -161,8 +164,10 @@ describe("Testing demo access", () => {
 
     await userEvent.click(screen.getByRole("button", { name: "Tenant" }));
 
-    expect(screen.getByText("Demo mode — changes are not saved")).toBeDefined();
-    expect(screen.getByText("Welcome, Demo-Tenant")).toBeDefined();
+    expect(
+      await screen.findByText("Demo mode — changes are not saved"),
+    ).toBeDefined();
+    expect(await screen.findByText("Welcome, Demo-Tenant")).toBeDefined();
   });
 
   test("demo access copy follows the selected Spanish locale", async () => {
@@ -171,7 +176,7 @@ describe("Testing demo access", () => {
     await userEvent.click(screen.getByRole("button", { name: "Solicitante" }));
 
     expect(
-      screen.getByText("Modo demo — los cambios no se guardan"),
+      await screen.findByText("Modo demo — los cambios no se guardan"),
     ).toBeDefined();
   });
 
@@ -180,8 +185,10 @@ describe("Testing demo access", () => {
 
     await userEvent.click(screen.getByRole("button", { name: "Inquilino" }));
 
-    expect(screen.getByText("Bienvenido, Demo-Tenant")).toBeDefined();
-    expect(screen.getByText(/Este es el panel de inquilinos/)).toBeDefined();
+    expect(await screen.findByText("Bienvenido, Demo-Tenant")).toBeDefined();
+    expect(
+      await screen.findByText(/Este es el panel de inquilinos/),
+    ).toBeDefined();
 
     await userEvent.click(
       screen.getByRole("button", { name: "Abrir menú de inquilino" }),

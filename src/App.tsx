@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { lazy, Suspense, useEffect, useRef } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -6,6 +6,7 @@ import {
   useLocation,
 } from "react-router-dom";
 
+import { Spinner } from "@/components/custom/Spinner";
 import Navbar from "@/components/layout/Navbar";
 import Sidebar from "@/components/layout/Sidebar";
 import { Toaster } from "@/components/ui/toaster";
@@ -17,19 +18,24 @@ import {
 } from "@/lib/firebase/firestore";
 import homeData_EN from "@/locales/home/home_en.json";
 import homeData_ES from "@/locales/home/home_es.json";
-import ApplicantFormPage from "@/pages/ApplicantForm.page";
-import ApplicantThankYouPage from "@/pages/ApplicantThankYou.page";
 import FAQPage from "@/pages/FAQ.page";
 import HomePage from "@/pages/Home.page";
-import TenantLeaderboardPage from "@/pages/TenantLeaderboard.page";
-import TenantTinderPage from "@/pages/TenantTinder.page";
-import TenantWelcomePage from "@/pages/TenantWelcome.page";
 import {
   isApplicantSession,
   isDemoSession,
   isTenantSession,
 } from "@/types/globalState";
 import type { HomePageData } from "@/types/locale";
+
+const ApplicantFormPage = lazy(() => import("@/pages/ApplicantForm.page"));
+const ApplicantThankYouPage = lazy(
+  () => import("@/pages/ApplicantThankYou.page"),
+);
+const TenantLeaderboardPage = lazy(
+  () => import("@/pages/TenantLeaderboard.page"),
+);
+const TenantTinderPage = lazy(() => import("@/pages/TenantTinder.page"));
+const TenantWelcomePage = lazy(() => import("@/pages/TenantWelcome.page"));
 
 const publicRoutes = ["/", "/FAQ"] as const;
 const applicantRoutes = ["/form", "/thankyou"] as const;
@@ -154,26 +160,34 @@ function AppContent() {
             {localeData.demoBanner}
           </p>
         )}
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/FAQ" element={<FAQPage />} />
-          {isApplicantSession(session) && (
-            <>
-              <Route path="/form" element={<ApplicantFormPage />} />
-              <Route path="/thankyou" element={<ApplicantThankYouPage />} />
-            </>
-          )}
-          {isTenantSession(session) && (
-            <>
-              <Route path="/admin-welcome" element={<TenantWelcomePage />} />
-              <Route path="/admin-tinder" element={<TenantTinderPage />} />
-              <Route
-                path="/admin-leaderboard"
-                element={<TenantLeaderboardPage />}
-              />
-            </>
-          )}
-        </Routes>
+        <Suspense
+          fallback={
+            <div className="flex min-h-[50vh] items-center justify-center">
+              <Spinner size="screen" />
+            </div>
+          }
+        >
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/FAQ" element={<FAQPage />} />
+            {isApplicantSession(session) && (
+              <>
+                <Route path="/form" element={<ApplicantFormPage />} />
+                <Route path="/thankyou" element={<ApplicantThankYouPage />} />
+              </>
+            )}
+            {isTenantSession(session) && (
+              <>
+                <Route path="/admin-welcome" element={<TenantWelcomePage />} />
+                <Route path="/admin-tinder" element={<TenantTinderPage />} />
+                <Route
+                  path="/admin-leaderboard"
+                  element={<TenantLeaderboardPage />}
+                />
+              </>
+            )}
+          </Routes>
+        </Suspense>
       </main>
     </>
   );
