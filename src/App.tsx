@@ -12,10 +12,6 @@ import Sidebar from "@/components/layout/Sidebar";
 import { Toaster } from "@/components/ui/toaster";
 import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
 import { useGlobalState } from "@/hooks/useGlobalState";
-import {
-  fetchApplicantPool,
-  waitForFirebaseAuth,
-} from "@/lib/firebase/firestore";
 import homeData_EN from "@/locales/home/home_en.json";
 import homeData_ES from "@/locales/home/home_es.json";
 import FAQPage from "@/pages/FAQ.page";
@@ -126,8 +122,10 @@ function AppContent() {
     let cancelled = false;
     dispatch({ type: "FETCH_INIT" });
 
-    void waitForFirebaseAuth()
-      .then(() => fetchApplicantPool())
+    void import("@/lib/firebase/firestore")
+      .then(({ fetchApplicantPool, waitForFirebaseAuth }) =>
+        waitForFirebaseAuth().then(() => fetchApplicantPool()),
+      )
       .then((fetchedApplicants) => {
         if (!cancelled) {
           dispatch({ type: "FETCH_SUCCESS", payload: fetchedApplicants });
