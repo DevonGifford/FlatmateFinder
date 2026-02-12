@@ -14,7 +14,7 @@ export default function ApplicantThankYouPage() {
     <>
       <div className="flex flex-col items-center justify-center h-screen">
         <img
-          src="/ThankYouPage.png"
+          src="/ThankYouPage.webp"
           alt="Thank you illustration"
           className="rounded-full -translate-y-10"
           width={"500px"}
