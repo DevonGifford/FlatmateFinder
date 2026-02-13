@@ -97,7 +97,7 @@ export default function HomePage() {
       </header>
 
       <img
-        src="/Tetuan-Splash.webp"
+        src="/Tetuan-Splash-500.webp"
         alt="Tetuan neighborhood"
         className="aspect-[4/3] w-full max-w-xl rounded-2xl object-cover shadow-lg"
         width={500}

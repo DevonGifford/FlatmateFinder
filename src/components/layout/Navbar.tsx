@@ -73,7 +73,7 @@ export default function Navbar() {
             aria-label={localeData.languageEnglish}
           >
             <Avatar className="h-6 w-6">
-              <AvatarImage src="/en-flag.png" alt="" />
+              <AvatarImage src="/en-flag.webp" alt="" />
             </Avatar>
           </ToggleGroupItem>
           <ToggleGroupItem
@@ -91,7 +91,7 @@ export default function Navbar() {
             aria-label={localeData.languageSpanish}
           >
             <Avatar className="h-6 w-6">
-              <AvatarImage src="/es-flag.png" alt="" />
+              <AvatarImage src="/es-flag.webp" alt="" />
             </Avatar>
           </ToggleGroupItem>
         </ToggleGroup>
