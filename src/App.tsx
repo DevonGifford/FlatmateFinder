@@ -122,10 +122,17 @@ function AppContent() {
     let cancelled = false;
     dispatch({ type: "FETCH_INIT" });
 
-    void import("@/lib/firebase/firestore")
-      .then(({ fetchApplicantPool, waitForFirebaseAuth }) =>
-        waitForFirebaseAuth().then(() => fetchApplicantPool()),
-      )
+    const applicantsPromise =
+      session.mode === "demo"
+        ? import("@/data/demoApplicants").then(
+            ({ demoApplicants }) => demoApplicants,
+          )
+        : import("@/lib/firebase/firestore").then(
+            ({ fetchApplicantPool, waitForFirebaseAuth }) =>
+              waitForFirebaseAuth().then(() => fetchApplicantPool()),
+          );
+
+    void applicantsPromise
       .then((fetchedApplicants) => {
         if (!cancelled) {
           dispatch({ type: "FETCH_SUCCESS", payload: fetchedApplicants });

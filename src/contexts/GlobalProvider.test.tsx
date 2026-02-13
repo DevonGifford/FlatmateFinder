@@ -170,6 +170,17 @@ describe("Testing demo access", () => {
     expect(await screen.findByText("Welcome, Demo-Tenant")).toBeDefined();
   });
 
+  test("demo tenants use local applicant seeds instead of Firebase", async () => {
+    window.history.pushState({}, "", "/admin-tinder");
+    customRenderApp({
+      session: { role: "tenant", mode: "demo", tenantId: "dev" },
+      applicantPool: null,
+    });
+
+    expect(await screen.findByText("Ronald Weasley")).toBeDefined();
+    expect(vi.mocked(fetchApplicantPool)).not.toHaveBeenCalled();
+  });
+
   test("demo access copy follows the selected Spanish locale", async () => {
     customRenderApp({ locale: "ES" });
 
