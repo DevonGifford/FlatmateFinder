@@ -3,7 +3,6 @@ import { useMatch, useNavigate } from "react-router-dom";
 
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
 import { useGlobalState } from "@/hooks/useGlobalState";
 import homeData_EN from "@/locales/home/home_en.json";
@@ -57,16 +56,22 @@ export default function Navbar() {
           </Button>
         )}
 
-        <ToggleGroup type="single" value={locale}>
-          <ToggleGroupItem
-            variant={"outline"}
-            value="EN"
+        <div
+          className="flex flex-row gap-2"
+          role="group"
+          aria-label="Language selection"
+        >
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
             onClick={() =>
               dispatch({
                 type: "SET_LOCALE",
                 payload: "EN",
               })
             }
+            aria-pressed={locale === "EN"}
             className={`${
               locale === "EN" ? "bg-cyan-600/20" : "hover:bg-cyan-600/20"
             } aria-pressed:bg-cyan-600/20 aria-pressed:text-foreground aria-pressed:hover:bg-cyan-600/20`}
@@ -75,16 +80,18 @@ export default function Navbar() {
             <Avatar className="h-6 w-6">
               <AvatarImage src="/en-flag.webp" alt="" />
             </Avatar>
-          </ToggleGroupItem>
-          <ToggleGroupItem
-            variant={"outline"}
-            value="ES"
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
             onClick={() =>
               dispatch({
                 type: "SET_LOCALE",
                 payload: "ES",
               })
             }
+            aria-pressed={locale === "ES"}
             className={`${
               locale === "ES" ? "bg-cyan-600/20" : "hover:bg-cyan-600/20"
             } aria-pressed:bg-cyan-600/20 aria-pressed:text-foreground aria-pressed:hover:bg-cyan-600/20`}
@@ -93,8 +100,8 @@ export default function Navbar() {
             <Avatar className="h-6 w-6">
               <AvatarImage src="/es-flag.webp" alt="" />
             </Avatar>
-          </ToggleGroupItem>
-        </ToggleGroup>
+          </Button>
+        </div>
       </nav>
     </>
   );

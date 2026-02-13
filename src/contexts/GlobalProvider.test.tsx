@@ -109,7 +109,7 @@ describe("Testing Global `locale`, switching between the two locales", () => {
     const subHeadingEN = screen.getByText("Welcome to");
     expect(subHeadingEN).toBeDefined();
 
-    const localeSpanishButton = screen.getByRole("radio", { name: "Spanish" });
+    const localeSpanishButton = screen.getByRole("button", { name: "Spanish" });
     await userEvent.click(localeSpanishButton);
 
     const welcomeHeading = screen.getByText(/^Bienvenido a/i);
@@ -137,7 +137,7 @@ describe("Testing Global `locale`, switching between the two locales", () => {
     expect(welcomeHeadingES).toBeDefined();
     expect(passwordHeadingES).toBeDefined();
 
-    const localeEnglishButton = screen.getByRole("radio", { name: "Inglés" });
+    const localeEnglishButton = screen.getByRole("button", { name: "Inglés" });
 
     await userEvent.click(localeEnglishButton);
 
