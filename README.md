@@ -86,7 +86,7 @@ Before getting started, make sure you have Node.js installed on your machine. Yo
    ```bash
    cp .env.example .env
    ```
-   Fill in the Firebase credentials and shared passwords in `.env`. The required variables are
+   Fill in the Firebase credentials and shared access codes in `.env`. The required variables are
    documented inline in [.env.example](.env.example). Never commit `.env` or real passwords.
 
 4. **Run the Application:**

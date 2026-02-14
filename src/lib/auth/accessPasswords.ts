@@ -11,9 +11,9 @@ interface TenantAccessCredential {
 }
 
 const tenantPasswords = [
-  import.meta.env.VITE_PASSWORD_UNO,
-  import.meta.env.VITE_PASSWORD_DOS,
-  import.meta.env.VITE_PASSWORD_TRES,
+  import.meta.env.VITE_TENANT_DEV_ACCESS_CODE,
+  import.meta.env.VITE_TENANT_OSCAR_ACCESS_CODE,
+  import.meta.env.VITE_TENANT_ADRIAN_ACCESS_CODE,
 ];
 
 export const tenantAccess: TenantAccessCredential[] = tenants.map(
@@ -24,8 +24,5 @@ export const tenantAccess: TenantAccessCredential[] = tenants.map(
 );
 
 export const applicantAccess: ApplicantAccessCredential[] = [
-  { password: import.meta.env.VITE_PASSWORD_ALPHA },
-  { password: import.meta.env.VITE_PASSWORD_BETA },
-  { password: import.meta.env.VITE_PASSWORD_MANGO },
-  { password: import.meta.env.VITE_PASSWORD_CHOCOLATE },
+  { password: import.meta.env.VITE_APPLICANT_ACCESS_CODE },
 ];
