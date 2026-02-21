@@ -32,7 +32,7 @@ export default function Sidebar() {
 
   return (
     <nav
-      className="flex flex-row justify-between"
+      className="flex flex-row justify-between px-2 py-2 sm:px-3"
       aria-label={localeData.sidebarTitle}
     >
       <Sheet open={open} onOpenChange={setOpen}>

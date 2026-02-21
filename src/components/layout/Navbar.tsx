@@ -19,7 +19,7 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className="flex flex-row justify-between"
+        className="flex flex-row justify-between px-2 py-2 sm:px-3"
         aria-label={localeData.navigationLabel}
       >
         {match && match.pathname === "/form" ? (
