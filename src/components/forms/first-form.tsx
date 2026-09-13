@@ -28,34 +28,36 @@ import {
 import { languages } from "@/lib/constants/constants";
 import { ApplicationInterface } from "@/types/applicationInterfaces";
 import { FirstFormData } from "@/types/localeInterfaces";
+import { getFormStepPath } from "@/lib/constants/formSteps";
+import {
+  getValidationMessages,
+  mergeApplicationSection,
+} from "@/lib/forms/formUtils";
 
 import Data_EN from "@/locales/applicant-form/firstform_en.json";
 import Data_ES from "@/locales/applicant-form/firstform_es.json";
 
-const firstFormSchema = z.object({
-  name: z
-    .string({ error: "⚠" })
-    .max(50, {
-      message: "⚠ too long",
-    }),
-  age: z
-    .string({ error: "⚠" })
-    .max(10, {
-      message: "⚠ too long",
-    }),
-  sex: z
-    .string({ error: "⚠" })
-    .max(10, {
-      message: "⚠ too long",
-    }),
-  phone: z
-    .string({ error: "⚠" })
-    .max(16, {
-      message: "⚠ too long",
-    }),
-  languages: z.array(z.string()).optional(),
-});
-type FirstFormValues = z.infer<typeof firstFormSchema>;
+type FirstFormValues = {
+  name: string;
+  age: string;
+  sex: string;
+  phone: string;
+  languages?: string[];
+};
+
+const firstFormSchema = (
+  locale: "EN" | "ES"
+): z.ZodType<FirstFormValues, FirstFormValues> => {
+  const { required, tooLong } = getValidationMessages(locale);
+
+  return z.object({
+    name: z.string({ error: required }).trim().min(1, required).max(50, tooLong),
+    age: z.string({ error: required }).trim().min(1, required).max(10, tooLong),
+    sex: z.string({ error: required }).trim().min(1, required).max(10, tooLong),
+    phone: z.string({ error: required }).trim().min(1, required).max(16, tooLong),
+    languages: z.array(z.string()).optional(),
+  });
+};
 
 interface FirstFormProps {
   application: ApplicationInterface | null;
@@ -69,27 +71,16 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
 
   const defaultValues: FirstFormValues = application!.firstForm;
   const form = useForm<FirstFormValues>({
-    resolver: zodResolver(firstFormSchema),
+    resolver: zodResolver(firstFormSchema(locale)),
     defaultValues,
   });
 
   function onSubmit(data: FirstFormValues) {
     try {
-      const formData: Partial<ApplicationInterface> = {
-        firstForm: {
-          ...data,
-        },
-      };
-
-      setApplication((existingData) => {
-        return {
-          ...existingData,
-          ...formData,
-        };
-      });
+      mergeApplicationSection(setApplication, "firstForm", data);
 
       toastFormComplete("1");
-      navigate(`/form?pageId=second-form`); //-updating route
+      navigate(getFormStepPath("second-form"));
     } catch {
       toastError();
     }
@@ -156,6 +147,7 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
                   type="multiple"
                   value={field.value}
                   onValueChange={(value) => field.onChange(value)}
+                  className="w-full justify-center"
                 >
                   {languages.map((lang) => (
                     <ToggleGroupItem key={lang.label} value={lang.label}>
@@ -181,14 +173,24 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
                     type="single"
                     value={field.value}
                     onValueChange={(value) => field.onChange(value)}
+                    className="w-full justify-center"
                   >
-                    <ToggleGroupItem value="male">
+                    <ToggleGroupItem
+                      value="male"
+                      className="aria-pressed:border-2 aria-pressed:border-primary"
+                    >
                       <IoMale />
                     </ToggleGroupItem>
-                    <ToggleGroupItem value="female">
+                    <ToggleGroupItem
+                      value="female"
+                      className="aria-pressed:border-2 aria-pressed:border-primary"
+                    >
                       <IoFemale />
                     </ToggleGroupItem>
-                    <ToggleGroupItem value="other">
+                    <ToggleGroupItem
+                      value="other"
+                      className="aria-pressed:border-2 aria-pressed:border-primary"
+                    >
                       <IoMaleFemale />
                     </ToggleGroupItem>
                   </ToggleGroup>

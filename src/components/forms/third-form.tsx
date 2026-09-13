@@ -23,31 +23,39 @@ import { ApplicationInterface, defaultApplication } from "@/types/applicationInt
 import { createApplicantDoc } from "@/lib/firebase/firestore";
 import { toastError, toastFormComplete } from "@/lib/customToast";
 import { ThirdFormData } from "@/types/localeInterfaces";
+import { normalizeExternalUrl } from "@/lib/utils";
+import { getValidationMessages } from "@/lib/forms/formUtils";
 
 import Data_EN from "@/locales/applicant-form/thirdform_en.json";
 import Data_ES from "@/locales/applicant-form/thirdform_es.json";
 
-const thirdFormSchema = z.object({
-  job_title: z.string({ error: "⚠" }),
-  job_type: z.string().optional(),
-  describe: z
-    .string({ error: "⚠" })
-    .max(500, {
-      message: "⚠ too long",
-    }),
-  hobbies: z
-    .string({ error: "⚠" })
-    .max(500, {
-      message: "⚠ too long",
-    }),
-  social_media: z
-    .string()
-    .max(30, {
-      message: "⚠ too long",
-    })
-    .optional(),
-});
-type ThirdFormValues = z.infer<typeof thirdFormSchema>;
+type ThirdFormValues = {
+  job_title: string;
+  job_type?: string;
+  describe: string;
+  hobbies: string;
+  social_media?: string;
+};
+
+const thirdFormSchema = (
+  locale: "EN" | "ES"
+): z.ZodType<ThirdFormValues, ThirdFormValues> => {
+  const { required, tooLong, invalidUrl } = getValidationMessages(locale);
+
+  return z.object({
+    job_title: z.string({ error: required }).trim().min(1, required),
+    job_type: z.string().optional(),
+    describe: z.string({ error: required }).trim().min(1, required).max(500, tooLong),
+    hobbies: z.string({ error: required }).trim().min(1, required).max(500, tooLong),
+    social_media: z
+      .string()
+      .trim()
+      .max(2048, tooLong)
+      .refine((value) => normalizeExternalUrl(value) !== null, invalidUrl)
+      .transform((value) => normalizeExternalUrl(value) ?? "")
+      .optional(),
+  });
+};
 
 interface ThirdFormProps {
   application: ApplicationInterface | null;
@@ -61,7 +69,8 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
   const localeData: ThirdFormData = locale === "EN" ? Data_EN : Data_ES;
 
   const form = useForm<ThirdFormValues>({
-    resolver: zodResolver(thirdFormSchema),
+    resolver: zodResolver(thirdFormSchema(locale)),
+    defaultValues: application!.thirdForm,
   });
 
   async function onSubmit(data: ThirdFormValues) {
@@ -145,11 +154,11 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
                     type="single"
                     value={field.value}
                     onValueChange={(value) => field.onChange(value)}
-                    className="pt-2 flex flex-row justify-evenly"
+                    className="w-full pt-2 flex flex-row justify-center"
                   >
                     <ToggleGroupItem
                       value="wfh"
-                      className="flex flex-col items-center justify-center text-center gap-1"
+                      className="min-h-12 min-w-20 px-4 py-2 flex flex-col items-center justify-center text-center gap-1 aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md"
                     >
                       <Home />
                       <span className="text-xs">{localeData
@@ -157,7 +166,7 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
                     </ToggleGroupItem>
                     <ToggleGroupItem
                       value="hybrid"
-                      className="flex flex-col items-center justify-center text-center gap-1"
+                      className="min-h-12 min-w-20 px-4 py-2 flex flex-col items-center justify-center text-center gap-1 aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md"
                     >
                       <Video />
                       <span className="text-xs">{localeData
@@ -165,7 +174,7 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
                     </ToggleGroupItem>
                     <ToggleGroupItem
                       value="office"
-                      className="flex flex-col items-center justify-center text-center gap-1"
+                      className="min-h-12 min-w-20 px-4 py-2 flex flex-col items-center justify-center text-center gap-1 aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md"
                     >
                       <Building />
                       <span className="text-xs">{localeData

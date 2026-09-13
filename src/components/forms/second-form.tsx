@@ -28,22 +28,34 @@ import {
 
 import { SecondFormData } from "@/types/localeInterfaces";
 import { ApplicationInterface } from "@/types/applicationInterfaces";
+import { getFormStepPath } from "@/lib/constants/formSteps";
+import {
+  getValidationMessages,
+  mergeApplicationSection,
+} from "@/lib/forms/formUtils";
 
 import Data_EN from "@/locales/applicant-form/secondform_en.json";
 import Data_ES from "@/locales/applicant-form/secondform_es.json";
 
-const secondFormSchema = z.object({
-  move_date: z.date({ error: "⚠" }),
-  length_stay: z.number({ error: "⚠" }),
-  meet_type: z.string({ error: "⚠" }),
-  more_info: z
-    .string()
-    .max(500, {
-      message: "⚠ too long",
-    })
-    .optional(),
-});
-type SecondFormValues = z.infer<typeof secondFormSchema>;
+type SecondFormValues = {
+  move_date: Date;
+  length_stay: number;
+  meet_type: string;
+  more_info?: string;
+};
+
+const secondFormSchema = (
+  locale: "EN" | "ES"
+): z.ZodType<SecondFormValues, SecondFormValues> => {
+  const { required, tooLong } = getValidationMessages(locale);
+
+  return z.object({
+    move_date: z.date({ error: required }),
+    length_stay: z.number({ error: required }),
+    meet_type: z.string({ error: required }).trim().min(1, required),
+    more_info: z.string().max(500, tooLong).optional(),
+  });
+};
 
 interface SecondFormProps {
   application: ApplicationInterface | null;
@@ -57,27 +69,16 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
 
   const defaultValues: SecondFormValues = application!.secondForm;
   const form = useForm<SecondFormValues>({
-    resolver: zodResolver(secondFormSchema),
+    resolver: zodResolver(secondFormSchema(locale)),
     defaultValues,
   });
 
   function onSubmit(data: SecondFormValues) {
     try {
-      const formData: Partial<ApplicationInterface> = {
-        secondForm: {
-          ...data,
-        },
-      };
-
-      setApplication((existingData) => {
-        return {
-          ...existingData,
-          ...formData,
-        };
-      });
+      mergeApplicationSection(setApplication, "secondForm", data);
 
       toastFormComplete("2");
-      navigate(`/form?pageId=third-form`); //-updating route
+      navigate(getFormStepPath("third-form"));
     } catch {
       toastError();
     }
@@ -196,18 +197,18 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
                   type="single"
                   value={field.value}
                   onValueChange={(value) => field.onChange(value)}
-                  className="pt-2 flex flex-row justify-evenly"
+                  className="w-full pt-2 flex flex-row justify-center"
                 >
                   <ToggleGroupItem
                     value="inperson"
-                    className="flex flex-col items-center justify-center text-center gap-1"
+                    className="min-h-12 min-w-20 px-4 py-2 flex flex-col items-center justify-center text-center gap-1 aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md"
                   >
                     <User className="font-bold" size={18} />
                     <span className="text-xs">{localeData.inPerson}</span>
                   </ToggleGroupItem>
                   <ToggleGroupItem
                     value="videocall"
-                    className="flex flex-col items-center justify-center text-center gap-1"
+                    className="min-h-12 min-w-20 px-4 py-2 flex flex-col items-center justify-center text-center gap-1 aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md"
                   >
                     <Video size={18} />
                     <span className="text-xs">{localeData.videoCall}</span>
