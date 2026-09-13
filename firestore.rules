@@ -1,0 +1,69 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function validRankings(rankings) {
+      return rankings is map
+        && rankings.keys().hasOnly([
+          'dev_star', 'dev_bool',
+          'osc_star', 'osc_bool',
+          'adr_star', 'adr_bool'
+        ])
+        && (!rankings.keys().hasAny(['dev_star']) || rankings.dev_star is number)
+        && (!rankings.keys().hasAny(['osc_star']) || rankings.osc_star is number)
+        && (!rankings.keys().hasAny(['adr_star']) || rankings.adr_star is number)
+        && (!rankings.keys().hasAny(['dev_bool']) || rankings.dev_bool is bool)
+        && (!rankings.keys().hasAny(['osc_bool']) || rankings.osc_bool is bool)
+        && (!rankings.keys().hasAny(['adr_bool']) || rankings.adr_bool is bool);
+    }
+
+    function validApplicant(data) {
+      return data is map
+        && data.keys().hasAll(['uuid', 'firstForm', 'secondForm', 'thirdForm', 'applicationDate'])
+        && data.keys().hasOnly([
+          'uuid', 'firstForm', 'secondForm', 'thirdForm',
+          'applicationDate', 'rankings', 'photo'
+        ])
+        && data.uuid is string
+        && data.firstForm is map
+        && data.firstForm.keys().hasAll(['name', 'age', 'sex', 'phone'])
+        && data.firstForm.keys().hasOnly(['name', 'age', 'sex', 'phone', 'languages'])
+        && data.firstForm.name is string
+        && data.firstForm.age is string
+        && data.firstForm.sex is string
+        && data.firstForm.phone is string
+        && (!data.firstForm.keys().hasAny(['languages']) || data.firstForm.languages is list)
+        && data.secondForm is map
+        && data.secondForm.keys().hasAll(['move_date', 'length_stay', 'meet_type'])
+        && data.secondForm.keys().hasOnly(['move_date', 'length_stay', 'meet_type', 'more_info'])
+        && data.secondForm.move_date is timestamp
+        && data.secondForm.length_stay is number
+        && data.secondForm.meet_type is string
+        && (!data.secondForm.keys().hasAny(['more_info']) || data.secondForm.more_info is string)
+        && data.thirdForm is map
+        && data.thirdForm.keys().hasAll(['job_title', 'job_type', 'describe', 'hobbies'])
+        && data.thirdForm.keys().hasOnly(['job_title', 'job_type', 'describe', 'hobbies', 'social_media'])
+        && data.thirdForm.job_title is string
+        && data.thirdForm.job_type is string
+        && data.thirdForm.describe is string
+        && data.thirdForm.hobbies is string
+        && (!data.thirdForm.keys().hasAny(['social_media']) || data.thirdForm.social_media is string)
+        && data.applicationDate is timestamp
+        && (!data.keys().hasAny(['rankings']) || validRankings(data.rankings))
+        && (!data.keys().hasAny(['photo']) || data.photo is string);
+    }
+
+    match /applicants/{applicantId} {
+      allow read: if signedIn();
+      allow create: if signedIn() && validApplicant(request.resource.data);
+      allow update: if signedIn()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['rankings'])
+        && validRankings(request.resource.data.rankings);
+      // Deletes are intentionally denied.
+    }
+  }
+}

@@ -1,10 +1,46 @@
 import React, { createContext, useEffect, useReducer } from "react";
-import { fetchApplicantPool } from "@/lib/firebase/firestore";
+import { fetchApplicantPool, waitForFirebaseAuth } from "@/lib/firebase/firestore";
 import GlobalReducer from "./GlobalReducer";
 import {
   ActionType,
   GlobalStateInterface,
-} from "@/lib/interfaces/globalStateInterfaces";
+} from "@/types/globalStateInterfaces";
+
+const AUTH_STORAGE_KEY = "flatmate-finder-auth";
+
+type PersistedAuth = Pick<
+  GlobalStateInterface,
+  "isAuthenticatedApplicant" | "isAuthenticatedTenant" | "loggedTenant"
+>;
+
+function readPersistedAuth(): PersistedAuth | null {
+  try {
+    const storedAuth = window.sessionStorage.getItem(AUTH_STORAGE_KEY);
+    if (!storedAuth) return null;
+
+    const parsedAuth: unknown = JSON.parse(storedAuth);
+    if (typeof parsedAuth !== "object" || parsedAuth === null) {
+      return null;
+    }
+
+    const authRecord = parsedAuth as Record<string, unknown>;
+    if (
+      typeof authRecord.isAuthenticatedApplicant !== "boolean" ||
+      typeof authRecord.isAuthenticatedTenant !== "boolean" ||
+      typeof authRecord.loggedTenant !== "string"
+    ) {
+      return null;
+    }
+
+    return {
+      isAuthenticatedApplicant: authRecord.isAuthenticatedApplicant,
+      isAuthenticatedTenant: authRecord.isAuthenticatedTenant,
+      loggedTenant: authRecord.loggedTenant,
+    };
+  } catch {
+    return null;
+  }
+}
 
 // Define separate contexts for state and dispatch
 export const GlobalStateContext = createContext<GlobalStateInterface | undefined>(undefined);
@@ -16,10 +52,38 @@ interface Props {
 }
 
 export const GlobalProvider: React.FC<Props> = ({ children, initialState }) => {
-  const [globalState, dispatch] = useReducer(GlobalReducer, initialState);
+  const persistedAuth = readPersistedAuth();
+  const [globalState, dispatch] = useReducer(GlobalReducer, {
+    ...initialState,
+    ...(persistedAuth ?? {}),
+  });
 
   useEffect(() => {
-    fetchApplicantPool(dispatch);
+    const auth: PersistedAuth = {
+      isAuthenticatedApplicant: globalState.isAuthenticatedApplicant,
+      isAuthenticatedTenant: globalState.isAuthenticatedTenant,
+      loggedTenant: globalState.loggedTenant,
+    };
+
+    try {
+      if (auth.isAuthenticatedApplicant || auth.isAuthenticatedTenant) {
+        window.sessionStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(auth));
+      } else {
+        window.sessionStorage.removeItem(AUTH_STORAGE_KEY);
+      }
+    } catch {
+      // Session persistence is a convenience and must not block the app.
+    }
+  }, [
+    globalState.isAuthenticatedApplicant,
+    globalState.isAuthenticatedTenant,
+    globalState.loggedTenant,
+  ]);
+
+  useEffect(() => {
+    waitForFirebaseAuth()
+      .then(() => fetchApplicantPool(dispatch))
+      .catch(() => dispatch({ type: "FETCH_FAILURE", payload: "Something went wrong" }));
   }, []);
 
   return (

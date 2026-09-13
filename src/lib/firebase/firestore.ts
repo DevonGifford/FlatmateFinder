@@ -3,7 +3,6 @@ import {
   collection,
   doc,
   setDoc,
-  addDoc,
   getDoc,
   DocumentReference,
   DocumentSnapshot,
@@ -11,38 +10,34 @@ import {
   updateDoc,
   getDocs,
 } from "firebase/firestore";
-import db from "./config";
-import { ApplicationInterface } from "../interfaces/applicationInterfaces";
-import { toastError, toastSuccess } from "../customToast";
-import { ApplicantProfile } from "../interfaces/applicantInterfaces";
-import { DispatchAction } from "../interfaces/globalStateInterfaces";
+import db, { authReady } from "./config";
+import { ApplicationInterface } from "@/types/applicationInterfaces";
+import { ApplicantProfile } from "@/types/applicantInterfaces";
+import { DispatchAction } from "@/types/globalStateInterfaces";
+import {
+  parseApplicantProfile,
+} from "@/types/applicantSchemas";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type Data = Record<string, any>;
-export type CollectionName = string;
 export type DocumentId = string;
 const firestore: Firestore = db;
+
+export const waitForFirebaseAuth = () => authReady;
 
 export const createApplicantDoc = async (
   documentId: DocumentId,
   userData: ApplicationInterface
 ) => {
-  try {
-    const collectionRef = collection(firestore, "applicants");
-    const docRef: DocumentReference<Data> = doc(collectionRef, documentId);
-    const docSnapshot: DocumentSnapshot<Data> = await getDoc(docRef);
-    if (docSnapshot.exists()) {
-      console.error(`⚠ Warning -  Document already exists in collection db`);
-    } else {
-      await setDoc(docRef, userData);
-
-      console.log(`✔ Success - Document successfully created`);
-      toastSuccess("Application Submitted");
-    }
-  } catch (error) {
-    console.error(`✖ Error creating the document in given collection `, error);
-    toastError();
+  const collectionRef = collection(firestore, "applicants");
+  const docRef: DocumentReference<DocumentData> = doc(
+    collectionRef,
+    documentId
+  );
+  const docSnapshot: DocumentSnapshot<DocumentData> = await getDoc(docRef);
+  if (docSnapshot.exists()) {
+    throw new Error("Applicant document already exists");
   }
+
+  await setDoc(docRef, userData);
 };
 
 export async function fetchApplicantPool(dispatch: DispatchAction) {
@@ -51,107 +46,32 @@ export async function fetchApplicantPool(dispatch: DispatchAction) {
     const fetchedData: ApplicantProfile[] = [];
 
     querySnapshot.forEach((doc) => {
-      const {
-        uuid,
-        firstForm,
-        secondForm,
-        thirdForm,
-        rankings,
-        photo,
-        applicationDate,
-      } = doc.data();
-
-      if (uuid && firstForm && secondForm && thirdForm && applicationDate) {
-        const profile: ApplicantProfile = {
-          id: doc.id,
-          uuid,
-          firstForm,
-          secondForm,
-          thirdForm,
-          applicationDate,
-          rankings,
-          photo,
-        };
-        fetchedData.push(profile);
-      }
+      const profile = parseApplicantProfile(doc.id, doc.data());
+      if (profile) fetchedData.push(profile);
     });
 
     dispatch({ type: "FETCH_SUCCESS", payload: fetchedData });
-  } catch (err) {
-    console.error("Error fetching data:", err);
+  } catch {
     dispatch({ type: "FETCH_FAILURE", payload: "Something went wrong" });
   }
 }
 
-export const updateDocument = async (
-  collectionName: CollectionName,
-  documentId: DocumentId,
-  data: Data
-) => {
-  const collectionRef = collection(firestore, collectionName);
-  const docRef: DocumentReference<Data> = doc(collectionRef, documentId);
-
-  try {
-    const docSnapshot: DocumentSnapshot<Data> = await getDoc(docRef);
-    if (docSnapshot.exists()) {
-      await updateDoc(docRef, data);
-    } else {
-      toastError();
-      return false;
-    }
-    toastSuccess();
-    return true;
-  } catch (error) {
-    toastError();
-    return false;
-  }
-};
-
 export const updateRanking = async (
   userId: string,
-  updatedRankings: Partial<ApplicationInterface>
-) => {
+  updatedRankings: Partial<NonNullable<ApplicantProfile["rankings"]>>
+): Promise<void> => {
   const applicantDocRef = doc(db, "applicants", userId);
 
-  try {
-    const docSnapshot = await getDoc(applicantDocRef);
-    if (docSnapshot.exists()) {
-      const existingData = docSnapshot.data() as ApplicationInterface;
+  const docSnapshot = await getDoc(applicantDocRef);
+  if (!docSnapshot.exists()) throw new Error("Applicant document not found");
 
-      const mergedRankings = {
-        ...existingData.rankings,
-        ...updatedRankings,
-      };
+  const existingData = parseApplicantProfile(userId, docSnapshot.data());
+  if (!existingData) throw new Error("Applicant document is invalid");
 
-      await updateDoc(applicantDocRef, {
-        rankings: mergedRankings,
-      });
+  const mergedRankings = {
+    ...existingData.rankings,
+    ...updatedRankings,
+  };
 
-      // ✔ Success case
-      toastSuccess();
-    } else {
-      // ✖ Error cases
-      console.error(`✖ Error:  Document does not exist.`);
-      toastError();
-    }
-  } catch (error) {
-    console.error("✖ Error:  Error updating document: ", error);
-    toastError();
-  }
-};
-
-export const specialCreateCollection = async <T extends DocumentData>(
-  collectionName: string,
-  data: T
-): Promise<boolean> => {
-  console.log(`specialCreateCollection:  💢 Triggered`);
-  try {
-    const dataCollection = collection(firestore, collectionName);
-    await addDoc(dataCollection, data);
-    console.log(`✔ Success:  Added ${collectionName} collection with data.`);
-    return true;
-  } catch (error) {
-    console.error(`❌ Error adding document: ${error}`);
-    return false;
-  }
+  await updateDoc(applicantDocRef, { rankings: mergedRankings });
 };

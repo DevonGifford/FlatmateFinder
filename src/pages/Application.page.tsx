@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useURLState } from "@/lib/hooks/useUrlState";
-import { useRequireApplicant } from "@/lib/hooks/useRequireApplicant";
+import { useURLState } from "@/hooks/useUrlState";
+import { useRequireApplicant } from "@/hooks/useRequireApplicant";
 import { Button } from "@/components/ui/button";
 import { FirstForm } from "@/components/forms/first-form";
 import { ThirdForm } from "@/components/forms/third-form";
 import { SecondForm } from "@/components/forms/second-form";
 import { ArrowLeftToLine } from "lucide-react";
-import { ApplicationInterface, defaultApplication } from "@/lib/interfaces/applicationInterfaces";
+import { ApplicationInterface, defaultApplication } from "@/types/applicationInterfaces";
 
 const ApplicationPage: React.FC = () => {
   const [application, setApplication] = useState<ApplicationInterface>(defaultApplication);

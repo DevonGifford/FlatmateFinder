@@ -3,7 +3,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
-import { useGlobalState } from "@/lib/hooks/useGlobalState";
+import type { Dispatch, SetStateAction } from "react";
+import { useGlobalState } from "@/hooks/useGlobalState";
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Textarea } from "@/components/ui/textarea";
@@ -18,30 +19,24 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Building, Home, Link, Video } from "lucide-react";
-import { ApplicationInterface, defaultApplication } from "@/lib/interfaces/applicationInterfaces";
+import { ApplicationInterface, defaultApplication } from "@/types/applicationInterfaces";
 import { createApplicantDoc } from "@/lib/firebase/firestore";
 import { toastError, toastFormComplete } from "@/lib/customToast";
-import { ThirdFormData } from "@/lib/interfaces/localeInterfaces";
+import { ThirdFormData } from "@/types/localeInterfaces";
 
-import Data_EN from "@/lib/translations/applicant-form/thirdform_en.json";
-import Data_ES from "@/lib/translations/applicant-form/thirdform_es.json";
+import Data_EN from "@/locales/applicant-form/thirdform_en.json";
+import Data_ES from "@/locales/applicant-form/thirdform_es.json";
 
 const thirdFormSchema = z.object({
-  job_title: z.string({
-    required_error: "⚠",
-  }),
+  job_title: z.string({ error: "⚠" }),
   job_type: z.string().optional(),
   describe: z
-    .string({
-      required_error: "⚠",
-    })
+    .string({ error: "⚠" })
     .max(500, {
       message: "⚠ too long",
     }),
   hobbies: z
-    .string({
-      required_error: "⚠",
-    })
+    .string({ error: "⚠" })
     .max(500, {
       message: "⚠ too long",
     }),
@@ -56,7 +51,7 @@ type ThirdFormValues = z.infer<typeof thirdFormSchema>;
 
 interface ThirdFormProps {
   application: ApplicationInterface | null;
-  setApplication: React.Dispatch<React.SetStateAction<ApplicationInterface>>;
+  setApplication: Dispatch<SetStateAction<ApplicationInterface>>;
 }
 
 export function ThirdForm({ application, setApplication }: ThirdFormProps) {
@@ -78,6 +73,8 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
 
       // - Generate a unique ID for the user
       const nameFirstFive = application.firstForm.name.slice(0, 5).replace(/\s/g, ""); // Extract first 5 letters and remove spaces
+      // This runs from the submit event, not during render.
+      // eslint-disable-next-line react-hooks/purity
       const currentTimeStamp = Date.now().toString().slice(-5); // Extract last 5 digits of current timestamp
       const documentId = `${nameFirstFive}-${currentTimeStamp}`;
 

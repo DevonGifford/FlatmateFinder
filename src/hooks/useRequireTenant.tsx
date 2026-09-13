@@ -1,23 +1,23 @@
-import { useGlobalDispatch } from "@/lib/hooks/useGlobalDispatch";
-import { useGlobalState } from "@/lib/hooks/useGlobalState";
+import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
+import { useGlobalState } from "@/hooks/useGlobalState";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const useRequireApplicant = () => {
+export const useRequireTenant = () => {
   const navigate = useNavigate();
   const dispatch = useGlobalDispatch();
-  const { isAuthenticatedApplicant } = useGlobalState();
+  const { isAuthenticatedTenant } = useGlobalState();
 
   useEffect(() => {
     const checkAdmin = async () => {
-      if (!isAuthenticatedApplicant) {
+      if (!isAuthenticatedTenant) {
         dispatch({ type: "RESET_AUTH" });
         navigate("/");
       }
     };
 
     checkAdmin();
-  }, [dispatch, isAuthenticatedApplicant, navigate]);
+  }, [dispatch, isAuthenticatedTenant, navigate]);
 
   return null;
 };

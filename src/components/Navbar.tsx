@@ -1,6 +1,6 @@
 import { useMatch, useNavigate } from "react-router-dom";
-import { useGlobalState } from "@/lib/hooks/useGlobalState";
-import { useGlobalDispatch } from "@/lib/hooks/useGlobalDispatch";
+import { useGlobalState } from "@/hooks/useGlobalState";
+import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";

@@ -1,18 +1,20 @@
 import path from "path";
+import { fileURLToPath } from "url";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vitest/config";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), tailwindcss()],
   test: {
-    reporters: ["html", "default"],
+    reporters: ["default"],
     globals: true,
     environment: "happy-dom",
     setupFiles: ["src/setupTest.ts"],
   },
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
+      "@": path.resolve(fileURLToPath(new URL("./src", import.meta.url))),
     },
   },
 });

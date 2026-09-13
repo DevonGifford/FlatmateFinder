@@ -2,8 +2,8 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useGlobalDispatch } from "@/lib/hooks/useGlobalDispatch";
-import { useGlobalState } from "@/lib/hooks/useGlobalState";
+import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
+import { useGlobalState } from "@/hooks/useGlobalState";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,9 +20,10 @@ import {
   toastIncorrectPassword,
 } from "@/lib/customToast";
 
-import { HomePageData } from "@/lib/interfaces/localeInterfaces";
-import Data_EN from "@/lib/translations/home-page/home_en.json";
-import Data_ES from "@/lib/translations/home-page/home_es.json";
+import { HomePageData } from "@/types/localeInterfaces";
+import Data_EN from "@/locales/home-page/home_en.json";
+import Data_ES from "@/locales/home-page/home_es.json";
+import { applicantAccess, tenantAccess } from "@/lib/auth/accessPasswords";
 
 const FormSchema = z.object({
   password: z.string().min(5, {
@@ -45,45 +46,28 @@ export default function HomePage() {
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     const { password } = data;
-    switch (password) {
-      // ✔  Tenant Password Check
-      case import.meta.env.VITE_PASSWORD_UNO:
-      case import.meta.env.VITE_PASSWORD_DOS:
-      case import.meta.env.VITE_PASSWORD_TRES:
-        dispatch({
-          type: "SET_TENANT",
-        });
-        handleTenantLogin(password);
-        break;
-      // ✔  Applicant Password Check
-      case import.meta.env.VITE_PASSWORD_ALPHA:
-      case import.meta.env.VITE_PASSWORD_BETA:
-      case import.meta.env.VITE_PASSWORD_MANGO:
-      case import.meta.env.VITE_PASSWORD_CHOCOLATE:
-        dispatch({
-          type: "SET_APPLICANT",
-        });
-        toastCorrectPassword();
-        navigate("/form");
-        break;
-      // ✖  Incorrect password case
-      default:
-        toastIncorrectPassword();
-        break;
+    const tenant = tenantAccess.find((credential) => credential.password === password);
+    if (tenant) {
+      dispatch({ type: "SET_TENANT" });
+      handleTenantLogin(tenant);
+      return;
     }
+
+    if (applicantAccess.some((credential) => credential.password === password)) {
+      dispatch({ type: "SET_APPLICANT" });
+      toastCorrectPassword();
+      navigate("/form");
+      return;
+    }
+
+    toastIncorrectPassword();
   }
 
-  function handleTenantLogin(password: string) {
-    const passwordPayloadMap: Record<string, string> = {
-      [import.meta.env.VITE_PASSWORD_UNO]: import.meta.env.VITE_PASSWORD_ONE,
-      [import.meta.env.VITE_PASSWORD_DOS]: import.meta.env.VITE_PASSWORD_TWO,
-      [import.meta.env.VITE_PASSWORD_TRES]: import.meta.env.VITE_PASSWORD_THREE,
-    };
-    const payload = passwordPayloadMap[password];
-    if (payload) {
+  function handleTenantLogin(tenant: (typeof tenantAccess)[number]) {
+    if (tenant.displayName) {
       dispatch({
         type: "SET_TENANT_PROFILE",
-        payload,
+        payload: tenant.displayName,
       });
     }
     navigate("/admin-welcome");

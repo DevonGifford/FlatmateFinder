@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import { useRequireTenant } from "@/lib/hooks/useRequireTenant";
+import { useRequireTenant } from "@/hooks/useRequireTenant";
 import { Button } from "@/components/ui/button";
-import { useGlobalState } from "@/lib/hooks/useGlobalState";
+import { useGlobalState } from "@/hooks/useGlobalState";
 
 export default function TenantWelcomePage() {
   useRequireTenant();
@@ -61,7 +61,6 @@ export default function TenantWelcomePage() {
           <li>
             Tinder card dropdown buttons may be difficult to click on mobile.
           </li>
-          <li>Currently reloading or refreshing the page will sign you out.</li>
         </ul>
         <p className="flex flex-col font-thin italic">
           <span>If you notice any other issues or have feature requests,</span>

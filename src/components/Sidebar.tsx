@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useGlobalDispatch } from "@/lib/hooks/useGlobalDispatch";
+import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -50,7 +50,6 @@ export default function Sidebar() {
                   onClick={() => {
                     dispatch({ type: "RESET_AUTH" });
                     navigate("/");
-                    window.location.reload(); //🎯 to-do-list remove
                   }}
                   className="flex text-xl font-semibold w-full h-14 rounded-xl justify-center items-center hover:bg-slate-300"
                 >

@@ -1,5 +1,27 @@
-  // jest-dom adds custom jest matchers for asserting on DOM nodes.
-  // allows you to do things like:
-  // expect(element).toHaveTextContent(/react/i)
-  // learn more: https://github.com/testing-library/jest-dom
-  import '@testing-library/jest-dom';
+import { beforeEach, vi } from "vitest";
+
+beforeEach(() => {
+  sessionStorage.clear();
+});
+
+vi.mock("@/lib/auth/accessPasswords", () => ({
+  tenantAccess: [
+    { password: "test-tenant-password", displayName: "Devon" },
+    { password: "test-tenant-password-two", displayName: "Oscar" },
+    { password: "test-tenant-password-three", displayName: "Adrian" },
+  ],
+  applicantAccess: [
+    { password: "test-applicant-password" },
+    { password: "test-applicant-password-two" },
+    { password: "test-applicant-password-three" },
+    { password: "test-applicant-password-four" },
+  ],
+}));
+
+// GlobalProvider fetches on mount. Keep the suite hermetic and offline.
+vi.mock("@/lib/firebase/firestore", () => ({
+  createApplicantDoc: vi.fn(),
+  fetchApplicantPool: vi.fn().mockResolvedValue(undefined),
+  waitForFirebaseAuth: vi.fn().mockResolvedValue(undefined),
+  updateRanking: vi.fn(),
+}));

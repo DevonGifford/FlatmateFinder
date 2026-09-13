@@ -3,14 +3,15 @@ import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
-import { useGlobalState } from "@/lib/hooks/useGlobalState";
+import type { Dispatch, SetStateAction } from "react";
+import { useGlobalState } from "@/hooks/useGlobalState";
 import { toastError, toastFormComplete } from "@/lib/customToast";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Calendar } from "@/components/ui/calendar";
 import { Textarea } from "@/components/ui/textarea";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
-import { CalendarIcon, User, Video } from "lucide-react";
+import { User, Video } from "lucide-react";
 import {
   Popover,
   PopoverContent,
@@ -25,23 +26,16 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import { SecondFormData } from "@/lib/interfaces/localeInterfaces";
-import { ApplicationInterface } from "@/lib/interfaces/applicationInterfaces";
+import { SecondFormData } from "@/types/localeInterfaces";
+import { ApplicationInterface } from "@/types/applicationInterfaces";
 
-import Data_EN from "@/lib/translations/applicant-form/secondform_en.json";
-import Data_ES from "@/lib/translations/applicant-form/secondform_es.json";
+import Data_EN from "@/locales/applicant-form/secondform_en.json";
+import Data_ES from "@/locales/applicant-form/secondform_es.json";
 
 const secondFormSchema = z.object({
-  move_date: z.date({
-    required_error: "⚠",
-    invalid_type_error: "⚠",
-  }),
-  length_stay: z.number({
-    required_error: "⚠",
-  }),
-  meet_type: z.string({
-    required_error: "⚠",
-  }),
+  move_date: z.date({ error: "⚠" }),
+  length_stay: z.number({ error: "⚠" }),
+  meet_type: z.string({ error: "⚠" }),
   more_info: z
     .string()
     .max(500, {
@@ -53,7 +47,7 @@ type SecondFormValues = z.infer<typeof secondFormSchema>;
 
 interface SecondFormProps {
   application: ApplicationInterface | null;
-  setApplication: React.Dispatch<React.SetStateAction<ApplicationInterface>>;
+  setApplication: Dispatch<SetStateAction<ApplicationInterface>>;
 }
 
 export function SecondForm({ application, setApplication }: SecondFormProps) {
@@ -84,7 +78,7 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
 
       toastFormComplete("2");
       navigate(`/form?pageId=third-form`); //-updating route
-    } catch (error) {
+    } catch {
       toastError();
     }
   }
@@ -111,25 +105,20 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
               </FormLabel>
 
               <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
+                <PopoverTrigger
+                  render={
                     <Button
                       variant={"secondary"}
                       className={cn(
                         "w-full pl-3 text-left font-normal",
                         !field.value && "text-muted-foreground"
                       )}
-                    >
-                      <span>
-                        {field.value instanceof Date ? (
-                          <span>{field.value.toDateString()}</span>
-                        ) : (
-                          <span>{localeData.pickDate}</span>
-                        )}
-                      </span>
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </Button>
-                  </FormControl>
+                    />
+                  }
+                >
+                  <span>
+                    {field.value instanceof Date ? field.value.toDateString() : localeData.pickDate}
+                  </span>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
@@ -140,7 +129,6 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
                       date < new Date("2024-01-20") ||
                       date < new Date("1900-01-01")
                     }
-                    initialFocus
                   />
                 </PopoverContent>
               </Popover>
@@ -167,7 +155,7 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
                   step={1}
                   defaultValue={[0]}
                   onValueChange={(vals) => {
-                    onChange(vals[0]);
+                    onChange(Array.isArray(vals) ? vals[0] : vals);
                   }}
                 />
               </FormControl>

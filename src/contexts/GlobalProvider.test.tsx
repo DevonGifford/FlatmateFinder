@@ -1,24 +1,28 @@
-import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
-import { test, expect, describe } from "vitest";
+import { test, expect, describe, beforeEach } from "vitest";
 import { screen, render, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { GlobalProvider } from "@/contexts/GlobalProvider";
-import { ApplicantProfile } from "@/lib/interfaces/applicantInterfaces";
+import { ApplicantProfile } from "@/types/applicantInterfaces";
 import { Timestamp } from "@firebase/firestore";
 import {
   GlobalStateInterface,
   initialState,
-} from "@/lib/interfaces/globalStateInterfaces";
+} from "@/types/globalStateInterfaces";
 import {
   customRenderLeaderBoard,
   customRenderApp,
-} from "./testUtils";
+} from "@/testUtils";
 
 import App from "@/App";
 import Navbar from "@/components/Navbar";
 import FaqPage from "@/pages/Faq.page";
 import TenantLeaderboardPage from "@/pages/TenantLeaderboard.page";
+import TenantTinderPage from "@/pages/TenantTinder.page";
+
+beforeEach(() => {
+  window.history.pushState({}, "", "/");
+});
 
 // DONE
 describe("Testing the testing environment", () => {
@@ -31,9 +35,9 @@ describe("Testing the testing environment", () => {
     );
     //- Assert
     const mainHeading = screen.getByText("Calle de Muller");
-    expect(mainHeading).toBeInTheDocument();
+    expect(mainHeading).toBeDefined();
     const subHeading = screen.getByText("Welcome to");
-    expect(subHeading).toBeInTheDocument();
+    expect(subHeading).toBeDefined();
   });
 
   test("simple render test: successfully render individual pages", async () => {
@@ -48,7 +52,7 @@ describe("Testing the testing environment", () => {
     );
 
     //- Assert
-    expect(screen.getByText("Frequently Asked Questions")).toBeInTheDocument();
+    expect(screen.getByText("Frequently Asked Questions")).toBeDefined();
   });
 
   test("simple demo test: form submission with incorrect password, shows toast error message", async () => {
@@ -67,15 +71,13 @@ describe("Testing the testing environment", () => {
 
     //- Assert
     await waitFor(() => {
-      screen.debug();
       const errorToast = screen.getByText(
         "That's not correct - Eso no está bien"
       );
-      expect(errorToast).toBeInTheDocument();
+      expect(errorToast).toBeDefined();
     });
   });
 });
-
 // DONE
 describe("Testing Global `locale`, switching between the two locales", () => {
   test("SET_LOCALE - should render with EN and switch to ES", async () => {
@@ -87,7 +89,7 @@ describe("Testing Global `locale`, switching between the two locales", () => {
     );
     // Assert initially loads with en locale set
     const subHeadingEN = screen.getByText("Welcome to");
-    expect(subHeadingEN).toBeInTheDocument();
+    expect(subHeadingEN).toBeDefined();
 
     // Act
     const localeSpanishButton = screen.getByRole("radio", {
@@ -102,10 +104,10 @@ describe("Testing Global `locale`, switching between the two locales", () => {
       /^Una contraseña secreta compartida contigo/i
     );
     const startButton = screen.getByText(/^Comenzar/i);
-    expect(welcomeHeading).toBeInTheDocument();
-    expect(passwordHeading).toBeInTheDocument();
-    expect(passwordText).toBeInTheDocument();
-    expect(startButton).toBeInTheDocument();
+    expect(welcomeHeading).toBeDefined();
+    expect(passwordHeading).toBeDefined();
+    expect(passwordText).toBeDefined();
+    expect(startButton).toBeDefined();
   });
 
   test("SET_LOCALE - should render with ES and switch to EN", async () => {
@@ -119,9 +121,9 @@ describe("Testing Global `locale`, switching between the two locales", () => {
     const mainHeading = screen.getByText("Calle de Muller");
     const welcomeHeadingES = screen.getByText(/^Bienvenido a/i);
     const passwordHeadingES = screen.getByText(/^Ingresar contraseña/i);
-    expect(mainHeading).toBeInTheDocument();
-    expect(welcomeHeadingES).toBeInTheDocument();
-    expect(passwordHeadingES).toBeInTheDocument();
+    expect(mainHeading).toBeDefined();
+    expect(welcomeHeadingES).toBeDefined();
+    expect(passwordHeadingES).toBeDefined();
 
     // Act
     const localeEnglishButton = screen.getByRole("radio", {
@@ -132,7 +134,7 @@ describe("Testing Global `locale`, switching between the two locales", () => {
 
     // Assert locale has been updated to EN
     const subHeadingEN = screen.getByText("Welcome to");
-    expect(subHeadingEN).toBeInTheDocument();
+    expect(subHeadingEN).toBeDefined();
   });
 });
 
@@ -149,13 +151,13 @@ describe("Testing Global `isAuthenticated` and `loggedTenant`, with password sub
     const startButton = screen.getByRole("button", { name: "Start" });
 
     //- Act
-    await userEvent.type(input, "Devon4B");
+    await userEvent.type(input, "test-tenant-password");
     await userEvent.click(startButton);
 
     //- Assert that the toast notification appears
     await waitFor(() => {
       const successToast = screen.getByText("Very good - Muy bien");
-      expect(successToast).toBeInTheDocument();
+      expect(successToast).toBeDefined();
     });
   });
 
@@ -170,14 +172,54 @@ describe("Testing Global `isAuthenticated` and `loggedTenant`, with password sub
     const startButton = screen.getByRole("button", { name: "Start" });
 
     //- Act
-    await userEvent.type(input, "Mango");
+    await userEvent.type(input, "test-applicant-password-three");
     await userEvent.click(startButton);
 
     //- Assert that the toast notification appears
     await waitFor(() => {
       const successToast = screen.getByText("Very good - Muy bien");
-      expect(successToast).toBeInTheDocument();
+      expect(successToast).toBeDefined();
     });
+  });
+
+  test("hydrates a tenant session from session storage", () => {
+    sessionStorage.setItem(
+      "flatmate-finder-auth",
+      JSON.stringify({
+        isAuthenticatedApplicant: false,
+        isAuthenticatedTenant: true,
+        loggedTenant: "Devon",
+      })
+    );
+    window.history.pushState({}, "", "/admin-welcome");
+
+    render(
+      <GlobalProvider initialState={initialState}>
+        <App />
+      </GlobalProvider>
+    );
+
+    expect(screen.getByText("Welcome to your profile Devon")).toBeDefined();
+  });
+
+  test("logout resets auth and clears the persisted session", async () => {
+    render(
+      <GlobalProvider
+        initialState={{
+          ...initialState,
+          isAuthenticatedTenant: true,
+          loggedTenant: "Devon",
+        }}
+      >
+        <App />
+      </GlobalProvider>
+    );
+
+    await userEvent.click(screen.getByRole("button", { name: "" }));
+    await userEvent.click(screen.getByRole("button", { name: "Logout" }));
+
+    expect(sessionStorage.getItem("flatmate-finder-auth")).toBeNull();
+    expect(screen.getByLabelText("Enter password")).toBeDefined();
   });
 });
 
@@ -194,7 +236,7 @@ describe("Testing Global `applicantPool`, with `isLoading` and `error` states", 
     );
 
     // Assert
-    expect(screen.getByText("No data available")).toBeInTheDocument();
+    expect(screen.getByText("No data available")).toBeDefined();
   });
 
   test("FETCH_FAILURE - should render loading spinner while waiting for data", () => {
@@ -206,12 +248,12 @@ describe("Testing Global `applicantPool`, with `isLoading` and `error` states", 
 
     // Assert that the Loader is present
     const loadingAnimation = screen.getByTestId("spinner-svg");
-    expect(loadingAnimation).toBeInTheDocument();
+    expect(loadingAnimation).toBeDefined();
 
     // Assert accessibility attributes
-    expect(loadingAnimation).toHaveAttribute("role", "progressbar");
-    expect(loadingAnimation).toHaveAttribute("aria-valuetext", "Loading");
-    expect(loadingAnimation).toHaveAttribute("aria-busy", "true");
+    expect(loadingAnimation.getAttribute("role")).toBe("progressbar");
+    expect(loadingAnimation.getAttribute("aria-valuetext")).toBe("Loading");
+    expect(loadingAnimation.getAttribute("aria-busy")).toBe("true");
   });
 
   test("FETCH_SUCCESS - should render leader board with mock data", () => {
@@ -262,107 +304,51 @@ describe("Testing Global `applicantPool`, with `isLoading` and `error` states", 
     customRenderLeaderBoard(partialState);
 
     //- Assert
-    expect(screen.getByText("Ronald Weasley")).toBeInTheDocument();
-  });
-});
-
-
-// TODO
-// [ ] UPDATE_APPLICANT_POOL
-// [ ] RESET_AUTH 
-// [ ] PURGE_STATE
-
-// WIP - PROTOTYPE TESTING :
-describe.skip("things I am trying out would be great to get some feedback on where I am going wrong", () => {
-  /*
-  ❌ Failed Attempt to mock useNavigate:
-  
-  const mockedUseNavigate = vi.fn();
-  .mock("react-router-dom", async () => {
-    nst mod = await vi.importActual<typeof import("react-router-dom")>(
-      "react-router-dom"
-      );
-      r turn {
-        ...mod,
-        useNavigate: () => mockedUseNavigate,
-      };
-    });
-  */
-
-  test("❌ Attempt: simple test, from root, expected route change - faq button results in faq page", async () => {
-    // - Assemble
-    render(
-      <GlobalProvider initialState={initialState}>
-        <App />
-      </GlobalProvider>
-    );
-    expect(screen.getByText(/Welcome/i)).toBeInTheDocument();
-    const faqButton = screen.getByLabelText("faq-button");
-    expect(faqButton).toBeInTheDocument();
-
-    // - Act
-    await userEvent.click(faqButton);
-
-    // - Assert: verify if the FAQ page content renders as expected after route change
-    await waitFor(() => {
-      // console.log("Location Pathname:", window.location.pathname);
-      expect(screen.getByText(/Frequently/i)).toBeInTheDocument();  //❌BREAKS HERE  still rendering the old page
-    });
+    expect(screen.getByText("Ronald Weasley")).toBeDefined();
   });
 
-  test("❌ Attempt: simple test, from component, expected route change - faq button results in faq page", async () => {
-    // - Assemble
+  test("React 19 smoke test - tenant tinder card renders", () => {
+    const mockApplicant: ApplicantProfile = {
+      id: "react-19-smoke-test",
+      uuid: "react-19-smoke-test",
+      firstForm: {
+        name: "React 19 Applicant",
+        phone: "680721466",
+        sex: "male",
+        languages: ["English"],
+        age: "30",
+      },
+      secondForm: {
+        move_date: Timestamp.fromDate(new Date(1702558880828)),
+        length_stay: 0,
+        meet_type: "inperson",
+        more_info: "",
+      },
+      thirdForm: {
+        hobbies: "Testing",
+        job_type: "wfh",
+        describe: "React compatibility smoke test.",
+        social_media: "",
+        job_title: "Engineer",
+      },
+      applicationDate: Timestamp.fromDate(new Date(1702558880828)),
+    };
+
     render(
       <MemoryRouter>
-        <GlobalProvider initialState={initialState}>
-          <Navbar />
+        <GlobalProvider
+          initialState={{
+            ...initialState,
+            isAuthenticatedTenant: true,
+            loggedTenant: "Devon",
+            applicantPool: [mockApplicant],
+          }}
+        >
+          <TenantTinderPage />
         </GlobalProvider>
       </MemoryRouter>
     );
-    const faqButton = screen.getByLabelText("faq-button");
-    expect(faqButton).toBeInTheDocument();
-    expect(window.location.pathname).toBe("/");
 
-    // - Act:  Click on the FAQ button
-    console.log("Before click:", window.location.pathname);
-    await userEvent.click(faqButton);
-    console.log("After click:", window.location.pathname);
-
-    // - Assert: Assert that URL updated
-    await waitFor(() => {
-      console.log("Location Pathname:", window.location.pathname);
-      expect(window.location.pathname).toBe("/FAQ");  //❌BREAKS HERE
-    });
-  });
-
-  test("❌ Attempt: password entry should update page, thus testing global context reducer + password function", async () => {
-    // - Assemble
-    render(
-      <GlobalProvider initialState={initialState}>
-        <App />
-      </GlobalProvider>
-    );
-    const input = screen.getByLabelText("Enter password");
-    const startButton = screen.getByRole("button", { name: "Start" });
-
-    // - Act: enter password and click start button
-    await userEvent.type(input, "Mango");
-    await userEvent.click(startButton);
-
-    // - Assert: toast notification appears
-    await waitFor(() => {
-      const successToast = screen.getByText("Very good - Muy bien");
-      expect(successToast).toBeInTheDocument();
-      screen.debug();
-    });
-
-    // - Assert:  wait for the component to re-render with the application form page
-    // assert the state has been updated - the state action was thus dispatched and route is now 'unlocked' by applicantGaurd
-    await waitFor(() => {
-      const applicationPage = screen.getByText("Whatsapp");
-      expect(applicationPage).toBeInTheDocument();   //❌BREAKS HERE - not rendering new page
-      screen.debug();
-    });
-    //results in the successful toast notif but does not 'update the route and render that page'
+    expect(screen.getByText("React 19 Applicant")).toBeDefined();
   });
 });

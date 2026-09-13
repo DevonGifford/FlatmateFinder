@@ -1,14 +1,17 @@
 import TinderCard from "react-tinder-card";
 import { useState } from "react";
-import { useGlobalState } from "@/lib/hooks/useGlobalState";
-import { useGlobalDispatch } from "@/lib/hooks/useGlobalDispatch";
-import { useRequireTenant } from "@/lib/hooks/useRequireTenant";
+import { useGlobalState } from "@/hooks/useGlobalState";
+import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
+import { useRequireTenant } from "@/hooks/useRequireTenant";
 import { updateRanking } from "@/lib/firebase/firestore";
 import { toastError } from "@/lib/customToast";
 import { ProfilePic } from "@/components/ProfilePic";
 import { StarRating } from "@/components/StarRating";
-import { Rankings } from "@/lib/interfaces/applicantInterfaces";
-import { ApplicationInterface } from "@/lib/interfaces/applicationInterfaces";
+import {
+  getTenantByName,
+  TenantBooleanKey,
+  TenantStarKey,
+} from "@/lib/constants/tenants";
 import { Timestamp } from "firebase/firestore";
 import {
   Card,
@@ -42,7 +45,7 @@ export default function TenantTinderPage() { useRequireTenant();
     Array(applicantPool?.length).fill(0)
   );
 
-  const adminId = (loggedTenant || "").substring(0, 3).toLowerCase();
+  const tenant = getTenantByName(loggedTenant);
 
   //- Handle star-ranking individual applicants - updates global context
   const handleStarClick = (starIndex: number, cardIndex: number) => {
@@ -56,18 +59,9 @@ export default function TenantTinderPage() { useRequireTenant();
       if (cardData) {
         const updatedCard = { ...cardData };
         updatedCard.rankings = updatedCard.rankings || {};
-        switch (loggedTenant) {
-          case "Devon":
-            updatedCard.rankings.dev_star = starIndex + 1;
-            break;
-          case "Oscar":
-            updatedCard.rankings.osc_star = starIndex + 1;
-            break;
-          case "Adrian":
-            updatedCard.rankings.adr_star = starIndex + 1;
-            break;
-          default:
-            break;
+        if (tenant) {
+          const rankingKey = `${tenant.id}_star` as TenantStarKey;
+          updatedCard.rankings[rankingKey] = starIndex + 1;
         }
         dispatch({ type: "UPDATE_APPLICANT_POOL", payload: [updatedCard] });
       }
@@ -82,18 +76,9 @@ export default function TenantTinderPage() { useRequireTenant();
       if (cardData) {
         const updatedCard = { ...cardData };
         updatedCard.rankings = updatedCard.rankings || {};
-        switch (loggedTenant) {
-          case "Devon":
-            updatedCard.rankings.dev_bool = direction === "right";
-            break;
-          case "Oscar":
-            updatedCard.rankings.osc_bool = direction === "right";
-            break;
-          case "Adrian":
-            updatedCard.rankings.adr_bool = direction === "right";
-            break;
-          default:
-            break;
+        if (tenant) {
+          const rankingKey = `${tenant.id}_bool` as TenantBooleanKey;
+          updatedCard.rankings[rankingKey] = direction === "right";
         }
 
         dispatch({ type: "UPDATE_APPLICANT_POOL", payload: [updatedCard] });
@@ -105,10 +90,11 @@ export default function TenantTinderPage() { useRequireTenant();
   //- Handle card leaving screen - updates the firestore database
   const onCardLeftScreen = (cardIndex: number) => {
     if (applicantPool && applicantPool[cardIndex]?.rankings) {
-      const updatedRankings = applicantPool[cardIndex]
-        .rankings as Partial<ApplicationInterface>;
+      const updatedRankings = applicantPool[cardIndex].rankings;
 
-      updateRanking(applicantPool[cardIndex].uuid, updatedRankings);
+      void updateRanking(applicantPool[cardIndex].uuid, updatedRankings).catch(
+        () => toastError("Something went wrong")
+      );
     } else {
       toastError("Something went wrong");
     }
@@ -179,7 +165,7 @@ export default function TenantTinderPage() { useRequireTenant();
             preventSwipe={["up", "down"]}
             className="absolute w-[310px] md:w-[500px]"
           >
-            <Card className="h-fit overflow-x-auto">
+            <Card className="h-fit overflow-x-auto bg-white shadow-2xl">
               <CardHeader>
                 <CardTitle>{dataItem.firstForm.name}</CardTitle>
                 <CardDescription className="flex flex-row justify-center items-center gap-1 text-base font-semibold ">
@@ -309,7 +295,7 @@ export default function TenantTinderPage() { useRequireTenant();
                       filled={
                         starIndex <
                         (dataItem.rankings?.[
-                          `${adminId}_star` as keyof Rankings
+                          `${tenant?.id}_star` as TenantStarKey
                         ] || 0)
                       }
                     />

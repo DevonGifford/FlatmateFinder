@@ -1,3 +1,5 @@
+import { Rankings } from "@/types/applicantInterfaces";
+
 export interface ApplicationInterface {
   uuid: string;
   firstForm: {
@@ -20,14 +22,7 @@ export interface ApplicationInterface {
     hobbies: string;
     social_media?: string;
   };
-  rankings?: {
-    dev_star?: number;
-    dev_bool?: boolean;
-    adr_star?: number;
-    adr_bool?: boolean;
-    osc_star?: number;
-    osc_bool?: boolean;
-  };
+  rankings?: Rankings;
   applicationDate: Date;
   id?: string;
   photo?: string;

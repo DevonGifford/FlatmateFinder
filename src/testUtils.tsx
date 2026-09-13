@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { GlobalProvider } from "@/contexts/GlobalProvider";
-import { GlobalStateInterface } from "@/lib/interfaces/globalStateInterfaces";
+import { GlobalStateInterface } from "@/types/globalStateInterfaces";
 
 import App from "@/App";
 import TenantLeaderboardPage from "@/pages/TenantLeaderboard.page";
