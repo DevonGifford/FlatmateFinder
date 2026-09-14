@@ -1,5 +1,8 @@
 import { useRequireTenant } from "@/hooks/useRequireTenant";
 import { useGlobalState } from "@/hooks/useGlobalState";
+import tenantData_EN from "@/locales/tenant-pages/tenant_en.json";
+import tenantData_ES from "@/locales/tenant-pages/tenant_es.json";
+import { TenantPageData } from "@/types/localeInterfaces";
 import { ErrorMessage } from "@/components/ErrorMessage";
 import { ProfilePic } from "@/components/ProfilePic";
 import { RatingBadge } from "@/components/RatingBadge";
@@ -13,7 +16,8 @@ import {
 
 export default function TenantLeaderboardPage() {
   useRequireTenant();
-  const { applicantPool, isLoading, error } = useGlobalState();
+  const { applicantPool, isLoading, error, locale } = useGlobalState();
+  const localeData: TenantPageData = locale === "EN" ? tenantData_EN : tenantData_ES;
 
   const computeTotalRating = (applicant: ApplicantProfile): number => {
     return tenants.reduce(
@@ -32,61 +36,87 @@ export default function TenantLeaderboardPage() {
     : [];
 
   return (
-    <>
-      <h1 className="text-2xl italic py-4 pb-6 border-b-2">
-        Current Leaderboard
-      </h1>
+    <section className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-2 pb-8 sm:px-4">
+      <header className="border-b-2 py-4 pb-5">
+        <p className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+          {localeData.rankingsEyebrow}
+        </p>
+        <h1 className="text-2xl font-bold italic sm:text-3xl">
+          {localeData.currentLeaderboard}
+        </h1>
+      </header>
       {isLoading && <Spinner />}
       {error && <ErrorMessage />}
       {sortedApplicants.length > 0 ? (
-        sortedApplicants.map(
-          (applicant: ApplicantProfile, index: number) => (
-            <div
-              key={index}
-              className="flex flex-row justify-between items-center gap-3 border-2 p-4 font-semibold text-lg"
+        <div className="flex flex-col gap-3" role="list" aria-label={localeData.applicantRankings}>
+          <div className="hidden items-center gap-4 px-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground sm:flex">
+            <span className="w-8">{localeData.rank}</span>
+            <span className="w-[220px]">{localeData.applicant}</span>
+            <span className="flex-1 text-center">{localeData.tenantRatings}</span>
+            <span className="w-14 text-center">{localeData.total}</span>
+          </div>
+          {sortedApplicants.map((applicant: ApplicantProfile, index: number) => (
+            <article
+              key={applicant.id ?? applicant.uuid}
+              className="flex flex-wrap items-center gap-3 rounded-xl border bg-card p-3 text-base shadow-sm sm:flex-nowrap sm:gap-4 sm:p-4"
+              role="listitem"
             >
-              {/* // 👇 PHOTO & NAME */}
-              <div className="flex flex-row gap-3 items-center shrink-0 sm:w-[180px] md:w-[220px]">
+              <span className="w-8 text-center text-lg font-bold text-muted-foreground">
+                {index + 1}
+              </span>
+              <div className="flex min-w-0 flex-1 items-center gap-3 sm:w-[220px] sm:flex-none">
                 <ProfilePic
                   src={applicant.photo}
                   fallbackSrc="/profile-fallback.svg"
-                  alt="profile-pic"
+                  alt={`Profile picture for ${applicant.firstForm.name}`}
                   width={50}
                   height={50}
-                  className="flex justify-center items-center rounded-full h-10 w-10"
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
                 />
-                <p className="hidden sm:block whitespace-nowrap truncate">
+                <p className="truncate font-semibold">
                   {applicant.firstForm.name}
                 </p>
               </div>
-              {/* // 👇 INDIV RANKINGS */}
-              <div className="flex flex-row w-full justify-evenly">
+              <div className="grid w-full grid-cols-3 gap-2 sm:flex sm:flex-1 sm:justify-evenly">
                 {tenants.map((tenant) => (
-                  <RatingBadge
+                  <div
                     key={tenant.id}
-                    boolValue={
-                      applicant.rankings?.[
-                        `${tenant.id}_bool` as TenantBooleanKey
-                      ]
-                    }
-                    starValue={
-                      applicant.rankings?.[
-                        `${tenant.id}_star` as TenantStarKey
-                      ]
-                    }
-                  />
+                    className="flex flex-col items-center gap-1"
+                  >
+                    <span className="text-xs font-medium text-muted-foreground sm:hidden">
+                      {tenant.name}
+                    </span>
+                    <RatingBadge
+                      boolValue={
+                        applicant.rankings?.[
+                          `${tenant.id}_bool` as TenantBooleanKey
+                        ]
+                      }
+                      starValue={
+                        applicant.rankings?.[
+                          `${tenant.id}_star` as TenantStarKey
+                        ]
+                      }
+                    />
+                  </div>
                 ))}
               </div>
-              {/* // 👇 TOTAL */}
-              <p className="text-xl shrink-0">
-                {computeTotalRating(applicant)}
-              </p>
-            </div>
-          )
-        )
+              <div className="flex w-14 shrink-0 flex-col items-center rounded-lg bg-muted px-2 py-1">
+                <span className="text-xs font-medium text-muted-foreground sm:hidden">
+                  {localeData.total}
+                </span>
+                <span className="text-xl font-bold">
+                  {computeTotalRating(applicant)}
+                </span>
+              </div>
+            </article>
+          ))}
+        </div>
       ) : (
-        <p>No data available</p>
+        <p className="rounded-xl border border-dashed p-8 text-center text-muted-foreground">
+          {localeData.noData}
+        </p>
       )}
-    </>
+    </section>
   );
 }

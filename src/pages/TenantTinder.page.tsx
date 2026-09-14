@@ -1,6 +1,9 @@
 import TinderCard from "react-tinder-card";
 import { useState } from "react";
 import { useGlobalState } from "@/hooks/useGlobalState";
+import tenantData_EN from "@/locales/tenant-pages/tenant_en.json";
+import tenantData_ES from "@/locales/tenant-pages/tenant_es.json";
+import { TenantPageData } from "@/types/localeInterfaces";
 import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
 import { useRequireTenant } from "@/hooks/useRequireTenant";
 import { updateRanking } from "@/lib/firebase/firestore";
@@ -40,7 +43,9 @@ import { IoFemale, IoMale, IoMaleFemale } from "react-icons/io5";
 
 export default function TenantTinderPage() { useRequireTenant();
   const dispatch = useGlobalDispatch();
-  const { applicantPool, loggedTenant } = useGlobalState();
+  const { applicantPool, loggedTenant, accessMode, locale } = useGlobalState();
+  const localeData: TenantPageData = locale === "EN" ? tenantData_EN : tenantData_ES;
+  const isGuestSession = accessMode === "guest-tenant";
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [starRatings, setStarRatings] = useState<number[]>(
     Array(applicantPool?.length).fill(0)
@@ -93,9 +98,13 @@ export default function TenantTinderPage() { useRequireTenant();
     if (applicantPool && applicantPool[cardIndex]?.rankings) {
       const updatedRankings = applicantPool[cardIndex].rankings;
 
-      void updateRanking(applicantPool[cardIndex].uuid, updatedRankings).catch(
-        () => toastError("Something went wrong")
-      );
+      if (!isGuestSession) {
+        void updateRanking(
+          applicantPool[cardIndex].uuid,
+          updatedRankings,
+          accessMode
+        ).catch(() => toastError("Something went wrong"));
+      }
     } else {
       toastError("Something went wrong");
     }
@@ -128,9 +137,9 @@ export default function TenantTinderPage() { useRequireTenant();
     }
   };
   const lengthStayIcon = (lengthStay: number) => {
-    if (lengthStay < 30) return "Short";
-    if (lengthStay < 80) return "Medium";
-    return "Long";
+    if (lengthStay < 30) return localeData.short;
+    if (lengthStay < 80) return localeData.medium;
+    return localeData.long;
   };
   const convertTimestamp = (timeStamp: Timestamp) => {
     if (timeStamp?.seconds) {
@@ -139,7 +148,7 @@ export default function TenantTinderPage() { useRequireTenant();
         timeStamp.seconds * 1000 + timeStamp.nanoseconds / 1000000
       );
 
-      const formattedDate = date.toLocaleDateString("en-US", {
+      const formattedDate = date.toLocaleDateString(locale === "EN" ? "en-US" : "es-ES", {
         day: "2-digit",
         month: "short",
         year: "numeric",
@@ -147,22 +156,22 @@ export default function TenantTinderPage() { useRequireTenant();
 
       return formattedDate;
     } else {
-      return "Invalid Date";
+      return localeData.invalidDate;
     }
   };
 
   return (
     <>
-      <div className="flex h-[calc(100vh-10vh)] flex-col justify-center items-center sm:mx-20 md:max-w-10/12 sm:max-w-4/6 gap-2 md:gap-8 overscroll-none">
+      <div className="relative flex min-h-[calc(100vh-10vh)] w-full flex-col items-center justify-center gap-3 overflow-hidden px-2 sm:px-6 md:gap-8">
         {applicantPool?.map((dataItem, index) => (
           <TinderCard
             key={index}
             onSwipe={(direction) => dataItem?.id && onSwipe(direction, index)}
             onCardLeftScreen={() => onCardLeftScreen(index)}
             preventSwipe={["up", "down"]}
-            className="absolute w-[310px] md:w-[500px]"
+            className="absolute w-[min(500px,calc(100vw-1rem))]"
           >
-            <Card className="h-fit overflow-x-auto bg-white shadow-2xl">
+            <Card className="max-h-[calc(100vh-6rem)] h-fit overflow-y-auto bg-white shadow-2xl">
               <CardHeader>
                 <CardTitle>{dataItem.firstForm.name}</CardTitle>
                 <CardDescription className="flex flex-row justify-center items-center gap-1 text-base font-semibold ">
@@ -175,7 +184,7 @@ export default function TenantTinderPage() { useRequireTenant();
                 {/* //👇 ENTRY DATE  */}
                 <div className="flex flex-row items-center gap-1 text-sm">
                   <CalendarClockIcon size={16} />
-                  <p className=" font-semibold">Desired Entry:</p>
+                  <p className=" font-semibold">{localeData.desiredEntry}</p>
                   <span className="font-normal pl-1">
                     {convertTimestamp(dataItem.secondForm.move_date)}
                   </span>
@@ -185,11 +194,11 @@ export default function TenantTinderPage() { useRequireTenant();
                     {/* //👇 AGE & GENDER */}
                     <div className="flex flex-row gap-5">
                       <div className="flex flex-row gap-2 items-center p-1">
-                        <h3 className="font-semibold">Age:</h3>
+                        <h3 className="font-semibold">{localeData.age}</h3>
                         <span>{dataItem.firstForm.age}</span>
                       </div>
                       <div className="flex flex-row gap-2 items-center p-1">
-                        <h3 className="font-semibold">Sex:</h3>
+                        <h3 className="font-semibold">{localeData.sex}</h3>
                         <span>{genderIcon(dataItem.firstForm.sex)}</span>
                       </div>
                     </div>
@@ -221,7 +230,7 @@ export default function TenantTinderPage() { useRequireTenant();
                         target="_blank"
                         rel="noreferrer"
                       >
-                        <h3>Social Media Link </h3>
+                        <h3>{localeData.socialMediaLink} </h3>
                         <ExternalLinkIcon size={13} />
                       </a>
                     )}
@@ -230,7 +239,7 @@ export default function TenantTinderPage() { useRequireTenant();
                   <ProfilePic
                     src={dataItem.photo}
                     fallbackSrc="/profile-fallback.svg"
-                    alt="profile-pic"
+                    alt={`${localeData.profilePictureAlt} ${dataItem.firstForm.name}`}
                     width={100}
                     height={100}
                     className="flex justify-center items-center rounded-full"
@@ -239,14 +248,14 @@ export default function TenantTinderPage() { useRequireTenant();
                 {/* //👇 Viewing & Length of Stay */}
                 <div className="flex flex-row w-full justify-evenly items-center text-sm font-semibold">
                   <div className="flex flex-col justify-center items-center p-2 rounded-lg border">
-                    <p>Viewing type: </p>
+                    <p>{localeData.viewingType}</p>
                     <span className="font-normal p-2 rounded full px-3">
                       {viewingtypeIcon(dataItem.secondForm.meet_type)}
                     </span>
                   </div>
 
                   <div className="flex flex-col justify-center items-center p-2 rounded-lg border">
-                    <p>Length of stay: </p>
+                    <p>{localeData.lengthOfStay}</p>
                     <span className="font-semibold p-2 rounded full px-3">
                       {lengthStayIcon(dataItem.secondForm.length_stay)}
                     </span>
@@ -260,7 +269,7 @@ export default function TenantTinderPage() { useRequireTenant();
                 >
                   <AccordionItem className="border-none py-1" value={"about"}>
                     <AccordionTrigger className="flex-col justify-center sm:gap-1 py-1 text-sm sm:text-lg hover:no-underline">
-                      Applicant Introduction
+                      {localeData.applicantIntroduction}
                     </AccordionTrigger>
                     <AccordionContent className="mx-8 text-xs sm:text-sm italic font-normal">
                       {dataItem.thirdForm.describe}
@@ -269,7 +278,7 @@ export default function TenantTinderPage() { useRequireTenant();
 
                   <AccordionItem className="border-none py-1" value={"hobbies"}>
                     <AccordionTrigger className="flex-col justify-center sm:gap-1 py-1 text-sm sm:text-base hover:no-underline">
-                      Hobbies & Interests
+                      {localeData.hobbiesInterests}
                     </AccordionTrigger>
                     <AccordionContent className="mx-8 text-xs sm:text-sm italic font-normal">
                       {dataItem.thirdForm.hobbies}
@@ -277,7 +286,7 @@ export default function TenantTinderPage() { useRequireTenant();
                   </AccordionItem>
                   <AccordionItem className="border-none py-1" value={"special"}>
                     <AccordionTrigger className="flex-col justify-left sm:gap-1 py-1 text-sm hover:no-underline">
-                      Special Request
+                      {localeData.specialRequest}
                     </AccordionTrigger>
                     <AccordionContent className="mx-8 text-xs sm:text-sm italic font-normal">
                       {dataItem.secondForm.more_info}
@@ -288,10 +297,15 @@ export default function TenantTinderPage() { useRequireTenant();
 
               <CardFooter className="flex flex-col text-center pt-1 sm:pt-4 justify-center items-center border-t-2 mx-10">
                 {/* //👇 STAR RATING SYSTEM */}
-                <div className="flex flex-row gap-3 pt-1 ">
+                <div
+                  className="flex flex-row gap-3 pt-1"
+                  role="group"
+                  aria-label={`${localeData.starRatingFor} ${dataItem.firstForm.name}`}
+                >
                   {[...Array(5)].map((_, starIndex) => (
                     <StarRating
                       key={starIndex}
+                      label={`${localeData.setRatingTo} ${starIndex + 1} ${starIndex === 0 ? localeData.star : localeData.stars}`}
                       onClick={() => handleStarClick(starIndex, index)}
                       filled={
                         starIndex <

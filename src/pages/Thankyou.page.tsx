@@ -15,6 +15,7 @@ export default function ThankyouPage() {
       <div className="flex flex-col items-center justify-center h-screen">
         <img
           src="/ThankYouPage.png"
+          alt="Thank you illustration"
           className="rounded-full -translate-y-10"
           width={"500px"}
         />

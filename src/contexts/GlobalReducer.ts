@@ -14,11 +14,29 @@ const globalReducer = (
       return {
         ...state,
         isAuthenticatedApplicant: true,
+        isAuthenticatedTenant: false,
+        accessMode: "applicant",
       };
     case "SET_TENANT":
       return {
         ...state,
+        isAuthenticatedApplicant: false,
         isAuthenticatedTenant: true,
+        accessMode: "tenant",
+      };
+    case "SET_GUEST_APPLICANT":
+      return {
+        ...state,
+        isAuthenticatedApplicant: true,
+        isAuthenticatedTenant: false,
+        accessMode: "guest-applicant",
+      };
+    case "SET_GUEST_TENANT":
+      return {
+        ...state,
+        isAuthenticatedApplicant: false,
+        isAuthenticatedTenant: true,
+        accessMode: "guest-tenant",
       };
     case "SET_TENANT_PROFILE":
       return {
@@ -30,6 +48,7 @@ const globalReducer = (
         ...state,
         isAuthenticatedApplicant: false,
         isAuthenticatedTenant: false,
+        accessMode: "none",
         loggedTenant: "",
       };
     //- locale actions

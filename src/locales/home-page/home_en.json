@@ -1,7 +1,11 @@
 {
   "subHeading": "Welcome to",
-  "mainHeading": "Calle de Muller",
+  "mainHeading": "Flatmate Finder",
   "passwordLabel": "Enter password",
-  "passwordDescription": "A secret password shared with you.",
-  "startButton": "Start"
+  "passwordDescription": "Use the password shared with you.",
+  "startButton": "Continue",
+  "guestPrompt": "Just exploring?",
+  "guestApplicant": "Guest applicant",
+  "guestTenant": "Guest tenant",
+  "guestBanner": "Guest mode — changes are not saved"
 }

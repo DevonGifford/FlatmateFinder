@@ -1,7 +1,11 @@
 {
   "subHeading": "Bienvenido a",
-  "mainHeading": "Calle de Muller",
+  "mainHeading": "Flatmate Finder",
   "passwordLabel": "Ingresar contraseña",
-  "passwordDescription": "Una contraseña secreta compartida contigo.",
-  "startButton": "Comenzar"
+  "passwordDescription": "Usa la contraseña compartida contigo.",
+  "startButton": "Continuar",
+  "guestPrompt": "¿Solo estás explorando?",
+  "guestApplicant": "Solicitante invitado",
+  "guestTenant": "Inquilino invitado",
+  "guestBanner": "Modo invitado — los cambios no se guardan"
 }

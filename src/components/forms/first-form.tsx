@@ -92,14 +92,14 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
         onSubmit={form.handleSubmit((data) => {
           onSubmit(data);
         })}
-        className="space-y-4 w-full  "
+        className="w-full space-y-6"
       >
         <FormField
           name="name"
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="flex text-center justify-center">
+              <FormLabel className="flex justify-center text-center">
                 {localeData.name}
               </FormLabel>
 
@@ -115,7 +115,7 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="flex text-center justify-center sm:justify-start">
+              <FormLabel className="flex justify-center text-center sm:justify-start sm:text-left">
                 Whatsapp
               </FormLabel>
 
@@ -134,10 +134,10 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
           name="languages"
           control={form.control}
           render={({ field }) => (
-            <FormItem className="rounded-lg border p-4">
-              <FormLabel className="flex flex-col gap-1 text-center justify-center">
+            <FormItem className="p-5">
+              <FormLabel className="flex flex-col justify-center gap-1 text-center">
                 {localeData.spoken}
-                <p className="text-xs font-thin italic">
+                <p className="text-sm font-normal italic text-muted-foreground">
                   {localeData.optional}
                 </p>
               </FormLabel>
@@ -147,10 +147,14 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
                   type="multiple"
                   value={field.value}
                   onValueChange={(value) => field.onChange(value)}
-                  className="w-full justify-center"
+                  className="w-full flex-wrap justify-center gap-2"
                 >
                   {languages.map((lang) => (
-                    <ToggleGroupItem key={lang.label} value={lang.label}>
+                    <ToggleGroupItem
+                      key={lang.label}
+                      value={lang.label}
+                      className="min-h-10 px-3 focus-visible:ring-2"
+                    >
                       {lang.label}
                     </ToggleGroupItem>
                   ))}
@@ -160,36 +164,36 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
             </FormItem>
           )}
         />
-        <div className="flex flex-row justify justify-evenly">
+        <div className="flex flex-row flex-wrap justify-center gap-4">
           <FormField
             name="sex"
             control={form.control}
             render={({ field }) => (
-              <FormItem className="rounded-lg border p-4">
-                <FormLabel>{localeData.gender}</FormLabel>
+              <FormItem className="min-w-[140px] flex-1 p-5 sm:min-w-[180px]">
+                <FormLabel className="text-center">{localeData.gender}</FormLabel>
                 <FormControl>
                   <ToggleGroup
                     size="sm"
                     type="single"
                     value={field.value}
                     onValueChange={(value) => field.onChange(value)}
-                    className="w-full justify-center"
+                    className="w-full justify-center gap-2"
                   >
                     <ToggleGroupItem
                       value="male"
-                      className="aria-pressed:border-2 aria-pressed:border-primary"
+                      className="min-h-11 min-w-11 aria-pressed:border-2 aria-pressed:border-primary focus-visible:ring-2"
                     >
                       <IoMale />
                     </ToggleGroupItem>
                     <ToggleGroupItem
                       value="female"
-                      className="aria-pressed:border-2 aria-pressed:border-primary"
+                      className="min-h-11 min-w-11 aria-pressed:border-2 aria-pressed:border-primary focus-visible:ring-2"
                     >
                       <IoFemale />
                     </ToggleGroupItem>
                     <ToggleGroupItem
                       value="other"
-                      className="aria-pressed:border-2 aria-pressed:border-primary"
+                      className="min-h-11 min-w-11 aria-pressed:border-2 aria-pressed:border-primary focus-visible:ring-2"
                     >
                       <IoMaleFemale />
                     </ToggleGroupItem>
@@ -203,14 +207,14 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
             name="age"
             control={form.control}
             render={({ field }) => (
-              <FormItem className="flex flex-col rounded-lg border p-4 px-8">
+              <FormItem className="min-w-[140px] flex-1 items-center p-5 sm:min-w-[180px]">
                 <FormLabel>{localeData.age}</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger className="h-10">
                       <SelectValue placeholder={`${localeData.age}`} />
                     </SelectTrigger>
                   </FormControl>
@@ -236,7 +240,7 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
 
         <Button
           type="submit"
-          className="rounded-lg text-sm md:text-base lg:text-xl p-4 px-8 md:px-12 md:py-6"
+          className="min-h-11 w-full rounded-lg px-6 text-base font-semibold sm:px-12"
           size={"lg"}
         >
           {localeData.nextbutton}

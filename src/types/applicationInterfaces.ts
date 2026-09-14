@@ -39,7 +39,7 @@ export const defaultApplication: ApplicationInterface = {
   },
   secondForm: {
     move_date: new Date(),
-    length_stay: 0,
+    length_stay: 6,
     meet_type: "",
     more_info: "",
   },

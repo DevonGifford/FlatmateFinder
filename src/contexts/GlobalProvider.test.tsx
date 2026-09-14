@@ -34,7 +34,7 @@ describe("Testing the testing environment", () => {
       </GlobalProvider>
     );
     //- Assert
-    const mainHeading = screen.getByText("Calle de Muller");
+    const mainHeading = screen.getByText("Flatmate Finder");
     expect(mainHeading).toBeDefined();
     const subHeading = screen.getByText("Welcome to");
     expect(subHeading).toBeDefined();
@@ -65,9 +65,9 @@ describe("Testing the testing environment", () => {
 
     //- Act
     const input = screen.getByLabelText("Enter password");
-    const startButton = screen.getByRole("button", { name: "Start" });
+    const continueButton = screen.getByRole("button", { name: "Continue" });
     await userEvent.type(input, "WrongPassword");
-    await userEvent.click(startButton);
+    await userEvent.click(continueButton);
 
     //- Assert
     await waitFor(() => {
@@ -101,13 +101,13 @@ describe("Testing Global `locale`, switching between the two locales", () => {
     const welcomeHeading = screen.getByText(/^Bienvenido a/i);
     const passwordHeading = screen.getByText(/^Ingresar contraseña/i);
     const passwordText = screen.getByText(
-      /^Una contraseña secreta compartida contigo/i
+      /^Usa la contraseña compartida contigo/i
     );
-    const startButton = screen.getByText(/^Comenzar/i);
+    const continueButton = screen.getByText(/^Continuar/i);
     expect(welcomeHeading).toBeDefined();
     expect(passwordHeading).toBeDefined();
     expect(passwordText).toBeDefined();
-    expect(startButton).toBeDefined();
+    expect(continueButton).toBeDefined();
   });
 
   test("SET_LOCALE - should render with ES and switch to EN", async () => {
@@ -118,7 +118,7 @@ describe("Testing Global `locale`, switching between the two locales", () => {
     customRenderApp(partialState);
 
     // Assert initial render with ES Locale set
-    const mainHeading = screen.getByText("Calle de Muller");
+    const mainHeading = screen.getByText("Flatmate Finder");
     const welcomeHeadingES = screen.getByText(/^Bienvenido a/i);
     const passwordHeadingES = screen.getByText(/^Ingresar contraseña/i);
     expect(mainHeading).toBeDefined();
@@ -138,6 +138,76 @@ describe("Testing Global `locale`, switching between the two locales", () => {
   });
 });
 
+describe("Testing guest access", () => {
+  test("guest applicant can enter the applicant experience", async () => {
+    customRenderApp({});
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "Guest applicant" })
+    );
+
+    expect(screen.getByText("Guest mode — changes are not saved")).toBeDefined();
+    expect(screen.getByLabelText("Name & Surname")).toBeDefined();
+  });
+
+  test("guest tenant can enter the tenant experience", async () => {
+    customRenderApp({});
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "Guest tenant" })
+    );
+
+    expect(screen.getByText("Guest mode — changes are not saved")).toBeDefined();
+    expect(screen.getByText("Welcome, Devon")).toBeDefined();
+  });
+
+  test("guest access copy follows the selected Spanish locale", async () => {
+    customRenderApp({ locale: "ES" });
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "Solicitante invitado" })
+    );
+
+    expect(screen.getByText("Modo invitado — los cambios no se guardan")).toBeDefined();
+  });
+
+  test("Spanish guest tenants see localized tenant navigation and pages", async () => {
+    customRenderApp({ locale: "ES" });
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "Inquilino invitado" })
+    );
+
+    expect(screen.getByText("Bienvenido, Devon")).toBeDefined();
+    expect(
+      screen.getByText(/Este es el panel de inquilinos/)
+    ).toBeDefined();
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "Open tenant menu" })
+    );
+    expect(screen.getByText("Panel principal")).toBeDefined();
+    expect(screen.getByText("Clasificación")).toBeDefined();
+
+    await userEvent.click(screen.getByText("Clasificación"));
+    expect(screen.getByText("Clasificación actual")).toBeDefined();
+  });
+
+  test("clears a persisted guest session on a public page", async () => {
+    window.history.pushState({}, "", "/FAQ");
+    customRenderApp({
+      isAuthenticatedTenant: true,
+      accessMode: "guest-tenant",
+      loggedTenant: "Devon",
+    });
+
+    expect(screen.queryByText("Guest mode — changes are not saved")).toBeNull();
+    await waitFor(() => {
+      expect(sessionStorage.getItem("flatmate-finder-auth")).toBeNull();
+    });
+  });
+});
+
 // DONE
 describe("Testing Global `isAuthenticated` and `loggedTenant`, with password submission form", () => {
   test("SET_TENANT + PROFILE - correct password should result in success toast notif", async () => {
@@ -148,11 +218,11 @@ describe("Testing Global `isAuthenticated` and `loggedTenant`, with password sub
       </GlobalProvider>
     );
     const input = screen.getByLabelText("Enter password");
-    const startButton = screen.getByRole("button", { name: "Start" });
+    const continueButton = screen.getByRole("button", { name: "Continue" });
 
     //- Act
     await userEvent.type(input, "test-tenant-password");
-    await userEvent.click(startButton);
+    await userEvent.click(continueButton);
 
     //- Assert that the toast notification appears
     await waitFor(() => {
@@ -169,11 +239,11 @@ describe("Testing Global `isAuthenticated` and `loggedTenant`, with password sub
       </GlobalProvider>
     );
     const input = screen.getByLabelText("Enter password");
-    const startButton = screen.getByRole("button", { name: "Start" });
+    const continueButton = screen.getByRole("button", { name: "Continue" });
 
     //- Act
     await userEvent.type(input, "test-applicant-password-three");
-    await userEvent.click(startButton);
+    await userEvent.click(continueButton);
 
     //- Assert that the toast notification appears
     await waitFor(() => {
@@ -199,7 +269,7 @@ describe("Testing Global `isAuthenticated` and `loggedTenant`, with password sub
       </GlobalProvider>
     );
 
-    expect(screen.getByText("Welcome to your profile Devon")).toBeDefined();
+    expect(screen.getByText("Welcome, Devon")).toBeDefined();
   });
 
   test("logout resets auth and clears the persisted session", async () => {
@@ -215,7 +285,9 @@ describe("Testing Global `isAuthenticated` and `loggedTenant`, with password sub
       </GlobalProvider>
     );
 
-    await userEvent.click(screen.getByRole("button", { name: "" }));
+    await userEvent.click(
+      screen.getByRole("button", { name: "Open tenant menu" })
+    );
     await userEvent.click(screen.getByRole("button", { name: "Logout" }));
 
     expect(sessionStorage.getItem("flatmate-finder-auth")).toBeNull();

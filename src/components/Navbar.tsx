@@ -4,7 +4,7 @@ import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { HelpCircle, HomeIcon, XSquare } from "lucide-react";
+import { ArrowLeft, HelpCircle, XSquare } from "lucide-react";
 
 export default function Navbar() {
   const match = useMatch("*"); //- match any route
@@ -28,15 +28,16 @@ export default function Navbar() {
             <XSquare size={25} />
           </Button>
         ) : match && match.pathname === "/FAQ" ? (
-          //👉 HOME button if URL is "/FAQ"
+          //👉 BACK button if URL is "/FAQ"
           <Button
             onClick={() => navigate("/")}
             size={"sm"}
             variant={"ghost"}
-            className="flex flex-row gap-1 transition ease-in-out duration-150 hover:scale-110"
+            className="flex h-10 flex-row gap-2 px-3 transition ease-in-out duration-150 hover:scale-105"
             aria-label="back-home"
           >
-            <HomeIcon size={22} />
+            <ArrowLeft size={20} />
+            <span className="text-base">Back</span>
           </Button>
         ) : (
           //👉 Default FAQ Button

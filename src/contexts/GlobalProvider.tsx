@@ -10,7 +10,7 @@ const AUTH_STORAGE_KEY = "flatmate-finder-auth";
 
 type PersistedAuth = Pick<
   GlobalStateInterface,
-  "isAuthenticatedApplicant" | "isAuthenticatedTenant" | "loggedTenant"
+  "isAuthenticatedApplicant" | "isAuthenticatedTenant" | "accessMode" | "loggedTenant"
 >;
 
 function readPersistedAuth(): PersistedAuth | null {
@@ -32,9 +32,27 @@ function readPersistedAuth(): PersistedAuth | null {
       return null;
     }
 
+    const persistedMode = authRecord.accessMode;
+    const accessMode =
+      typeof persistedMode === "string" &&
+      [
+        "none",
+        "applicant",
+        "tenant",
+        "guest-applicant",
+        "guest-tenant",
+      ].includes(persistedMode)
+        ? (persistedMode as PersistedAuth["accessMode"])
+        : authRecord.isAuthenticatedTenant
+          ? "tenant"
+          : authRecord.isAuthenticatedApplicant
+            ? "applicant"
+            : "none";
+
     return {
       isAuthenticatedApplicant: authRecord.isAuthenticatedApplicant,
       isAuthenticatedTenant: authRecord.isAuthenticatedTenant,
+      accessMode,
       loggedTenant: authRecord.loggedTenant,
     };
   } catch {
@@ -62,6 +80,7 @@ export const GlobalProvider: React.FC<Props> = ({ children, initialState }) => {
     const auth: PersistedAuth = {
       isAuthenticatedApplicant: globalState.isAuthenticatedApplicant,
       isAuthenticatedTenant: globalState.isAuthenticatedTenant,
+      accessMode: globalState.accessMode,
       loggedTenant: globalState.loggedTenant,
     };
 
@@ -77,6 +96,7 @@ export const GlobalProvider: React.FC<Props> = ({ children, initialState }) => {
   }, [
     globalState.isAuthenticatedApplicant,
     globalState.isAuthenticatedTenant,
+    globalState.accessMode,
     globalState.loggedTenant,
   ]);
 

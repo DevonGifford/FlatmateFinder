@@ -4,6 +4,10 @@ export interface HomePageData {
   passwordLabel: string;
   passwordDescription: string;
   startButton: string;
+  guestPrompt: string;
+  guestApplicant: string;
+  guestTenant: string;
+  guestBanner: string;
 }
 
 export interface FirstFormData {
@@ -55,4 +59,8 @@ export interface ThirdFormData {
 export interface ThankyouPageData {
   checkoutHeading: string;
   faqheading: string;
+}
+
+export interface TenantPageData {
+  [key: string]: string;
 }
