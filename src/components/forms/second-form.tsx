@@ -109,6 +109,7 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
                 <PopoverTrigger
                   render={
                     <Button
+                      type="button"
                       variant={"secondary"}
                       className={cn(
                         "h-10 w-full pl-3 text-left font-normal",
@@ -121,15 +122,12 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
                     {field.value instanceof Date ? field.value.toDateString() : localeData.pickDate}
                   </span>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
+                <PopoverContent className="w-auto p-0" align="center">
                   <Calendar
                     mode="single"
                     selected={field.value}
                     onSelect={field.onChange}
-                    disabled={(date) =>
-                      date < new Date("2024-01-20") ||
-                      date < new Date("1900-01-01")
-                    }
+                    disabled={(date) => date < new Date("2026-09-01")}
                   />
                 </PopoverContent>
               </Popover>

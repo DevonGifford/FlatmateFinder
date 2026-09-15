@@ -45,7 +45,7 @@ export default function TenantTinderPage() { useRequireTenant();
   const dispatch = useGlobalDispatch();
   const { applicantPool, loggedTenant, accessMode, locale } = useGlobalState();
   const localeData: TenantPageData = locale === "EN" ? tenantData_EN : tenantData_ES;
-  const isGuestSession = accessMode === "guest-tenant";
+  const isDemoSession = accessMode === "demo-tenant";
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [starRatings, setStarRatings] = useState<number[]>(
     Array(applicantPool?.length).fill(0)
@@ -98,7 +98,7 @@ export default function TenantTinderPage() { useRequireTenant();
     if (applicantPool && applicantPool[cardIndex]?.rankings) {
       const updatedRankings = applicantPool[cardIndex].rankings;
 
-      if (!isGuestSession) {
+      if (!isDemoSession) {
         void updateRanking(
           applicantPool[cardIndex].uuid,
           updatedRankings,

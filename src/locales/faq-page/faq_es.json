@@ -17,12 +17,12 @@
     },
     {
       "question": "Cómo es el vecindario?",
-      "answer": "Valdeacederas ofrece un ambiente seguro y tranquilo con servicios cercanos como restaurantes, supermercados y fácil acceso al transporte público.",
+      "answer": "El vecindario ofrece un ambiente seguro y tranquilo, con servicios cercanos como restaurantes, supermercados y fácil acceso al transporte público.",
       "emoji": "🏙️"
     },
     {
       "question": "Cuánto es el alquiler mensual y qué costos adicionales debo esperar?",
-      "answer": "El alquiler es de €550 al mes. Los servicios se dividen entre los inquilinos, con un promedio de €40 a €60 al mes. Utilizamos la aplicación Splitwise para rastrear cualquier gasto compartido, algunos euros al mes.",
+      "answer": "El precio del alquiler depende de la habitación. Los gastos no están incluidos y se dividen entre los inquilinos, normalmente entre 50 € y 80 € al mes. Usamos Splitwise para llevar el control de los gastos compartidos.",
       "emoji": "💸"
     },
     {

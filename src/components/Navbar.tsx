@@ -54,7 +54,7 @@ export default function Navbar() {
         )}
 
         {/* //👇 LANGUAGE SETTINGS */}
-        <ToggleGroup type="single">
+        <ToggleGroup type="single" value={locale}>
           <ToggleGroupItem
             variant={"outline"}
             value="EN"
@@ -64,9 +64,8 @@ export default function Navbar() {
                 payload: "EN",
               })
             }
-            className={`${
-              locale === "EN" ? "bg-cyan-600/20" : "hover:bg-cyan-600/20"
-            }`}
+            className={`${locale === "EN" ? "bg-cyan-600/20" : "hover:bg-cyan-600/20"
+              } aria-pressed:bg-cyan-600/20 aria-pressed:text-foreground aria-pressed:hover:bg-cyan-600/20`}
             aria-label="locale-en"
           >
             <Avatar className="h-6 w-6">
@@ -82,9 +81,8 @@ export default function Navbar() {
                 payload: "ES",
               })
             }
-            className={`${
-              locale === "ES" ? "bg-cyan-600/20" : "hover:bg-cyan-600/20"
-            }`}
+            className={`${locale === "ES" ? "bg-cyan-600/20" : "hover:bg-cyan-600/20"
+              } aria-pressed:bg-cyan-600/20 aria-pressed:text-foreground aria-pressed:hover:bg-cyan-600/20`}
             aria-label="locale-es"
           >
             <Avatar className="h-6 w-6">

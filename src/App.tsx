@@ -37,54 +37,54 @@ function AppContent() {
   const location = useLocation();
   const localeData: HomePageData = locale === "EN" ? homeData_EN : homeData_ES;
   const isPublicRoute = location.pathname === "/" || location.pathname === "/FAQ";
-  const isGuestApplicantArea =
-    accessMode === "guest-applicant" &&
+  const isDemoApplicantArea =
+    accessMode === "demo-applicant" &&
     ["/form", "/thankyou"].includes(location.pathname);
-  const isGuestTenantArea =
-    accessMode === "guest-tenant" &&
+  const isDemoTenantArea =
+    accessMode === "demo-tenant" &&
     ["/admin-welcome", "/admin-tinder", "/admin-leaderboard"].includes(
       location.pathname
     );
-  const isGuestArea = isGuestApplicantArea || isGuestTenantArea;
-  const isGuestSession =
-    accessMode === "guest-applicant" || accessMode === "guest-tenant";
-  const guestSessionOnMount = useRef(isGuestSession);
-  const wasInGuestArea = useRef(isGuestArea);
+  const isDemoArea = isDemoApplicantArea || isDemoTenantArea;
+  const isDemoSession =
+    accessMode === "demo-applicant" || accessMode === "demo-tenant";
+  const demoSessionOnMount = useRef(isDemoSession);
+  const wasInDemoArea = useRef(isDemoArea);
 
   useEffect(() => {
     if (
-      isGuestSession &&
+      isDemoSession &&
       isPublicRoute &&
-      (guestSessionOnMount.current || wasInGuestArea.current)
+      (demoSessionOnMount.current || wasInDemoArea.current)
     ) {
       dispatch({ type: "RESET_AUTH" });
     }
-    wasInGuestArea.current = isGuestArea;
-  }, [dispatch, isGuestArea, isGuestSession, isPublicRoute]);
+    wasInDemoArea.current = isDemoArea;
+  }, [dispatch, isDemoArea, isDemoSession, isPublicRoute]);
 
   const showTenantShell =
-    isAuthenticatedTenant && (!isGuestSession || isGuestTenantArea);
+    isAuthenticatedTenant && (!isDemoSession || isDemoTenantArea);
 
   return (
     <>
       {!showTenantShell && <Navbar />}
       {showTenantShell && <Sidebar />}
       <main className="flex flex-col h-auto gap-3 lg:gap-5">
-        {isGuestArea && (
+        {isDemoArea && (
           <p className="mx-auto rounded-full bg-muted px-4 py-1 text-center text-sm text-muted-foreground">
-            {localeData.guestBanner}
+            {localeData.demoBanner}
           </p>
         )}
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/FAQ" element={<FaqPage />} />
-          {(isAuthenticatedApplicant || accessMode === "guest-applicant") && (
+          {(isAuthenticatedApplicant || accessMode === "demo-applicant") && (
             <>
               <Route path="/form" element={<ApplicationPage />} />
               <Route path="/thankyou" element={<ThankyouPage />} />
             </>
           )}
-          {(isAuthenticatedTenant || accessMode === "guest-tenant") && (
+          {(isAuthenticatedTenant || accessMode === "demo-tenant") && (
             <>
               <Route path="/admin-welcome" element={<TenantWelcomePage />} />
               <Route path="/admin-tinder" element={<TenantTinderPage />} />

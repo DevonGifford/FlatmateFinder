@@ -14,8 +14,10 @@ import {
 
 export default function TenantWelcomePage() {
   useRequireTenant();
-  const { loggedTenant, locale } = useGlobalState();
+  const { loggedTenant, accessMode, locale } = useGlobalState();
   const localeData: TenantPageData = locale === "EN" ? tenantData_EN : tenantData_ES;
+  // Keep the internal tenant identity available for demo ranking behavior.
+  const tenantDisplayName = accessMode === "demo-tenant" ? "Demo-Tenant" : loggedTenant;
 
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-col gap-8 px-4 py-8 sm:px-6 lg:gap-10 lg:py-12">
@@ -25,7 +27,7 @@ export default function TenantWelcomePage() {
           {localeData.dashboardEyebrow}
         </div>
         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-          {localeData.welcome}, {loggedTenant}
+          {localeData.welcome}, {tenantDisplayName}
         </h1>
         <p className="mt-3 max-w-2xl text-base text-muted-foreground sm:text-lg">
           {localeData.dashboardDescription}
@@ -38,9 +40,6 @@ export default function TenantWelcomePage() {
             <ClipboardCheck className="h-5 w-5" />
             <h2 className="text-xl font-bold">{localeData.howItWorks}</h2>
           </div>
-          <p className="max-w-xl text-sm text-muted-foreground">
-            {localeData.howItWorksDescription}
-          </p>
         </div>
         <ol className="grid gap-5 text-sm text-muted-foreground sm:grid-cols-3 sm:gap-6">
           <li className="flex flex-col items-center gap-3 text-center">

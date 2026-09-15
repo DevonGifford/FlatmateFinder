@@ -4,8 +4,9 @@
   "passwordLabel": "Ingresar contraseña",
   "passwordDescription": "Usa la contraseña compartida contigo.",
   "startButton": "Continuar",
-  "guestPrompt": "¿Solo estás explorando?",
-  "guestApplicant": "Solicitante invitado",
-  "guestTenant": "Inquilino invitado",
-  "guestBanner": "Modo invitado — los cambios no se guardan"
+  "demoPrompt": "¿Solo estás explorando?",
+  "demoPromptDescription": "Prueba la aplicación como solicitante o inquilino.",
+  "demoApplicant": "Solicitante",
+  "demoTenant": "Inquilino",
+  "demoBanner": "Modo demo — los cambios no se guardan"
 }

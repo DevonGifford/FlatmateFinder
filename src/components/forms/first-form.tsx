@@ -54,7 +54,7 @@ const firstFormSchema = (
     name: z.string({ error: required }).trim().min(1, required).max(50, tooLong),
     age: z.string({ error: required }).trim().min(1, required).max(10, tooLong),
     sex: z.string({ error: required }).trim().min(1, required).max(10, tooLong),
-    phone: z.string({ error: required }).trim().min(1, required).max(16, tooLong),
+    phone: z.string({ error: required }).trim().min(1, required).max(25, tooLong),
     languages: z.array(z.string()).optional(),
   });
 };
@@ -99,12 +99,12 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="flex justify-center text-center">
+              <FormLabel>
                 {localeData.name}
               </FormLabel>
 
               <FormControl>
-                <Input placeholder="" className=" text-center" {...field} />
+                <Input placeholder="" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -121,44 +121,13 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
 
               <FormControl>
                 <Input
-                  placeholder=""
+                  id="form-phone"
+                  type="tel"
+                  inputMode="tel"
+                  autoComplete="tel"
                   className="text-center sm:text-left"
                   {...field}
                 />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          name="languages"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem className="p-5">
-              <FormLabel className="flex flex-col justify-center gap-1 text-center">
-                {localeData.spoken}
-                <p className="text-sm font-normal italic text-muted-foreground">
-                  {localeData.optional}
-                </p>
-              </FormLabel>
-              <FormControl>
-                <ToggleGroup
-                  size="sm"
-                  type="multiple"
-                  value={field.value}
-                  onValueChange={(value) => field.onChange(value)}
-                  className="w-full flex-wrap justify-center gap-2"
-                >
-                  {languages.map((lang) => (
-                    <ToggleGroupItem
-                      key={lang.label}
-                      value={lang.label}
-                      className="min-h-10 px-3 focus-visible:ring-2"
-                    >
-                      {lang.label}
-                    </ToggleGroupItem>
-                  ))}
-                </ToggleGroup>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -169,7 +138,7 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
             name="sex"
             control={form.control}
             render={({ field }) => (
-              <FormItem className="min-w-[140px] flex-1 p-5 sm:min-w-[180px]">
+              <FormItem className="min-w-35 flex-1 p-5 sm:min-w-45">
                 <FormLabel className="text-center">{localeData.gender}</FormLabel>
                 <FormControl>
                   <ToggleGroup
@@ -207,14 +176,14 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
             name="age"
             control={form.control}
             render={({ field }) => (
-              <FormItem className="min-w-[140px] flex-1 items-center p-5 sm:min-w-[180px]">
+              <FormItem className="min-w-35 flex-1 items-center p-5 sm:min-w-45">
                 <FormLabel>{localeData.age}</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger className="h-10">
+                    <SelectTrigger className="h-10 w-full justify-center">
                       <SelectValue placeholder={`${localeData.age}`} />
                     </SelectTrigger>
                   </FormControl>
@@ -237,6 +206,41 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
             )}
           />
         </div>
+
+        <FormField
+          name="languages"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem className="p-5">
+              <FormLabel className="flex flex-col justify-center gap-1 text-center">
+                {localeData.spoken}
+                <p className="text-sm font-normal italic text-muted-foreground">
+                  {localeData.optional}
+                </p>
+              </FormLabel>
+              <FormControl>
+                <ToggleGroup
+                  size="sm"
+                  type="multiple"
+                  value={field.value}
+                  onValueChange={(value) => field.onChange(value)}
+                  className="w-full flex-wrap justify-center gap-2"
+                >
+                  {languages.map((lang) => (
+                    <ToggleGroupItem
+                      key={lang.label}
+                      value={lang.label}
+                      className="min-h-10 px-3 focus-visible:ring-2"
+                    >
+                      {lang.label}
+                    </ToggleGroupItem>
+                  ))}
+                </ToggleGroup>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <Button
           type="submit"

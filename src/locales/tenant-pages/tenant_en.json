@@ -12,7 +12,6 @@
   "welcome": "Welcome",
   "dashboardDescription": "This is the tenant dashboard, where current tenants can review applicants and compare ratings.",
   "howItWorks": "How it works",
-  "howItWorksDescription": "A quick review process to help everyone compare applicants consistently.",
   "stepOne": "Open the applicant deck and read each profile.",
   "stepTwo": "Give a star rating, then swipe left or right.",
   "stepThree": "Use the leaderboard to compare the shortlist.",

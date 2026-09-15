@@ -1,4 +1,5 @@
 import * as z from "zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,6 +25,7 @@ import { HomePageData } from "@/types/localeInterfaces";
 import Data_EN from "@/locales/home-page/home_en.json";
 import Data_ES from "@/locales/home-page/home_es.json";
 import { applicantAccess, tenantAccess } from "@/lib/auth/accessPasswords";
+import { Eye, EyeOff } from "lucide-react";
 
 const FormSchema = z.object({
   password: z.string().min(5, {
@@ -32,6 +34,7 @@ const FormSchema = z.object({
 });
 
 export default function HomePage() {
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const dispatch = useGlobalDispatch();
   const { locale } = useGlobalState();
@@ -74,19 +77,19 @@ export default function HomePage() {
     toastCorrectPassword();
   }
 
-  function handleGuestApplicant() {
-    dispatch({ type: "SET_GUEST_APPLICANT" });
+  function handleDemoApplicant() {
+    dispatch({ type: "SET_DEMO_APPLICANT" });
     navigate("/form");
   }
 
-  function handleGuestTenant() {
-    dispatch({ type: "SET_GUEST_TENANT" });
+  function handleDemoTenant() {
+    dispatch({ type: "SET_DEMO_TENANT" });
     dispatch({ type: "SET_TENANT_PROFILE", payload: "Devon" });
     navigate("/admin-welcome");
   }
 
   return (
-    <section className="mx-auto flex min-h-[calc(100vh-8rem)] w-full max-w-5xl flex-col items-center justify-center gap-8 px-4 py-8 sm:px-8 md:gap-10 md:py-12">
+    <section className="mx-auto flex min-h-[calc(100vh-8rem)] w-full max-w-5xl flex-col items-center justify-center gap-4 px-4 py-8 sm:px-8 md:gap-6 md:py-12">
       <header className="flex max-w-2xl flex-col items-center gap-2 text-center">
         <span className="text-xl italic text-muted-foreground sm:text-2xl">
           {localeData.subHeading}
@@ -108,27 +111,40 @@ export default function HomePage() {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-6"
+            className="flex flex-col gap-4"
           >
             <FormField
               name="password"
               control={form.control}
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="w-full text-center text-xl font-bold sm:text-2xl">
+                <FormItem className="border-0">
+                  <FormLabel className="w-full justify-center text-center text-xl font-bold sm:text-2xl">
                     {localeData.passwordLabel}
                   </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder=""
-                      className="text-center"
-                      autoFocus
-                      {...field}
-                    />
-                  </FormControl>
                   <FormDescription className="text-center">
                     {localeData.passwordDescription}
                   </FormDescription>
+                  <div className="relative">
+                    <FormControl>
+                      <Input
+                        placeholder=""
+                        className="pr-10 text-center"
+                        autoFocus
+                        type={showPassword ? "text" : "password"}
+                        {...field}
+                      />
+                    </FormControl>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon-sm"
+                      onClick={() => setShowPassword((visible) => !visible)}
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                      className="absolute right-1 top-1/2 -translate-y-1/2"
+                    >
+                      {showPassword ? <EyeOff /> : <Eye />}
+                    </Button>
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}
@@ -138,26 +154,34 @@ export default function HomePage() {
             </Button>
           </form>
         </Form>
-      </div>
-      <div className="flex flex-col items-center gap-3 text-center">
-        <p className="text-sm text-muted-foreground">{localeData.guestPrompt}</p>
-        <div className="flex flex-wrap justify-center gap-2">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={handleGuestApplicant}
-            className="transition hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.98]"
-          >
-            {localeData.guestApplicant}
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={handleGuestTenant}
-            className="transition hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.98]"
-          >
-            {localeData.guestTenant}
-          </Button>
+
+        <div className="flex flex-col items-center gap-3 py-4 text-center">
+          <div className="flex flex-col items-center gap-1">
+            <p className="text-sm text-muted-foreground">
+              {localeData.demoPrompt}
+            </p>
+            <p className="text-xs italic text-muted-foreground">
+              {localeData.demoPromptDescription}
+            </p>
+          </div>
+          <div className="flex flex-wrap justify-center gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleDemoApplicant}
+              className="transition hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.98]"
+            >
+              {localeData.demoApplicant}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleDemoTenant}
+              className="transition hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.98]"
+            >
+              {localeData.demoTenant}
+            </Button>
+          </div>
         </div>
       </div>
     </section>

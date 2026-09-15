@@ -138,47 +138,47 @@ describe("Testing Global `locale`, switching between the two locales", () => {
   });
 });
 
-describe("Testing guest access", () => {
-  test("guest applicant can enter the applicant experience", async () => {
+describe("Testing demo access", () => {
+  test("demo applicant can enter the applicant experience", async () => {
     customRenderApp({});
 
     await userEvent.click(
-      screen.getByRole("button", { name: "Guest applicant" })
+      screen.getByRole("button", { name: "Applicant" })
     );
 
-    expect(screen.getByText("Guest mode — changes are not saved")).toBeDefined();
+    expect(screen.getByText("Demo mode — changes are not saved")).toBeDefined();
     expect(screen.getByLabelText("Name & Surname")).toBeDefined();
   });
 
-  test("guest tenant can enter the tenant experience", async () => {
+  test("demo tenant can enter the tenant experience", async () => {
     customRenderApp({});
 
     await userEvent.click(
-      screen.getByRole("button", { name: "Guest tenant" })
+      screen.getByRole("button", { name: "Tenant" })
     );
 
-    expect(screen.getByText("Guest mode — changes are not saved")).toBeDefined();
-    expect(screen.getByText("Welcome, Devon")).toBeDefined();
+    expect(screen.getByText("Demo mode — changes are not saved")).toBeDefined();
+    expect(screen.getByText("Welcome, Demo-Tenant")).toBeDefined();
   });
 
-  test("guest access copy follows the selected Spanish locale", async () => {
+  test("demo access copy follows the selected Spanish locale", async () => {
     customRenderApp({ locale: "ES" });
 
     await userEvent.click(
-      screen.getByRole("button", { name: "Solicitante invitado" })
+      screen.getByRole("button", { name: "Solicitante" })
     );
 
-    expect(screen.getByText("Modo invitado — los cambios no se guardan")).toBeDefined();
+    expect(screen.getByText("Modo demo — los cambios no se guardan")).toBeDefined();
   });
 
-  test("Spanish guest tenants see localized tenant navigation and pages", async () => {
+  test("Spanish demo tenants see localized tenant navigation and pages", async () => {
     customRenderApp({ locale: "ES" });
 
     await userEvent.click(
-      screen.getByRole("button", { name: "Inquilino invitado" })
+      screen.getByRole("button", { name: "Inquilino" })
     );
 
-    expect(screen.getByText("Bienvenido, Devon")).toBeDefined();
+    expect(screen.getByText("Bienvenido, Demo-Tenant")).toBeDefined();
     expect(
       screen.getByText(/Este es el panel de inquilinos/)
     ).toBeDefined();
@@ -193,15 +193,15 @@ describe("Testing guest access", () => {
     expect(screen.getByText("Clasificación actual")).toBeDefined();
   });
 
-  test("clears a persisted guest session on a public page", async () => {
+  test("clears a persisted demo session on a public page", async () => {
     window.history.pushState({}, "", "/FAQ");
     customRenderApp({
       isAuthenticatedTenant: true,
-      accessMode: "guest-tenant",
+      accessMode: "demo-tenant",
       loggedTenant: "Devon",
     });
 
-    expect(screen.queryByText("Guest mode — changes are not saved")).toBeNull();
+    expect(screen.queryByText("Demo mode — changes are not saved")).toBeNull();
     await waitFor(() => {
       expect(sessionStorage.getItem("flatmate-finder-auth")).toBeNull();
     });
@@ -270,6 +270,32 @@ describe("Testing Global `isAuthenticated` and `loggedTenant`, with password sub
     );
 
     expect(screen.getByText("Welcome, Devon")).toBeDefined();
+  });
+
+  test("migrates a legacy demo session without treating it as real access", async () => {
+    sessionStorage.setItem(
+      "flatmate-finder-auth",
+      JSON.stringify({
+        isAuthenticatedApplicant: false,
+        isAuthenticatedTenant: true,
+        accessMode: "guest-tenant",
+        loggedTenant: "Devon",
+      })
+    );
+    window.history.pushState({}, "", "/admin-welcome");
+
+    render(
+      <GlobalProvider initialState={initialState}>
+        <App />
+      </GlobalProvider>
+    );
+
+    await waitFor(() => {
+      const storedAuth = JSON.parse(
+        sessionStorage.getItem("flatmate-finder-auth") ?? "{}"
+      ) as { accessMode?: string };
+      expect(storedAuth.accessMode).toBe("demo-tenant");
+    });
   });
 
   test("logout resets auth and clears the persisted session", async () => {

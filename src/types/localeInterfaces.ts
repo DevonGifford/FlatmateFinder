@@ -4,10 +4,11 @@ export interface HomePageData {
   passwordLabel: string;
   passwordDescription: string;
   startButton: string;
-  guestPrompt: string;
-  guestApplicant: string;
-  guestTenant: string;
-  guestBanner: string;
+  demoPrompt: string;
+  demoPromptDescription: string;
+  demoApplicant: string;
+  demoTenant: string;
+  demoBanner: string;
 }
 
 export interface FirstFormData {
