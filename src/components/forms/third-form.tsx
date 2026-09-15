@@ -1,33 +1,38 @@
-import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Building, Home, Link, Video } from "lucide-react";
+import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
-import type { Dispatch, SetStateAction } from "react";
-import { useGlobalState } from "@/hooks/useGlobalState";
-import { Button } from "@/components/ui/button";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
+import * as z from "zod";
+
 import { Spinner } from "@/components/Spinner";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Building, Home, Link, Video } from "lucide-react";
-import { ApplicationInterface, defaultApplication } from "@/types/applicationInterfaces";
-import { createApplicantDoc } from "@/lib/firebase/firestore";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { useGlobalState } from "@/hooks/useGlobalState";
 import { toastError, toastFormComplete } from "@/lib/customToast";
-import { ThirdFormData } from "@/types/localeInterfaces";
-import { normalizeExternalUrl } from "@/lib/utils";
+import { createApplicantDoc } from "@/lib/firebase/firestore";
 import { getValidationMessages } from "@/lib/forms/formUtils";
-
+import { normalizeExternalUrl } from "@/lib/utils";
 import Data_EN from "@/locales/applicant-form/thirdform_en.json";
 import Data_ES from "@/locales/applicant-form/thirdform_es.json";
+import {
+  ApplicationInterface,
+  defaultApplication,
+} from "@/types/applicationInterfaces";
+import { isApplicantSession } from "@/types/globalStateInterfaces";
+import { ThirdFormData } from "@/types/localeInterfaces";
 
 type ThirdFormValues = {
   job_title: string;
@@ -38,15 +43,23 @@ type ThirdFormValues = {
 };
 
 const thirdFormSchema = (
-  locale: "EN" | "ES"
+  locale: "EN" | "ES",
 ): z.ZodType<ThirdFormValues, ThirdFormValues> => {
   const { required, tooLong, invalidUrl } = getValidationMessages(locale);
 
   return z.object({
     job_title: z.string({ error: required }).trim().min(1, required),
     job_type: z.string().optional(),
-    describe: z.string({ error: required }).trim().min(1, required).max(500, tooLong),
-    hobbies: z.string({ error: required }).trim().min(1, required).max(500, tooLong),
+    describe: z
+      .string({ error: required })
+      .trim()
+      .min(1, required)
+      .max(500, tooLong),
+    hobbies: z
+      .string({ error: required })
+      .trim()
+      .min(1, required)
+      .max(500, tooLong),
     social_media: z
       .string()
       .trim()
@@ -65,7 +78,7 @@ interface ThirdFormProps {
 export function ThirdForm({ application, setApplication }: ThirdFormProps) {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const { locale, accessMode } = useGlobalState();
+  const { locale, session } = useGlobalState();
   const localeData: ThirdFormData = locale === "EN" ? Data_EN : Data_ES;
 
   const form = useForm<ThirdFormValues>({
@@ -80,27 +93,19 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
         throw new Error("Error: cannot access applicant context");
       }
 
-      // - Generate a unique ID for the user
-      const nameFirstFive = application.firstForm.name.slice(0, 5).replace(/\s/g, ""); // Extract first 5 letters and remove spaces
-      // This runs from the submit event, not during render.
-      // eslint-disable-next-line react-hooks/purity
-      const currentTimeStamp = Date.now().toString().slice(-5); // Extract last 5 digits of current timestamp
-      const documentId = `${nameFirstFive}-${currentTimeStamp}`;
-
       const updatedThirdForm = {
         ...application.thirdForm,
         ...data,
-        social_media: data.social_media || "",  //normalize data
-        job_type: data.job_type || "",          //normalize data
+        social_media: data.social_media || "", //normalize data
+        job_type: data.job_type || "", //normalize data
       };
 
       const completedApplication: ApplicationInterface = {
         ...application,
         thirdForm: updatedThirdForm,
-        uuid: documentId,
         photo: "",
       };
-      if (accessMode === "demo-applicant") {
+      if (isApplicantSession(session) && session.mode === "demo") {
         setIsLoading(false);
         toastFormComplete("3");
         setApplication(defaultApplication);
@@ -108,12 +113,12 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
         return;
       }
 
-      await createApplicantDoc(documentId, completedApplication, accessMode);
+      await createApplicantDoc(completedApplication, session);
 
       setIsLoading(false);
       toastFormComplete("3");
       setApplication(defaultApplication); // Reset application state
-      navigate("/thankyou");              // Update route
+      navigate("/thankyou"); // Update route
     } catch (error) {
       setIsLoading(false);
       toastError();
@@ -136,8 +141,7 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
             render={({ field }) => (
               <FormItem className="min-w-0 border-none pb-0 shadow-none">
                 <FormLabel className="flex justify-center text-center">
-                  {localeData
-              .careerTitle}
+                  {localeData.careerTitle}
                 </FormLabel>
 
                 <FormControl>
@@ -168,25 +172,22 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
                       value="wfh"
                       className="min-h-14 min-w-24 flex-col items-center justify-center gap-1 px-4 py-2 text-center aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md focus-visible:ring-2"
                     >
-                      <Home />
-                      <span className="text-xs">{localeData
-                  .wfh}</span>
+                      <Home aria-hidden="true" />
+                      <span className="text-xs">{localeData.wfh}</span>
                     </ToggleGroupItem>
                     <ToggleGroupItem
                       value="hybrid"
                       className="min-h-14 min-w-24 flex-col items-center justify-center gap-1 px-4 py-2 text-center aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md focus-visible:ring-2"
                     >
-                      <Video />
-                      <span className="text-xs">{localeData
-                  .hybrid}</span>
+                      <Video aria-hidden="true" />
+                      <span className="text-xs">{localeData.hybrid}</span>
                     </ToggleGroupItem>
                     <ToggleGroupItem
                       value="office"
                       className="min-h-14 min-w-24 flex-col items-center justify-center gap-1 px-4 py-2 text-center aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md focus-visible:ring-2"
                     >
-                      <Building />
-                      <span className="text-xs">{localeData
-                  .office}</span>
+                      <Building aria-hidden="true" />
+                      <span className="text-xs">{localeData.office}</span>
                     </ToggleGroupItem>
                   </ToggleGroup>
                 </FormControl>
@@ -202,14 +203,12 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="flex flex-col justify-center gap-1 text-center">
-                {localeData
-            .tellMoreTitle}
-                <p className="text-sm font-normal italic text-muted-foreground">
-                  {localeData
-              .tellMoreDescription}
-                </p>
-              </FormLabel>
+              <div className="flex flex-col justify-center gap-1 text-center">
+                <FormLabel>{localeData.tellMoreTitle}</FormLabel>
+                <FormDescription className="font-normal italic">
+                  {localeData.tellMoreDescription}
+                </FormDescription>
+              </div>
               <FormControl>
                 <Textarea placeholder="" {...field} />
               </FormControl>
@@ -223,14 +222,12 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="flex flex-col justify-center gap-1 text-center">
-                {localeData
-            .hobbiesTitle}
-                <p className="text-sm font-normal italic text-muted-foreground">
-                  {localeData
-              .hobbiesPlacholder}
-                </p>
-              </FormLabel>
+              <div className="flex flex-col justify-center gap-1 text-center">
+                <FormLabel>{localeData.hobbiesTitle}</FormLabel>
+                <FormDescription className="font-normal italic">
+                  {localeData.hobbiesPlacholder}
+                </FormDescription>
+              </div>
               <FormControl>
                 <Textarea placeholder="" {...field} />
               </FormControl>
@@ -243,16 +240,18 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
           control={form.control}
           render={({ field }) => (
             <FormItem className="p-5">
-              <FormLabel className="flex flex-col justify-center gap-1 text-center">
-                <p>{localeData
-            .social}</p>
-                <p className="text-sm font-normal italic text-muted-foreground">
-                  {localeData
-              .optional}
-                </p>
-              </FormLabel>
+              <div className="flex flex-col justify-center gap-1 text-center">
+                <FormLabel>{localeData.social}</FormLabel>
+                <FormDescription className="font-normal italic">
+                  {localeData.optional}
+                </FormDescription>
+              </div>
               <div className="flex flex-row justify-between items-center gap-3">
-                <Link className="text-devready-green" size={20} />
+                <Link
+                  className="text-devready-green"
+                  size={20}
+                  aria-hidden="true"
+                />
                 <FormControl>
                   <Input placeholder="Instagram, LinkedIn etc." {...field} />
                 </FormControl>
@@ -266,8 +265,7 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
           className="min-h-11 w-full rounded-lg px-6 text-base font-semibold sm:px-16"
           size={"lg"}
         >
-          {isLoading ? <Spinner /> : `${localeData
-        .completeButton}`}
+          {isLoading ? <Spinner /> : `${localeData.completeButton}`}
         </Button>
       </form>
     </Form>

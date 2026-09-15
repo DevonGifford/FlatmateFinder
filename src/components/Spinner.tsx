@@ -1,6 +1,7 @@
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
 import { Loader } from "lucide-react";
+
+import { cn } from "@/lib/utils";
 
 type SpinnerProps = VariantProps<typeof spinnerVariants>;
 
@@ -21,15 +22,18 @@ const spinnerVariants = cva("text-muted-foreground animate-spin slower", {
 
 export const Spinner = ({ size }: SpinnerProps) => {
   return (
-    <Loader
+    <span
       className={cn(
-        "text-muted-foreground animate-spin slower",
-        spinnerVariants({ size })
+        "inline-flex shrink-0 items-center justify-center text-muted-foreground animate-spin slower",
+        spinnerVariants({ size }),
       )}
-      data-testid="spinner-svg" 
-      role="progressbar" 
-      aria-valuetext="Loading" 
-      aria-busy="true" 
-    />
+      data-testid="spinner-svg"
+      role="status"
+      aria-live="polite"
+      aria-label="Loading"
+      aria-busy="true"
+    >
+      <Loader className="h-full w-full" aria-hidden="true" />
+    </span>
   );
 };

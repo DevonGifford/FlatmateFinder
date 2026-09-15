@@ -9,12 +9,23 @@ export interface HomePageData {
   demoApplicant: string;
   demoTenant: string;
   demoBanner: string;
+  faqButton: string;
+  backButton: string;
+  quitForm: string;
+  showPassword: string;
+  hidePassword: string;
+  languageEnglish: string;
+  languageSpanish: string;
+  navigationLabel: string;
 }
 
 export interface FirstFormData {
   name: string;
   whatsapp: string;
   gender: string;
+  male: string;
+  female: string;
+  otherGender: string;
   age: string;
   spoken: string;
   en: string;

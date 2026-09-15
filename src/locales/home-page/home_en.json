@@ -8,5 +8,13 @@
   "demoPromptDescription": "Preview the app as either an applicant or tenant.",
   "demoApplicant": "Applicant",
   "demoTenant": "Tenant",
-  "demoBanner": "Demo mode — changes are not saved"
+  "demoBanner": "Demo mode — changes are not saved",
+  "faqButton": "FAQ",
+  "backButton": "Back",
+  "quitForm": "Quit application",
+  "showPassword": "Show password",
+  "hidePassword": "Hide password",
+  "languageEnglish": "English",
+  "languageSpanish": "Spanish",
+  "navigationLabel": "Primary navigation"
 }

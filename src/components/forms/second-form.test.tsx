@@ -1,9 +1,11 @@
 import { render, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
+
 import { GlobalProvider } from "@/contexts/GlobalProvider";
 import { defaultApplication } from "@/types/applicationInterfaces";
 import { initialState } from "@/types/globalStateInterfaces";
+
 import { SecondForm } from "./second-form";
 
 describe("SecondForm", () => {
@@ -18,7 +20,7 @@ describe("SecondForm", () => {
             setApplication={setApplication}
           />
         </GlobalProvider>
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     const slider = container.querySelector('input[type="range"]');
@@ -47,14 +49,14 @@ describe("SecondForm", () => {
             setApplication={setApplication}
           />
         </GlobalProvider>
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     await waitFor(() => {
       expect(
         container
           .querySelector('input[type="range"]')
-          ?.getAttribute("aria-valuenow")
+          ?.getAttribute("aria-valuenow"),
       ).toBe("42");
     });
   });

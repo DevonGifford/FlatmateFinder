@@ -1,10 +1,10 @@
-import { useGlobalState } from "@/hooks/useGlobalState";
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { ThankyouPageData } from "@/types/localeInterfaces";
 
+import { Button } from "@/components/ui/button";
+import { useGlobalState } from "@/hooks/useGlobalState";
 import Data_EN from "@/locales/thankyou-page/thankyou_en.json";
 import Data_ES from "@/locales/thankyou-page/thankyou_es.json";
+import { ThankyouPageData } from "@/types/localeInterfaces";
 
 export default function ThankyouPage() {
   const { locale } = useGlobalState();
@@ -18,11 +18,11 @@ export default function ThankyouPage() {
           alt="Thank you illustration"
           className="rounded-full -translate-y-10"
           width={"500px"}
+          loading="lazy"
+          decoding="async"
         />
-        <Link to="/FAQ">
-          <h2 className="text-3xl font-bold">{localeData.checkoutHeading}</h2>
-          <Button>{localeData.faqheading}</Button>
-        </Link>
+        <h2 className="text-3xl font-bold">{localeData.checkoutHeading}</h2>
+        <Button render={<Link to="/FAQ" />}>{localeData.faqheading}</Button>
       </div>
     </>
   );

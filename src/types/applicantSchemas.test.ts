@@ -1,5 +1,6 @@
 import { Timestamp } from "firebase/firestore";
 import { describe, expect, it } from "vitest";
+
 import { parseApplicantProfile } from "./applicantSchemas";
 
 const validApplicant = {
@@ -37,7 +38,25 @@ describe("parseApplicantProfile", () => {
       parseApplicantProfile("doc-1", {
         ...validApplicant,
         secondForm: { ...validApplicant.secondForm, length_stay: "long" },
-      })
+      }),
+    ).toBeNull();
+  });
+
+  it("rejects ratings outside the supported range", () => {
+    expect(
+      parseApplicantProfile("doc-1", {
+        ...validApplicant,
+        rankings: { dev_star: 6 },
+      }),
+    ).toBeNull();
+  });
+
+  it("rejects stay lengths outside the stored slider range", () => {
+    expect(
+      parseApplicantProfile("doc-1", {
+        ...validApplicant,
+        secondForm: { ...validApplicant.secondForm, length_stay: 101 },
+      }),
     ).toBeNull();
   });
 });

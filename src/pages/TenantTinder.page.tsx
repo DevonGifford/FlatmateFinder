@@ -1,36 +1,4 @@
-import TinderCard from "react-tinder-card";
-import { useState } from "react";
-import { useGlobalState } from "@/hooks/useGlobalState";
-import tenantData_EN from "@/locales/tenant-pages/tenant_en.json";
-import tenantData_ES from "@/locales/tenant-pages/tenant_es.json";
-import { TenantPageData } from "@/types/localeInterfaces";
-import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
-import { useRequireTenant } from "@/hooks/useRequireTenant";
-import { updateRanking } from "@/lib/firebase/firestore";
-import { toastError } from "@/lib/customToast";
-import { normalizeExternalUrl } from "@/lib/utils";
-import { ProfilePic } from "@/components/ProfilePic";
-import { StarRating } from "@/components/StarRating";
-import {
-  getTenantByName,
-  TenantBooleanKey,
-  TenantStarKey,
-} from "@/lib/constants/tenants";
 import { Timestamp } from "firebase/firestore";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import {
   Building,
   CalendarClockIcon,
@@ -40,26 +8,53 @@ import {
   Video,
 } from "lucide-react";
 import { IoFemale, IoMale, IoMaleFemale } from "react-icons/io5";
+import TinderCard from "react-tinder-card";
 
-export default function TenantTinderPage() { useRequireTenant();
+import { ProfilePic } from "@/components/ProfilePic";
+import { StarRating } from "@/components/StarRating";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
+import { useGlobalState } from "@/hooks/useGlobalState";
+import { useRequireTenant } from "@/hooks/useRequireTenant";
+import {
+  getTenantById,
+  TenantBooleanKey,
+  TenantStarKey,
+} from "@/lib/constants/tenants";
+import { toastError } from "@/lib/customToast";
+import { updateRanking } from "@/lib/firebase/firestore";
+import { normalizeExternalUrl } from "@/lib/utils";
+import tenantData_EN from "@/locales/tenant-pages/tenant_en.json";
+import tenantData_ES from "@/locales/tenant-pages/tenant_es.json";
+import { TenantPageData } from "@/types/localeInterfaces";
+
+export default function TenantTinderPage() {
+  useRequireTenant();
   const dispatch = useGlobalDispatch();
-  const { applicantPool, loggedTenant, accessMode, locale } = useGlobalState();
-  const localeData: TenantPageData = locale === "EN" ? tenantData_EN : tenantData_ES;
-  const isDemoSession = accessMode === "demo-tenant";
-  const [currentCardIndex, setCurrentCardIndex] = useState(0);
-  const [starRatings, setStarRatings] = useState<number[]>(
-    Array(applicantPool?.length).fill(0)
-  );
+  const { applicantPool, session, locale } = useGlobalState();
+  const localeData: TenantPageData =
+    locale === "EN" ? tenantData_EN : tenantData_ES;
+  const isDemoSession = session.role === "tenant" && session.mode === "demo";
 
-  const tenant = getTenantByName(loggedTenant);
+  const tenant =
+    session.role === "tenant" ? getTenantById(session.tenantId) : undefined;
 
   //- Handle star-ranking individual applicants - updates global context
   const handleStarClick = (starIndex: number, cardIndex: number) => {
-    const newRatings = [...starRatings];
-    newRatings[cardIndex] = starIndex + 1;
-    setStarRatings(newRatings);
-
-    if (loggedTenant && applicantPool) {
+    if (tenant && applicantPool) {
       const cardData = applicantPool[cardIndex];
 
       if (cardData) {
@@ -76,7 +71,7 @@ export default function TenantTinderPage() { useRequireTenant();
 
   //- Handle swipe-ranking individual applicants - updates global context + sets next card
   const onSwipe = (direction: string, cardIndex: number) => {
-    if (loggedTenant && applicantPool) {
+    if (tenant && applicantPool) {
       const cardData = applicantPool[cardIndex];
 
       if (cardData) {
@@ -88,7 +83,6 @@ export default function TenantTinderPage() { useRequireTenant();
         }
 
         dispatch({ type: "UPDATE_APPLICANT_POOL", payload: [updatedCard] });
-        setCurrentCardIndex(currentCardIndex + 1);
       }
     }
   };
@@ -102,7 +96,7 @@ export default function TenantTinderPage() { useRequireTenant();
         void updateRanking(
           applicantPool[cardIndex].uuid,
           updatedRankings,
-          accessMode
+          session,
         ).catch(() => toastError("Something went wrong"));
       }
     } else {
@@ -113,27 +107,27 @@ export default function TenantTinderPage() { useRequireTenant();
   //- General Helper Function - Icons & Conversions
   const genderIcon = (gender: string) => {
     if (gender === "male") {
-      return <IoMale />;
+      return <IoMale aria-hidden="true" />;
     } else if (gender === "female") {
-      return <IoFemale />;
+      return <IoFemale aria-hidden="true" />;
     } else {
-      return <IoMaleFemale />;
+      return <IoMaleFemale aria-hidden="true" />;
     }
   };
   const jobtypeIcon = (jobType: string) => {
     if (jobType === "wfh") {
-      return <Home size={16} />;
+      return <Home size={16} aria-hidden="true" />;
     } else if (jobType === "office") {
-      return <Building size={16} />;
+      return <Building size={16} aria-hidden="true" />;
     } else {
-      return <Video size={16} />;
+      return <Video size={16} aria-hidden="true" />;
     }
   };
   const viewingtypeIcon = (viewType: string) => {
-    if (viewType === "meet_type") {
-      return <User className="font-bold" size={18} />;
+    if (viewType === "inperson") {
+      return <User className="font-bold" size={18} aria-hidden="true" />;
     } else {
-      return <Video size={18} />;
+      return <Video size={18} aria-hidden="true" />;
     }
   };
   const lengthStayIcon = (lengthStay: number) => {
@@ -145,14 +139,17 @@ export default function TenantTinderPage() { useRequireTenant();
     if (timeStamp?.seconds) {
       //-Firestore Timestamp-like object ~ seconds and nanoseconds
       const date = new Date(
-        timeStamp.seconds * 1000 + timeStamp.nanoseconds / 1000000
+        timeStamp.seconds * 1000 + timeStamp.nanoseconds / 1000000,
       );
 
-      const formattedDate = date.toLocaleDateString(locale === "EN" ? "en-US" : "es-ES", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      });
+      const formattedDate = date.toLocaleDateString(
+        locale === "EN" ? "en-US" : "es-ES",
+        {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        },
+      );
 
       return formattedDate;
     } else {
@@ -183,7 +180,7 @@ export default function TenantTinderPage() { useRequireTenant();
               <CardContent className="flex flex-col gap-1 sm:gap-3">
                 {/* //👇 ENTRY DATE  */}
                 <div className="flex flex-row items-center gap-1 text-sm">
-                  <CalendarClockIcon size={16} />
+                  <CalendarClockIcon size={16} aria-hidden="true" />
                   <p className=" font-semibold">{localeData.desiredEntry}</p>
                   <span className="font-normal pl-1">
                     {convertTimestamp(dataItem.secondForm.move_date)}
@@ -216,7 +213,7 @@ export default function TenantTinderPage() { useRequireTenant();
                                   >
                                     {lang}
                                   </span>
-                                )
+                                ),
                               )}
                             </div>
                           </div>
@@ -226,7 +223,11 @@ export default function TenantTinderPage() { useRequireTenant();
                     {normalizeExternalUrl(dataItem.thirdForm.social_media) && (
                       <a
                         className="flex flex-row items-center gap-1 hover:text-blue-500 pt-1"
-                        href={normalizeExternalUrl(dataItem.thirdForm.social_media) ?? undefined}
+                        href={
+                          normalizeExternalUrl(
+                            dataItem.thirdForm.social_media,
+                          ) ?? undefined
+                        }
                         target="_blank"
                         rel="noreferrer"
                       >
@@ -240,6 +241,7 @@ export default function TenantTinderPage() { useRequireTenant();
                     src={dataItem.photo}
                     fallbackSrc="/profile-fallback.svg"
                     alt={`${localeData.profilePictureAlt} ${dataItem.firstForm.name}`}
+                    openLabel={`${localeData.openProfilePicture} ${dataItem.firstForm.name}`}
                     width={100}
                     height={100}
                     className="flex justify-center items-center rounded-full"
@@ -299,7 +301,8 @@ export default function TenantTinderPage() { useRequireTenant();
                 {/* //👇 STAR RATING SYSTEM */}
                 <div
                   className="flex flex-row gap-3 pt-1"
-                  role="group"
+                  role="radiogroup"
+                  aria-orientation="horizontal"
                   aria-label={`${localeData.starRatingFor} ${dataItem.firstForm.name}`}
                 >
                   {[...Array(5)].map((_, starIndex) => (
@@ -309,6 +312,12 @@ export default function TenantTinderPage() { useRequireTenant();
                       onClick={() => handleStarClick(starIndex, index)}
                       filled={
                         starIndex <
+                        (dataItem.rankings?.[
+                          `${tenant?.id}_star` as TenantStarKey
+                        ] || 0)
+                      }
+                      selected={
+                        starIndex + 1 ===
                         (dataItem.rankings?.[
                           `${tenant?.id}_star` as TenantStarKey
                         ] || 0)

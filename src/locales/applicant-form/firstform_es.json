@@ -1,13 +1,16 @@
 {
-    "name": "Nombre y apellido",
-    "whatsapp": "Whatsapp",
-    "gender": "Género",
-    "age": "Edad",
-    "spoken": " Yo hablo",
-    "en": "Inglés",
-    "es": "Español",
-    "fr": "Francés",
-    "other": "Otro",
-    "nextbutton": "Siguiente",
-    "optional": "opcional"
-  }
+  "name": "Nombre y apellido",
+  "whatsapp": "Whatsapp",
+  "gender": "Género",
+  "male": "Hombre",
+  "female": "Mujer",
+  "otherGender": "Otro",
+  "age": "Edad",
+  "spoken": " Yo hablo",
+  "en": "Inglés",
+  "es": "Español",
+  "fr": "Francés",
+  "other": "Otro",
+  "nextbutton": "Siguiente",
+  "optional": "opcional"
+}

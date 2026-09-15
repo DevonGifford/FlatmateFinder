@@ -1,4 +1,5 @@
 import { useContext } from "react";
+
 import { GlobalDispatchContext } from "@/contexts/GlobalProvider";
 
 export const useGlobalDispatch = () => {

@@ -1,22 +1,21 @@
-import * as z from "zod";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "react-router-dom";
 import type { Dispatch, SetStateAction } from "react";
-import { useGlobalState } from "@/hooks/useGlobalState";
-import { toastError, toastFormComplete } from "@/lib/customToast";
-import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form";
+import { IoFemale, IoMale, IoMaleFemale } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
+import * as z from "zod";
+
 import { Button } from "@/components/ui/button";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { IoMale, IoFemale, IoMaleFemale } from "react-icons/io5";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -24,18 +23,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { useGlobalState } from "@/hooks/useGlobalState";
 import { languages } from "@/lib/constants/constants";
-import { ApplicationInterface } from "@/types/applicationInterfaces";
-import { FirstFormData } from "@/types/localeInterfaces";
 import { getFormStepPath } from "@/lib/constants/formSteps";
+import { toastError, toastFormComplete } from "@/lib/customToast";
 import {
   getValidationMessages,
   mergeApplicationSection,
 } from "@/lib/forms/formUtils";
-
 import Data_EN from "@/locales/applicant-form/firstform_en.json";
 import Data_ES from "@/locales/applicant-form/firstform_es.json";
+import { ApplicationInterface } from "@/types/applicationInterfaces";
+import { FirstFormData } from "@/types/localeInterfaces";
 
 type FirstFormValues = {
   name: string;
@@ -46,15 +46,23 @@ type FirstFormValues = {
 };
 
 const firstFormSchema = (
-  locale: "EN" | "ES"
+  locale: "EN" | "ES",
 ): z.ZodType<FirstFormValues, FirstFormValues> => {
   const { required, tooLong } = getValidationMessages(locale);
 
   return z.object({
-    name: z.string({ error: required }).trim().min(1, required).max(50, tooLong),
+    name: z
+      .string({ error: required })
+      .trim()
+      .min(1, required)
+      .max(50, tooLong),
     age: z.string({ error: required }).trim().min(1, required).max(10, tooLong),
     sex: z.string({ error: required }).trim().min(1, required).max(10, tooLong),
-    phone: z.string({ error: required }).trim().min(1, required).max(25, tooLong),
+    phone: z
+      .string({ error: required })
+      .trim()
+      .min(1, required)
+      .max(25, tooLong),
     languages: z.array(z.string()).optional(),
   });
 };
@@ -99,9 +107,7 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>
-                {localeData.name}
-              </FormLabel>
+              <FormLabel>{localeData.name}</FormLabel>
 
               <FormControl>
                 <Input placeholder="" {...field} />
@@ -116,7 +122,7 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="flex justify-center text-center sm:justify-start sm:text-left">
-                Whatsapp
+                {localeData.whatsapp}
               </FormLabel>
 
               <FormControl>
@@ -139,7 +145,9 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
             control={form.control}
             render={({ field }) => (
               <FormItem className="min-w-35 flex-1 p-5 sm:min-w-45">
-                <FormLabel className="text-center">{localeData.gender}</FormLabel>
+                <FormLabel className="text-center">
+                  {localeData.gender}
+                </FormLabel>
                 <FormControl>
                   <ToggleGroup
                     size="sm"
@@ -150,21 +158,24 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
                   >
                     <ToggleGroupItem
                       value="male"
+                      aria-label={localeData.male}
                       className="min-h-11 min-w-11 aria-pressed:border-2 aria-pressed:border-primary focus-visible:ring-2"
                     >
-                      <IoMale />
+                      <IoMale aria-hidden="true" />
                     </ToggleGroupItem>
                     <ToggleGroupItem
                       value="female"
+                      aria-label={localeData.female}
                       className="min-h-11 min-w-11 aria-pressed:border-2 aria-pressed:border-primary focus-visible:ring-2"
                     >
-                      <IoFemale />
+                      <IoFemale aria-hidden="true" />
                     </ToggleGroupItem>
                     <ToggleGroupItem
                       value="other"
+                      aria-label={localeData.otherGender}
                       className="min-h-11 min-w-11 aria-pressed:border-2 aria-pressed:border-primary focus-visible:ring-2"
                     >
-                      <IoMaleFemale />
+                      <IoMaleFemale aria-hidden="true" />
                     </ToggleGroupItem>
                   </ToggleGroup>
                 </FormControl>
@@ -197,7 +208,7 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
                         >
                           {String(age)}
                         </SelectItem>
-                      )
+                      ),
                     )}
                   </SelectContent>
                 </Select>
@@ -212,12 +223,12 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
           control={form.control}
           render={({ field }) => (
             <FormItem className="p-5">
-              <FormLabel className="flex flex-col justify-center gap-1 text-center">
-                {localeData.spoken}
-                <p className="text-sm font-normal italic text-muted-foreground">
+              <div className="flex flex-col justify-center gap-1 text-center">
+                <FormLabel>{localeData.spoken}</FormLabel>
+                <FormDescription className="font-normal italic">
                   {localeData.optional}
-                </p>
-              </FormLabel>
+                </FormDescription>
+              </div>
               <FormControl>
                 <ToggleGroup
                   size="sm"

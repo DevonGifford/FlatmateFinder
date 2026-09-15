@@ -1,13 +1,16 @@
 {
-    "name": "Name & Surname",
-    "whatsapp": "Whatsapp",
-    "gender": "Gender",
-    "age": "Age",
-    "spoken": "I speak",
-    "en": "English",
-    "es": "Spanish",
-    "fr": "French",
-    "other": "Other",
-    "nextbutton": "Next",
-    "optional": "optional"
-  }
+  "name": "Name & Surname",
+  "whatsapp": "Whatsapp",
+  "gender": "Gender",
+  "male": "Male",
+  "female": "Female",
+  "otherGender": "Other",
+  "age": "Age",
+  "spoken": "I speak",
+  "en": "English",
+  "es": "Spanish",
+  "fr": "French",
+  "other": "Other",
+  "nextbutton": "Next",
+  "optional": "optional"
+}

@@ -1,7 +1,9 @@
 import { Timestamp } from "firebase/firestore";
 import { describe, expect, it } from "vitest";
+
+import type { GlobalStateInterface } from "@/types/globalStateInterfaces";
+
 import GlobalReducer from "./GlobalReducer";
-import { GlobalStateInterface } from "@/types/globalStateInterfaces";
 
 const applicant = {
   id: "applicant-1",
@@ -27,10 +29,7 @@ const applicant = {
 };
 
 const state: GlobalStateInterface = {
-  isAuthenticatedApplicant: true,
-  isAuthenticatedTenant: true,
-  accessMode: "tenant",
-  loggedTenant: "Devon",
+  session: { role: "tenant", mode: "real", tenantId: "dev" },
   locale: "ES",
   applicantPool: [applicant],
   isLoading: false,
@@ -51,15 +50,15 @@ describe("GlobalReducer", () => {
     });
   });
 
-  it("resets authentication without clearing unrelated state", () => {
+  it("resets authentication and clears tenant-only applicant data", () => {
     const updatedState = GlobalReducer(state, { type: "RESET_AUTH" });
 
     expect(updatedState).toMatchObject({
-      isAuthenticatedApplicant: false,
-      isAuthenticatedTenant: false,
-      loggedTenant: "",
+      session: { role: "none", mode: "none" },
       locale: "ES",
-      applicantPool: [applicant],
+      applicantPool: null,
+      isLoading: false,
+      error: "",
     });
   });
 
@@ -67,17 +66,16 @@ describe("GlobalReducer", () => {
     const demoApplicant = GlobalReducer(state, {
       type: "SET_DEMO_APPLICANT",
     });
-    const demoTenant = GlobalReducer(state, { type: "SET_DEMO_TENANT" });
+    const demoTenant = GlobalReducer(state, {
+      type: "SET_DEMO_TENANT",
+      payload: "dev",
+    });
 
     expect(demoApplicant).toMatchObject({
-      isAuthenticatedApplicant: true,
-      isAuthenticatedTenant: false,
-      accessMode: "demo-applicant",
+      session: { role: "applicant", mode: "demo" },
     });
     expect(demoTenant).toMatchObject({
-      isAuthenticatedApplicant: false,
-      isAuthenticatedTenant: true,
-      accessMode: "demo-tenant",
+      session: { role: "tenant", mode: "demo", tenantId: "dev" },
     });
   });
 
@@ -85,10 +83,7 @@ describe("GlobalReducer", () => {
     const updatedState = GlobalReducer(state, { type: "PURGE_STATE" });
 
     expect(updatedState).toEqual({
-      isAuthenticatedApplicant: false,
-      isAuthenticatedTenant: false,
-      accessMode: "none",
-      loggedTenant: "",
+      session: { role: "none", mode: "none" },
       locale: "EN",
       applicantPool: null,
       isLoading: false,

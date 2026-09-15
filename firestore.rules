@@ -13,9 +13,21 @@ service cloud.firestore {
           'osc_star', 'osc_bool',
           'adr_star', 'adr_bool'
         ])
-        && (!rankings.keys().hasAny(['dev_star']) || rankings.dev_star is number)
-        && (!rankings.keys().hasAny(['osc_star']) || rankings.osc_star is number)
-        && (!rankings.keys().hasAny(['adr_star']) || rankings.adr_star is number)
+        && (!rankings.keys().hasAny(['dev_star']) || (
+          rankings.dev_star is number
+          && rankings.dev_star >= 1
+          && rankings.dev_star <= 5
+        ))
+        && (!rankings.keys().hasAny(['osc_star']) || (
+          rankings.osc_star is number
+          && rankings.osc_star >= 1
+          && rankings.osc_star <= 5
+        ))
+        && (!rankings.keys().hasAny(['adr_star']) || (
+          rankings.adr_star is number
+          && rankings.adr_star >= 1
+          && rankings.adr_star <= 5
+        ))
         && (!rankings.keys().hasAny(['dev_bool']) || rankings.dev_bool is bool)
         && (!rankings.keys().hasAny(['osc_bool']) || rankings.osc_bool is bool)
         && (!rankings.keys().hasAny(['adr_bool']) || rankings.adr_bool is bool);
@@ -42,6 +54,8 @@ service cloud.firestore {
         && data.secondForm.keys().hasOnly(['move_date', 'length_stay', 'meet_type', 'more_info'])
         && data.secondForm.move_date is timestamp
         && data.secondForm.length_stay is number
+        && data.secondForm.length_stay >= 0
+        && data.secondForm.length_stay <= 100
         && data.secondForm.meet_type is string
         && (!data.secondForm.keys().hasAny(['more_info']) || data.secondForm.more_info is string)
         && data.thirdForm is map

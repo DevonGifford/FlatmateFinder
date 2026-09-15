@@ -1,41 +1,42 @@
-import * as z from "zod";
-import { cn } from "@/lib/utils";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "react-router-dom";
-import type { Dispatch, SetStateAction } from "react";
-import { useGlobalState } from "@/hooks/useGlobalState";
-import { toastError, toastFormComplete } from "@/lib/customToast";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Calendar } from "@/components/ui/calendar";
-import { Textarea } from "@/components/ui/textarea";
-import { Slider } from "@/components/ui/slider";
-import { Button } from "@/components/ui/button";
 import { User, Video } from "lucide-react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import type { Dispatch, SetStateAction } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import * as z from "zod";
+
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-
-import { SecondFormData } from "@/types/localeInterfaces";
-import { ApplicationInterface } from "@/types/applicationInterfaces";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Slider } from "@/components/ui/slider";
+import { Textarea } from "@/components/ui/textarea";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { useGlobalState } from "@/hooks/useGlobalState";
+import { lengthOfStayRange } from "@/lib/constants/constants";
 import { getFormStepPath } from "@/lib/constants/formSteps";
+import { toastError, toastFormComplete } from "@/lib/customToast";
 import {
   getValidationMessages,
   mergeApplicationSection,
 } from "@/lib/forms/formUtils";
-
+import { cn } from "@/lib/utils";
 import Data_EN from "@/locales/applicant-form/secondform_en.json";
 import Data_ES from "@/locales/applicant-form/secondform_es.json";
+import { ApplicationInterface } from "@/types/applicationInterfaces";
+import { SecondFormData } from "@/types/localeInterfaces";
 
 type SecondFormValues = {
   move_date: Date;
@@ -44,14 +45,24 @@ type SecondFormValues = {
   more_info?: string;
 };
 
+function getToday() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return today;
+}
+
 const secondFormSchema = (
-  locale: "EN" | "ES"
+  locale: "EN" | "ES",
 ): z.ZodType<SecondFormValues, SecondFormValues> => {
   const { required, tooLong } = getValidationMessages(locale);
 
   return z.object({
     move_date: z.date({ error: required }),
-    length_stay: z.number({ error: required }),
+    length_stay: z
+      .number({ error: required })
+      .int()
+      .min(lengthOfStayRange.min)
+      .max(lengthOfStayRange.max),
     meet_type: z.string({ error: required }).trim().min(1, required),
     more_info: z.string().max(500, tooLong).optional(),
   });
@@ -66,6 +77,7 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
   const navigate = useNavigate();
   const { locale } = useGlobalState();
   const localeData: SecondFormData = locale === "EN" ? Data_EN : Data_ES;
+  const minimumMoveDate = getToday();
 
   const defaultValues: SecondFormValues = application!.secondForm;
   const form = useForm<SecondFormValues>({
@@ -98,12 +110,12 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
           control={form.control}
           render={({ field }) => (
             <FormItem className="flex min-w-0 flex-col p-5">
-              <FormLabel className="flex flex-col justify-center gap-1 text-center">
-                {localeData.headingMoveDate}
-                <p className="text-sm font-normal italic text-muted-foreground">
+              <div className="flex flex-col justify-center gap-1 text-center">
+                <FormLabel>{localeData.headingMoveDate}</FormLabel>
+                <FormDescription className="font-normal italic">
                   {localeData.descriptionMoveDate}
-                </p>
-              </FormLabel>
+                </FormDescription>
+              </div>
 
               <Popover>
                 <PopoverTrigger
@@ -113,13 +125,15 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
                       variant={"secondary"}
                       className={cn(
                         "h-10 w-full pl-3 text-left font-normal",
-                        !field.value && "text-muted-foreground"
+                        !field.value && "text-muted-foreground",
                       )}
                     />
                   }
                 >
                   <span>
-                    {field.value instanceof Date ? field.value.toDateString() : localeData.pickDate}
+                    {field.value instanceof Date
+                      ? field.value.toDateString()
+                      : localeData.pickDate}
                   </span>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="center">
@@ -127,7 +141,7 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
                     mode="single"
                     selected={field.value}
                     onSelect={field.onChange}
-                    disabled={(date) => date < new Date("2026-09-01")}
+                    disabled={(date) => date < minimumMoveDate}
                   />
                 </PopoverContent>
               </Popover>
@@ -149,8 +163,8 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
 
               <FormControl className="mx-auto w-11/12">
                 <Slider
-                  min={0}
-                  max={100}
+                  min={lengthOfStayRange.min}
+                  max={lengthOfStayRange.max}
                   step={1}
                   value={[field.value]}
                   onValueChange={(vals) => {
@@ -201,14 +215,14 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
                     value="inperson"
                     className="min-h-14 min-w-24 flex-col items-center justify-center gap-1 px-4 py-2 text-center aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md focus-visible:ring-2"
                   >
-                    <User className="font-bold" size={18} />
+                    <User className="font-bold" size={18} aria-hidden="true" />
                     <span className="text-xs">{localeData.inPerson}</span>
                   </ToggleGroupItem>
                   <ToggleGroupItem
                     value="videocall"
                     className="min-h-14 min-w-24 flex-col items-center justify-center gap-1 px-4 py-2 text-center aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md focus-visible:ring-2"
                   >
-                    <Video size={18} />
+                    <Video size={18} aria-hidden="true" />
                     <span className="text-xs">{localeData.videoCall}</span>
                   </ToggleGroupItem>
                 </ToggleGroup>
@@ -228,12 +242,12 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="flex flex-col justify-center gap-1 text-center">
-                <p>{localeData.headingMoreInfo}</p>
-                <p className="text-sm font-normal italic text-muted-foreground">
+              <div className="flex flex-col justify-center gap-1 text-center">
+                <FormLabel>{localeData.headingMoreInfo}</FormLabel>
+                <FormDescription className="font-normal italic">
                   {localeData.optional}
-                </p>
-              </FormLabel>
+                </FormDescription>
+              </div>
               <FormControl>
                 <Textarea
                   placeholder={`${localeData.specialRequestQuestion}`}

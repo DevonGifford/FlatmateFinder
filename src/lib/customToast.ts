@@ -20,7 +20,9 @@ export function toastError(message?: string) {
   toast({
     variant: "destructive",
     title: "Uh oh! 🙈",
-    description: message? `${message}` : "Try again later - Inténtalo más tarde",
+    description: message
+      ? `${message}`
+      : "Try again later - Inténtalo más tarde",
   });
 }
 

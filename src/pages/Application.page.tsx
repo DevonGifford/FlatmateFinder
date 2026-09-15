@@ -1,30 +1,33 @@
+import { ArrowLeftToLine } from "lucide-react";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useURLState } from "@/hooks/useUrlState";
-import { useRequireApplicant } from "@/hooks/useRequireApplicant";
-import { Button } from "@/components/ui/button";
+
 import { FirstForm } from "@/components/forms/first-form";
-import { ThirdForm } from "@/components/forms/third-form";
 import { SecondForm } from "@/components/forms/second-form";
-import { ArrowLeftToLine } from "lucide-react";
-import { ApplicationInterface, defaultApplication } from "@/types/applicationInterfaces";
+import { ThirdForm } from "@/components/forms/third-form";
+import { Button } from "@/components/ui/button";
+import { useRequireApplicant } from "@/hooks/useRequireApplicant";
+import { useURLState } from "@/hooks/useUrlState";
 import {
-  formSteps,
   FormStep,
+  formSteps,
   getFormStepPath,
 } from "@/lib/constants/formSteps";
+import {
+  ApplicationInterface,
+  defaultApplication,
+} from "@/types/applicationInterfaces";
 
 const ApplicationPage: React.FC = () => {
-  const [application, setApplication] = useState<ApplicationInterface>(defaultApplication);
+  const [application, setApplication] =
+    useState<ApplicationInterface>(defaultApplication);
   const { pageId } = useURLState();
   const navigate = useNavigate();
   useRequireApplicant();
   const currentStep: FormStep = formSteps.some(({ id }) => id === pageId)
     ? (pageId as FormStep)
     : "first-form";
-  const currentStepIndex = formSteps.findIndex(
-    ({ id }) => id === currentStep
-  );
+  const currentStepIndex = formSteps.findIndex(({ id }) => id === currentStep);
 
   const getPageIndicatorStyle = (circleId: number) => {
     if (circleId - 1 < currentStepIndex) {
@@ -45,7 +48,7 @@ const ApplicationPage: React.FC = () => {
             <div
               key={circleId}
               className={`h-5 w-5 rounded-full transition-colors ${getPageIndicatorStyle(
-                circleId
+                circleId,
               )}`}
             ></div>
           ))}
