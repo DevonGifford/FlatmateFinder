@@ -10,9 +10,9 @@ import { Link } from "react-router-dom";
 import { useGlobalState } from "@/hooks/useGlobalState";
 import { useRequireTenant } from "@/hooks/useRequireTenant";
 import { getTenantById } from "@/lib/constants/tenants";
-import tenantData_EN from "@/locales/tenant-pages/tenant_en.json";
-import tenantData_ES from "@/locales/tenant-pages/tenant_es.json";
-import { TenantPageData } from "@/types/localeInterfaces";
+import tenantData_EN from "@/locales/tenant/tenant_en.json";
+import tenantData_ES from "@/locales/tenant/tenant_es.json";
+import type { TenantPageData } from "@/types/locale";
 
 export default function TenantWelcomePage() {
   useRequireTenant();

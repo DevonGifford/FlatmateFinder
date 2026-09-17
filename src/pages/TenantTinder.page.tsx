@@ -10,8 +10,8 @@ import {
 import { IoFemale, IoMale, IoMaleFemale } from "react-icons/io5";
 import TinderCard from "react-tinder-card";
 
-import { ProfilePic } from "@/components/ProfilePic";
-import { StarRating } from "@/components/StarRating";
+import { ProfilePic } from "@/components/custom/ProfilePic";
+import { StarRating } from "@/components/custom/StarRating";
 import {
   Accordion,
   AccordionContent,
@@ -34,12 +34,12 @@ import {
   TenantBooleanKey,
   TenantStarKey,
 } from "@/lib/constants/tenants";
-import { toastError } from "@/lib/customToast";
 import { updateRanking } from "@/lib/firebase/firestore";
+import { toastError } from "@/lib/toast";
 import { normalizeExternalUrl } from "@/lib/utils";
-import tenantData_EN from "@/locales/tenant-pages/tenant_en.json";
-import tenantData_ES from "@/locales/tenant-pages/tenant_es.json";
-import { TenantPageData } from "@/types/localeInterfaces";
+import tenantData_EN from "@/locales/tenant/tenant_en.json";
+import tenantData_ES from "@/locales/tenant/tenant_es.json";
+import type { TenantPageData } from "@/types/locale";
 
 export default function TenantTinderPage() {
   useRequireTenant();
@@ -52,7 +52,6 @@ export default function TenantTinderPage() {
   const tenant =
     session.role === "tenant" ? getTenantById(session.tenantId) : undefined;
 
-  //- Handle star-ranking individual applicants - updates global context
   const handleStarClick = (starIndex: number, cardIndex: number) => {
     if (tenant && applicantPool) {
       const cardData = applicantPool[cardIndex];
@@ -69,7 +68,6 @@ export default function TenantTinderPage() {
     }
   };
 
-  //- Handle swipe-ranking individual applicants - updates global context + sets next card
   const onSwipe = (direction: string, cardIndex: number) => {
     if (tenant && applicantPool) {
       const cardData = applicantPool[cardIndex];
@@ -87,7 +85,6 @@ export default function TenantTinderPage() {
     }
   };
 
-  //- Handle card leaving screen - updates the firestore database
   const onCardLeftScreen = (cardIndex: number) => {
     if (applicantPool && applicantPool[cardIndex]?.rankings) {
       const updatedRankings = applicantPool[cardIndex].rankings;
@@ -104,7 +101,6 @@ export default function TenantTinderPage() {
     }
   };
 
-  //- General Helper Function - Icons & Conversions
   const genderIcon = (gender: string) => {
     if (gender === "male") {
       return <IoMale aria-hidden="true" />;
@@ -137,7 +133,6 @@ export default function TenantTinderPage() {
   };
   const convertTimestamp = (timeStamp: Timestamp) => {
     if (timeStamp?.seconds) {
-      //-Firestore Timestamp-like object ~ seconds and nanoseconds
       const date = new Date(
         timeStamp.seconds * 1000 + timeStamp.nanoseconds / 1000000,
       );
@@ -178,7 +173,6 @@ export default function TenantTinderPage() {
               </CardHeader>
 
               <CardContent className="flex flex-col gap-1 sm:gap-3">
-                {/* //👇 ENTRY DATE  */}
                 <div className="flex flex-row items-center gap-1 text-sm">
                   <CalendarClockIcon size={16} aria-hidden="true" />
                   <p className=" font-semibold">{localeData.desiredEntry}</p>
@@ -188,7 +182,6 @@ export default function TenantTinderPage() {
                 </div>
                 <div className="flex flex-row justify-around items-center">
                   <div className="flex flex-col gap-1 justify-start text-left text-sm">
-                    {/* //👇 AGE & GENDER */}
                     <div className="flex flex-row gap-5">
                       <div className="flex flex-row gap-2 items-center p-1">
                         <h3 className="font-semibold">{localeData.age}</h3>
@@ -199,7 +192,6 @@ export default function TenantTinderPage() {
                         <span>{genderIcon(dataItem.firstForm.sex)}</span>
                       </div>
                     </div>
-                    {/* //👇 LANGUAGES  */}
                     <div>
                       {dataItem.firstForm.languages &&
                         dataItem.firstForm.languages.length > 0 && (
@@ -219,7 +211,6 @@ export default function TenantTinderPage() {
                           </div>
                         )}
                     </div>
-                    {/* //👇 SOCIAL MEDIA */}
                     {normalizeExternalUrl(dataItem.thirdForm.social_media) && (
                       <a
                         className="flex flex-row items-center gap-1 hover:text-blue-500 pt-1"
@@ -236,7 +227,6 @@ export default function TenantTinderPage() {
                       </a>
                     )}
                   </div>
-                  {/* //👇 PROFILE PICTURE */}
                   <ProfilePic
                     src={dataItem.photo}
                     fallbackSrc="/profile-fallback.svg"
@@ -247,7 +237,6 @@ export default function TenantTinderPage() {
                     className="flex justify-center items-center rounded-full"
                   />
                 </div>
-                {/* //👇 Viewing & Length of Stay */}
                 <div className="flex flex-row w-full justify-evenly items-center text-sm font-semibold">
                   <div className="flex flex-col justify-center items-center p-2 rounded-lg border">
                     <p>{localeData.viewingType}</p>
@@ -263,7 +252,6 @@ export default function TenantTinderPage() {
                     </span>
                   </div>
                 </div>
-                {/* //👇 ABOUT SECTION & HOBBIES/INTEREST & SPECIAL REQUEST */}
                 <Accordion
                   type="single"
                   collapsible
@@ -298,7 +286,6 @@ export default function TenantTinderPage() {
               </CardContent>
 
               <CardFooter className="flex flex-col text-center pt-1 sm:pt-4 justify-center items-center border-t-2 mx-10">
-                {/* //👇 STAR RATING SYSTEM */}
                 <div
                   className="flex flex-row gap-3 pt-1"
                   role="radiogroup"

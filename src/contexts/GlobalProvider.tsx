@@ -8,8 +8,8 @@ import {
 import {
   type ActionType,
   type AppSession,
-  type GlobalStateInterface,
-} from "@/types/globalStateInterfaces";
+  type GlobalState,
+} from "@/types/globalState";
 
 import GlobalReducer from "./GlobalReducer";
 
@@ -42,6 +42,7 @@ function isAppSession(value: unknown): value is AppSession {
   return session.role === "tenant" && isTenantId(session.tenantId);
 }
 
+/** Converts session formats written by older releases into the current model. */
 function migrateLegacyAuth(auth: LegacyPersistedAuth): AppSession | null {
   const normalizedMode =
     auth.accessMode === "guest-applicant"
@@ -80,6 +81,7 @@ function migrateLegacyAuth(auth: LegacyPersistedAuth): AppSession | null {
   return tenant ? { role: "tenant", mode: "real", tenantId: tenant.id } : null;
 }
 
+/** Reads the current or legacy session from storage, rejecting malformed data. */
 function readPersistedSession(): AppSession | null {
   try {
     const storedAuth = window.sessionStorage.getItem(AUTH_STORAGE_KEY);
@@ -115,9 +117,8 @@ function readPersistedSession(): AppSession | null {
   }
 }
 
-// Define separate contexts for state and dispatch
 export const GlobalStateContext = createContext<
-  GlobalStateInterface | undefined
+  GlobalState | undefined
 >(undefined);
 export const GlobalDispatchContext = createContext<
   React.Dispatch<ActionType> | undefined
@@ -125,7 +126,7 @@ export const GlobalDispatchContext = createContext<
 
 interface Props {
   children: React.ReactNode;
-  initialState: GlobalStateInterface;
+  initialState: GlobalState;
 }
 
 export const GlobalProvider: React.FC<Props> = ({ children, initialState }) => {

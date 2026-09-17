@@ -7,21 +7,21 @@ import { SecondForm } from "@/components/forms/second-form";
 import { ThirdForm } from "@/components/forms/third-form";
 import { Button } from "@/components/ui/button";
 import { useRequireApplicant } from "@/hooks/useRequireApplicant";
-import { useURLState } from "@/hooks/useUrlState";
+import { useUrlState } from "@/hooks/useUrlState";
 import {
   FormStep,
   formSteps,
   getFormStepPath,
 } from "@/lib/constants/formSteps";
 import {
-  ApplicationInterface,
+  Application,
   defaultApplication,
-} from "@/types/applicationInterfaces";
+} from "@/types/application";
 
-const ApplicationPage: React.FC = () => {
+const ApplicantFormPage: React.FC = () => {
   const [application, setApplication] =
-    useState<ApplicationInterface>(defaultApplication);
-  const { pageId } = useURLState();
+    useState<Application>(defaultApplication);
+  const { pageId } = useUrlState();
   const navigate = useNavigate();
   useRequireApplicant();
   const currentStep: FormStep = formSteps.some(({ id }) => id === pageId)
@@ -42,7 +42,6 @@ const ApplicationPage: React.FC = () => {
   return (
     <>
       <div className="flex flex-col items-center h-[calc(100vh-10vh)] overflow-auto hide-scrollbar px-2 sm:px-4">
-        {/* Page Indicator  */}
         <div className="flex flex-row justify-center items-center text-center gap-8 py-7">
           {[1, 2, 3].map((circleId) => (
             <div
@@ -55,7 +54,6 @@ const ApplicationPage: React.FC = () => {
         </div>
 
         <div className="flex w-full max-w-2xl flex-col">
-          {/* Conditional rendering based on router query */}
           {currentStep === "second-form" && (
             <SecondForm
               key="second-form"
@@ -71,7 +69,6 @@ const ApplicationPage: React.FC = () => {
             />
           )}
 
-          {/* 'go back to previous form' button or render first form */}
           {currentStep !== "first-form" ? (
             <div>
               <Button
@@ -98,4 +95,4 @@ const ApplicationPage: React.FC = () => {
   );
 };
 
-export default ApplicationPage;
+export default ApplicantFormPage;

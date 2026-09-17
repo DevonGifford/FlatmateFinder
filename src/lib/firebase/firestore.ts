@@ -6,14 +6,14 @@ import {
   runTransaction,
 } from "firebase/firestore";
 
-import { ApplicantProfile } from "@/types/applicantInterfaces";
+import type { ApplicantProfile } from "@/types/applicant";
 import { parseApplicantProfile } from "@/types/applicantSchemas";
-import { ApplicationInterface } from "@/types/applicationInterfaces";
+import type { Application } from "@/types/application";
 import {
   type AppSession,
   isApplicantSession,
   isTenantSession,
-} from "@/types/globalStateInterfaces";
+} from "@/types/globalState";
 
 import db, { authReady } from "./config";
 
@@ -22,8 +22,9 @@ const firestore: Firestore = db;
 
 export const waitForFirebaseAuth = () => authReady;
 
+/** Persists a real applicant application and assigns its Firestore document ID. */
 export const createApplicantDoc = async (
-  userData: ApplicationInterface,
+  userData: Application,
   session: AppSession,
 ): Promise<DocumentId> => {
   if (!isApplicantSession(session) || session.mode !== "real") {
@@ -46,6 +47,7 @@ export const createApplicantDoc = async (
   return docRef.id;
 };
 
+/** Reads and validates the applicant pool at the Firebase boundary. */
 export async function fetchApplicantPool(): Promise<ApplicantProfile[]> {
   const querySnapshot = await getDocs(collection(firestore, "applicants"));
   const fetchedData: ApplicantProfile[] = [];
@@ -58,6 +60,7 @@ export async function fetchApplicantPool(): Promise<ApplicantProfile[]> {
   return fetchedData;
 }
 
+/** Merges a tenant's ranking changes without overwriting other tenant rankings. */
 export const updateRanking = async (
   userId: string,
   updatedRankings: Partial<NonNullable<ApplicantProfile["rankings"]>>,

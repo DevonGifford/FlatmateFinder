@@ -25,17 +25,17 @@ import {
 } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useGlobalState } from "@/hooks/useGlobalState";
-import { languages } from "@/lib/constants/constants";
+import { languages } from "@/lib/constants/formOptions";
 import { getFormStepPath } from "@/lib/constants/formSteps";
-import { toastError, toastFormComplete } from "@/lib/customToast";
 import {
   getValidationMessages,
   mergeApplicationSection,
 } from "@/lib/forms/formUtils";
-import Data_EN from "@/locales/applicant-form/firstform_en.json";
-import Data_ES from "@/locales/applicant-form/firstform_es.json";
-import { ApplicationInterface } from "@/types/applicationInterfaces";
-import { FirstFormData } from "@/types/localeInterfaces";
+import { toastError, toastFormComplete } from "@/lib/toast";
+import Data_EN from "@/locales/applicant-form/first-form_en.json";
+import Data_ES from "@/locales/applicant-form/first-form_es.json";
+import type { Application } from "@/types/application";
+import type { FirstFormData } from "@/types/locale";
 
 type FirstFormValues = {
   name: string;
@@ -68,8 +68,8 @@ const firstFormSchema = (
 };
 
 interface FirstFormProps {
-  application: ApplicationInterface | null;
-  setApplication: Dispatch<SetStateAction<ApplicationInterface>>;
+  application: Application | null;
+  setApplication: Dispatch<SetStateAction<Application>>;
 }
 
 export function FirstForm({ application, setApplication }: FirstFormProps) {
@@ -87,7 +87,7 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
     try {
       mergeApplicationSection(setApplication, "firstForm", data);
 
-      toastFormComplete("1");
+      toastFormComplete(1);
       navigate(getFormStepPath("second-form"));
     } catch {
       toastError();

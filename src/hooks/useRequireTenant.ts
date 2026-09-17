@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
 import { useGlobalState } from "@/hooks/useGlobalState";
-import { isTenantSession } from "@/types/globalStateInterfaces";
+import { isTenantSession } from "@/types/globalState";
 
 export const useRequireTenant = () => {
   const navigate = useNavigate();

@@ -1,8 +1,6 @@
 import { FirebaseApp, getApps, initializeApp } from "firebase/app";
 import { getAuth, signInAnonymously } from "firebase/auth";
 import { Firestore, getFirestore } from "firebase/firestore";
-// import { getAnalytics } from "firebase/analytics";
-// https://firebase.google.com/docs/web/setup#available-libraries
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_PUBLIC_FIREBASE_API_KEY,
@@ -14,15 +12,12 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-// - Initialize Firebase
 let app: FirebaseApp;
 if (getApps().length === 0) {
   app = initializeApp(firebaseConfig);
 } else {
   app = getApps()[0];
 }
-//- Firestore exports
-// const analytics = getAnalytics(app);
 const db: Firestore = getFirestore(app);
 const auth = getAuth(app);
 

@@ -1,7 +1,7 @@
-import { ErrorMessage } from "@/components/ErrorMessage";
-import { ProfilePic } from "@/components/ProfilePic";
-import { RatingBadge } from "@/components/RatingBadge";
-import { Spinner } from "@/components/Spinner";
+import { ErrorMessage } from "@/components/custom/ErrorMessage";
+import { ProfilePic } from "@/components/custom/ProfilePic";
+import { RatingBadge } from "@/components/custom/RatingBadge";
+import { Spinner } from "@/components/custom/Spinner";
 import { useGlobalState } from "@/hooks/useGlobalState";
 import { useRequireTenant } from "@/hooks/useRequireTenant";
 import {
@@ -9,10 +9,10 @@ import {
   tenants,
   TenantStarKey,
 } from "@/lib/constants/tenants";
-import tenantData_EN from "@/locales/tenant-pages/tenant_en.json";
-import tenantData_ES from "@/locales/tenant-pages/tenant_es.json";
-import { ApplicantProfile } from "@/types/applicantInterfaces";
-import { TenantPageData } from "@/types/localeInterfaces";
+import tenantData_EN from "@/locales/tenant/tenant_en.json";
+import tenantData_ES from "@/locales/tenant/tenant_es.json";
+import type { ApplicantProfile } from "@/types/applicant";
+import type { TenantPageData } from "@/types/locale";
 
 export default function TenantLeaderboardPage() {
   useRequireTenant();

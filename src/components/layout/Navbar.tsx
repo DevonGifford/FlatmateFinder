@@ -6,9 +6,9 @@ import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
 import { useGlobalState } from "@/hooks/useGlobalState";
-import homeData_EN from "@/locales/home-page/home_en.json";
-import homeData_ES from "@/locales/home-page/home_es.json";
-import type { HomePageData } from "@/types/localeInterfaces";
+import homeData_EN from "@/locales/home/home_en.json";
+import homeData_ES from "@/locales/home/home_es.json";
+import type { HomePageData } from "@/types/locale";
 
 export default function Navbar() {
   const match = useMatch("*"); //- match any route
@@ -23,9 +23,7 @@ export default function Navbar() {
         className="flex flex-row justify-between"
         aria-label={localeData.navigationLabel}
       >
-        {/* // 👇 DYNAMIC BUTTON */}
         {match && match.pathname === "/form" ? (
-          //👉 Quit Button if URL is "/form"
           <Button
             onClick={() => navigate("/")}
             size={"sm"}
@@ -36,7 +34,6 @@ export default function Navbar() {
             <XSquare size={25} aria-hidden="true" />
           </Button>
         ) : match && match.pathname === "/FAQ" ? (
-          //👉 BACK button if URL is "/FAQ"
           <Button
             onClick={() => navigate("/")}
             size={"sm"}
@@ -48,7 +45,6 @@ export default function Navbar() {
             <span className="text-base">{localeData.backButton}</span>
           </Button>
         ) : (
-          //👉 Default FAQ Button
           <Button
             onClick={() => navigate("/FAQ")}
             size={"lg"}
@@ -61,7 +57,6 @@ export default function Navbar() {
           </Button>
         )}
 
-        {/* //👇 LANGUAGE SETTINGS */}
         <ToggleGroup type="single" value={locale}>
           <ToggleGroupItem
             variant={"outline"}

@@ -25,18 +25,18 @@ import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useGlobalState } from "@/hooks/useGlobalState";
-import { lengthOfStayRange } from "@/lib/constants/constants";
+import { lengthOfStayRange } from "@/lib/constants/applicantConstraints";
 import { getFormStepPath } from "@/lib/constants/formSteps";
-import { toastError, toastFormComplete } from "@/lib/customToast";
 import {
   getValidationMessages,
   mergeApplicationSection,
 } from "@/lib/forms/formUtils";
+import { toastError, toastFormComplete } from "@/lib/toast";
 import { cn } from "@/lib/utils";
-import Data_EN from "@/locales/applicant-form/secondform_en.json";
-import Data_ES from "@/locales/applicant-form/secondform_es.json";
-import { ApplicationInterface } from "@/types/applicationInterfaces";
-import { SecondFormData } from "@/types/localeInterfaces";
+import Data_EN from "@/locales/applicant-form/second-form_en.json";
+import Data_ES from "@/locales/applicant-form/second-form_es.json";
+import type { Application } from "@/types/application";
+import type { SecondFormData } from "@/types/locale";
 
 type SecondFormValues = {
   move_date: Date;
@@ -69,8 +69,8 @@ const secondFormSchema = (
 };
 
 interface SecondFormProps {
-  application: ApplicationInterface | null;
-  setApplication: Dispatch<SetStateAction<ApplicationInterface>>;
+  application: Application | null;
+  setApplication: Dispatch<SetStateAction<Application>>;
 }
 
 export function SecondForm({ application, setApplication }: SecondFormProps) {
@@ -89,7 +89,7 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
     try {
       mergeApplicationSection(setApplication, "secondForm", data);
 
-      toastFormComplete("2");
+      toastFormComplete(2);
       navigate(getFormStepPath("third-form"));
     } catch {
       toastError();
@@ -104,7 +104,6 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
         })}
         className="w-full space-y-8"
       >
-        {/* SET MOVE DATE */}
         <FormField
           name="move_date"
           control={form.control}
@@ -151,7 +150,6 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
           )}
         />
 
-        {/* LENGTH OF STAY */}
         <FormField
           name="length_stay"
           control={form.control}
@@ -197,7 +195,6 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
           )}
         />
 
-        {/* TYPE OF VIEWING */}
         <FormField
           name="meet_type"
           control={form.control}
@@ -236,7 +233,6 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
           )}
         />
 
-        {/* MORE_INFO */}
         <FormField
           name="more_info"
           control={form.control}
@@ -259,7 +255,6 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
           )}
         />
 
-        {/* BUTTONS */}
         <Button
           type="submit"
           className="min-h-11 w-full rounded-lg px-6 text-base font-semibold sm:px-12"

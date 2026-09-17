@@ -1,7 +1,7 @@
 import { Timestamp } from "firebase/firestore";
 import { describe, expect, it } from "vitest";
 
-import type { GlobalStateInterface } from "@/types/globalStateInterfaces";
+import type { GlobalState } from "@/types/globalState";
 
 import GlobalReducer from "./GlobalReducer";
 
@@ -28,7 +28,7 @@ const applicant = {
   applicationDate: Timestamp.fromDate(new Date("2025-12-01")),
 };
 
-const state: GlobalStateInterface = {
+const state: GlobalState = {
   session: { role: "tenant", mode: "real", tenantId: "dev" },
   locale: "ES",
   applicantPool: [applicant],

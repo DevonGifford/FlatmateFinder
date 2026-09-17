@@ -5,33 +5,30 @@ import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
 import App from "@/App";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/layout/Navbar";
 import { GlobalProvider } from "@/contexts/GlobalProvider";
 import { fetchApplicantPool } from "@/lib/firebase/firestore";
-import FaqPage from "@/pages/Faq.page";
+import FAQPage from "@/pages/FAQ.page";
 import TenantLeaderboardPage from "@/pages/TenantLeaderboard.page";
 import TenantTinderPage from "@/pages/TenantTinder.page";
 import { customRenderApp, customRenderLeaderBoard } from "@/testUtils";
-import { ApplicantProfile } from "@/types/applicantInterfaces";
+import type { ApplicantProfile } from "@/types/applicant";
 import {
-  GlobalStateInterface,
+  GlobalState,
   initialState,
-} from "@/types/globalStateInterfaces";
+} from "@/types/globalState";
 
 beforeEach(() => {
   window.history.pushState({}, "", "/");
 });
 
-// DONE
 describe("Testing the testing environment", () => {
   test("simple render test: successfully renders application", () => {
-    //- Assemble
     render(
       <GlobalProvider initialState={initialState}>
         <App />
       </GlobalProvider>,
     );
-    //- Assert
     const mainHeading = screen.getByText("Flatmate Finder");
     expect(mainHeading).toBeDefined();
     const subHeading = screen.getByText("Welcome to");
@@ -39,35 +36,30 @@ describe("Testing the testing environment", () => {
   });
 
   test("simple render test: successfully render individual pages", async () => {
-    //- Assemble
     render(
       <MemoryRouter>
         <GlobalProvider initialState={initialState}>
           <Navbar />
-          <FaqPage />
+          <FAQPage />
         </GlobalProvider>
       </MemoryRouter>,
     );
 
-    //- Assert
     expect(screen.getByText("Frequently Asked Questions")).toBeDefined();
   });
 
   test("simple demo test: form submission with incorrect password, shows toast error message", async () => {
-    //- Assemble
     render(
       <GlobalProvider initialState={initialState}>
         <App />
       </GlobalProvider>,
     );
 
-    //- Act
     const input = screen.getByLabelText("Enter password");
     const continueButton = screen.getByRole("button", { name: "Continue" });
     await userEvent.type(input, "WrongPassword");
     await userEvent.click(continueButton);
 
-    //- Assert
     await waitFor(() => {
       const errorToast = screen.getByText(
         "That's not correct - Eso no está bien",
@@ -107,24 +99,19 @@ describe("Testing the testing environment", () => {
     });
   });
 });
-// DONE
 describe("Testing Global `locale`, switching between the two locales", () => {
   test("SET_LOCALE - should render with EN and switch to ES", async () => {
-    // Assemble
     render(
       <GlobalProvider initialState={initialState}>
         <App />
       </GlobalProvider>,
     );
-    // Assert initially loads with en locale set
     const subHeadingEN = screen.getByText("Welcome to");
     expect(subHeadingEN).toBeDefined();
 
-    // Act
     const localeSpanishButton = screen.getByRole("radio", { name: "Spanish" });
     await userEvent.click(localeSpanishButton);
 
-    // Assert locale has updated
     const welcomeHeading = screen.getByText(/^Bienvenido a/i);
     const passwordHeading = screen.getByText(/^Ingresar contraseña/i);
     const passwordText = screen.getByText(
@@ -138,13 +125,11 @@ describe("Testing Global `locale`, switching between the two locales", () => {
   });
 
   test("SET_LOCALE - should render with ES and switch to EN", async () => {
-    // Assemble
-    const partialState: Partial<GlobalStateInterface> = {
+    const partialState: Partial<GlobalState> = {
       locale: "ES",
     };
     customRenderApp(partialState);
 
-    // Assert initial render with ES Locale set
     const mainHeading = screen.getByText("Flatmate Finder");
     const welcomeHeadingES = screen.getByText(/^Bienvenido a/i);
     const passwordHeadingES = screen.getByText(/^Ingresar contraseña/i);
@@ -152,12 +137,10 @@ describe("Testing Global `locale`, switching between the two locales", () => {
     expect(welcomeHeadingES).toBeDefined();
     expect(passwordHeadingES).toBeDefined();
 
-    // Act
     const localeEnglishButton = screen.getByRole("radio", { name: "Inglés" });
 
     await userEvent.click(localeEnglishButton);
 
-    // Assert locale has been updated to EN
     const subHeadingEN = screen.getByText("Welcome to");
     expect(subHeadingEN).toBeDefined();
   });
@@ -223,10 +206,8 @@ describe("Testing demo access", () => {
   });
 });
 
-// DONE
 describe("Testing session state and password submission", () => {
   test("SET_TENANT + PROFILE - correct password should result in success toast notif", async () => {
-    //- Assemble
     render(
       <GlobalProvider initialState={initialState}>
         <App />
@@ -235,11 +216,9 @@ describe("Testing session state and password submission", () => {
     const input = screen.getByLabelText("Enter password");
     const continueButton = screen.getByRole("button", { name: "Continue" });
 
-    //- Act
     await userEvent.type(input, "test-tenant-password");
     await userEvent.click(continueButton);
 
-    //- Assert that the toast notification appears
     await waitFor(() => {
       const successToast = screen.getByText("Very good - Muy bien");
       expect(successToast).toBeDefined();
@@ -247,7 +226,6 @@ describe("Testing session state and password submission", () => {
   });
 
   test("SET_APPLICANT - correct password should result in success toast notif", async () => {
-    //- Assemble
     render(
       <GlobalProvider initialState={initialState}>
         <App />
@@ -256,11 +234,9 @@ describe("Testing session state and password submission", () => {
     const input = screen.getByLabelText("Enter password");
     const continueButton = screen.getByRole("button", { name: "Continue" });
 
-    //- Act
     await userEvent.type(input, "test-applicant-password-three");
     await userEvent.click(continueButton);
 
-    //- Assert that the toast notification appears
     await waitFor(() => {
       const successToast = screen.getByText("Very good - Muy bien");
       expect(successToast).toBeDefined();
@@ -359,10 +335,8 @@ describe("Testing session state and password submission", () => {
   });
 });
 
-// DONE
 describe("Testing Global `applicantPool`, with `isLoading` and `error` states", () => {
   test("FETCH_INIT - default state should render leaderboard without data gracefully", () => {
-    // Assemble
     render(
       <MemoryRouter>
         <GlobalProvider initialState={initialState}>
@@ -371,22 +345,18 @@ describe("Testing Global `applicantPool`, with `isLoading` and `error` states", 
       </MemoryRouter>,
     );
 
-    // Assert
     expect(screen.getByText("No data available")).toBeDefined();
   });
 
   test("FETCH_FAILURE - should render loading spinner while waiting for data", () => {
-    // Assemble
-    const partialState: Partial<GlobalStateInterface> = {
+    const partialState: Partial<GlobalState> = {
       isLoading: true,
     };
     customRenderLeaderBoard(partialState);
 
-    // Assert that the Loader is present
     const loadingAnimation = screen.getByTestId("spinner-svg");
     expect(loadingAnimation).toBeDefined();
 
-    // Assert accessibility attributes
     expect(loadingAnimation.getAttribute("role")).toBe("status");
     expect(loadingAnimation.getAttribute("aria-label")).toBe("Loading");
     expect(loadingAnimation.getAttribute("aria-live")).toBe("polite");
@@ -394,8 +364,6 @@ describe("Testing Global `applicantPool`, with `isLoading` and `error` states", 
   });
 
   test("FETCH_SUCCESS - should render leader board with mock data", () => {
-    //- Assemble
-    // Define mockApplicantPool as an array of ApplicantProfile
     const mockApplicantPool: ApplicantProfile[] = [
       {
         id: "Adria-Alpha-39461",
@@ -408,7 +376,7 @@ describe("Testing Global `applicantPool`, with `isLoading` and `error` states", 
           age: "30",
         },
         secondForm: {
-          move_date: Timestamp.fromDate(new Date(1702558880828)), // Construct Timestamp from milliseconds
+          move_date: Timestamp.fromDate(new Date(1702558880828)),
           length_stay: 0,
           meet_type: "inperson",
           more_info: "Prefers quiet neighborhoods.",
@@ -422,7 +390,7 @@ describe("Testing Global `applicantPool`, with `isLoading` and `error` states", 
           social_media: "twitter.com/ronweasley",
           job_title: "Auror at the Ministry",
         },
-        applicationDate: Timestamp.fromDate(new Date(1702558880828)), // Construct Timestamp from milliseconds
+        applicationDate: Timestamp.fromDate(new Date(1702558880828)),
         rankings: {
           dev_star: 2,
           osc_bool: true,
@@ -435,12 +403,11 @@ describe("Testing Global `applicantPool`, with `isLoading` and `error` states", 
           "https://i.pinimg.com/1200x/7a/32/44/7a32443d0e64c43871c0a29e816b66e3.jpg",
       },
     ];
-    const partialState: Partial<GlobalStateInterface> = {
+    const partialState: Partial<GlobalState> = {
       applicantPool: mockApplicantPool,
     };
     customRenderLeaderBoard(partialState);
 
-    //- Assert
     expect(screen.getByText("Ronald Weasley")).toBeDefined();
   });
 

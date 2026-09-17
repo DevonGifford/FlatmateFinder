@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import * as z from "zod";
 
-import { Spinner } from "@/components/Spinner";
+import { Spinner } from "@/components/custom/Spinner";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -21,18 +21,18 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useGlobalState } from "@/hooks/useGlobalState";
-import { toastError, toastFormComplete } from "@/lib/customToast";
 import { createApplicantDoc } from "@/lib/firebase/firestore";
 import { getValidationMessages } from "@/lib/forms/formUtils";
+import { toastError, toastFormComplete } from "@/lib/toast";
 import { normalizeExternalUrl } from "@/lib/utils";
-import Data_EN from "@/locales/applicant-form/thirdform_en.json";
-import Data_ES from "@/locales/applicant-form/thirdform_es.json";
+import Data_EN from "@/locales/applicant-form/third-form_en.json";
+import Data_ES from "@/locales/applicant-form/third-form_es.json";
 import {
-  ApplicationInterface,
+  Application,
   defaultApplication,
-} from "@/types/applicationInterfaces";
-import { isApplicantSession } from "@/types/globalStateInterfaces";
-import { ThirdFormData } from "@/types/localeInterfaces";
+} from "@/types/application";
+import { isApplicantSession } from "@/types/globalState";
+import type { ThirdFormData } from "@/types/locale";
 
 type ThirdFormValues = {
   job_title: string;
@@ -71,8 +71,8 @@ const thirdFormSchema = (
 };
 
 interface ThirdFormProps {
-  application: ApplicationInterface | null;
-  setApplication: Dispatch<SetStateAction<ApplicationInterface>>;
+  application: Application | null;
+  setApplication: Dispatch<SetStateAction<Application>>;
 }
 
 export function ThirdForm({ application, setApplication }: ThirdFormProps) {
@@ -100,14 +100,14 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
         job_type: data.job_type || "", //normalize data
       };
 
-      const completedApplication: ApplicationInterface = {
+      const completedApplication: Application = {
         ...application,
         thirdForm: updatedThirdForm,
         photo: "",
       };
       if (isApplicantSession(session) && session.mode === "demo") {
         setIsLoading(false);
-        toastFormComplete("3");
+        toastFormComplete(3);
         setApplication(defaultApplication);
         navigate("/thankyou");
         return;
@@ -116,7 +116,7 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
       await createApplicantDoc(completedApplication, session);
 
       setIsLoading(false);
-      toastFormComplete("3");
+      toastFormComplete(3);
       setApplication(defaultApplication); // Reset application state
       navigate("/thankyou"); // Update route
     } catch (error) {
@@ -197,7 +197,6 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
             )}
           />
         </div>
-        {/* TELL US ABOUT YOURSELF */}
         <FormField
           name="describe"
           control={form.control}
@@ -216,7 +215,6 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
             </FormItem>
           )}
         />
-        {/* WHAT YOU DO FOR FUN */}
         <FormField
           name="hobbies"
           control={form.control}

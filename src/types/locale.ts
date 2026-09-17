@@ -68,7 +68,7 @@ export interface ThirdFormData {
   optional: string;
 }
 
-export interface ThankyouPageData {
+export interface ThankYouPageData {
   checkoutHeading: string;
   faqheading: string;
 }

@@ -6,8 +6,8 @@ import {
   useLocation,
 } from "react-router-dom";
 
-import Navbar from "@/components/Navbar";
-import Sidebar from "@/components/Sidebar";
+import Navbar from "@/components/layout/Navbar";
+import Sidebar from "@/components/layout/Sidebar";
 import { Toaster } from "@/components/ui/toaster";
 import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
 import { useGlobalState } from "@/hooks/useGlobalState";
@@ -15,21 +15,21 @@ import {
   fetchApplicantPool,
   waitForFirebaseAuth,
 } from "@/lib/firebase/firestore";
-import homeData_EN from "@/locales/home-page/home_en.json";
-import homeData_ES from "@/locales/home-page/home_es.json";
-import ApplicationPage from "@/pages/Application.page";
-import FaqPage from "@/pages/Faq.page";
+import homeData_EN from "@/locales/home/home_en.json";
+import homeData_ES from "@/locales/home/home_es.json";
+import ApplicantFormPage from "@/pages/ApplicantForm.page";
+import ApplicantThankYouPage from "@/pages/ApplicantThankYou.page";
+import FAQPage from "@/pages/FAQ.page";
 import HomePage from "@/pages/Home.page";
 import TenantLeaderboardPage from "@/pages/TenantLeaderboard.page";
 import TenantTinderPage from "@/pages/TenantTinder.page";
 import TenantWelcomePage from "@/pages/TenantWelcome.page";
-import ThankyouPage from "@/pages/Thankyou.page";
 import {
   isApplicantSession,
   isDemoSession,
   isTenantSession,
-} from "@/types/globalStateInterfaces";
-import { HomePageData } from "@/types/localeInterfaces";
+} from "@/types/globalState";
+import type { HomePageData } from "@/types/locale";
 
 const publicRoutes = ["/", "/FAQ"] as const;
 const applicantRoutes = ["/form", "/thankyou"] as const;
@@ -156,11 +156,11 @@ function AppContent() {
         )}
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/FAQ" element={<FaqPage />} />
+          <Route path="/FAQ" element={<FAQPage />} />
           {isApplicantSession(session) && (
             <>
-              <Route path="/form" element={<ApplicationPage />} />
-              <Route path="/thankyou" element={<ThankyouPage />} />
+              <Route path="/form" element={<ApplicantFormPage />} />
+              <Route path="/thankyou" element={<ApplicantThankYouPage />} />
             </>
           )}
           {isTenantSession(session) && (

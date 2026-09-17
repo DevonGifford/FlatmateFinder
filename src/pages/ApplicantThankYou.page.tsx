@@ -2,13 +2,13 @@ import { Link } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import { useGlobalState } from "@/hooks/useGlobalState";
-import Data_EN from "@/locales/thankyou-page/thankyou_en.json";
-import Data_ES from "@/locales/thankyou-page/thankyou_es.json";
-import { ThankyouPageData } from "@/types/localeInterfaces";
+import Data_EN from "@/locales/applicant-thank-you/thank-you_en.json";
+import Data_ES from "@/locales/applicant-thank-you/thank-you_es.json";
+import type { ThankYouPageData } from "@/types/locale";
 
-export default function ThankyouPage() {
+export default function ApplicantThankYouPage() {
   const { locale } = useGlobalState();
-  const localeData: ThankyouPageData = locale === "EN" ? Data_EN : Data_ES;
+  const localeData: ThankYouPageData = locale === "EN" ? Data_EN : Data_ES;
 
   return (
     <>

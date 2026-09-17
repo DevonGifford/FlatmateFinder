@@ -1,6 +1,6 @@
-import { Rankings } from "@/types/applicantInterfaces";
+import type { Rankings } from "@/types/applicant";
 
-export interface ApplicationInterface {
+export interface Application {
   uuid: string;
   firstForm: {
     name: string;
@@ -28,7 +28,7 @@ export interface ApplicationInterface {
   photo?: string;
 }
 
-export const defaultApplication: ApplicationInterface = {
+export const defaultApplication: Application = {
   uuid: "", // Replace with a unique identifier generation logic
   firstForm: {
     name: "",

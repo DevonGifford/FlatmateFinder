@@ -1,5 +1,6 @@
 export { cn } from "cn";
 
+/** Normalizes an external link while allowing only HTTP(S) destinations. */
 export function normalizeExternalUrl(value: string | undefined): string | null {
   if (!value?.trim()) return "";
 

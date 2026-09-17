@@ -26,7 +26,9 @@ export function toastError(message?: string) {
   });
 }
 
-export function toastFormComplete(formNumber: string) {
+type FormNumber = 1 | 2 | 3;
+
+export function toastFormComplete(formNumber: FormNumber) {
   toast({
     variant: "form",
     title: "✔",

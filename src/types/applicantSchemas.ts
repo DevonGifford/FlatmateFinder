@@ -1,7 +1,10 @@
 import { Timestamp } from "firebase/firestore";
 import * as z from "zod";
 
-import { lengthOfStayRange, ratingRange } from "@/lib/constants/constants";
+import {
+  lengthOfStayRange,
+  ratingRange,
+} from "@/lib/constants/applicantConstraints";
 import { tenants } from "@/lib/constants/tenants";
 
 const timestampSchema = z.custom<Timestamp>(
@@ -65,6 +68,7 @@ export const applicantProfileSchema = z
 
 export type ParsedApplicantProfile = z.infer<typeof applicantProfileSchema>;
 
+/** Validates an unknown Firestore document and attaches its document ID. */
 export function parseApplicantProfile(
   id: string,
   data: unknown,
