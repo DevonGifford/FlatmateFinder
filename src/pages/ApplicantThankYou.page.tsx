@@ -14,11 +14,12 @@ export default function ApplicantThankYouPage() {
     <>
       <div className="flex flex-col items-center justify-center h-screen">
         <img
-          src="/ThankYouPage.png"
+          src="/ThankYouPage.webp"
           alt="Thank you illustration"
           className="rounded-full -translate-y-10"
-          width={"500px"}
-          loading="lazy"
+          width={500}
+          height={376}
+          fetchPriority="high"
           decoding="async"
         />
         <h2 className="text-3xl font-bold">{localeData.checkoutHeading}</h2>

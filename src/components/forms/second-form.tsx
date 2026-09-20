@@ -210,6 +210,7 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
                 >
                   <ToggleGroupItem
                     value="inperson"
+                    role="button"
                     className="min-h-14 min-w-24 flex-col items-center justify-center gap-1 px-4 py-2 text-center aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md focus-visible:ring-2"
                   >
                     <User className="font-bold" size={18} aria-hidden="true" />
@@ -217,6 +218,7 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
                   </ToggleGroupItem>
                   <ToggleGroupItem
                     value="videocall"
+                    role="button"
                     className="min-h-14 min-w-24 flex-col items-center justify-center gap-1 px-4 py-2 text-center aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md focus-visible:ring-2"
                   >
                     <Video size={18} aria-hidden="true" />

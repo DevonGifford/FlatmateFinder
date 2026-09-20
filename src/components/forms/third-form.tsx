@@ -170,6 +170,7 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
                   >
                     <ToggleGroupItem
                       value="wfh"
+                      role="button"
                       className="min-h-14 min-w-24 flex-col items-center justify-center gap-1 px-4 py-2 text-center aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md focus-visible:ring-2"
                     >
                       <Home aria-hidden="true" />
@@ -177,6 +178,7 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
                     </ToggleGroupItem>
                     <ToggleGroupItem
                       value="hybrid"
+                      role="button"
                       className="min-h-14 min-w-24 flex-col items-center justify-center gap-1 px-4 py-2 text-center aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md focus-visible:ring-2"
                     >
                       <Video aria-hidden="true" />
@@ -184,6 +186,7 @@ export function ThirdForm({ application, setApplication }: ThirdFormProps) {
                     </ToggleGroupItem>
                     <ToggleGroupItem
                       value="office"
+                      role="button"
                       className="min-h-14 min-w-24 flex-col items-center justify-center gap-1 px-4 py-2 text-center aria-pressed:border-2 aria-pressed:border-primary aria-pressed:shadow-md focus-visible:ring-2"
                     >
                       <Building aria-hidden="true" />

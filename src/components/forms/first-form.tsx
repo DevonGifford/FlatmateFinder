@@ -158,6 +158,7 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
                   >
                     <ToggleGroupItem
                       value="male"
+                      role="button"
                       aria-label={localeData.male}
                       className="min-h-11 min-w-11 aria-pressed:border-2 aria-pressed:border-primary focus-visible:ring-2"
                     >
@@ -165,6 +166,7 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
                     </ToggleGroupItem>
                     <ToggleGroupItem
                       value="female"
+                      role="button"
                       aria-label={localeData.female}
                       className="min-h-11 min-w-11 aria-pressed:border-2 aria-pressed:border-primary focus-visible:ring-2"
                     >
@@ -172,6 +174,7 @@ export function FirstForm({ application, setApplication }: FirstFormProps) {
                     </ToggleGroupItem>
                     <ToggleGroupItem
                       value="other"
+                      role="button"
                       aria-label={localeData.otherGender}
                       className="min-h-11 min-w-11 aria-pressed:border-2 aria-pressed:border-primary focus-visible:ring-2"
                     >
