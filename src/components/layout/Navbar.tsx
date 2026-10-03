@@ -56,11 +56,7 @@ export default function Navbar() {
           </Button>
         )}
 
-        <div
-          className="flex flex-row gap-2"
-          role="group"
-          aria-label="Language selection"
-        >
+        <div className="flex flex-row gap-2" role="group" aria-label="Language selection">
           <Button
             type="button"
             variant="outline"

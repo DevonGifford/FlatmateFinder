@@ -17,10 +17,7 @@ describe("FirstForm", () => {
     render(
       <MemoryRouter initialEntries={["/form"]}>
         <GlobalProvider initialState={initialState}>
-          <FirstForm
-            application={defaultApplication}
-            setApplication={setApplication}
-          />
+          <FirstForm application={defaultApplication} setApplication={setApplication} />
         </GlobalProvider>
       </MemoryRouter>,
     );

@@ -16,21 +16,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useGlobalState } from "@/hooks/useGlobalState";
 import { lengthOfStayRange } from "@/lib/constants/applicantConstraints";
 import { getFormStepPath } from "@/lib/constants/formSteps";
-import {
-  getValidationMessages,
-  mergeApplicationSection,
-} from "@/lib/forms/formUtils";
+import { getValidationMessages, mergeApplicationSection } from "@/lib/forms/formUtils";
 import { toastError, toastFormComplete } from "@/lib/toast";
 import { cn } from "@/lib/utils";
 import Data_EN from "@/locales/applicant-form/second-form_en.json";
@@ -51,9 +44,7 @@ function getToday() {
   return today;
 }
 
-const secondFormSchema = (
-  locale: "EN" | "ES",
-): z.ZodType<SecondFormValues, SecondFormValues> => {
+const secondFormSchema = (locale: "EN" | "ES"): z.ZodType<SecondFormValues, SecondFormValues> => {
   const { required, tooLong } = getValidationMessages(locale);
 
   return z.object({
@@ -130,9 +121,7 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
                   }
                 >
                   <span>
-                    {field.value instanceof Date
-                      ? field.value.toDateString()
-                      : localeData.pickDate}
+                    {field.value instanceof Date ? field.value.toDateString() : localeData.pickDate}
                   </span>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="center">
@@ -226,10 +215,7 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
                   </ToggleGroupItem>
                 </ToggleGroup>
               </FormControl>
-              <span className="text-sm text-muted-foreground">
-                {" "}
-                *{localeData.schedule}
-              </span>
+              <span className="text-sm text-muted-foreground"> *{localeData.schedule}</span>
               <FormMessage />
             </FormItem>
           )}
@@ -247,10 +233,7 @@ export function SecondForm({ application, setApplication }: SecondFormProps) {
                 </FormDescription>
               </div>
               <FormControl>
-                <Textarea
-                  placeholder={`${localeData.specialRequestQuestion}`}
-                  {...field}
-                />
+                <Textarea placeholder={`${localeData.specialRequestQuestion}`} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -6,11 +6,7 @@ interface RatingBadgeProps {
   ariaLabel: string;
 }
 
-export const RatingBadge: React.FC<RatingBadgeProps> = ({
-  boolValue,
-  starValue,
-  ariaLabel,
-}) => {
+export const RatingBadge: React.FC<RatingBadgeProps> = ({ boolValue, starValue, ariaLabel }) => {
   const color =
     boolValue === undefined
       ? "border border-border bg-muted text-muted-foreground"
@@ -24,9 +20,7 @@ export const RatingBadge: React.FC<RatingBadgeProps> = ({
       role="img"
       aria-label={ariaLabel}
     >
-      <p className="sm:text-xl -translate-y-1.5 sm:-translate-y-0.5">
-        {starValue ?? "—"}
-      </p>
+      <p className="sm:text-xl -translate-y-1.5 sm:-translate-y-0.5">{starValue ?? "—"}</p>
     </div>
   );
 };

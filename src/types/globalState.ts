@@ -17,13 +17,11 @@ export type AppSession =
 
 export const isApplicantSession = (
   session: AppSession,
-): session is Extract<AppSession, { role: "applicant" }> =>
-  session.role === "applicant";
+): session is Extract<AppSession, { role: "applicant" }> => session.role === "applicant";
 
 export const isTenantSession = (
   session: AppSession,
-): session is Extract<AppSession, { role: "tenant" }> =>
-  session.role === "tenant";
+): session is Extract<AppSession, { role: "tenant" }> => session.role === "tenant";
 
 export const isDemoSession = (session: AppSession) => session.mode === "demo";
 

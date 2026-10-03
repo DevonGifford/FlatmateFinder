@@ -15,10 +15,7 @@ describe("SecondForm", () => {
     const { container } = render(
       <MemoryRouter>
         <GlobalProvider initialState={initialState}>
-          <SecondForm
-            application={defaultApplication}
-            setApplication={setApplication}
-          />
+          <SecondForm application={defaultApplication} setApplication={setApplication} />
         </GlobalProvider>
       </MemoryRouter>,
     );
@@ -44,20 +41,15 @@ describe("SecondForm", () => {
     const { container } = render(
       <MemoryRouter>
         <GlobalProvider initialState={initialState}>
-          <SecondForm
-            application={persistedApplication}
-            setApplication={setApplication}
-          />
+          <SecondForm application={persistedApplication} setApplication={setApplication} />
         </GlobalProvider>
       </MemoryRouter>,
     );
 
     await waitFor(() => {
-      expect(
-        container
-          .querySelector('input[type="range"]')
-          ?.getAttribute("aria-valuenow"),
-      ).toBe("42");
+      expect(container.querySelector('input[type="range"]')?.getAttribute("aria-valuenow")).toBe(
+        "42",
+      );
     });
   });
 });

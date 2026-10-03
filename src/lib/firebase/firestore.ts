@@ -1,19 +1,9 @@
-import {
-  collection,
-  doc,
-  Firestore,
-  getDocs,
-  runTransaction,
-} from "firebase/firestore";
+import { collection, doc, Firestore, getDocs, runTransaction } from "firebase/firestore";
 
 import type { ApplicantProfile } from "@/types/applicant";
 import { parseApplicantProfile } from "@/types/applicantSchemas";
 import type { Application } from "@/types/application";
-import {
-  type AppSession,
-  isApplicantSession,
-  isTenantSession,
-} from "@/types/globalState";
+import { type AppSession, isApplicantSession, isTenantSession } from "@/types/globalState";
 
 import db, { authReady } from "./config";
 

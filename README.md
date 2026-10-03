@@ -1,21 +1,27 @@
 <div align="center">
-    <h1>
-        Flatmate Finder 
-    </h1>
-    <p>
-        <a href="https://skillicons.dev">
-            <img src="https://skillicons.dev/icons?i=react,ts,tailwind,vite,vitest,firebase,github,vercel" /><br>
-        </a>
-    </p>
-    <h5>
-        <a href='https://flatmate-finder-devongifford.vercel.app/', target='_blank'>
-            live demo ↗
-        <a/>
-    </h5>
+  <!-- cover logo -->
+  <p align='center'>
+    <img src="docs/FlatmateFinder-Logo.png" alt="Demo" title="DemoImage" height="250">
+  </p>
+  <!-- sub headline -->
+  <h2>
+     Self-Hosted Applicant Review System
+  </h2>
+  <!-- tech used in this project -->  
+  <p>
+    <a href="https://skillicons.dev">
+      <img src="https://skillicons.dev/icons?i=react,ts,tailwind,vite,vitest,firebase,github,vercel" /><br>
+    </a>
+  </p>
+  <!-- demo link -->
+  <h5>
+      <a href='https://flatmate-finder-devongifford.vercel.app/', target='_blank'>
+          live demo ↗
+      <a/>
+  </h5>
 </div>
 
 <br>
-
 <!-- -------------------------------------------------------------------------- -->
 
 ### Brief Introduction

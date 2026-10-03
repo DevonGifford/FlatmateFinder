@@ -22,8 +22,7 @@ export default function Sidebar() {
   const location = useLocation();
   const dispatch = useGlobalDispatch();
   const { locale } = useGlobalState();
-  const localeData: TenantPageData =
-    locale === "EN" ? tenantData_EN : tenantData_ES;
+  const localeData: TenantPageData = locale === "EN" ? tenantData_EN : tenantData_ES;
   const [open, setOpen] = useState(false);
 
   const closeMenu = () => setOpen(false);
@@ -42,15 +41,9 @@ export default function Sidebar() {
             aria-hidden="true"
           />
         </SheetTrigger>
-        <SheetContent
-          side="left"
-          className="gap-0"
-          closeLabel={localeData.closeMenu}
-        >
+        <SheetContent side="left" className="gap-0" closeLabel={localeData.closeMenu}>
           <SheetHeader className="items-center justify-center border-b py-10">
-            <SheetTitle className="text-xl">
-              {localeData.sidebarTitle}
-            </SheetTitle>
+            <SheetTitle className="text-xl">{localeData.sidebarTitle}</SheetTitle>
             <SheetDescription>{localeData.sidebarDescription}</SheetDescription>
           </SheetHeader>
           <div className="flex flex-1 flex-col gap-3 p-4 pt-8">
@@ -58,9 +51,7 @@ export default function Sidebar() {
               to="/admin-welcome"
               onClick={closeMenu}
               className={menuItemClass}
-              aria-current={
-                location.pathname === "/admin-welcome" ? "page" : undefined
-              }
+              aria-current={location.pathname === "/admin-welcome" ? "page" : undefined}
             >
               <Home className="h-5 w-5" aria-hidden="true" />
               {localeData.dashboard}
@@ -69,9 +60,7 @@ export default function Sidebar() {
               to="/admin-tinder"
               onClick={closeMenu}
               className={menuItemClass}
-              aria-current={
-                location.pathname === "/admin-tinder" ? "page" : undefined
-              }
+              aria-current={location.pathname === "/admin-tinder" ? "page" : undefined}
             >
               <Heart className="h-5 w-5" aria-hidden="true" />
               {localeData.tinderReview}
@@ -80,9 +69,7 @@ export default function Sidebar() {
               to="/admin-leaderboard"
               onClick={closeMenu}
               className={menuItemClass}
-              aria-current={
-                location.pathname === "/admin-leaderboard" ? "page" : undefined
-              }
+              aria-current={location.pathname === "/admin-leaderboard" ? "page" : undefined}
             >
               <ListChecks className="h-5 w-5" aria-hidden="true" />
               {localeData.leaderboard}
@@ -101,9 +88,7 @@ export default function Sidebar() {
                 {localeData.logout}
               </Button>
               <p className="mt-4 border-t px-2 pb-6 pt-4 text-center text-sm leading-relaxed text-muted-foreground">
-                <strong className="font-semibold">
-                  {localeData.tenantSpaceOnly}
-                </strong>
+                <strong className="font-semibold">{localeData.tenantSpaceOnly}</strong>
                 <br />
                 {localeData.tenantAccess}
                 <br />

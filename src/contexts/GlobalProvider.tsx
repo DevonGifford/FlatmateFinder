@@ -1,15 +1,8 @@
+/* eslint-disable react-refresh/only-export-components -- contexts intentionally live with their provider. */
 import React, { createContext, useEffect, useReducer } from "react";
 
-import {
-  getTenantById,
-  getTenantByName,
-  type TenantId,
-} from "@/lib/constants/tenants";
-import {
-  type ActionType,
-  type AppSession,
-  type GlobalState,
-} from "@/types/globalState";
+import { getTenantById, getTenantByName, type TenantId } from "@/lib/constants/tenants";
+import { type ActionType, type AppSession, type GlobalState } from "@/types/globalState";
 
 import GlobalReducer from "./GlobalReducer";
 
@@ -25,9 +18,7 @@ type LegacyPersistedAuth = {
 };
 
 function isTenantId(value: unknown): value is TenantId {
-  return (
-    typeof value === "string" && getTenantById(value as TenantId) !== undefined
-  );
+  return typeof value === "string" && getTenantById(value as TenantId) !== undefined;
 }
 
 function isAppSession(value: unknown): value is AppSession {
@@ -106,10 +97,7 @@ function readPersistedSession(): AppSession | null {
     return migrateLegacyAuth({
       isAuthenticatedApplicant: authRecord.isAuthenticatedApplicant,
       isAuthenticatedTenant: authRecord.isAuthenticatedTenant,
-      accessMode:
-        typeof authRecord.accessMode === "string"
-          ? authRecord.accessMode
-          : undefined,
+      accessMode: typeof authRecord.accessMode === "string" ? authRecord.accessMode : undefined,
       loggedTenant: authRecord.loggedTenant,
     });
   } catch {
@@ -117,12 +105,10 @@ function readPersistedSession(): AppSession | null {
   }
 }
 
-export const GlobalStateContext = createContext<
-  GlobalState | undefined
->(undefined);
-export const GlobalDispatchContext = createContext<
-  React.Dispatch<ActionType> | undefined
->(undefined);
+export const GlobalStateContext = createContext<GlobalState | undefined>(undefined);
+export const GlobalDispatchContext = createContext<React.Dispatch<ActionType> | undefined>(
+  undefined,
+);
 
 interface Props {
   children: React.ReactNode;
@@ -139,10 +125,7 @@ export const GlobalProvider: React.FC<Props> = ({ children, initialState }) => {
   useEffect(() => {
     try {
       if (globalState.session.role !== "none") {
-        window.sessionStorage.setItem(
-          AUTH_STORAGE_KEY,
-          JSON.stringify(globalState.session),
-        );
+        window.sessionStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(globalState.session));
       } else {
         window.sessionStorage.removeItem(AUTH_STORAGE_KEY);
       }
@@ -153,9 +136,7 @@ export const GlobalProvider: React.FC<Props> = ({ children, initialState }) => {
 
   return (
     <GlobalStateContext.Provider value={globalState}>
-      <GlobalDispatchContext.Provider value={dispatch}>
-        {children}
-      </GlobalDispatchContext.Provider>
+      <GlobalDispatchContext.Provider value={dispatch}>{children}</GlobalDispatchContext.Provider>
     </GlobalStateContext.Provider>
   );
 };

@@ -8,19 +8,11 @@ import { ThirdForm } from "@/components/forms/third-form";
 import { Button } from "@/components/ui/button";
 import { useRequireApplicant } from "@/hooks/useRequireApplicant";
 import { useUrlState } from "@/hooks/useUrlState";
-import {
-  FormStep,
-  formSteps,
-  getFormStepPath,
-} from "@/lib/constants/formSteps";
-import {
-  Application,
-  defaultApplication,
-} from "@/types/application";
+import { FormStep, formSteps, getFormStepPath } from "@/lib/constants/formSteps";
+import { Application, defaultApplication } from "@/types/application";
 
 const ApplicantFormPage: React.FC = () => {
-  const [application, setApplication] =
-    useState<Application>(defaultApplication);
+  const [application, setApplication] = useState<Application>(defaultApplication);
   const { pageId } = useUrlState();
   const navigate = useNavigate();
   useRequireApplicant();
@@ -62,11 +54,7 @@ const ApplicantFormPage: React.FC = () => {
             />
           )}
           {currentStep === "third-form" && (
-            <ThirdForm
-              key="third-form"
-              application={application}
-              setApplication={setApplication}
-            />
+            <ThirdForm key="third-form" application={application} setApplication={setApplication} />
           )}
 
           {currentStep !== "first-form" ? (
@@ -83,11 +71,7 @@ const ApplicantFormPage: React.FC = () => {
               </Button>
             </div>
           ) : (
-            <FirstForm
-              key="first-form"
-              application={application}
-              setApplication={setApplication}
-            />
+            <FirstForm key="first-form" application={application} setApplication={setApplication} />
           )}
         </div>
       </div>

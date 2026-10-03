@@ -2,9 +2,7 @@ import { Timestamp } from "firebase/firestore";
 
 import { TenantBooleanKey, TenantStarKey } from "@/lib/constants/tenants";
 
-export type Rankings = Partial<
-  Record<TenantStarKey, number> & Record<TenantBooleanKey, boolean>
->;
+export type Rankings = Partial<Record<TenantStarKey, number> & Record<TenantBooleanKey, boolean>>;
 
 export interface ApplicantProfile {
   uuid: string;

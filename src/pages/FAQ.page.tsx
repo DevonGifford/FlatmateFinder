@@ -15,9 +15,7 @@ export default function FAQPage() {
   return (
     <>
       <div className="flex flex-col justify-center items-center sm:mx-20 md:max-w-10/12 sm:max-w-4/6 gap-5 md:gap-8">
-        <h1 className="text-4xl italic py-4 pb-6 border-b-2">
-          Frequently Asked Questions
-        </h1>
+        <h1 className="text-4xl italic py-4 pb-6 border-b-2">Frequently Asked Questions</h1>
         <Accordion type="single" collapsible className="w-full text-center">
           {localeData.faq_questions.map((faq, index) => (
             <AccordionItem

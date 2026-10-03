@@ -10,7 +10,7 @@ export default defineConfig({
     reporters: ["default"],
     globals: true,
     environment: "happy-dom",
-    setupFiles: ["src/setupTest.ts"],
+    setupFiles: ["src/test/setupTest.ts"],
   },
   resolve: {
     alias: {

@@ -7,12 +7,7 @@ interface StarIconProps {
   label: string;
 }
 
-export const StarRating = ({
-  filled,
-  selected = filled,
-  onClick,
-  label,
-}: StarIconProps) => {
+export const StarRating = ({ filled, selected = filled, onClick, label }: StarIconProps) => {
   const fillColor = filled ? "text-yellow-500 fill-yellow-400" : "";
   return (
     <button

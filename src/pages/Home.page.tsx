@@ -19,10 +19,7 @@ import { Input } from "@/components/ui/input";
 import { useGlobalDispatch } from "@/hooks/useGlobalDispatch";
 import { useGlobalState } from "@/hooks/useGlobalState";
 import { applicantAccess, tenantAccess } from "@/lib/auth/accessPasswords";
-import {
-  toastCorrectPassword,
-  toastIncorrectPassword,
-} from "@/lib/toast";
+import { toastCorrectPassword, toastIncorrectPassword } from "@/lib/toast";
 import Data_EN from "@/locales/home/home_en.json";
 import Data_ES from "@/locales/home/home_es.json";
 import type { HomePageData } from "@/types/locale";
@@ -49,17 +46,13 @@ export default function HomePage() {
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     const { password } = data;
-    const tenant = tenantAccess.find(
-      (credential) => credential.password === password,
-    );
+    const tenant = tenantAccess.find((credential) => credential.password === password);
     if (tenant) {
       handleTenantLogin(tenant);
       return;
     }
 
-    if (
-      applicantAccess.some((credential) => credential.password === password)
-    ) {
+    if (applicantAccess.some((credential) => credential.password === password)) {
       dispatch({ type: "SET_APPLICANT" });
       toastCorrectPassword();
       navigate("/form");
@@ -107,10 +100,7 @@ export default function HomePage() {
 
       <div className="w-full max-w-md rounded-2xl border bg-card p-5 shadow-sm sm:p-8">
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-4"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
             <FormField
               name="password"
               control={form.control}
@@ -136,11 +126,7 @@ export default function HomePage() {
                       variant="ghost"
                       size="icon-sm"
                       onClick={() => setShowPassword((visible) => !visible)}
-                      aria-label={
-                        showPassword
-                          ? localeData.hidePassword
-                          : localeData.showPassword
-                      }
+                      aria-label={showPassword ? localeData.hidePassword : localeData.showPassword}
                       className="absolute right-1 top-1/2 -translate-y-1/2"
                     >
                       {showPassword ? <EyeOff /> : <Eye />}
@@ -158,9 +144,7 @@ export default function HomePage() {
 
         <div className="flex flex-col items-center gap-3 py-4 text-center">
           <div className="flex flex-col items-center gap-1">
-            <p className="text-sm text-muted-foreground">
-              {localeData.demoPrompt}
-            </p>
+            <p className="text-sm text-muted-foreground">{localeData.demoPrompt}</p>
             <p className="text-xs italic text-muted-foreground">
               {localeData.demoPromptDescription}
             </p>
